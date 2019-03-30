@@ -1,4 +1,4 @@
-# howth_golf_live
+# Howth Golf Live
 
 A Flutter mobile app that facilitates scoring in the golf tournaments hosted at Howth Golf Club.
 

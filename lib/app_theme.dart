@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AppThemeData {
   ThemeData build() => ThemeData(
       primaryColor: Colors.white,
-      accentColor: Color.fromARGB(1, 153, 0, 0),
+      primaryColorDark: Color.fromARGB(255, 187, 187, 187),
+      accentColor: Color.fromARGB(255, 153, 0, 0),
       textTheme: TextTheme(
         headline: TextStyle(
           fontSize: 24,

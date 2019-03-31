@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/flashing_element.dart';
-import 'package:howth_golf_live/primary_app.dart';
+import 'package:howth_golf_live/tournaments_page.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
@@ -12,8 +12,8 @@ class HomePage extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           // Navigate into app when tapped.
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => PrimaryApp()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TournamentsPage()));
         },
         child: Scaffold(
             body: Center(

@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   carousel_pro: ^0.0.13
+  bubble_tab_indicator: ^0.1.4
   cupertino_icons: ^0.1.2
 
 dev_dependencies:

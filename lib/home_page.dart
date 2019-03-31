@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
             Padding(padding: EdgeInsetsDirectional.only(top: 550)),
             FlashingElement(Text(
               'Tap anywhere to begin!',
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.subhead,
             ))
           ],
         ))));

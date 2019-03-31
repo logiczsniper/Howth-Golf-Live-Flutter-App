@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  carousel_pro: ^0.0.13
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
@@ -20,8 +20,7 @@ flutter:
 
   uses-material-design: true
   assets: 
-    - images/icon.png
-    - images/drawer_image.png
+    - images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

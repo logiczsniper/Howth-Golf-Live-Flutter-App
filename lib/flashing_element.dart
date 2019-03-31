@@ -4,16 +4,16 @@ class FlashingElement extends StatefulWidget {
   final Widget target;
   FlashingElement(this.target);
 
-  FlashingElementState createState() => new FlashingElementState(this.target);
+  _FlashingElementState createState() => new _FlashingElementState(this.target);
 }
 
-class FlashingElementState extends State<FlashingElement>
+class _FlashingElementState extends State<FlashingElement>
     with TickerProviderStateMixin {
   AnimationController _opacityController;
   Animation<double> _opacity;
   Widget target;
 
-  FlashingElementState(this.target);
+  _FlashingElementState(this.target);
 
   @override
   void initState() {

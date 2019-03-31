@@ -9,8 +9,13 @@ class AppThemeData {
           fontSize: 24,
           color: Colors.black,
         ),
-        subhead: TextStyle(fontSize: 15, color: Colors.black),
-        caption:
-            TextStyle(fontSize: 15, color: Color.fromARGB(1, 187, 187, 187)),
+        body1: TextStyle(
+            fontSize: 21, color: Colors.black, fontWeight: FontWeight.w300),
+        body2: TextStyle(
+            fontSize: 21,
+            color: Color.fromARGB(255, 187, 187, 187),
+            fontWeight: FontWeight.w300),
+        caption: TextStyle(
+            fontSize: 26, color: Colors.black, fontWeight: FontWeight.w500),
       ));
 }

@@ -34,8 +34,8 @@ class FlashingElementState extends State<FlashingElement>
 
   @override
   void dispose() {
-    super.dispose();
     _opacityController.dispose();
+    super.dispose();
   }
 
   @override

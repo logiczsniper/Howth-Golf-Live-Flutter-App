@@ -1,9 +1,12 @@
 class Constants {
-  final String clubName = "Howth Golf Club";
-  final String clubMobile = "(01) 832 3055";
-  final String clubAddress = "13 Carrickbrack Rd, Sutton";
+  String get appName => "Howth Golf Live";
 
-  String getDrawerText() {
-    return '$clubName\n$clubAddress\n$clubMobile';
-  }
+  String get currentText => "Current";
+  String get archivedText => "Archived";
+  String get favouritesText => "Favourites";
+
+  String get competitionsText => "Competitions";
+  String get resultsText => "Results";
+  String get clubLinksText => "Club Links";
+  String get appHelpText => "App Help";
 }

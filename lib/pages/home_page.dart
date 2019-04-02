@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/flashing_element.dart';
-import 'package:howth_golf_live/tournaments_page.dart';
+import 'package:howth_golf_live/pages/tournaments_page.dart';
 
 class HomePage extends StatelessWidget {
   final String title;

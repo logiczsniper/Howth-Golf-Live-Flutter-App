@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:howth_golf_live/app_theme.dart';
+import 'package:howth_golf_live/constants.dart';
+import 'package:howth_golf_live/pages/tournaments_page.dart';
+import 'package:howth_golf_live/pages/results_page.dart';
+import 'package:howth_golf_live/pages/clublinks_page.dart';
+import 'package:howth_golf_live/pages/apphelp_page.dart';
 
 class ElementBuilder {
   final ThemeData appTheme = AppThemeData().build();
+  final Constants constants = Constants();
+  String currentPage = 'Competitions';
 
   Drawer buildDrawer(BuildContext context) {
     return Drawer(
@@ -31,45 +38,41 @@ class ElementBuilder {
                   autoplayDuration: Duration(seconds: 6),
                   animationDuration: Duration(milliseconds: 350),
                   boxFit: BoxFit.fill)),
-          _buildListTile(
-              context,
-              'Competitions',
-              Theme.of(context).textTheme.body2,
-              Icon(Icons.radio_button_checked),
-              null),
-          _buildListTile(context, 'Results', Theme.of(context).textTheme.body1,
-              Icon(Icons.radio_button_unchecked), null),
-          _buildListTile(
-              context,
-              'Club Links',
-              Theme.of(context).textTheme.body1,
-              Icon(Icons.radio_button_unchecked),
-              null),
-          _buildListTile(context, 'App Help', Theme.of(context).textTheme.body1,
-              Icon(Icons.radio_button_unchecked), null)
+          _buildDrawerTile(
+              context, constants.competitionsText, TournamentsPage()),
+          _buildDrawerTile(context, constants.resultsText, ResultsPage()),
+          _buildDrawerTile(context, constants.clubLinksText, ClubLinksPage()),
+          _buildDrawerTile(context, constants.appHelpText, AppHelpPage())
         ],
       ),
     );
   }
 
-  ListTile _buildListTile(BuildContext context, String text, TextStyle style,
-      Icon icon, Widget destination) {
+  ListTile _buildDrawerTile(
+      BuildContext context, String text, Widget destination) {
+    Icon icon = currentPage == text
+        ? Icon(Icons.radio_button_checked)
+        : Icon(Icons.radio_button_unchecked);
+
+    TextStyle style = currentPage == text
+        ? appTheme.textTheme.body2
+        : appTheme.textTheme.body1;
+
     return ListTile(
       title: Center(child: Text(text, style: style)),
-      // TODO have the icon on the current page be checked, the rest unchecked.
-      // in addition, the selected page will have body2 theme, unselected body1.
       trailing: icon,
       onTap: () {
+        currentPage = destination.toString();
         Navigator.pop(context);
-        //Navigator.push(
-        //    context, MaterialPageRoute(builder: (context) => destination));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => destination));
       },
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
+  AppBar buildTabAppBar(BuildContext context, String title) {
     return AppBar(
-        title: Center(child: Text('Competitions')),
+        title: Center(child: Text(title)),
         backgroundColor: appTheme.primaryColorDark,
         actions: <Widget>[
           IconButton(
@@ -85,13 +88,20 @@ class ElementBuilder {
               indicatorHeight: 25.0,
             ),
             tabs: <Widget>[
-              _buildTab(context, 'Current'),
-              _buildTab(context, 'Archived'),
-              _buildTab(context, 'Favourites')
+              _buildTab(context, constants.currentText),
+              _buildTab(context, constants.archivedText),
+              _buildTab(context, constants.favouritesText)
             ]));
   }
 
   Tab _buildTab(BuildContext context, String text) {
     return Tab(text: text);
+  }
+
+  AppBar buildAppBar(BuildContext context, String title) {
+    return AppBar(
+      title: Center(child: Text(title)),
+      backgroundColor: appTheme.primaryColorDark,
+    );
   }
 }

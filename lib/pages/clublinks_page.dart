@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/element_builder.dart';
-import 'package:howth_golf_live/constants.dart';
+import 'package:howth_golf_live/pages/app_resources.dart';
 
-class ClubLinksPage extends StatelessWidget {
-  final ElementBuilder elementBuilder = ElementBuilder();
-  final Constants constants = Constants();
-
+class ClubLinksPage extends StatelessWidget with AppResources {
   ClubLinksPage({Key key}) : super(key: key);
 
   @override

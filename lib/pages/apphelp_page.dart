@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/constants.dart';
-import 'package:howth_golf_live/element_builder.dart';
+import 'package:howth_golf_live/pages/app_resources.dart';
 
-class AppHelpPage extends StatelessWidget {
-  final ElementBuilder elementBuilder = ElementBuilder();
-
+class AppHelpPage extends StatelessWidget with AppResources {
   AppHelpPage({Key key}) : super(key: key);
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    return Constants().appHelpText;
+    return constants.appHelpText;
   }
 
   @override

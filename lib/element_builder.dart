@@ -3,15 +3,15 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:howth_golf_live/app_theme.dart';
 import 'package:howth_golf_live/constants.dart';
-import 'package:howth_golf_live/pages/tournaments_page.dart';
-import 'package:howth_golf_live/pages/results_page.dart';
-import 'package:howth_golf_live/pages/clublinks_page.dart';
-import 'package:howth_golf_live/pages/apphelp_page.dart';
 
 class ElementBuilder {
+  String currentRoute;
   final ThemeData appTheme = AppThemeData().build();
   final Constants constants = Constants();
-  String currentPage = 'Competitions';
+
+  ElementBuilder() {
+    currentRoute = "/Competitions";
+  }
 
   Drawer buildDrawer(BuildContext context) {
     return Drawer(
@@ -38,50 +38,57 @@ class ElementBuilder {
                   autoplayDuration: Duration(seconds: 6),
                   animationDuration: Duration(milliseconds: 350),
                   boxFit: BoxFit.fill)),
-          _buildDrawerTile(
-              context, constants.competitionsText, TournamentsPage()),
-          _buildDrawerTile(context, constants.resultsText, ResultsPage()),
-          _buildDrawerTile(context, constants.clubLinksText, ClubLinksPage()),
-          _buildDrawerTile(context, constants.appHelpText, AppHelpPage())
+          _buildDrawerTile(context, constants.competitionsText),
+          _buildDrawerTile(context, constants.resultsText),
+          _buildDrawerTile(context, constants.clubLinksText),
+          _buildDrawerTile(context, constants.appHelpText)
         ],
       ),
     );
   }
 
-  ListTile _buildDrawerTile(
-      BuildContext context, String text, Widget destination) {
-    Icon icon = currentPage == text
+  ListTile _buildDrawerTile(BuildContext context, String text) {
+    // TODO fixme
+    String namedRoute = '/' + text;
+    currentRoute = currentRoute == null ? '' : currentRoute;
+    print(currentRoute + '||' + namedRoute);
+
+    Icon icon = currentRoute == namedRoute
         ? Icon(Icons.radio_button_checked)
         : Icon(Icons.radio_button_unchecked);
 
-    TextStyle style = currentPage == text
+    TextStyle style = currentRoute == namedRoute
         ? appTheme.textTheme.body2
         : appTheme.textTheme.body1;
 
     return ListTile(
+      selected: true,
       title: Center(child: Text(text, style: style)),
       trailing: icon,
       onTap: () {
-        currentPage = destination.toString();
         Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => destination));
+        Navigator.pushNamed(context, namedRoute);
+        currentRoute = namedRoute;
       },
     );
   }
 
   AppBar buildTabAppBar(BuildContext context, String title) {
     return AppBar(
-        title: Center(child: Text(title)),
-        backgroundColor: appTheme.primaryColorDark,
+        centerTitle: true,
+        title: Text(title, style: TextStyle(color: appTheme.primaryColorDark)),
+        backgroundColor: appTheme.primaryColor,
+        iconTheme: IconThemeData(color: appTheme.primaryColorDark),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
             tooltip: 'Tap to search!',
+            color: appTheme.primaryColorDark,
             onPressed: () {},
           )
         ],
         bottom: TabBar(
+            labelColor: appTheme.primaryColorDark,
             indicator: BubbleTabIndicator(
               indicatorColor: appTheme.accentColor,
               tabBarIndicatorSize: TabBarIndicatorSize.tab,
@@ -100,8 +107,10 @@ class ElementBuilder {
 
   AppBar buildAppBar(BuildContext context, String title) {
     return AppBar(
-      title: Center(child: Text(title)),
-      backgroundColor: appTheme.primaryColorDark,
+      centerTitle: true,
+      title: Text(title, style: TextStyle(color: appTheme.primaryColorDark)),
+      backgroundColor: appTheme.primaryColor,
+      iconTheme: IconThemeData(color: appTheme.primaryColorDark),
     );
   }
 }

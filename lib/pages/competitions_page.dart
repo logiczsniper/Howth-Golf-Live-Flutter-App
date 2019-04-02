@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/constants.dart';
-import 'package:howth_golf_live/element_builder.dart';
+import 'package:howth_golf_live/pages/app_resources.dart';
 
-class TournamentsPage extends StatefulWidget {
+class CompetitionsPage extends StatefulWidget with AppResources {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    return Constants().competitionsText;
+    return constants.competitionsText;
   }
 
   @override
-  _TournamentsPageState createState() => new _TournamentsPageState();
+  _CompetitionsPageState createState() => new _CompetitionsPageState();
 }
 
-class _TournamentsPageState extends State<TournamentsPage> {
-  final Constants clubConstants = Constants();
-  final ElementBuilder elementBuilder = ElementBuilder();
-
+class _CompetitionsPageState extends State<CompetitionsPage> with AppResources {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +20,7 @@ class _TournamentsPageState extends State<TournamentsPage> {
             child: Scaffold(
                 drawer: elementBuilder.buildDrawer(context),
                 appBar: elementBuilder.buildTabAppBar(
-                    context, Constants().competitionsText),
+                    context, constants.competitionsText),
                 body: TabBarView(
                   children: <Widget>[
                     Text('Tournaments now!'),

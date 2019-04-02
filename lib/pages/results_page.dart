@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/constants.dart';
-import 'package:howth_golf_live/element_builder.dart';
+import 'package:howth_golf_live/pages/app_resources.dart';
 
-class ResultsPage extends StatefulWidget {
-
+class ResultsPage extends StatefulWidget with AppResources {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    return Constants().resultsText;
+    return constants.resultsText;
   }
 
   @override
   _ResultsPageState createState() => new _ResultsPageState();
 }
 
-class _ResultsPageState extends State<ResultsPage> {
-  final Constants clubConstants = Constants();
-  final ElementBuilder elementBuilder = ElementBuilder();
-
+class _ResultsPageState extends State<ResultsPage> with AppResources {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

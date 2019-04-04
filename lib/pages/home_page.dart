@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/flashing_element.dart';
-import 'package:howth_golf_live/pages/app_resources.dart';
+import 'package:howth_golf_live/app_resources.dart';
 
 class HomePage extends StatelessWidget with AppResources {
   final String title;
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget with AppResources {
           children: <Widget>[
             Padding(padding: EdgeInsetsDirectional.only(top: 90)),
             new Image.asset('images/icon.png'),
-            Padding(padding: EdgeInsetsDirectional.only(top: 550)),
+            Padding(padding: EdgeInsetsDirectional.only(top: 400)),
             FlashingElement(Text(
               'Tap anywhere to begin!',
               style: appTheme.textTheme.subhead,

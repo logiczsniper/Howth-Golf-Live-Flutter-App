@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/pages/app_resources.dart';
+import 'package:howth_golf_live/app_resources.dart';
+import 'package:dio/dio.dart';
 
 class CompetitionsPage extends StatefulWidget with AppResources {
   @override
@@ -14,8 +15,8 @@ class CompetitionsPage extends StatefulWidget with AppResources {
 class _CompetitionsPageState extends State<CompetitionsPage> with AppResources {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: DefaultTabController(
+    return Scaffold(
+        body: DefaultTabController(
             length: 3,
             child: Scaffold(
                 drawer: elementBuilder.buildDrawer(context),

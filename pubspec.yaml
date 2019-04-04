@@ -12,6 +12,7 @@ dependencies:
   carousel_pro: ^0.0.13
   bubble_tab_indicator: ^0.1.4
   cupertino_icons: ^0.1.2
+  dio: ^1.0.0
 
 dev_dependencies:
   flutter_test:

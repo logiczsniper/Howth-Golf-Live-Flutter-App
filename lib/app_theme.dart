@@ -10,6 +10,8 @@ class AppThemeData {
           fontSize: 24,
           color: Colors.black,
         ),
+        subhead:
+            TextStyle(fontSize: 16, color: Color.fromARGB(255, 187, 187, 187)),
         body1: TextStyle(
             fontSize: 21, color: Colors.black, fontWeight: FontWeight.w300),
         body2: TextStyle(

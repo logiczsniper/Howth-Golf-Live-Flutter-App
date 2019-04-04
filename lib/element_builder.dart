@@ -5,13 +5,8 @@ import 'package:howth_golf_live/app_theme.dart';
 import 'package:howth_golf_live/constants.dart';
 
 class ElementBuilder {
-  String currentRoute;
   final ThemeData appTheme = AppThemeData().build();
   final Constants constants = Constants();
-
-  ElementBuilder() {
-    currentRoute = "/Competitions";
-  }
 
   Drawer buildDrawer(BuildContext context) {
     return Drawer(
@@ -35,40 +30,28 @@ class ElementBuilder {
                   radius: Radius.circular(7.0),
                   overlayShadow: false,
                   overlayShadowSize: 0.0,
-                  autoplayDuration: Duration(seconds: 6),
+                  autoplay: false,
                   animationDuration: Duration(milliseconds: 350),
                   boxFit: BoxFit.fill)),
-          _buildDrawerTile(context, constants.competitionsText),
-          _buildDrawerTile(context, constants.resultsText),
-          _buildDrawerTile(context, constants.clubLinksText),
-          _buildDrawerTile(context, constants.appHelpText)
+          buildDrawerTile(
+              context, constants.competitionsText, Icons.golf_course),
+          buildDrawerTile(context, constants.resultsText, Icons.stars),
+          buildDrawerTile(context, constants.clubLinksText, Icons.link),
+          buildDrawerTile(context, constants.appHelpText, Icons.help)
         ],
       ),
     );
   }
 
-  ListTile _buildDrawerTile(BuildContext context, String text) {
-    // TODO fixme
+  ListTile buildDrawerTile(BuildContext context, String text, IconData icon) {
     String namedRoute = '/' + text;
-    currentRoute = currentRoute == null ? '' : currentRoute;
-    print(currentRoute + '||' + namedRoute);
-
-    Icon icon = currentRoute == namedRoute
-        ? Icon(Icons.radio_button_checked)
-        : Icon(Icons.radio_button_unchecked);
-
-    TextStyle style = currentRoute == namedRoute
-        ? appTheme.textTheme.body2
-        : appTheme.textTheme.body1;
 
     return ListTile(
-      selected: true,
-      title: Center(child: Text(text, style: style)),
-      trailing: icon,
+      title: Center(child: Text(text, style: appTheme.textTheme.body2)),
+      trailing: Icon(icon, color: appTheme.primaryColorDark),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, namedRoute);
-        currentRoute = namedRoute;
       },
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/pages/app_resources.dart';
+import 'package:howth_golf_live/app_resources.dart';
 
 class AppHelpPage extends StatelessWidget with AppResources {
   AppHelpPage({Key key}) : super(key: key);

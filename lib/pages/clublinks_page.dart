@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/app_resources.dart';
+import 'package:howth_golf_live/static/app_resources.dart';
 
 class ClubLinksPage extends StatelessWidget with AppResources {
   ClubLinksPage({Key key}) : super(key: key);

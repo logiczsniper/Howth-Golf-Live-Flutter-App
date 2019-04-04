@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/apphelp_page.dart';
 import 'package:howth_golf_live/pages/clublinks_page.dart';
 import 'package:howth_golf_live/pages/home_page.dart';
-import 'package:howth_golf_live/app_resources.dart';
+import 'package:howth_golf_live/static/app_resources.dart';
 import 'package:howth_golf_live/pages/results_page.dart';
 import 'package:howth_golf_live/pages/competitions_page.dart';
 

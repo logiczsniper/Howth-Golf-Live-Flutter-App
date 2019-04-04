@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
-import 'package:howth_golf_live/app_theme.dart';
-import 'package:howth_golf_live/constants.dart';
+import 'package:howth_golf_live/static/app_theme.dart';
+import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/flashing_element.dart';
 
 class ElementBuilder {
   final ThemeData appTheme = AppThemeData().build();
@@ -22,16 +23,14 @@ class ElementBuilder {
                     'images/drawer_image_four.jpg',
                     'images/drawer_image_five.jpg',
                   ].map((path) => AssetImage(path)).toList(),
-                  dotColor: Color.fromARGB(255, 187, 187, 187),
+                  dotColor: appTheme.primaryColor,
                   dotSize: 4.0,
                   dotSpacing: 10,
                   indicatorBgPadding: 15.0,
                   borderRadius: true,
-                  radius: Radius.circular(7.0),
+                  radius: Radius.circular(20.0),
                   overlayShadow: false,
-                  overlayShadowSize: 0.0,
                   autoplay: false,
-                  animationDuration: Duration(milliseconds: 350),
                   boxFit: BoxFit.fill)),
           buildDrawerTile(
               context, constants.competitionsText, Icons.golf_course),
@@ -47,7 +46,7 @@ class ElementBuilder {
     String namedRoute = '/' + text;
 
     return ListTile(
-      title: Center(child: Text(text, style: appTheme.textTheme.body2)),
+      title: Text(text, style: appTheme.textTheme.body2),
       trailing: Icon(icon, color: appTheme.primaryColorDark),
       onTap: () {
         Navigator.pop(context);
@@ -95,5 +94,9 @@ class ElementBuilder {
       backgroundColor: appTheme.primaryColor,
       iconTheme: IconThemeData(color: appTheme.primaryColorDark),
     );
+  }
+
+  FlashingElement buildFlashingElement(Widget target) {
+    return FlashingElement(target);
   }
 }

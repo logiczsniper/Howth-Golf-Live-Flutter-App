@@ -14,8 +14,8 @@ class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
         super(key: key);
 
   @override
-  _ComplexAppBarState createState() => new _ComplexAppBarState(
-      this.title, this._importEntries, this._listBuilder);
+  _ComplexAppBarState createState() =>
+      new _ComplexAppBarState(this.title, this._importEntries);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -29,10 +29,9 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
   Function _importEntries;
-  Function _listBuilder;
   String title;
 
-  _ComplexAppBarState(this.title, this._importEntries, this._listBuilder) {
+  _ComplexAppBarState(this.title, this._importEntries) {
     _appBarTitle = Text(title,
         style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)));
 
@@ -120,10 +119,26 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         drawer: AppDrawer(),
         body: TabBarView(
           children: <Widget>[
-            _listBuilder(_searchText, filteredEntries, entries),
-            _listBuilder(_searchText, filteredEntries, entries),
-            _listBuilder(_searchText, filteredEntries, entries)
+            widget._listBuilder(_searchText, filteredEntries, entries),
+            widget._listBuilder(_searchText, filteredEntries, entries),
+            widget._listBuilder(_searchText, filteredEntries, entries)
           ],
         ));
+  }
+}
+
+class StandardAppBar extends StatelessWidget with AppResources {
+  final String title;
+
+  StandardAppBar(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      title: Text(title, style: TextStyle(color: appTheme.primaryColorDark)),
+      backgroundColor: appTheme.primaryColor,
+      iconTheme: IconThemeData(color: appTheme.primaryColorDark),
+    );
   }
 }

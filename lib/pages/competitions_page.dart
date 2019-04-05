@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_bar_complex.dart';
+import 'package:howth_golf_live/static/app_bar_custom.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class CompetitionsPage extends StatefulWidget with AppResources {

@@ -14,7 +14,8 @@ class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
         super(key: key);
 
   @override
-  _ComplexAppBarState createState() => new _ComplexAppBarState();
+  _ComplexAppBarState createState() => new _ComplexAppBarState(
+      this.title, this._importEntries, this._listBuilder);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -28,11 +29,12 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
   Function _importEntries;
+  Function _listBuilder;
+  String title;
 
-  _ComplexAppBarState() {
-    _appBarTitle = Text(widget.title,
+  _ComplexAppBarState(this.title, this._importEntries, this._listBuilder) {
+    _appBarTitle = Text(title,
         style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)));
-    _importEntries = widget._importEntries;
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -69,7 +71,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
-        this._appBarTitle = new Text(widget.title,
+        this._appBarTitle = new Text(title,
             style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)));
         filteredEntries = entries;
         _filter.clear();
@@ -118,9 +120,9 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         drawer: AppDrawer(),
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(_searchText, filteredEntries, entries),
-            widget._listBuilder(_searchText, filteredEntries, entries),
-            widget._listBuilder(_searchText, filteredEntries, entries)
+            _listBuilder(_searchText, filteredEntries, entries),
+            _listBuilder(_searchText, filteredEntries, entries),
+            _listBuilder(_searchText, filteredEntries, entries)
           ],
         ));
   }

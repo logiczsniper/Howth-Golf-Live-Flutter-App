@@ -3,6 +3,7 @@ import 'package:howth_golf_live/static/app_bar_complex.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class CompetitionsPage extends StatefulWidget with AppResources {
+  final String title = "Competitions";
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
     return constants.competitionsText;

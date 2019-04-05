@@ -57,6 +57,6 @@ void _getResults() async {
         body: DefaultTabController(
             length: 3,
             child: ComplexAppBar(_getResults, _buildResultsList,
-                title: constants.competitionsText)));
+                title: constants.resultsText)));
   }
 }

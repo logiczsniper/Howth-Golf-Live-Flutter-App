@@ -133,33 +133,41 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            title: _appBarTitle,
-            backgroundColor: appTheme.primaryColor,
-            iconTheme: IconThemeData(color: appTheme.primaryColorDark),
-            actions: <Widget>[
-              IconButton(
-                icon: _searchIcon,
-                tooltip: 'Tap to search!',
-                color: appTheme.primaryColorDark,
-                onPressed: _searchPressed,
-              )
-            ],
-            bottom: TabBar(
-                labelColor: appTheme.primaryColorDark,
-                indicator: BubbleTabIndicator(
-                  indicatorColor: appTheme.accentColor,
-                  tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                  indicatorHeight: 25.0,
-                ),
-                tabs: <Widget>[
-                  _buildTab(context, constants.currentText),
-                  _buildTab(context, constants.archivedText),
-                  _buildTab(context, constants.favouritesText)
-                ])),
-        drawer: AppDrawer(),
+    return SafeArea(
+      child: NestedScrollView(
+        controller: ScrollController(),
+        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+                centerTitle: true,
+                title: _appBarTitle,
+                floating: true,
+                pinned: false,
+                snap: true,
+                backgroundColor: appTheme.primaryColor,
+                iconTheme: IconThemeData(color: appTheme.primaryColorDark),
+                actions: <Widget>[
+                  IconButton(
+                    icon: _searchIcon,
+                    tooltip: 'Tap to search!',
+                    color: appTheme.primaryColorDark,
+                    onPressed: _searchPressed,
+                  )
+                ],
+                bottom: TabBar(
+                    labelColor: appTheme.primaryColorDark,
+                    indicator: BubbleTabIndicator(
+                      indicatorColor: appTheme.accentColor,
+                      tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                      indicatorHeight: 25.0,
+                    ),
+                    tabs: <Widget>[
+                      _buildTab(context, constants.currentText),
+                      _buildTab(context, constants.archivedText),
+                      _buildTab(context, constants.favouritesText)
+                    ])),
+          ];
+        },
         body: TabBarView(
           children: <Widget>[
             widget._listBuilder(
@@ -169,7 +177,9 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
             widget._listBuilder(
                 _searchText, filteredFavouriteEntries, favouriteEntries)
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/app_bar_custom.dart';
+import 'package:howth_golf_live/static/app_drawer.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class ResultsPage extends StatefulWidget with AppResources {
@@ -63,6 +64,7 @@ void _getResults() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: AppDrawer(),
         body: DefaultTabController(
             length: 3,
             child: ComplexAppBar(_getResults, _buildResultsList,

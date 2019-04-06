@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_flashing_element.dart';
+import 'package:howth_golf_live/static/app_fading_element.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class HomePage extends StatelessWidget with AppResources {
@@ -15,17 +15,23 @@ class HomePage extends StatelessWidget with AppResources {
           Navigator.pushNamed(context, '/' + constants.competitionsText);
         },
         child: Scaffold(
-            body: Center(
-                child: Column(
-          children: <Widget>[
-            Padding(padding: EdgeInsetsDirectional.only(top: 90)),
-            new Image.asset('images/icon.png'),
-            Padding(padding: EdgeInsetsDirectional.only(top: 400)),
-            FlashingElement(Text(
-              'Tap anywhere to begin!',
-              style: appTheme.textTheme.subhead,
-            ))
-          ],
-        ))));
+          body: Center(
+              child: Column(
+            children: <Widget>[
+              Padding(padding: EdgeInsetsDirectional.only(top: 90)),
+              new Image.asset('images/icon.png'),
+              Padding(padding: EdgeInsetsDirectional.only(top: 400)),
+              FadingElement(
+                Text(
+                  'Tap anywhere to begin!',
+                  style:
+                      TextStyle(fontSize: 14, color: appTheme.primaryColorDark),
+                ),
+                true,
+              )
+            ],
+          )),
+          backgroundColor: appTheme.primaryColor,
+        ));
   }
 }

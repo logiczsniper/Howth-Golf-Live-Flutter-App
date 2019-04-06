@@ -72,10 +72,12 @@ void _getCompetitions() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: AppDrawer(),
-        body: DefaultTabController(
-            length: 3,
-            child: ComplexAppBar(_getCompetitions, _buildCompetitionsList,
-                title: constants.competitionsText)));
+      drawer: AppDrawer(),
+      body: DefaultTabController(
+          length: 3,
+          child: ComplexAppBar(_getCompetitions, _buildCompetitionsList,
+              title: constants.competitionsText)),
+      backgroundColor: appTheme.primaryColor,
+    );
   }
 }

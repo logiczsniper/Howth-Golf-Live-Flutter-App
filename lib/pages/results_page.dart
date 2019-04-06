@@ -64,10 +64,12 @@ void _getResults() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: AppDrawer(),
-        body: DefaultTabController(
-            length: 3,
-            child: ComplexAppBar(_getResults, _buildResultsList,
-                title: constants.resultsText)));
+      drawer: AppDrawer(),
+      body: DefaultTabController(
+          length: 3,
+          child: ComplexAppBar(_getResults, _buildResultsList,
+              title: constants.resultsText)),
+      backgroundColor: appTheme.primaryColor,
+    );
   }
 }

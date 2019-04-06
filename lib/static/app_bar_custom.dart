@@ -1,6 +1,6 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_drawer.dart';
+import 'package:howth_golf_live/static/app_fading_element.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -88,27 +88,33 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
           Icons.close,
           color: appTheme.primaryColorDark,
         );
-        this._appBarTitle = new TextField(
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: false,
-          controller: _filter,
-          style: TextStyle(color: appTheme.primaryColorDark),
-          decoration: new InputDecoration(
-              contentPadding: EdgeInsets.all(1.5),
-              enabledBorder: outlineInputBorder,
-              focusedBorder: outlineInputBorder,
-              prefixIcon: new Icon(
-                Icons.search,
-                color: appTheme.primaryColorDark,
-              ),
-              hintText: 'Search...',
-              hintStyle: appTheme.textTheme.subhead),
+        this._appBarTitle = FadingElement(
+          new TextField(
+            textCapitalization: TextCapitalization.sentences,
+            autocorrect: false,
+            controller: _filter,
+            style: TextStyle(color: appTheme.primaryColorDark),
+            decoration: new InputDecoration(
+                contentPadding: EdgeInsets.all(1.5),
+                enabledBorder: outlineInputBorder,
+                focusedBorder: outlineInputBorder,
+                prefixIcon: new Icon(
+                  Icons.search,
+                  color: appTheme.primaryColorDark,
+                ),
+                hintText: 'Search...',
+                hintStyle: appTheme.textTheme.subhead),
+          ),
+          false,
+          fadeIn: true,
+          duration: Duration(milliseconds: 200),
         );
       } else {
         this._searchIcon = new Icon(
           Icons.search,
           color: appTheme.primaryColorDark,
         );
+
         this._appBarTitle = new Text(title,
             style: TextStyle(
               color: appTheme.primaryColorDark,
@@ -183,10 +189,17 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   }
 }
 
-class StandardAppBar extends StatelessWidget with AppResources {
+class StandardAppBar extends StatelessWidget
+    with AppResources
+    implements PreferredSizeWidget {
   final String title;
 
-  StandardAppBar(this.title);
+  StandardAppBar(this.title, {Key key})
+      : preferredSize = Size.fromHeight(56.0),
+        super(key: key);
+
+  @override
+  final Size preferredSize; //
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +207,7 @@ class StandardAppBar extends StatelessWidget with AppResources {
       centerTitle: true,
       title: Text(title, style: TextStyle(color: appTheme.primaryColorDark)),
       backgroundColor: appTheme.primaryColor,
+      elevation: 0.0,
       iconTheme: IconThemeData(color: appTheme.primaryColorDark),
     );
   }

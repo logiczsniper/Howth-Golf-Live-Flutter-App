@@ -30,9 +30,18 @@ void _getCompetitions() async {
       });
     } */
 
-  List _getCompetitions() {
-    List tempList = ['bobs', 'your', 'competitions'];
-    return tempList;
+  Map _getCompetitions() {
+    List tempListCurrent = ['current', 'your', 'competitionssss'];
+    List tempListArchived = ['archived', 'your', 'competitionssss'];
+    List tempListFavourites = ['favourites', 'your', 'competitionssss'];
+
+    Map<String, List> output = {
+      constants.currentText: tempListCurrent,
+      constants.archivedText: tempListArchived,
+      constants.favouritesText: tempListFavourites
+    };
+
+    return output;
   }
 
   Widget _buildCompetitionsList(

@@ -22,9 +22,18 @@ void _getResults() async {
       BUILD SMART WEB SCRAPER HERE
 
     } */
-  List _getResults() {
-    List tempList = ['results abby', 'your', 'resultssss'];
-    return tempList;
+  Map _getResults() {
+    List tempListCurrent = ['current', 'your', 'resultssss'];
+    List tempListArchived = ['archived', 'your', 'resultssss'];
+    List tempListFavourites = ['favourites', 'your', 'resultssss'];
+
+    Map<String, List> output = {
+      constants.currentText: tempListCurrent,
+      constants.archivedText: tempListArchived,
+      constants.favouritesText: tempListFavourites
+    };
+
+    return output;
   }
 
   Widget _buildResultsList(

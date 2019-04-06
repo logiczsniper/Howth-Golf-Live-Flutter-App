@@ -24,8 +24,16 @@ class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
-  List entries = new List();
-  List filteredEntries = new List();
+
+  List currentEntries = new List();
+  List filteredCurrentEntries = new List();
+
+  List archivedEntries = new List();
+  List filteredArchivedEntries = new List();
+
+  List favouriteEntries = new List();
+  List filteredFavouriteEntries = new List();
+
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
   Function _importEntries;
@@ -39,7 +47,9 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
-          filteredEntries = entries;
+          filteredCurrentEntries = currentEntries;
+          filteredArchivedEntries = archivedEntries;
+          filteredFavouriteEntries = favouriteEntries;
         });
       } else {
         setState(() {
@@ -50,29 +60,62 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   }
 
   void _getEntries() {
-    List tempList = this._importEntries();
+    Map tempList = this._importEntries();
 
     setState(() {
-      entries = tempList;
-      filteredEntries = entries;
+      currentEntries = tempList[constants.currentText];
+      filteredCurrentEntries = currentEntries;
+
+      archivedEntries = tempList[constants.archivedText];
+      filteredArchivedEntries = archivedEntries;
+
+      favouriteEntries = tempList[constants.favouritesText];
+      filteredFavouriteEntries = favouriteEntries;
     });
   }
 
   void _searchPressed() {
+    OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
+      borderSide: BorderSide(color: appTheme.accentColor, width: 1.8),
+      borderRadius: const BorderRadius.all(
+        const Radius.circular(10.0),
+      ),
+    );
+
     setState(() {
       if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
+        this._searchIcon = new Icon(
+          Icons.close,
+          color: appTheme.primaryColorDark,
+        );
         this._appBarTitle = new TextField(
+          textCapitalization: TextCapitalization.sentences,
+          autocorrect: false,
           controller: _filter,
-          style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)),
+          style: TextStyle(color: appTheme.primaryColorDark),
           decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'Search...'),
+              contentPadding: EdgeInsets.all(1.5),
+              enabledBorder: outlineInputBorder,
+              focusedBorder: outlineInputBorder,
+              prefixIcon: new Icon(
+                Icons.search,
+                color: appTheme.primaryColorDark,
+              ),
+              hintText: 'Search...',
+              hintStyle: appTheme.textTheme.subhead),
         );
       } else {
-        this._searchIcon = new Icon(Icons.search);
+        this._searchIcon = new Icon(
+          Icons.search,
+          color: appTheme.primaryColorDark,
+        );
         this._appBarTitle = new Text(title,
-            style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)));
-        filteredEntries = entries;
+            style: TextStyle(
+              color: appTheme.primaryColorDark,
+            ));
+        filteredCurrentEntries = currentEntries;
+        filteredArchivedEntries = archivedEntries;
+        filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
     });
@@ -119,9 +162,12 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         drawer: AppDrawer(),
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(_searchText, filteredEntries, entries),
-            widget._listBuilder(_searchText, filteredEntries, entries),
-            widget._listBuilder(_searchText, filteredEntries, entries)
+            widget._listBuilder(
+                _searchText, filteredCurrentEntries, currentEntries),
+            widget._listBuilder(
+                _searchText, filteredArchivedEntries, archivedEntries),
+            widget._listBuilder(
+                _searchText, filteredFavouriteEntries, favouriteEntries)
           ],
         ));
   }

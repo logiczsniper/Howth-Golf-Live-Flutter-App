@@ -86,7 +86,6 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
       if (this._searchIcon.icon == Icons.search) {
         this._searchIcon = new Icon(
           Icons.close,
-          color: appTheme.primaryColorDark,
         );
         this._appBarTitle = FadingElement(
           new TextField(
@@ -98,21 +97,18 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
                 contentPadding: EdgeInsets.all(1.5),
                 enabledBorder: outlineInputBorder,
                 focusedBorder: outlineInputBorder,
-                prefixIcon: new Icon(
-                  Icons.search,
-                  color: appTheme.primaryColorDark,
-                ),
+                prefixIcon:
+                    new Icon(Icons.search, color: appTheme.primaryColorDark),
                 hintText: 'Search...',
                 hintStyle: appTheme.textTheme.subhead),
           ),
           false,
           fadeIn: true,
-          duration: Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 400),
         );
       } else {
         this._searchIcon = new Icon(
           Icons.search,
-          color: appTheme.primaryColorDark,
         );
 
         this._appBarTitle = new Text(title,
@@ -156,8 +152,8 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
                   IconButton(
                     icon: _searchIcon,
                     tooltip: 'Tap to search!',
-                    color: appTheme.primaryColorDark,
                     onPressed: _searchPressed,
+                    color: appTheme.primaryColorDark,
                   )
                 ],
                 bottom: TabBar(

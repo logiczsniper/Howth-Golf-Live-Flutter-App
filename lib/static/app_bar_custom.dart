@@ -1,6 +1,5 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_fading_element.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -36,7 +35,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
 
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
-  bool _toggle;
+  bool _toggleTitle;
   Function _importEntries;
   String title;
 
@@ -88,27 +87,36 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         this._searchIcon = new Icon(
           Icons.close,
         );
-        _toggle = false;
+        _toggleTitle = false;
       } else {
         this._searchIcon = new Icon(
           Icons.search,
         );
-        _toggle = true;
+        _toggleTitle = true;
         filteredCurrentEntries = currentEntries;
         filteredArchivedEntries = archivedEntries;
         filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
       this._appBarTitle = AnimatedCrossFade(
-        firstCurve: Curves.easeInCubic,
-        secondCurve: Curves.easeInQuint,
+        firstCurve: Curves.easeInOutExpo,
+        secondCurve: Curves.easeInOutExpo,
         crossFadeState:
-            _toggle ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            _toggleTitle ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         duration: Duration(milliseconds: 1020),
-        firstChild: Text(title,
-            style: TextStyle(
-              color: appTheme.primaryColorDark,
-            )),
+        firstChild: Center(
+            child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 4),
+            ),
+            Text(title,
+                style: TextStyle(
+                  color: appTheme.primaryColorDark,
+                ))
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        )),
         secondChild: new TextField(
           textCapitalization: TextCapitalization.sentences,
           autocorrect: false,
@@ -135,7 +143,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   void initState() {
     this._getEntries();
     super.initState();
-    this._toggle = false;
+    this._toggleTitle = false;
   }
 
   @override

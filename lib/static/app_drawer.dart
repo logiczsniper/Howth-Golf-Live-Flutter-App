@@ -12,7 +12,7 @@ class AppDrawer extends StatelessWidget with AppResources {
         padding: EdgeInsets.only(left: 24.0),
         child: Text(text,
             style: TextStyle(
-                fontSize: 17, color: Color.fromARGB(255, 187, 187, 187))),
+                fontSize: 18, color: Color.fromARGB(255, 187, 187, 187))),
       )),
       trailing: Icon(icon, color: appTheme.primaryColorDark),
       onTap: () {
@@ -25,12 +25,13 @@ class AppDrawer extends StatelessWidget with AppResources {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: MediaQuery.of(context).size.width * 29 / 50,
+        width: MediaQuery.of(context).size.width * 3 / 5,
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
+                  curve: Curves.decelerate,
                   child: new Carousel(
                       images: [
                         'images/drawer_image_one.png',

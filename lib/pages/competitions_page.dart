@@ -4,7 +4,6 @@ import 'package:howth_golf_live/static/app_drawer.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class CompetitionsPage extends StatefulWidget with AppResources {
-  final String title = "Competitions";
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
     return constants.competitionsText;
@@ -67,8 +66,10 @@ void _getCompetitions() async {
           elevation: 1.8,
           margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: Container(
-              decoration:
-                  BoxDecoration(color: Color.fromARGB(255, 248, 248, 248)),
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 248, 248, 248),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(10.0)),
               child: ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),

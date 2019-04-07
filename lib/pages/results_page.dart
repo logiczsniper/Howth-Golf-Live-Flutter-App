@@ -53,9 +53,35 @@ void _getResults() async {
     return ListView.builder(
       itemCount: results == null ? 0 : filteredResults.length,
       itemBuilder: (BuildContext context, int index) {
-        return new ListTile(
-          title: Text(filteredResults[index]),
-          onTap: () => print(filteredResults[index]),
+        return Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 1.8,
+          margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 248, 248, 248),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
+                  leading: Container(
+                    padding: EdgeInsets.only(right: 15.0),
+                    decoration: new BoxDecoration(
+                        border: new Border(
+                            right: new BorderSide(
+                                width: 1.5, color: appTheme.accentColor))),
+                    child: Text("00 - 00", style: appTheme.textTheme.caption),
+                  ),
+                  title: Text(
+                    filteredResults[index].toString(),
+                    style: appTheme.textTheme.body2,
+                  ),
+                  subtitle: Text("00/00/0000 - 11/11/1111",
+                      style: appTheme.textTheme.subhead),
+                  trailing: Icon(Icons.keyboard_arrow_right,
+                      color: appTheme.primaryColorDark))),
         );
       },
     );

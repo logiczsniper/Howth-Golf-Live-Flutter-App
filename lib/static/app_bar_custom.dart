@@ -36,6 +36,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
 
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
+  bool _toggle;
   Function _importEntries;
   String title;
 
@@ -87,39 +88,42 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         this._searchIcon = new Icon(
           Icons.close,
         );
-        this._appBarTitle = FadingElement(
-          new TextField(
-            textCapitalization: TextCapitalization.sentences,
-            autocorrect: false,
-            controller: _filter,
-            style: TextStyle(color: appTheme.primaryColorDark),
-            decoration: new InputDecoration(
-                contentPadding: EdgeInsets.all(1.5),
-                enabledBorder: outlineInputBorder,
-                focusedBorder: outlineInputBorder,
-                prefixIcon:
-                    new Icon(Icons.search, color: appTheme.primaryColorDark),
-                hintText: 'Search...',
-                hintStyle: appTheme.textTheme.subhead),
-          ),
-          false,
-          fadeIn: true,
-          duration: Duration(milliseconds: 400),
-        );
+        _toggle = false;
       } else {
         this._searchIcon = new Icon(
           Icons.search,
         );
-
-        this._appBarTitle = new Text(title,
-            style: TextStyle(
-              color: appTheme.primaryColorDark,
-            ));
+        _toggle = true;
         filteredCurrentEntries = currentEntries;
         filteredArchivedEntries = archivedEntries;
         filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
+      this._appBarTitle = AnimatedCrossFade(
+        firstCurve: Curves.easeInCubic,
+        secondCurve: Curves.easeInQuint,
+        crossFadeState:
+            _toggle ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        duration: Duration(milliseconds: 1020),
+        firstChild: Text(title,
+            style: TextStyle(
+              color: appTheme.primaryColorDark,
+            )),
+        secondChild: new TextField(
+          textCapitalization: TextCapitalization.sentences,
+          autocorrect: false,
+          controller: _filter,
+          style: TextStyle(color: appTheme.primaryColorDark),
+          decoration: new InputDecoration(
+              contentPadding: EdgeInsets.all(1.5),
+              enabledBorder: outlineInputBorder,
+              focusedBorder: outlineInputBorder,
+              prefixIcon:
+                  new Icon(Icons.search, color: appTheme.primaryColorDark),
+              hintText: 'Search...',
+              hintStyle: appTheme.textTheme.subhead),
+        ),
+      );
     });
   }
 
@@ -131,6 +135,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   void initState() {
     this._getEntries();
     super.initState();
+    this._toggle = false;
   }
 
   @override

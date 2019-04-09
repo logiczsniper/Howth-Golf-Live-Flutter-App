@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/static/app_resources.dart';
 import 'package:howth_golf_live/pages/apphelp_page.dart';
 import 'package:howth_golf_live/pages/clublinks_page.dart';
 import 'package:howth_golf_live/pages/home_page.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
 import 'package:howth_golf_live/pages/results_page.dart';
 import 'package:howth_golf_live/pages/competitions_page.dart';
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget with AppResources {
         theme: appTheme,
         initialRoute: '/',
         routes: <String, WidgetBuilder>{
-          '/': (context) => HomePage(title: constants.appName),
+          '/': (context) => HomePage(),
           '/' + constants.competitionsText: (context) => CompetitionsPage(),
           '/' + constants.resultsText: (context) => ResultsPage(),
           '/' + constants.clubLinksText: (context) => ClubLinksPage(),

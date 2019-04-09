@@ -3,9 +3,7 @@ import 'package:howth_golf_live/static/app_fading_element.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class HomePage extends StatelessWidget with AppResources {
-  final String title;
-
-  HomePage({Key key, @required this.title}) : super(key: key);
+  HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

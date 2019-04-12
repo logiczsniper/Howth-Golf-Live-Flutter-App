@@ -41,7 +41,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   String title;
 
   _ComplexAppBarState(this.title, this._importEntries) {
-    _appBarTitle = MyCrossFade(title).build(context);
+    _appBarTitle = MyCrossFade(title, _filter).build(context);
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -91,7 +91,8 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
-      this._appBarTitle = MyCrossFade(title, _toggleTitle).build(context);
+      this._appBarTitle =
+          MyCrossFade(title, _filter, _toggleTitle).build(context);
     });
   }
 

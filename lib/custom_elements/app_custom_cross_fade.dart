@@ -4,11 +4,11 @@ import 'package:howth_golf_live/static/app_resources.dart';
 class MyCrossFade with AppResources {
   final bool _toggleTitle;
   final String title;
+  final TextEditingController _filter;
 
-  MyCrossFade(this.title, [this._toggleTitle = true]);
+  MyCrossFade(this.title, this._filter, [this._toggleTitle = true]);
 
   Widget build(BuildContext context) {
-    final TextEditingController _filter = new TextEditingController();
     OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
       borderSide: BorderSide(color: appTheme.accentColor, width: 1.8),
       borderRadius: const BorderRadius.all(

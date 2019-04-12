@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_bar_custom.dart';
-import 'package:howth_golf_live/static/app_drawer.dart';
+import 'package:howth_golf_live/custom_elements/app_bar_custom.dart';
+import 'package:howth_golf_live/custom_elements/app_drawer.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class ComplexPage extends StatefulWidget with AppResources {

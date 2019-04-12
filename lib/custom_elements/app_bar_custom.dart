@@ -1,6 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/app_resources.dart';
+import 'package:howth_golf_live/custom_elements/app_custom_cross_fade.dart';
 
 class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -35,13 +36,12 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
 
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
-  bool _toggleTitle;
+  bool _toggleTitle = true;
   Function _importEntries;
   String title;
 
   _ComplexAppBarState(this.title, this._importEntries) {
-    _appBarTitle = Text(title,
-        style: TextStyle(color: Color.fromARGB(255, 187, 187, 187)));
+    _appBarTitle = MyCrossFade(title).build(context);
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -75,13 +75,6 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   }
 
   void _searchPressed() {
-    OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
-      borderSide: BorderSide(color: appTheme.accentColor, width: 1.8),
-      borderRadius: const BorderRadius.all(
-        const Radius.circular(10.0),
-      ),
-    );
-
     setState(() {
       if (this._searchIcon.icon == Icons.search) {
         this._searchIcon = new Icon(
@@ -98,40 +91,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
         filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
-      this._appBarTitle = AnimatedCrossFade(
-        firstCurve: Curves.easeInOutExpo,
-        secondCurve: Curves.easeInOutExpo,
-        crossFadeState:
-            _toggleTitle ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        duration: Duration(milliseconds: 1020),
-        firstChild: Center(
-            child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 4),
-            ),
-            Text(title,
-                style: TextStyle(
-                  color: appTheme.primaryColorDark,
-                ))
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        )),
-        secondChild: new TextField(
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: false,
-          controller: _filter,
-          style: TextStyle(color: appTheme.primaryColorDark),
-          decoration: new InputDecoration(
-              contentPadding: EdgeInsets.all(1.5),
-              enabledBorder: outlineInputBorder,
-              focusedBorder: outlineInputBorder,
-              prefixIcon:
-                  new Icon(Icons.search, color: appTheme.primaryColorDark),
-              hintText: 'Search...',
-              hintStyle: appTheme.textTheme.subhead),
-        ),
-      );
+      this._appBarTitle = MyCrossFade(title, _toggleTitle).build(context);
     });
   }
 

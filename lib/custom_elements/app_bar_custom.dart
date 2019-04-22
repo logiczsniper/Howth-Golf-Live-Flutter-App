@@ -5,17 +5,14 @@ import 'package:howth_golf_live/custom_elements/app_custom_cross_fade.dart';
 
 class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  final Function _importEntries;
   final Function _listBuilder;
 
-  ComplexAppBar(this._importEntries, this._listBuilder,
-      {Key key, this.title: "Default Title"})
+  ComplexAppBar(this._listBuilder, {Key key, this.title: "Default Title"})
       : preferredSize = Size.fromHeight(56.0),
         super(key: key);
 
   @override
-  _ComplexAppBarState createState() =>
-      new _ComplexAppBarState(this.title, this._importEntries);
+  _ComplexAppBarState createState() => new _ComplexAppBarState(this.title);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -25,52 +22,24 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
 
-  List currentEntries = new List();
-  List filteredCurrentEntries = new List();
-
-  List archivedEntries = new List();
-  List filteredArchivedEntries = new List();
-
-  List favouriteEntries = new List();
-  List filteredFavouriteEntries = new List();
-
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle;
   bool _toggleTitle = true;
-  Function _importEntries;
   String title;
 
-  _ComplexAppBarState(this.title, this._importEntries) {
+  _ComplexAppBarState(this.title) {
     _appBarTitle = MyCrossFade(title, _filter).build(context);
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
-          filteredCurrentEntries = currentEntries;
-          filteredArchivedEntries = archivedEntries;
-          filteredFavouriteEntries = favouriteEntries;
         });
       } else {
         setState(() {
           _searchText = _filter.text;
         });
       }
-    });
-  }
-
-  void _getEntries() {
-    Map tempList = this._importEntries();
-
-    setState(() {
-      currentEntries = tempList[constants.currentText];
-      filteredCurrentEntries = currentEntries;
-
-      archivedEntries = tempList[constants.archivedText];
-      filteredArchivedEntries = archivedEntries;
-
-      favouriteEntries = tempList[constants.favouritesText];
-      filteredFavouriteEntries = favouriteEntries;
     });
   }
 
@@ -86,9 +55,6 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
           Icons.search,
         );
         _toggleTitle = true;
-        filteredCurrentEntries = currentEntries;
-        filteredArchivedEntries = archivedEntries;
-        filteredFavouriteEntries = favouriteEntries;
         _filter.clear();
       }
       this._appBarTitle =
@@ -96,15 +62,10 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
     });
   }
 
-  Tab _buildTab(BuildContext context, String text) {
-    return Tab(text: text);
-  }
-
   @override
   void initState() {
-    this._getEntries();
     super.initState();
-    this._toggleTitle = false;
+    _toggleTitle = false;
   }
 
   @override
@@ -138,20 +99,17 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
                       indicatorHeight: 25.0,
                     ),
                     tabs: <Widget>[
-                      _buildTab(context, constants.currentText),
-                      _buildTab(context, constants.archivedText),
-                      _buildTab(context, constants.favouritesText)
+                      Tab(text: constants.currentText),
+                      Tab(text: constants.archivedText),
+                      Tab(text: constants.favouritesText),
                     ])),
           ];
         },
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(
-                _searchText, filteredCurrentEntries, currentEntries),
-            widget._listBuilder(
-                _searchText, filteredArchivedEntries, archivedEntries),
-            widget._listBuilder(
-                _searchText, filteredFavouriteEntries, favouriteEntries)
+            widget._listBuilder(_searchText, 1),
+            widget._listBuilder(_searchText, 0),
+            widget._listBuilder(_searchText, 1)
           ],
         ),
       ),

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "641773459126",
+    "firebase_url": "https://howthgolflive.firebaseio.com",
+    "project_id": "howthgolflive",
+    "storage_bucket": "howthgolflive.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641773459126:android:2b4fdf16af8eadc2",
+        "android_client_info": {
+          "package_name": "com.howth_golf.live_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641773459126-68ucecikah9o7ptpaeki6pl1f8qo9kcn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtvVvieVGEmRN02gbu1kTA2kBFiwLmqNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641773459126-68ucecikah9o7ptpaeki6pl1f8qo9kcn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

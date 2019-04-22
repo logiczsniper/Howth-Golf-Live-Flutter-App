@@ -1,4 +1,4 @@
-package com.example.howth_golf_live;
+package com.howth_golf.live_app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

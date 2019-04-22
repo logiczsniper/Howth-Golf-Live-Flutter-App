@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>641773459126-bqesgkiv10bbohsnl7it82p4le1er19v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.641773459126-bqesgkiv10bbohsnl7it82p4le1er19v</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBwiUBtyACSYiACfWxShaMZDVUeb0a5lR0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>641773459126</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.howthGolf.liveApp</string>
+	<key>PROJECT_ID</key>
+	<string>howthgolflive</string>
+	<key>STORAGE_BUCKET</key>
+	<string>howthgolflive.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:641773459126:ios:0fcf1da31f02e351</string>
+	<key>DATABASE_URL</key>
+	<string>https://howthgolflive.firebaseio.com</string>
+</dict>
+</plist>

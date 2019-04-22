@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/parents/complex_page.dart';
 
 class ResultsPage extends ComplexPage {
-  static List currentListBuilder() {
-    return ['current', 'your', 'resultss'];
-  }
-
-  static List archivedListBuilder() {
-    return ['archived', 'your', 'resultss'];
-  }
-
-  static List favouritesListBuilder() {
-    return ['favourites', 'your', 'resultss'];
-  }
-
   static ListTile tileBuilder(int index, List filteredElements) {
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
@@ -30,7 +18,7 @@ class ResultsPage extends ComplexPage {
                   fontWeight: FontWeight.w500)),
         ),
         title: Text(
-          filteredElements[index].toString(),
+          'filteredElements[index].toString()',
           style: TextStyle(
               fontSize: 21,
               color: Color.fromARGB(255, 187, 187, 187),
@@ -43,7 +31,5 @@ class ResultsPage extends ComplexPage {
             color: Color.fromARGB(255, 187, 187, 187)));
   }
 
-  ResultsPage()
-      : super(currentListBuilder, archivedListBuilder, favouritesListBuilder,
-            tileBuilder, "Results");
+  ResultsPage() : super(tileBuilder, "Results");
 }

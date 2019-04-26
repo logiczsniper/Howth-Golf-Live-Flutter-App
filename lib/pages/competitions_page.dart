@@ -1,25 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/custom_elements/app_fading_element.dart';
 import 'package:howth_golf_live/pages/parents/complex_page.dart';
 
 class CompetitionsPage extends ComplexPage {
-  static ListTile tileBuilder(int index, List filteredElements) {
-    if (filteredElements == null)
-      return ListTile(
-          title: Center(
-              child: Text("Loading...",
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: Color.fromARGB(255, 187, 187, 187),
-                      fontWeight: FontWeight.w400))));
+  static Widget tileBuilder(int index, List filteredElements) {
 
-    if (filteredElements[0] is bool)
-      return ListTile(
-          title: Center(
-              child: Text("No competitions found!",
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: Color.fromARGB(255, 187, 187, 187),
-                      fontWeight: FontWeight.w400))));
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(
@@ -44,12 +29,15 @@ class CompetitionsPage extends ComplexPage {
               color: Color.fromARGB(255, 187, 187, 187),
               fontWeight: FontWeight.w300),
         ),
-        subtitle: Text(
-            "${filteredElements[index]['start_date']} - ${filteredElements[index]['end_date']}",
+        subtitle: Text("${filteredElements[index]['start_date']}",
             style: TextStyle(
                 fontSize: 16, color: Color.fromARGB(255, 187, 187, 187))),
-        trailing: Icon(Icons.keyboard_arrow_right,
-            color: Color.fromARGB(255, 187, 187, 187)));
+        trailing: FadingElement(
+          Icon(Icons.keyboard_arrow_right,
+              color: Color.fromARGB(255, 187, 187, 187)),
+          false,
+          duration: Duration(milliseconds: 800),
+        ));
   }
 
   CompetitionsPage() : super(tileBuilder, "Competitions");

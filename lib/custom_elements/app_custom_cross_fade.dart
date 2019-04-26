@@ -22,7 +22,7 @@ class MyCrossFade with AppResources {
       secondCurve: Curves.easeInOutExpo,
       crossFadeState:
           _toggleTitle ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: Duration(milliseconds: 1020),
+      duration: Duration(milliseconds: 1010),
       firstChild: Center(
           child: Column(
         children: <Widget>[

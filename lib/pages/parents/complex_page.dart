@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/custom_elements/app_bar_custom.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
+
 import 'package:howth_golf_live/static/app_resources.dart';
 
 class ComplexPage extends StatefulWidget with AppResources {
-  final ListTile Function(int index, List filteredElements) _tileBuilder;
+  final Widget Function(int index, List filteredElements) _tileBuilder;
   final String title;
 
   ComplexPage(this._tileBuilder, this.title);
@@ -15,6 +17,25 @@ class ComplexPage extends StatefulWidget with AppResources {
 }
 
 class _ComplexPageState extends State<ComplexPage> with AppResources {
+  Widget _complexTileBuilder(int index, List filteredElements) {
+    if (filteredElements == null)
+      return ListTile(
+          title: Center(
+              child: SpinKitPulse(
+                  color: Color.fromARGB(255, 187, 187, 187), size: 45)));
+
+    if (filteredElements[0] is bool)
+      return ListTile(
+          title: Center(
+              child: Text("No ${widget.title.toLowerCase()} found!",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Color.fromARGB(255, 187, 187, 187),
+                      fontWeight: FontWeight.w400))));
+
+    return this.widget._tileBuilder(index, filteredElements);
+  }
+
   Widget _buildElementsList(String _searchText, int documentIndex) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
@@ -22,12 +43,10 @@ class _ComplexPageState extends State<ComplexPage> with AppResources {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
-            return const Center(
-                child: Text("Loading...",
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: Color.fromARGB(255, 187, 187, 187),
-                        fontWeight: FontWeight.w400)));
+            return Center(
+                child: SpinKitPulse(
+              color: Color.fromARGB(255, 187, 187, 187),
+            ));
 
           var elements = snapshot.data.documents[documentIndex].data.entries
               .toList()[0]
@@ -62,7 +81,7 @@ class _ComplexPageState extends State<ComplexPage> with AppResources {
                         color: Color.fromARGB(255, 248, 248, 248),
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: this.widget._tileBuilder(index, filteredElements)),
+                    child: _complexTileBuilder(index, filteredElements)),
               );
             },
           );

@@ -21,14 +21,14 @@ class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
-
-  Icon _searchIcon = new Icon(Icons.search);
+  bool _toggleAppBar;
+  Widget _searchIcon;
   Widget _appBarTitle;
-  bool _toggleTitle = true;
   String title;
 
   _ComplexAppBarState(this.title) {
     _appBarTitle = MyCrossFade(title, _filter).build(context);
+    _searchIcon = Icon(Icons.search);
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -45,27 +45,28 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
 
   void _searchPressed() {
     setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(
-          Icons.close,
-        );
-        _toggleTitle = false;
+      if (this._toggleAppBar == true) {
+        _toggleAppBar = false;
       } else {
-        this._searchIcon = new Icon(
-          Icons.search,
-        );
-        _toggleTitle = true;
+        _toggleAppBar = true;
         _filter.clear();
       }
-      this._appBarTitle =
-          MyCrossFade(title, _filter, _toggleTitle).build(context);
+      _searchIcon = AnimatedCrossFade(
+        duration: const Duration(milliseconds: 450),
+        firstChild: new Icon(Icons.search),
+        secondChild: new Icon(Icons.close),
+        crossFadeState: _toggleAppBar
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+      );
+      _appBarTitle = MyCrossFade(title, _filter, _toggleAppBar).build(context);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _toggleTitle = false;
+    _toggleAppBar = true;
   }
 
   @override

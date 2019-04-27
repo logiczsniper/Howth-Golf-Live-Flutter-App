@@ -4,7 +4,6 @@ import 'package:howth_golf_live/pages/parents/complex_page.dart';
 
 class CompetitionsPage extends ComplexPage {
   static Widget tileBuilder(int index, List filteredElements) {
-
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(

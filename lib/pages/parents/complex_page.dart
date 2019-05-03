@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:howth_golf_live/custom_elements/app_bar_custom.dart';
+import 'package:howth_golf_live/custom_elements/app_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
+import 'package:howth_golf_live/custom_elements/styled_card.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
-import 'package:howth_golf_live/static/app_resources.dart';
-
-class ComplexPage extends StatefulWidget with AppResources {
+class ComplexPage extends StatefulWidget {
   final Widget Function(int index, List filteredElements) _tileBuilder;
   final String title;
 
@@ -16,22 +16,25 @@ class ComplexPage extends StatefulWidget with AppResources {
   _ComplexPageState createState() => new _ComplexPageState();
 }
 
-class _ComplexPageState extends State<ComplexPage> with AppResources {
+class _ComplexPageState extends State<ComplexPage> {
   Widget _complexTileBuilder(int index, List filteredElements) {
     if (filteredElements == null)
       return ListTile(
           title: Center(
               child: SpinKitPulse(
-                  color: Color.fromARGB(255, 187, 187, 187), size: 45)));
+        color: Constants.primaryAppColorDark,
+        size: 45,
+        duration: Duration(milliseconds: 800),
+      )));
 
     if (filteredElements[0] is bool)
       return ListTile(
           title: Center(
               child: Text("No ${widget.title.toLowerCase()} found!",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 18,
                       color: Color.fromARGB(255, 187, 187, 187),
-                      fontWeight: FontWeight.w400))));
+                      fontWeight: FontWeight.w300))));
 
     return this.widget._tileBuilder(index, filteredElements);
   }
@@ -45,7 +48,7 @@ class _ComplexPageState extends State<ComplexPage> with AppResources {
           if (!snapshot.hasData)
             return Center(
                 child: SpinKitPulse(
-              color: Color.fromARGB(255, 187, 187, 187),
+              color: Constants.primaryAppColorDark,
             ));
 
           var elements = snapshot.data.documents[documentIndex].data.entries
@@ -70,18 +73,8 @@ class _ComplexPageState extends State<ComplexPage> with AppResources {
           return ListView.builder(
             itemCount: filteredElements.length,
             itemBuilder: (BuildContext context, int index) {
-              return Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                elevation: 1.8,
-                margin:
-                    new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 248, 248, 248),
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: _complexTileBuilder(index, filteredElements)),
+              return StyledCard(
+                _complexTileBuilder(index, filteredElements),
               );
             },
           );
@@ -95,7 +88,7 @@ class _ComplexPageState extends State<ComplexPage> with AppResources {
       body: DefaultTabController(
           length: 3,
           child: ComplexAppBar(_buildElementsList, title: this.widget.title)),
-      backgroundColor: appTheme.primaryColor,
+      backgroundColor: Constants.primaryAppColor,
     );
   }
 }

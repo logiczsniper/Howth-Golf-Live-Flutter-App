@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fading_element.dart';
 import 'package:howth_golf_live/pages/parents/complex_page.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
 class ResultsPage extends ComplexPage {
   static Widget tileBuilder(int index, List filteredElements) {
@@ -11,37 +12,37 @@ class ResultsPage extends ComplexPage {
             children: <Widget>[
               Text(
                 "${filteredElements[index]['title']}",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Color.fromARGB(255, 187, 187, 187),
-                    fontWeight: FontWeight.w300),
+                style: Constants.cardTitleTextStyle,
+                overflow: TextOverflow.fade,
+                maxLines: 1,
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 6),
               ),
               SizedBox(
-                  width: 290,
+                  width: 260,
                   child: Container(
                       decoration: new BoxDecoration(
                           border: new Border(
                               bottom: new BorderSide(
                                   width: 1.5,
-                                  color: Color.fromARGB(255, 153, 0, 0)))))),
+                                  color: Constants.accentAppColor))))),
               Padding(
                 padding: EdgeInsets.only(top: 6),
               )
             ]),
         subtitle: Text(
             "${filteredElements[index]['date']} by ${filteredElements[index]['author']}",
-            style: TextStyle(
-                fontSize: 16, color: Color.fromARGB(255, 187, 187, 187))),
+            overflow: TextOverflow.fade,
+            maxLines: 1,
+            style: Constants.cardSubTitleTextStyle),
         trailing: FadingElement(
           Icon(Icons.keyboard_arrow_right,
-              color: Color.fromARGB(255, 187, 187, 187)),
+              color: Constants.primaryAppColorDark),
           false,
           duration: Duration(milliseconds: 800),
         ));
   }
 
-  ResultsPage() : super(tileBuilder, "Results");
+  ResultsPage() : super(tileBuilder, Constants.resultsText);
 }

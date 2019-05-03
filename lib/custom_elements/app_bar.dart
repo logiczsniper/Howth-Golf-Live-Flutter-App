@@ -1,7 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
-import 'package:howth_golf_live/custom_elements/app_custom_cross_fade.dart';
+import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/custom_elements/cross_fade.dart';
 
 class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -18,7 +18,7 @@ class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize; // default is 56.0
 }
 
-class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
+class _ComplexAppBarState extends State<ComplexAppBar> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   bool _toggleAppBar;
@@ -82,27 +82,28 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
                 floating: true,
                 pinned: false,
                 snap: true,
-                backgroundColor: appTheme.primaryColor,
-                iconTheme: IconThemeData(color: appTheme.primaryColorDark),
+                backgroundColor: Constants.primaryAppColor,
+                iconTheme:
+                    IconThemeData(color: Constants.primaryAppColorDark),
                 actions: <Widget>[
                   IconButton(
                     icon: _searchIcon,
                     tooltip: 'Tap to search!',
                     onPressed: _searchPressed,
-                    color: appTheme.primaryColorDark,
+                    color: Constants.primaryAppColorDark,
                   )
                 ],
                 bottom: TabBar(
-                    labelColor: appTheme.primaryColorDark,
+                    labelColor: Constants.primaryAppColorDark,
                     indicator: BubbleTabIndicator(
-                      indicatorColor: appTheme.accentColor,
+                      indicatorColor: Constants.accentAppColor,
                       tabBarIndicatorSize: TabBarIndicatorSize.tab,
                       indicatorHeight: 25.0,
                     ),
                     tabs: <Widget>[
-                      Tab(text: constants.currentText),
-                      Tab(text: constants.archivedText),
-                      Tab(text: constants.favouritesText),
+                      Tab(text: Constants.currentText),
+                      Tab(text: Constants.archivedText),
+                      Tab(text: Constants.favouritesText),
                     ])),
           ];
         },
@@ -118,9 +119,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> with AppResources {
   }
 }
 
-class StandardAppBar extends StatelessWidget
-    with AppResources
-    implements PreferredSizeWidget {
+class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   StandardAppBar(this.title, {Key key})
@@ -134,10 +133,11 @@ class StandardAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text(title, style: TextStyle(color: appTheme.primaryColorDark)),
-      backgroundColor: appTheme.primaryColor,
+      title: Text(title,
+          style: TextStyle(color: Constants.primaryAppColorDark)),
+      backgroundColor: Constants.primaryAppColor,
       elevation: 0.0,
-      iconTheme: IconThemeData(color: appTheme.primaryColorDark),
+      iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
     );
   }
 }

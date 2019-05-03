@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fading_element.dart';
 import 'package:howth_golf_live/pages/parents/complex_page.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
 class CompetitionsPage extends ComplexPage {
   static Widget tileBuilder(int index, List filteredElements) {
@@ -13,31 +14,33 @@ class CompetitionsPage extends ComplexPage {
               decoration: new BoxDecoration(
                   border: new Border(
                       right: new BorderSide(
-                          width: 1.5, color: Color.fromARGB(255, 153, 0, 0)))),
+                          width: 1.5, color: Constants.accentAppColor))),
               child: Text(
                   "${filteredElements[index]['score']['howth_score']} - ${filteredElements[index]['score']['opposition_score']}",
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
                   style: TextStyle(
-                      fontSize: 22,
-                      color: Color.fromARGB(255, 187, 187, 187),
-                      fontWeight: FontWeight.w500)),
+                      fontSize: 19,
+                      color: Constants.primaryAppColorDark,
+                      fontWeight: FontWeight.w400)),
             )),
         title: Text(
           "${filteredElements[index]['opposition']}",
-          style: TextStyle(
-              fontSize: 19,
-              color: Color.fromARGB(255, 187, 187, 187),
-              fontWeight: FontWeight.w300),
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          style: Constants.cardTitleTextStyle,
         ),
         subtitle: Text("${filteredElements[index]['start_date']}",
-            style: TextStyle(
-                fontSize: 16, color: Color.fromARGB(255, 187, 187, 187))),
+            overflow: TextOverflow.fade,
+            maxLines: 1,
+            style: Constants.cardSubTitleTextStyle),
         trailing: FadingElement(
           Icon(Icons.keyboard_arrow_right,
-              color: Color.fromARGB(255, 187, 187, 187)),
+              color: Constants.primaryAppColorDark),
           false,
           duration: Duration(milliseconds: 800),
         ));
   }
 
-  CompetitionsPage() : super(tileBuilder, "Competitions");
+  CompetitionsPage() : super(tileBuilder, Constants.competitionsText);
 }

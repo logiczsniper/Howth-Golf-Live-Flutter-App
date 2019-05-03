@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bar_custom.dart';
+import 'package:howth_golf_live/custom_elements/app_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
+import 'package:howth_golf_live/custom_elements/styled_card.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
-class SimplePage extends StatelessWidget with AppResources {
+class SimplePage extends StatelessWidget {
   final Center Function() _buildBody;
   final String title;
   SimplePage(this._buildBody, this.title, {Key key}) : super(key: key);
@@ -13,8 +14,14 @@ class SimplePage extends StatelessWidget with AppResources {
     return Scaffold(
       drawer: AppDrawer(),
       appBar: StandardAppBar(title),
-      body: _buildBody(),
-      backgroundColor: appTheme.primaryColor,
+      body: StyledCard(
+        ListTile(
+          title: _buildBody(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
+        ),
+        simple: true
+      ),
+      backgroundColor: Constants.primaryAppColor,
     );
   }
 }

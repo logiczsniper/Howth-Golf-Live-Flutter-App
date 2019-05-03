@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
-class MyCrossFade with AppResources {
+class MyCrossFade {
   final bool _toggleTitle;
   final String title;
   final TextEditingController _filter;
@@ -10,7 +10,7 @@ class MyCrossFade with AppResources {
 
   Widget build(BuildContext context) {
     OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
-      borderSide: BorderSide(color: appTheme.accentColor, width: 1.8),
+      borderSide: BorderSide(color: Constants.accentAppColor, width: 1.8),
       borderRadius: const BorderRadius.all(
         const Radius.circular(10.0),
       ),
@@ -28,7 +28,7 @@ class MyCrossFade with AppResources {
         children: <Widget>[
           Text(title,
               style: TextStyle(
-                color: appTheme.primaryColorDark,
+                color: Constants.primaryAppColorDark,
               ))
         ],
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,15 +37,15 @@ class MyCrossFade with AppResources {
         textCapitalization: TextCapitalization.sentences,
         autocorrect: false,
         controller: _filter,
-        style: TextStyle(color: appTheme.primaryColorDark),
+        style: TextStyle(color: Constants.primaryAppColorDark),
         decoration: new InputDecoration(
             contentPadding: EdgeInsets.all(1.5),
             enabledBorder: outlineInputBorder,
             focusedBorder: outlineInputBorder,
             prefixIcon:
-                new Icon(Icons.search, color: appTheme.primaryColorDark),
+                new Icon(Icons.search, color: Constants.primaryAppColorDark),
             hintText: 'Search...',
-            hintStyle: appTheme.textTheme.subhead),
+            hintStyle: Constants.appTheme.textTheme.subhead),
       ),
     );
   }

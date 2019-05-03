@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_fading_element.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
+import 'package:howth_golf_live/custom_elements/fading_element.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
-class HomePage extends StatelessWidget with AppResources {
+class HomePage extends StatelessWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
@@ -10,26 +10,26 @@ class HomePage extends StatelessWidget with AppResources {
     return GestureDetector(
         onTap: () {
           // Navigate into app when tapped.
-          Navigator.pushNamed(context, '/' + constants.competitionsText);
+          Navigator.pushNamed(context, '/' + Constants.competitionsText);
         },
         child: Scaffold(
           body: Center(
               child: Column(
             children: <Widget>[
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
-              new Image.asset('images/icon.png'),
+              new Image.asset('lib/static/images/icon.png'),
               Padding(padding: EdgeInsetsDirectional.only(top: 400)),
               FadingElement(
                 Text(
                   'Tap anywhere to begin!',
-                  style:
-                      TextStyle(fontSize: 14, color: appTheme.primaryColorDark),
+                  style: TextStyle(
+                      fontSize: 14, color: Constants.primaryAppColorDark),
                 ),
                 true,
               )
             ],
           )),
-          backgroundColor: appTheme.primaryColor,
+          backgroundColor: Constants.primaryAppColor,
         ));
   }
 }

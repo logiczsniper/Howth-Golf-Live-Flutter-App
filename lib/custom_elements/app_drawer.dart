@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:howth_golf_live/static/app_resources.dart';
+import 'package:howth_golf_live/static/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class AppDrawer extends StatelessWidget with AppResources {
+class AppDrawer extends StatelessWidget {
   ListTile buildDrawerTile(BuildContext context, String text, IconData icon) {
     String namedRoute = '/' + text;
 
@@ -11,15 +13,23 @@ class AppDrawer extends StatelessWidget with AppResources {
           child: Padding(
         padding: EdgeInsets.only(left: 24.0),
         child: Text(text,
-            style: TextStyle(
-                fontSize: 18, color: Color.fromARGB(255, 187, 187, 187))),
+            style:
+                TextStyle(fontSize: 18, color: Constants.primaryAppColorDark)),
       )),
-      trailing: Icon(icon, color: appTheme.primaryColorDark),
+      trailing: Icon(icon, color: Constants.primaryAppColorDark),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, namedRoute);
       },
     );
+  }
+
+  static _launchUrl() async {
+    if (await canLaunch("https://www.facebook.com/howthgolfclubdublin/")) {
+      await launch("https://www.facebook.com/howthgolfclubdublin/");
+    } else {
+      throw 'Could not launch FacebookLink';
+    }
   }
 
   @override
@@ -34,13 +44,16 @@ class AppDrawer extends StatelessWidget with AppResources {
                   curve: Curves.decelerate,
                   child: new Carousel(
                       images: [
-                        'images/drawer_image_one.png',
-                        'images/drawer_image_two.jpg',
-                        'images/drawer_image_three.jpg',
-                        'images/drawer_image_four.jpg',
-                        'images/drawer_image_five.jpg',
-                      ].map((path) => AssetImage(path)).toList(),
-                      dotColor: appTheme.primaryColor,
+                        'drawer_image_one.png',
+                        'drawer_image_two.jpg',
+                        'drawer_image_three.jpg',
+                        'drawer_image_four.jpg',
+                        'drawer_image_five.jpg',
+                      ]
+                          .map(
+                              (path) => AssetImage('lib/static/images/' + path))
+                          .toList(),
+                      dotColor: Constants.primaryAppColor,
                       dotSize: 4.0,
                       dotSpacing: 10,
                       indicatorBgPadding: 15.0,
@@ -50,10 +63,21 @@ class AppDrawer extends StatelessWidget with AppResources {
                       autoplay: false,
                       boxFit: BoxFit.fill)),
               buildDrawerTile(
-                  context, constants.competitionsText, Icons.golf_course),
-              buildDrawerTile(context, constants.resultsText, Icons.stars),
-              buildDrawerTile(context, constants.clubLinksText, Icons.link),
-              buildDrawerTile(context, constants.appHelpText, Icons.help)
+                  context, Constants.competitionsText, Icons.golf_course),
+              buildDrawerTile(context, Constants.resultsText, Icons.stars),
+              buildDrawerTile(context, Constants.clubLinksText, Icons.link),
+              buildDrawerTile(context, Constants.appHelpText, Icons.help),
+              Padding(
+                padding: EdgeInsets.only(bottom: 55),
+              ),
+              IconButton(
+                  iconSize: 45,
+                  color: Constants.accentAppColor,
+                  icon: Icon(FontAwesomeIcons.facebookSquare),
+                  tooltip: 'Howth Golf Club Facebook Page',
+                  onPressed: () {
+                    _launchUrl();
+                  }),
             ],
           ),
         ));

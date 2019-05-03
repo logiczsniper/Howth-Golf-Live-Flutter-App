@@ -13,7 +13,9 @@ dependencies:
   carousel_pro: ^0.0.13
   bubble_tab_indicator: ^0.1.4
   cupertino_icons: ^0.1.2
-  flutter_spinkit: "^3.1.0"
+  flutter_spinkit: ^3.1.0
+  url_launcher: 5.0.2
+  font_awesome_flutter: 8.4.0
 
 dev_dependencies:
   flutter_test:
@@ -23,4 +25,4 @@ flutter:
 
   uses-material-design: true
   assets: 
-    - images/
+    - lib/static/images/

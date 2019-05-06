@@ -34,6 +34,7 @@ class MyCrossFade {
         mainAxisAlignment: MainAxisAlignment.center,
       )),
       secondChild: new TextField(
+        cursorColor: Constants.accentAppColor,
         textCapitalization: TextCapitalization.sentences,
         autocorrect: false,
         controller: _filter,

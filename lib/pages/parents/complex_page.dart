@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/custom_elements/app_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
-import 'package:howth_golf_live/custom_elements/styled_card.dart';
+import 'package:howth_golf_live/custom_elements/complex_card.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class ComplexPage extends StatefulWidget {
@@ -73,9 +73,10 @@ class _ComplexPageState extends State<ComplexPage> {
           return ListView.builder(
             itemCount: filteredElements.length,
             itemBuilder: (BuildContext context, int index) {
-              return StyledCard(
-                _complexTileBuilder(index, filteredElements),
-              );
+              return ComplexCard(_complexTileBuilder(index, filteredElements),
+                  () {
+                print("Complex card tap.");
+              });
             },
           );
         });

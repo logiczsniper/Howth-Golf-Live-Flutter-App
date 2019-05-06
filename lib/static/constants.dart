@@ -15,6 +15,7 @@ class Constants {
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);
+  static const Color cardAppColor = Color.fromARGB(255, 248, 248, 248);
   static const Color secondaryHeaderAppColor = Color.fromARGB(255, 57, 57, 57);
   static const TextStyle cardTitleTextStyle = TextStyle(
       fontSize: 16, color: primaryAppColorDark, fontWeight: FontWeight.w300);

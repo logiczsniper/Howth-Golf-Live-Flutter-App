@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/static/constants.dart';
 
-class StyledCard extends StatelessWidget {
+class SimpleCard extends StatelessWidget {
   final Widget child;
-  final bool simple;
 
-  StyledCard(this.child, {this.simple = false});
+  SimpleCard(this.child);
 
   @override
   Widget build(BuildContext context) {
-    var margin = simple
-        ? EdgeInsets.fromLTRB(10.0, 6.0, 10.0, 300.0)
-        : EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0);
     return Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 1.85,
-        margin: margin,
+        margin: EdgeInsets.fromLTRB(
+            10.0, 6.0, 10.0, MediaQuery.of(context).size.height * 0.25),
         child: Container(
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 248, 248, 248),
+                color: Constants.cardAppColor,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10.0)),
             child: child));

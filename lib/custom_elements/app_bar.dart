@@ -28,7 +28,10 @@ class _ComplexAppBarState extends State<ComplexAppBar> {
 
   _ComplexAppBarState(this.title) {
     _appBarTitle = MyCrossFade(title, _filter).build(context);
-    _searchIcon = Icon(Icons.search);
+    _searchIcon = Icon(
+      Icons.search,
+      color: Constants.primaryAppColorDark,
+    );
 
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
@@ -83,8 +86,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> {
                 pinned: false,
                 snap: true,
                 backgroundColor: Constants.primaryAppColor,
-                iconTheme:
-                    IconThemeData(color: Constants.primaryAppColorDark),
+                iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
                 actions: <Widget>[
                   IconButton(
                     icon: _searchIcon,
@@ -133,8 +135,8 @@ class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text(title,
-          style: TextStyle(color: Constants.primaryAppColorDark)),
+      title:
+          Text(title, style: TextStyle(color: Constants.primaryAppColorDark)),
       backgroundColor: Constants.primaryAppColor,
       elevation: 0.0,
       iconTheme: IconThemeData(color: Constants.primaryAppColorDark),

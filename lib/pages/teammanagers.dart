@@ -44,5 +44,5 @@ class ResultsPage extends ComplexPage {
         ));
   }
 
-  ResultsPage() : super(tileBuilder, Constants.resultsText);
+  ResultsPage() : super(tileBuilder, Constants.managersText);
 }

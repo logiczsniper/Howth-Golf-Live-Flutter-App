@@ -64,8 +64,8 @@ class AppDrawer extends StatelessWidget {
                       boxFit: BoxFit.fill)),
               buildDrawerTile(
                   context, Constants.competitionsText, Icons.golf_course),
-              buildDrawerTile(context, Constants.resultsText, Icons.stars),
-              buildDrawerTile(context, Constants.clubLinksText, Icons.link),
+              buildDrawerTile(context, Constants.managersText, Icons.stars),
+              buildDrawerTile(context, Constants.courseMapText, Icons.link),
               buildDrawerTile(context, Constants.appHelpText, Icons.help),
               Padding(
                 padding: EdgeInsets.only(bottom: 55),

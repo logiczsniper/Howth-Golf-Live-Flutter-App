@@ -8,8 +8,8 @@ class Constants {
   static const String favouritesText = "Favourites";
 
   static const String competitionsText = "Competitions";
-  static const String resultsText = "Results";
-  static const String clubLinksText = "Club Links";
+  static const String managersText = "Team Managers";
+  static const String courseMapText = "Course Map";
   static const String appHelpText = "App Help";
 
   static const Color primaryAppColor = Colors.white;

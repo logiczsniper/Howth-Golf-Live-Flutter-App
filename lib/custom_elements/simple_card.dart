@@ -8,6 +8,7 @@ class SimpleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO make the card the perfect size to fit all of its elements in
     return Card(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/custom_elements/app_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
+import 'package:howth_golf_live/pages/specific_competition.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class ComplexPage extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ComplexPageState extends State<ComplexPage> {
     return this.widget._tileBuilder(index, filteredElements);
   }
 
+  // TODO build an AnimatedList instead- fade effect to elements
   Widget _buildElementsList(String _searchText, int documentIndex) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
@@ -51,9 +53,8 @@ class _ComplexPageState extends State<ComplexPage> {
               color: Constants.primaryAppColorDark,
             ));
 
-          var elements = snapshot.data.documents[documentIndex].data.entries
-              .toList()[0]
-              .value;
+          var elements =
+              snapshot.data.documents[2].data.entries.toList()[0].value;
           List filteredElements = elements;
 
           if (_searchText.isNotEmpty) {
@@ -75,7 +76,11 @@ class _ComplexPageState extends State<ComplexPage> {
             itemBuilder: (BuildContext context, int index) {
               return ComplexCard(_complexTileBuilder(index, filteredElements),
                   () {
-                print("Complex card tap.");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SpecificCompetitionPage(filteredElements[index])));
               });
             },
           );

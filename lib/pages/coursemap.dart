@@ -22,5 +22,5 @@ class ClubLinksPage extends SimplePage {
   }
 
   ClubLinksPage({Key key})
-      : super(buildBody, Constants.clubLinksText, key: key);
+      : super(buildBody, Constants.courseMapText, key: key);
 }

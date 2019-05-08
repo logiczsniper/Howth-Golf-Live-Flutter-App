@@ -42,7 +42,7 @@ class AppHelpPage extends SimplePage {
         autocorrect: false,
         controller: _filter,
         onTap: () {
-          print("YOOO");
+          // TODO CLEAR THE CODE FROM THE TEXT FIELD
           _controller.animateTo(0,
               duration: Duration(seconds: 2), curve: Curves.easeInOut);
         },

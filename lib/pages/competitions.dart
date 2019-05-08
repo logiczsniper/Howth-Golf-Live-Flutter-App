@@ -5,6 +5,7 @@ import 'package:howth_golf_live/static/constants.dart';
 
 class CompetitionsPage extends ComplexPage {
   static Widget tileBuilder(int index, List filteredElements) {
+    var base = filteredElements[index];
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(
@@ -16,7 +17,7 @@ class CompetitionsPage extends ComplexPage {
                       right: new BorderSide(
                           width: 1.5, color: Constants.accentAppColor))),
               child: Text(
-                  "${filteredElements[index]['score']['howth_score']} - ${filteredElements[index]['score']['opposition_score']}",
+                  "${base['score']['howth']} - ${base['score']['opposition']}",
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: TextStyle(
@@ -25,12 +26,12 @@ class CompetitionsPage extends ComplexPage {
                       fontWeight: FontWeight.w400)),
             )),
         title: Text(
-          "${filteredElements[index]['opposition']}",
+          "${base['title']}",
           overflow: TextOverflow.fade,
           maxLines: 1,
           style: Constants.cardTitleTextStyle,
         ),
-        subtitle: Text("${filteredElements[index]['start_date']}",
+        subtitle: Text("${base['date']}",
             overflow: TextOverflow.fade,
             maxLines: 1,
             style: Constants.cardSubTitleTextStyle),

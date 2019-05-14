@@ -58,14 +58,14 @@ class AppDrawer extends StatelessWidget {
                       dotSpacing: 10,
                       indicatorBgPadding: 15.0,
                       borderRadius: true,
-                      radius: Radius.circular(20.0),
+                      radius: Radius.circular(12.0),
                       overlayShadow: false,
                       autoplay: false,
                       boxFit: BoxFit.fill)),
               buildDrawerTile(
                   context, Constants.competitionsText, Icons.golf_course),
-              buildDrawerTile(context, Constants.managersText, Icons.stars),
-              buildDrawerTile(context, Constants.courseMapText, Icons.link),
+              buildDrawerTile(context, Constants.managersText, Icons.people),
+              buildDrawerTile(context, Constants.courseMapText, Icons.map),
               buildDrawerTile(context, Constants.appHelpText, Icons.help),
               Padding(
                 padding: EdgeInsets.only(bottom: 55),

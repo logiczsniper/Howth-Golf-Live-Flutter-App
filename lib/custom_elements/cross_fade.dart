@@ -5,8 +5,11 @@ class MyCrossFade {
   final bool _toggleTitle;
   final String title;
   final TextEditingController _filter;
+  final String hintText;
+  final IconData iconData;
 
-  MyCrossFade(this.title, this._filter, [this._toggleTitle = true]);
+  MyCrossFade(this.title, this._filter, this.hintText, this._toggleTitle,
+      this.iconData);
 
   Widget build(BuildContext context) {
     OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
@@ -44,8 +47,8 @@ class MyCrossFade {
             enabledBorder: outlineInputBorder,
             focusedBorder: outlineInputBorder,
             prefixIcon:
-                new Icon(Icons.search, color: Constants.primaryAppColorDark),
-            hintText: 'Search...',
+                new Icon(iconData, color: Constants.primaryAppColorDark),
+            hintText: hintText,
             hintStyle: Constants.appTheme.textTheme.subhead),
       ),
     );

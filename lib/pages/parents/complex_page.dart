@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:howth_golf_live/custom_elements/app_bar.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
-import 'package:howth_golf_live/custom_elements/complex_card.dart';
+import 'package:howth_golf_live/custom_elements/cards/complex_card.dart';
 import 'package:howth_golf_live/pages/specific_competition.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
@@ -40,8 +40,7 @@ class _ComplexPageState extends State<ComplexPage> {
     return this.widget._tileBuilder(index, filteredElements);
   }
 
-  // TODO build an AnimatedList instead- fade effect to elements
-  Widget _buildElementsList(String _searchText, int documentIndex) {
+  Widget _buildElementsList(String _searchText, {bool current = false}) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection(this.widget.title.toLowerCase())
@@ -54,7 +53,8 @@ class _ComplexPageState extends State<ComplexPage> {
             ));
 
           var elements =
-              snapshot.data.documents[2].data.entries.toList()[0].value;
+              snapshot.data.documents[0].data.entries.toList()[0].value;
+
           List filteredElements = elements;
 
           if (_searchText.isNotEmpty) {
@@ -71,16 +71,37 @@ class _ComplexPageState extends State<ComplexPage> {
             filteredElements = tempList.isNotEmpty ? tempList : [false];
           }
 
+          List<Map> currentElements = [];
+          List<Map> archivedElements = [];
+          List<Map> activeElements =
+              current ? currentElements : archivedElements;
+          for (Map filteredElement in filteredElements) {
+            DateTime competitionDate = DateTime.parse(filteredElement['date']
+                    .toString()
+                    .split('/')
+                    .reversed
+                    .join()
+                    .replaceAll('/', '-') +
+                ' 00:00:00');
+            if ((competitionDate.difference(DateTime.now()).inDays.abs() < 7 &&
+                    competitionDate.isBefore(DateTime.now())) ||
+                competitionDate.isAfter(DateTime.now())) {
+              currentElements.add(filteredElement);
+            } else {
+              archivedElements.add(filteredElement);
+            }
+          }
+
           return ListView.builder(
-            itemCount: filteredElements.length,
+            itemCount: activeElements.length,
             itemBuilder: (BuildContext context, int index) {
-              return ComplexCard(_complexTileBuilder(index, filteredElements),
+              return ComplexCard(_complexTileBuilder(index, activeElements),
                   () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            SpecificCompetitionPage(filteredElements[index])));
+                            SpecificCompetitionPage(activeElements[index])));
               });
             },
           );
@@ -93,7 +114,8 @@ class _ComplexPageState extends State<ComplexPage> {
       drawer: AppDrawer(),
       body: DefaultTabController(
           length: 3,
-          child: ComplexAppBar(_buildElementsList, title: this.widget.title)),
+          child: CompetitionsPageAppBar(_buildElementsList,
+              title: this.widget.title)),
       backgroundColor: Constants.primaryAppColor,
     );
   }

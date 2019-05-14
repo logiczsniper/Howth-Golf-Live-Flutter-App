@@ -1,103 +1,109 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bar.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/specific_competition_bar.dart';
+import 'package:howth_golf_live/custom_elements/competition_details.dart';
+import 'package:howth_golf_live/custom_elements/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
-class SpecificCompetitionPage extends StatelessWidget {
-  final Map data;
+class SpecificCompetitionPage extends StatefulWidget {
+  final Map competition;
 
-  SpecificCompetitionPage(this.data);
+  SpecificCompetitionPage(this.competition);
+
+  @override
+  SpecificCompetitionPageState createState() => SpecificCompetitionPageState();
+}
+
+class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
+  String processPlayerList(List playerList) {
+    String output = '';
+    for (String player in playerList) {
+      output += player.toString();
+      if (playerList.indexOf(player) != playerList.length - 1) {
+        output += ', ';
+      }
+    }
+    return output;
+  }
+
+  List tileBuilder(BuildContext context) {
+    List holes = widget.competition['holes'];
+    List<Widget> output = [CompetitionDetails(widget.competition)];
+    for (Map hole in holes) {
+      IconData trailingIcon;
+      if (hole['hole_score'].toString().toLowerCase().contains('up')) {
+        trailingIcon = Icons.thumb_up;
+      } else if (hole['hole_score']
+          .toString()
+          .toLowerCase()
+          .contains('under')) {
+        trailingIcon = Icons.thumb_down;
+      } else {
+        trailingIcon = Icons.thumbs_up_down;
+      }
+      output.add(Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 1.85,
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Constants.cardAppColor,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+                leading: Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Container(
+                      padding: EdgeInsets.only(right: 15.0),
+                      decoration: new BoxDecoration(
+                          border: new Border(
+                              right: new BorderSide(
+                                  width: 1.5,
+                                  color: Constants.accentAppColor))),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'HOLE',
+                              style: Constants.cardSubTitleTextStyle
+                                  .apply(fontSizeDelta: -1.5),
+                            ),
+                            Text(hole['hole_number'].toString(),
+                                style: TextStyle(
+                                    fontSize: 21.5,
+                                    color: Constants.primaryAppColorDark,
+                                    fontWeight: FontWeight.w400))
+                          ]),
+                    )),
+                title: Text(
+                  "${hole['hole_score']}",
+                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  style: Constants.cardTitleTextStyle,
+                ),
+                subtitle: Text(processPlayerList(hole['players']),
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Constants.cardSubTitleTextStyle),
+                trailing: FadingElement(
+                  Icon(trailingIcon,
+                      color: Constants.primaryAppColorDark, size: 19.0),
+                  false,
+                  duration: Duration(milliseconds: 800),
+                ),
+              ))));
+    }
+    return output;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StandardAppBar(data['title']),
-      body: Column(
-        children: <Widget>[
-          Center(
-              child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.location_on),
-                  Text(
-                    data['location'],
-                    style: Constants.cardSubTitleTextStyle,
-                  )
-                ],
-              ),
-              Padding(
-                  padding: EdgeInsets.only(left: 1.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.access_time),
-                      Text(
-                        data['time'],
-                        style: Constants.cardSubTitleTextStyle,
-                      ),
-                    ],
-                  )),
-            ],
-          )),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-          ),
-          ListTile(
-            leading: Container(
-                margin: EdgeInsets.fromLTRB(50.0, 1.0, 1.0, 1.0),
-                child: Column(
-                  children: <Widget>[
-                    Text('Howth GC', style: Constants.cardTitleTextStyle),
-                    Container(
-                        padding: EdgeInsets.all(12.0),
-                        margin: EdgeInsets.all(1.0),
-                        child: Text(data['score']['howth'],
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 21,
-                                color: Constants.primaryAppColorDark,
-                                fontWeight: FontWeight.w400)),
-                        decoration: ShapeDecoration(
-                            color: Constants.accentAppColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)))),
-                  ],
-                )),
-            title: Container(
-              decoration: BoxDecoration(
-                  border: Border(
-                      right: BorderSide(
-                          width: 1.5, color: Constants.accentAppColor),
-                      left: BorderSide(
-                          width: 1.5, color: Constants.accentAppColor))),
-              height: 50.0,
-            ),
-            trailing: Container(
-                margin: EdgeInsets.fromLTRB(1.0, 1.0, 50.0, 1.0),
-                child: Column(
-                  children: <Widget>[
-                    Text(data['opposition'],
-                        style: Constants.cardTitleTextStyle),
-                    Container(
-                        padding: EdgeInsets.all(12.0),
-                        margin: EdgeInsets.all(1.0),
-                        child: Text(data['score']['opposition'],
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            style: TextStyle(
-                                fontSize: 21,
-                                color: Constants.primaryAppColorDark,
-                                fontWeight: FontWeight.w400)),
-                        decoration: ShapeDecoration(
-                            color: Constants.accentAppColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)))),
-                  ],
-                )),
-          ), /* TODO List builder here */
-        ],
+      appBar: CompetitionPageAppBar(widget.competition),
+      body: ListView(
+        children: tileBuilder(context),
       ),
       backgroundColor: Constants.primaryAppColor,
     );

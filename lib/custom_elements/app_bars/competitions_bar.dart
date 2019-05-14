@@ -3,34 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/custom_elements/cross_fade.dart';
 
-class ComplexAppBar extends StatefulWidget implements PreferredSizeWidget {
+class CompetitionsPageAppBar extends StatefulWidget
+    implements PreferredSizeWidget {
   final String title;
   final Function _listBuilder;
 
-  ComplexAppBar(this._listBuilder, {Key key, this.title: "Default Title"})
+  CompetitionsPageAppBar(this._listBuilder,
+      {Key key, this.title: "Default Title"})
       : preferredSize = Size.fromHeight(56.0),
         super(key: key);
 
   @override
-  _ComplexAppBarState createState() => new _ComplexAppBarState(this.title);
+  _CompetitionsPageAppBarState createState() =>
+      new _CompetitionsPageAppBarState(this.title);
 
   @override
   final Size preferredSize; // default is 56.0
 }
 
-class _ComplexAppBarState extends State<ComplexAppBar> {
+class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
-  bool _toggleAppBar;
+  bool _toggleAppBar = true;
   Widget _searchIcon;
   Widget _appBarTitle;
   String title;
 
-  _ComplexAppBarState(this.title) {
-    _appBarTitle = MyCrossFade(title, _filter).build(context);
-    _searchIcon = Icon(
-      Icons.search,
-      color: Constants.primaryAppColorDark,
+  _CompetitionsPageAppBarState(this.title) {
+    _appBarTitle = MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search).build(context);
+    _searchIcon = AnimatedCrossFade(
+      duration: const Duration(milliseconds: 450),
+      firstChild: new Icon(Icons.search),
+      secondChild: new Icon(Icons.close),
+      crossFadeState:
+          _toggleAppBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
     );
 
     _filter.addListener(() {
@@ -62,7 +68,7 @@ class _ComplexAppBarState extends State<ComplexAppBar> {
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
       );
-      _appBarTitle = MyCrossFade(title, _filter, _toggleAppBar).build(context);
+      _appBarTitle = MyCrossFade(title, _filter,'Search...', _toggleAppBar, Icons.search).build(context);
     });
   }
 
@@ -98,48 +104,24 @@ class _ComplexAppBarState extends State<ComplexAppBar> {
                 bottom: TabBar(
                     labelColor: Constants.primaryAppColorDark,
                     indicator: BubbleTabIndicator(
-                      indicatorColor: Constants.accentAppColor,
-                      tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                      indicatorHeight: 25.0,
-                    ),
+                        indicatorColor: Constants.accentAppColor,
+                        tabBarIndicatorSize: TabBarIndicatorSize.tab,
+                        indicatorHeight: 25.0,
+                        insets: EdgeInsets.symmetric(
+                            vertical: 1.0, horizontal: 30.0)),
                     tabs: <Widget>[
                       Tab(text: Constants.currentText),
-                      Tab(text: Constants.archivedText),
-                      Tab(text: Constants.favouritesText),
+                      Tab(text: Constants.archivedText)
                     ])),
           ];
         },
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(_searchText, 1),
-            widget._listBuilder(_searchText, 0),
-            widget._listBuilder(_searchText, 1)
+            widget._listBuilder(_searchText, current: true),
+            widget._listBuilder(_searchText, current: false)
           ],
         ),
       ),
-    );
-  }
-}
-
-class StandardAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-
-  StandardAppBar(this.title, {Key key})
-      : preferredSize = Size.fromHeight(56.0),
-        super(key: key);
-
-  @override
-  final Size preferredSize; //
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      title:
-          Text(title, style: TextStyle(color: Constants.primaryAppColorDark)),
-      backgroundColor: Constants.primaryAppColor,
-      elevation: 0.0,
-      iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bar.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/standard_bar.dart';
 import 'package:howth_golf_live/custom_elements/app_drawer.dart';
-import 'package:howth_golf_live/custom_elements/simple_card.dart';
+import 'package:howth_golf_live/custom_elements/cards/simple_card.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class SimplePage extends StatelessWidget {

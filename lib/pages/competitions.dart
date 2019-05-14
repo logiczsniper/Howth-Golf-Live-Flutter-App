@@ -21,7 +21,7 @@ class CompetitionsPage extends ComplexPage {
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 20,
                       color: Constants.primaryAppColorDark,
                       fontWeight: FontWeight.w400)),
             )),

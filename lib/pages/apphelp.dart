@@ -42,7 +42,6 @@ class AppHelpPage extends SimplePage {
         autocorrect: false,
         controller: _filter,
         onTap: () {
-          // TODO CLEAR THE CODE FROM THE TEXT FIELD
           _controller.animateTo(0,
               duration: Duration(seconds: 2), curve: Curves.easeInOut);
         },
@@ -52,9 +51,10 @@ class AppHelpPage extends SimplePage {
             enabledBorder: outlineInputBorder,
             focusedBorder: outlineInputBorder,
             prefixIcon: new IconButton(
-                icon: Icon(Icons.arrow_forward),
+                icon: Icon(Icons.keyboard_arrow_right),
                 onPressed: () {
                   var text = _filter.text;
+                  _filter.clear();
                   print(text);
                 },
                 color: Constants.primaryAppColorDark),

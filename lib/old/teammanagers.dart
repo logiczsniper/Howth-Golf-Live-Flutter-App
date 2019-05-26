@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/fading_element.dart';
-import 'package:howth_golf_live/pages/parents/complex_page.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
-class ResultsPage extends ComplexPage {
+class ResultsPage {
   static Widget tileBuilder(int index, List filteredElements) {
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
@@ -43,6 +42,4 @@ class ResultsPage extends ComplexPage {
           duration: Duration(milliseconds: 800),
         ));
   }
-
-  ResultsPage() : super(tileBuilder, Constants.managersText);
 }

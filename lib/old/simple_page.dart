@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bars/standard_bar.dart';
-import 'package:howth_golf_live/custom_elements/app_drawer.dart';
-import 'package:howth_golf_live/custom_elements/cards/simple_card.dart';
+import 'package:howth_golf_live/old/standard_bar.dart';
+import 'package:howth_golf_live/old/simple_card.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class SimplePage extends StatelessWidget {
@@ -13,7 +12,6 @@ class SimplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScrollController _controller = new ScrollController();
     return Scaffold(
-      drawer: AppDrawer(),
       appBar: StandardAppBar(title),
       body: SimpleCard(ListTile(
         title: Center(

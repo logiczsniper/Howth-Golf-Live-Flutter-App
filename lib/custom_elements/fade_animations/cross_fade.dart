@@ -7,10 +7,11 @@ class MyCrossFade {
   final TextEditingController _filter;
   final String hintText;
   final IconData iconData;
+  final bool password;
 
-  MyCrossFade(this.title, this._filter, this.hintText, this._toggleTitle,
-      this.iconData);
-
+  MyCrossFade(
+      this.title, this._filter, this.hintText, this._toggleTitle, this.iconData,
+      {this.password = false});
   Widget build(BuildContext context) {
     OutlineInputBorder outlineInputBorder = new OutlineInputBorder(
       borderSide: BorderSide(color: Constants.accentAppColor, width: 1.8),
@@ -37,6 +38,7 @@ class MyCrossFade {
         mainAxisAlignment: MainAxisAlignment.center,
       )),
       secondChild: new TextField(
+        obscureText: password,
         cursorColor: Constants.accentAppColor,
         textCapitalization: TextCapitalization.sentences,
         autocorrect: false,

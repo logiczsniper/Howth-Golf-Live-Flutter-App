@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/styled_button.dart';
-import 'package:howth_golf_live/pages/parents/simple_page.dart';
+import 'package:howth_golf_live/old/styled_button.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
-class ClubLinksPage extends SimplePage {
+class ClubLinksPage {
   static List<Widget> buildBody(ScrollController _controller) {
     return <Widget>[
       Text("Here are a few links that are associated with Howth Golf Club. \n ",
@@ -20,7 +19,4 @@ class ClubLinksPage extends SimplePage {
       StyledButton("tel:+353 (1)832 3055", "Call the Shop"),
     ];
   }
-
-  ClubLinksPage({Key key})
-      : super(buildBody, Constants.courseMapText, key: key);
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class HomePage extends StatelessWidget {

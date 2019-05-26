@@ -1,7 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
-import 'package:howth_golf_live/custom_elements/cross_fade.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -21,7 +21,8 @@ class CompetitionsPageAppBar extends StatefulWidget
   final Size preferredSize; // default is 56.0
 }
 
-class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> {
+class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
+    with TickerProviderStateMixin {
   final TextEditingController _filter = new TextEditingController();
   String _searchText = "";
   bool _toggleAppBar = true;
@@ -30,7 +31,9 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> {
   String title;
 
   _CompetitionsPageAppBarState(this.title) {
-    _appBarTitle = MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search).build(context);
+    _appBarTitle =
+        MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search)
+            .build(context);
     _searchIcon = AnimatedCrossFade(
       duration: const Duration(milliseconds: 450),
       firstChild: new Icon(Icons.search),
@@ -68,7 +71,9 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> {
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
       );
-      _appBarTitle = MyCrossFade(title, _filter,'Search...', _toggleAppBar, Icons.search).build(context);
+      _appBarTitle =
+          MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search)
+              .build(context);
     });
   }
 
@@ -93,12 +98,18 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> {
                 snap: true,
                 backgroundColor: Constants.primaryAppColor,
                 iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
+                leading: IconButton(
+                  icon: Icon(Icons.help_outline),
+                  tooltip: 'Tap for help!',
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/' + Constants.appHelpText);
+                  },
+                ),
                 actions: <Widget>[
                   IconButton(
                     icon: _searchIcon,
                     tooltip: 'Tap to search!',
                     onPressed: _searchPressed,
-                    color: Constants.primaryAppColorDark,
                   )
                 ],
                 bottom: TabBar(

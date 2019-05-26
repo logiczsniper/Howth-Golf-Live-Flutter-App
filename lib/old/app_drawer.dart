@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:howth_golf_live/static/constants.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
   ListTile buildDrawerTile(BuildContext context, String text, IconData icon) {
@@ -24,6 +21,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
+/* 
   static _launchUrl() async {
     if (await canLaunch("https://www.facebook.com/howthgolfclubdublin/")) {
       await launch("https://www.facebook.com/howthgolfclubdublin/");
@@ -31,7 +29,7 @@ class AppDrawer extends StatelessWidget {
       throw 'Could not launch FacebookLink';
     }
   }
-
+ */
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -41,8 +39,9 @@ class AppDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                  curve: Curves.decelerate,
-                  child: new Carousel(
+                child: Container(),
+                curve: Curves.decelerate,
+/*                   child: new Carousel(
                       images: [
                         'drawer_image_one.png',
                         'drawer_image_two.jpg',
@@ -61,23 +60,24 @@ class AppDrawer extends StatelessWidget {
                       radius: Radius.circular(12.0),
                       overlayShadow: false,
                       autoplay: false,
-                      boxFit: BoxFit.fill)),
+                      boxFit: BoxFit.fill) */
+              ),
               buildDrawerTile(
                   context, Constants.competitionsText, Icons.golf_course),
-              buildDrawerTile(context, Constants.managersText, Icons.people),
-              buildDrawerTile(context, Constants.courseMapText, Icons.map),
+/*               buildDrawerTile(context, Constants.managersText, Icons.people),
+              buildDrawerTile(context, Constants.courseMapText, Icons.map), */
               buildDrawerTile(context, Constants.appHelpText, Icons.help),
               Padding(
                 padding: EdgeInsets.only(bottom: 55),
               ),
-              IconButton(
+/*               IconButton(
                   iconSize: 45,
                   color: Constants.accentAppColor,
                   icon: Icon(FontAwesomeIcons.facebookSquare),
                   tooltip: 'Howth Golf Club Facebook Page',
                   onPressed: () {
                     _launchUrl();
-                  }),
+                  }), */
             ],
           ),
         ));

@@ -5,11 +5,8 @@ class Constants {
 
   static const String currentText = "Current";
   static const String archivedText = "Archived";
-  static const String favouritesText = "Favourites";
 
   static const String competitionsText = "Competitions";
-  static const String managersText = "Team Managers";
-  static const String courseMapText = "Course Map";
   static const String appHelpText = "App Help";
 
   static const Color primaryAppColor = Colors.white;

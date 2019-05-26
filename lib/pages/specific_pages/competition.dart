@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bars/specific_competition_bar.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/competition_details.dart';
-import 'package:howth_golf_live/custom_elements/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
@@ -14,6 +15,14 @@ class SpecificCompetitionPage extends StatefulWidget {
 }
 
 class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
+  Map currentData;
+
+  @override
+  initState() {
+    super.initState();
+    Map currentData = widget.competition;
+  }
+
   String processPlayerList(List playerList) {
     String output = '';
     for (String player in playerList) {
@@ -98,12 +107,40 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return output;
   }
 
+  Future<void> refreshList() async {
+    final int currentId = widget.competition['id'];
+    Future<QuerySnapshot> newData = Firestore.instance
+        .collection(Constants.competitionsText.toLowerCase())
+        .snapshots()
+        .first;
+    setState(() {
+      newData.then((QuerySnapshot snapshot) {
+        this.currentData =
+            snapshot.documents[0].data.entries.toList()[0].value[currentId];
+      });
+      // TODO fix me
+    });
+  }
+
+  void applyPrivileges(String codeAttempt) {
+    if (codeAttempt == widget.competition['id'].toString()) {
+      // TODO
+      print('apply competition priviliges');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CompetitionPageAppBar(widget.competition),
-      body: ListView(
-        children: tileBuilder(context),
+      appBar: CodeFieldBar(widget.competition, applyPrivileges),
+      body: RefreshIndicator(
+        displacement: 50.0,
+        color: Constants.accentAppColor,
+        backgroundColor: Constants.primaryAppColor,
+        child: ListView(
+          children: tileBuilder(context),
+        ),
+        onRefresh: refreshList,
       ),
       backgroundColor: Constants.primaryAppColor,
     );

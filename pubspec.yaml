@@ -7,25 +7,20 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  cloud_firestore: ^0.9.13+1
-  sqflite: 1.1.5
-  path: 1.6.2
   flutter:
     sdk: flutter
-  carousel_pro: ^0.0.13
+
+  cloud_firestore: ^0.9.13+1
   bubble_tab_indicator: ^0.1.4
   cupertino_icons: ^0.1.2
   flutter_spinkit: ^3.1.0
-  url_launcher: 5.0.2
   font_awesome_flutter: 8.4.0
-  uuid: 2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
   assets: 
-    - lib/static/images/
+    - lib/old/images/

@@ -12,9 +12,8 @@ class CompetitionDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Container(
-            width: MediaQuery.of(context).size.width / 7,
-            margin: EdgeInsets.all(1.0),
+        Flexible(
+            flex: 1,
             child: Column(
               children: <Widget>[
                 Container(
@@ -32,10 +31,8 @@ class CompetitionDetails extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0)))),
               ],
             )),
-        Container(
-          height: MediaQuery.of(context).size.height / 14,
-          alignment: Alignment.topCenter,
-          padding: EdgeInsets.all(2.0),
+        Flexible(
+          flex: 2,
           child: Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,7 +42,7 @@ class CompetitionDetails extends StatelessWidget {
                 children: <Widget>[
                   Icon(
                     FontAwesomeIcons.fistRaised,
-                    size: 16.0,
+                    size: 15.5,
                   ),
                   Container(
                       child: Text(
@@ -94,9 +91,8 @@ class CompetitionDetails extends StatelessWidget {
             ],
           )),
         ),
-        Container(
-            width: MediaQuery.of(context).size.width / 7,
-            margin: EdgeInsets.all(1.0),
+        Flexible(
+            flex: 1,
             child: Column(
               children: <Widget>[
                 Container(

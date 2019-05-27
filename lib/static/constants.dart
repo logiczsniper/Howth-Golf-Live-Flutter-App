@@ -9,6 +9,11 @@ class Constants {
   static const String competitionsText = "Competitions";
   static const String appHelpText = "App Help";
 
+  static const List<Map<String, String>> appHelpEntries = [
+    {'title': 'Gaining Admin privileges', 'data': 'Admin stuff'},
+    {'title': 'Competition Score Access', 'data': 'Get access to stuff'}
+  ];
+
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);

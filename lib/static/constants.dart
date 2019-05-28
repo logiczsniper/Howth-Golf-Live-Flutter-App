@@ -9,9 +9,61 @@ class Constants {
   static const String competitionsText = "Competitions";
   static const String appHelpText = "App Help";
 
-  static const List<Map<String, String>> appHelpEntries = [
-    {'title': 'Gaining Admin privileges', 'data': 'Admin stuff'},
-    {'title': 'Competition Score Access', 'data': 'Get access to stuff'}
+  static List<Map<String, dynamic>> appHelpEntries = [
+    {
+      'title': 'Gaining Admin Privileges',
+      'subtitle': 'Highest level permissions, e.g. adding new tournaments',
+      'steps': [
+        {
+          'title': 'Return to the app help page',
+          'data': 'Click the arrow icon in the top left corner of this page'
+        },
+        {
+          'title': 'Show the text field',
+          'data': 'Click the admin icon in the top right corner of the page'
+        },
+        {
+          'title': 'Enter your admin code',
+          'data': 'Click on the box that has appeared, type in your admin code'
+        },
+        {
+          'title': 'Submit entered code',
+          'data': 'Click the admin icon in the top right corner of the page'
+        },
+      ]
+    },
+    {
+      'title': 'Competition Score Access',
+      'subtitle':
+          'Low level permissions, e.g. modify scores of a specific competition',
+      'steps': [
+        {
+          'title': 'Return to the competitions page',
+          'data': 'Click the home icon in the top right corner of this page'
+        },
+        {
+          'title': 'Locate competition to be accessed',
+          'data': 'Scroll through the current and archived competitions'
+        },
+        {
+          'title': 'Click on the compeition',
+          'data': 'Tap anywhere on it\'s card'
+        },
+        {
+          'title': 'Show the text field',
+          'data': 'Click the admin icon in the top right corner of the page'
+        },
+        {
+          'title': 'Enter your competition code',
+          'data':
+              'Click on the box that has appeared, type in your competition code'
+        },
+        {
+          'title': 'Submit entered code',
+          'data': 'Click the admin icon in the top right corner of the page'
+        },
+      ]
+    }
   ];
 
   static const Color primaryAppColor = Colors.white;

@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
               child: Column(
             children: <Widget>[
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
-              new Image.asset('lib/static/icon.png'),
+              new Image.asset('lib/static/home_image.png'),
               Padding(padding: EdgeInsetsDirectional.only(top: 400)),
               FadingElement(
                 Text(

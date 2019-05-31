@@ -27,6 +27,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(10.0)),
               child: ListTile(
+                isThreeLine: true,
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
                 leading: Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class Constants {
   static String get appName => "Howth Golf Live";
@@ -9,7 +10,7 @@ class Constants {
   static const String competitionsText = "Competitions";
   static const String appHelpText = "App Help";
 
-  static List<Map<String, dynamic>> appHelpEntries = [
+  static List<Map<String, dynamic>> _appHelpEntryData = [
     {
       'title': 'Gaining Admin Privileges',
       'subtitle': 'Highest level permissions, e.g. adding new tournaments',
@@ -65,6 +66,10 @@ class Constants {
       ]
     }
   ];
+  static List<AppHelpEntry> appHelpEntries =
+      new List<AppHelpEntry>.generate(_appHelpEntryData.length, (int index) {
+    return AppHelpEntry.buildFromMap(_appHelpEntryData[index]);
+  });
 
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);

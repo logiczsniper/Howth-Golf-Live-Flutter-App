@@ -4,9 +4,10 @@ import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/competition_details.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
-  final Map competition;
+  final DataBaseEntry competition;
 
   SpecificCompetitionPage(this.competition);
 
@@ -20,7 +21,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   @override
   initState() {
     super.initState();
-    Map currentData = widget.competition;
+    DataBaseEntry currentData = widget.competition;
   }
 
   String processPlayerList(List playerList) {
@@ -35,14 +36,13 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   }
 
   List tileBuilder(BuildContext context) {
-    List holes = widget.competition['holes'];
+    List holes = widget.competition.holes;
     List<Widget> output = [CompetitionDetails(widget.competition)];
-    for (Map hole in holes) {
+    for (Hole hole in holes) {
       IconData trailingIcon;
-      if (hole['hole_score'].toString().toLowerCase().contains('up')) {
+      if (hole.holeScore.toLowerCase().contains('up')) {
         trailingIcon = Icons.thumb_up;
-      } else if (hole['hole_score']
-          .toString()
+      } else if (hole.holeScore
           .toLowerCase()
           .contains('under')) {
         trailingIcon = Icons.thumb_down;
@@ -79,7 +79,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                               style: Constants.cardSubTitleTextStyle
                                   .apply(fontSizeDelta: -1.5),
                             ),
-                            Text(hole['hole_number'].toString(),
+                            Text(hole.holeNumber.toString(),
                                 style: TextStyle(
                                     fontSize: 21.5,
                                     color: Constants.primaryAppColorDark,
@@ -87,12 +87,12 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                           ]),
                     )),
                 title: Text(
-                  "${hole['hole_score']}",
+                  hole.holeScore,
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: Constants.cardTitleTextStyle,
                 ),
-                subtitle: Text(processPlayerList(hole['players']),
+                subtitle: Text(processPlayerList(hole.players),
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Constants.cardSubTitleTextStyle),
@@ -108,7 +108,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   }
 
   Future<void> refreshList() async {
-    final int currentId = widget.competition['id'];
+    final int currentId = widget.competition.id;
     Future<QuerySnapshot> newData = Firestore.instance
         .collection(Constants.competitionsText.toLowerCase())
         .snapshots()
@@ -123,7 +123,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   }
 
   void applyPrivileges(String codeAttempt) {
-    if (codeAttempt == widget.competition['id'].toString()) {
+    if (codeAttempt == widget.competition.id.toString()) {
       // TODO
       print('apply competition priviliges');
     }
@@ -132,7 +132,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CodeFieldBar(widget.competition, applyPrivileges),
+      appBar: CodeFieldBar(widget.competition.title, applyPrivileges),
       body: RefreshIndicator(
         displacement: 50.0,
         color: Constants.accentAppColor,

@@ -5,11 +5,12 @@ import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.d
 import 'package:howth_golf_live/custom_elements/my_details.dart';
 import 'package:howth_golf_live/pages/specific_pages/help.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class AppHelpPage extends StatelessWidget {
   List<Widget> tileListBuilder(BuildContext context) {
     List<Widget> output = [MyDetails()];
-    for (Map<String, dynamic> entry in Constants.appHelpEntries) {
+    for (AppHelpEntry entry in Constants.appHelpEntries) {
       output.add(ComplexCard(
           ListTile(
               contentPadding:
@@ -32,12 +33,12 @@ class AppHelpPage extends StatelessWidget {
                             fontWeight: FontWeight.w400)),
                   )),
               title: Text(
-                "${entry['title']}",
+                entry.title,
                 overflow: TextOverflow.fade,
                 maxLines: 2,
                 style: Constants.cardTitleTextStyle,
               ),
-              subtitle: Text(entry['subtitle'],
+              subtitle: Text(entry.subtitle,
                   overflow: TextOverflow.fade,
                   maxLines: 2,
                   style: Constants.cardSubTitleTextStyle),
@@ -64,7 +65,7 @@ class AppHelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CodeFieldBar({'title': Constants.appHelpText}, applyPrivileges),
+      appBar: CodeFieldBar(Constants.appHelpText, applyPrivileges),
       body: ListView(
         children: tileListBuilder(context),
       ),

@@ -6,6 +6,7 @@ import 'package:howth_golf_live/custom_elements/complex_card.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/pages/specific_pages/competition.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class CompetitionsPage extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class CompetitionsPage extends StatefulWidget {
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
   static Widget tileBuilder(int index, List filteredElements) {
-    var base = filteredElements[index];
+    DataBaseEntry base = filteredElements[index];
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(
@@ -25,8 +26,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   border: new Border(
                       right: new BorderSide(
                           width: 1.5, color: Constants.accentAppColor))),
-              child: Text(
-                  "${base['score']['howth']} - ${base['score']['opposition']}",
+              child: Text("${base.score.howth} - ${base.score.opposition}",
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: TextStyle(
@@ -35,12 +35,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       fontWeight: FontWeight.w400)),
             )),
         title: Text(
-          "${base['title']}",
+          base.title,
           overflow: TextOverflow.fade,
           maxLines: 1,
           style: Constants.cardTitleTextStyle,
         ),
-        subtitle: Text("${base['date']}",
+        subtitle: Text(base.date,
             overflow: TextOverflow.fade,
             maxLines: 1,
             style: Constants.cardSubTitleTextStyle),
@@ -87,17 +87,22 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               color: Constants.primaryAppColorDark,
             ));
 
-          var elements =
-              snapshot.data.documents[0].data.entries.toList()[0].value;
+          List<DataBaseEntry> elements = new List<DataBaseEntry>.generate(
+              snapshot.data.documents[0].data.entries.toList()[0].value.length,
+              (int index) {
+            return DataBaseEntry.buildFromMap(snapshot
+                .data.documents[0].data.entries
+                .toList()[0]
+                .value[index]);
+          });
 
-          List filteredElements = elements;
+          List<DataBaseEntry> filteredElements = elements;
 
           if (_searchText.isNotEmpty) {
-            List tempList = new List();
+            List<DataBaseEntry> tempList = new List();
             for (int i = 0; i < elements.length; i++) {
               if (elements[i]
                   .values
-                  .join()
                   .toLowerCase()
                   .contains(_searchText.toLowerCase())) {
                 tempList.add(elements[i]);
@@ -106,12 +111,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             filteredElements = tempList.isNotEmpty ? tempList : [];
           }
 
-          List<Map> currentElements = [];
-          List<Map> archivedElements = [];
-          List<Map> activeElements =
+          List<DataBaseEntry> currentElements = [];
+          List<DataBaseEntry> archivedElements = [];
+          List<DataBaseEntry> activeElements =
               current ? currentElements : archivedElements;
-          for (Map filteredElement in filteredElements) {
-            DateTime competitionDate = DateTime.parse(filteredElement['date']
+          for (DataBaseEntry filteredElement in filteredElements) {
+            DateTime competitionDate = DateTime.parse(filteredElement.date
                     .toString()
                     .split('/')
                     .reversed

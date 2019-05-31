@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class CompetitionDetails extends StatelessWidget {
-  final Map data;
+  final DataBaseEntry data;
   CompetitionDetails(this.data);
 
   @override
@@ -18,7 +19,7 @@ class CompetitionDetails extends StatelessWidget {
               children: <Widget>[
                 Container(
                     padding: EdgeInsets.all(12.0),
-                    child: Text(data['score']['howth'],
+                    child: Text(data.score.howth,
                         overflow: TextOverflow.fade,
                         maxLines: 1,
                         style: TextStyle(
@@ -46,7 +47,7 @@ class CompetitionDetails extends StatelessWidget {
                   ),
                   Container(
                       child: Text(
-                    data['opposition'],
+                    data.opposition,
                     maxLines: 2,
                     overflow: TextOverflow.fade,
                     style: Constants.cardSubTitleTextStyle
@@ -63,7 +64,7 @@ class CompetitionDetails extends StatelessWidget {
                   ),
                   Container(
                       child: Text(
-                    data['location'],
+                    data.location,
                     maxLines: 2,
                     overflow: TextOverflow.fade,
                     style: Constants.cardSubTitleTextStyle
@@ -80,7 +81,7 @@ class CompetitionDetails extends StatelessWidget {
                   ),
                   Container(
                       child: Text(
-                    data['time'],
+                    data.time,
                     maxLines: 2,
                     overflow: TextOverflow.fade,
                     style: Constants.cardSubTitleTextStyle
@@ -97,7 +98,7 @@ class CompetitionDetails extends StatelessWidget {
               children: <Widget>[
                 Container(
                     padding: EdgeInsets.all(12.0),
-                    child: Text(data['score']['opposition'],
+                    child: Text(data.score.opposition,
                         overflow: TextOverflow.fade,
                         maxLines: 1,
                         style: TextStyle(

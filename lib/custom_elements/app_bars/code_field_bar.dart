@@ -4,16 +4,16 @@ import 'package:howth_golf_live/static/constants.dart';
 
 class CodeFieldBar extends StatefulWidget
     implements PreferredSizeWidget {
-  final Map data;
+  final String dataTitle;
   final Function applyPrivileges;
 
-  CodeFieldBar(this.data, this.applyPrivileges, {Key key})
+  CodeFieldBar(this.dataTitle, this.applyPrivileges, {Key key})
       : preferredSize = Size.fromHeight(56.0),
         super(key: key);
 
   @override
   CodeFieldBarState createState() =>
-      new CodeFieldBarState(data['title']);
+      new CodeFieldBarState(dataTitle);
 
   @override
   final Size preferredSize; // default is 56.0

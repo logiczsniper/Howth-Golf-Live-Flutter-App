@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 
 class SpecificHelpPage extends StatefulWidget {
-  final Map entry;
+  final AppHelpEntry entry;
 
   SpecificHelpPage(this.entry);
 
@@ -12,9 +13,9 @@ class SpecificHelpPage extends StatefulWidget {
 
 class SpecificHelpPageState extends State<SpecificHelpPage> {
   List<Widget> tileBuilder(BuildContext context) {
-    List<Map<String, String>> steps = widget.entry['steps'];
+    List<HelpStep> steps = widget.entry.steps;
     List<Widget> output = [];
-    for (Map<String, String> step in steps) {
+    for (HelpStep step in steps) {
       output.add(Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -53,12 +54,12 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
                           ]),
                     )),
                 title: Text(
-                  step['title'],
+                  step.title,
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: Constants.cardTitleTextStyle,
                 ),
-                subtitle: Text(step['data'],
+                subtitle: Text(step.data,
                     overflow: TextOverflow.fade,
                     maxLines: 4,
                     style: Constants.cardSubTitleTextStyle),
@@ -76,7 +77,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.entry['title'],
+        title: Text(widget.entry.title,
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(

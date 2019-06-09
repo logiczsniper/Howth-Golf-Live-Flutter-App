@@ -31,9 +31,14 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   String title;
 
   _CompetitionsPageAppBarState(this.title) {
-    _appBarTitle =
-        MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search)
-            .build(context);
+    _appBarTitle = MyCrossFade(
+      title,
+      _filter,
+      'Search...',
+      _toggleAppBar,
+      Icons.search,
+      TextInputType.text,
+    ).build(context);
     _searchIcon = AnimatedCrossFade(
       duration: const Duration(milliseconds: 450),
       firstChild: new Icon(Icons.search),
@@ -62,6 +67,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       } else {
         _toggleAppBar = true;
         _filter.clear();
+        FocusScope.of(context).requestFocus(new FocusNode());
       }
       _searchIcon = AnimatedCrossFade(
         duration: const Duration(milliseconds: 450),
@@ -71,9 +77,14 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
       );
-      _appBarTitle =
-          MyCrossFade(title, _filter, 'Search...', _toggleAppBar, Icons.search)
-              .build(context);
+      _appBarTitle = MyCrossFade(
+        title,
+        _filter,
+        'Search...',
+        _toggleAppBar,
+        Icons.search,
+        TextInputType.text,
+      ).build(context);
     });
   }
 

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
-class CodeFieldBar extends StatefulWidget
-    implements PreferredSizeWidget {
+class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String dataTitle;
   final Function applyPrivileges;
 
@@ -12,8 +11,7 @@ class CodeFieldBar extends StatefulWidget
         super(key: key);
 
   @override
-  CodeFieldBarState createState() =>
-      new CodeFieldBarState(dataTitle);
+  CodeFieldBarState createState() => new CodeFieldBarState(dataTitle);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -28,7 +26,7 @@ class CodeFieldBarState extends State<CodeFieldBar> {
 
   CodeFieldBarState(this.title) {
     _appBarTitle = MyCrossFade(title, _filter, 'Enter code here...',
-            _toggleAppBar, Icons.keyboard_arrow_right,
+            _toggleAppBar, Icons.keyboard_arrow_right, TextInputType.number,
             password: true)
         .build(context);
 
@@ -54,9 +52,10 @@ class CodeFieldBarState extends State<CodeFieldBar> {
       } else {
         _toggleAppBar = true;
         _filter.clear();
+        FocusScope.of(context).requestFocus(new FocusNode());
       }
       _appBarTitle = MyCrossFade(title, _filter, 'Enter code here...',
-              _toggleAppBar, Icons.keyboard_arrow_right,
+              _toggleAppBar, Icons.keyboard_arrow_right, TextInputType.number,
               password: true)
           .build(context);
     });

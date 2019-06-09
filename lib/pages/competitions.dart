@@ -81,6 +81,19 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             .collection(Constants.competitionsText.toLowerCase())
             .snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.error != null) {
+            return Center(
+                child: Column(
+              children: <Widget>[
+                Icon(Icons.error, color: Constants.primaryAppColorDark),
+                Text(
+                  'Oof, please email the address in App Help to report this error.',
+                  style: Constants.cardSubTitleTextStyle,
+                )
+              ],
+            ));
+          }
+
           if (!snapshot.hasData)
             return Center(
                 child: SpinKitPulse(

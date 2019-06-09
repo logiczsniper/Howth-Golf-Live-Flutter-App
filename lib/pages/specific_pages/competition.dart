@@ -5,6 +5,7 @@ import 'package:howth_golf_live/custom_elements/competition_details.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
   final DataBaseEntry competition;
@@ -16,12 +17,12 @@ class SpecificCompetitionPage extends StatefulWidget {
 }
 
 class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
-  Map currentData;
+  DataBaseEntry currentData;
 
   @override
   initState() {
     super.initState();
-    DataBaseEntry currentData = widget.competition;
+    currentData = widget.competition;
   }
 
   String processPlayerList(List playerList) {
@@ -36,15 +37,13 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   }
 
   List tileBuilder(BuildContext context) {
-    List holes = widget.competition.holes;
-    List<Widget> output = [CompetitionDetails(widget.competition)];
+    List holes = currentData.holes;
+    List<Widget> output = [CompetitionDetails(currentData)];
     for (Hole hole in holes) {
       IconData trailingIcon;
       if (hole.holeScore.toLowerCase().contains('up')) {
         trailingIcon = Icons.thumb_up;
-      } else if (hole.holeScore
-          .toLowerCase()
-          .contains('under')) {
+      } else if (hole.holeScore.toLowerCase().contains('under')) {
         trailingIcon = Icons.thumb_down;
       } else {
         trailingIcon = Icons.thumbs_up_down;
@@ -108,31 +107,35 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   }
 
   Future<void> refreshList() async {
-    final int currentId = widget.competition.id;
+    final int currentId = currentData.id;
     Future<QuerySnapshot> newData = Firestore.instance
         .collection(Constants.competitionsText.toLowerCase())
         .snapshots()
         .first;
     setState(() {
       newData.then((QuerySnapshot snapshot) {
-        this.currentData =
+        Map databaseOutput =
             snapshot.documents[0].data.entries.toList()[0].value[currentId];
+        this.currentData = DataBaseEntry.buildFromMap(databaseOutput);
       });
-      // TODO fix me
     });
   }
 
-  void applyPrivileges(String codeAttempt) {
-    if (codeAttempt == widget.competition.id.toString()) {
-      // TODO
-      print('apply competition priviliges');
+  void applyPrivileges(String codeAttempt) async {
+    if (codeAttempt == currentData.id.toString()) {
+      // TODO code each competition should have a 5 digit code
+      final preferences = await SharedPreferences.getInstance();
+      if (preferences.containsKey(Constants.activeCompetitionText)) {
+        preferences.setString(
+            Constants.activeCompetitionText, currentData.id.toString());
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CodeFieldBar(widget.competition.title, applyPrivileges),
+      appBar: CodeFieldBar(currentData.title, applyPrivileges),
       body: RefreshIndicator(
         displacement: 50.0,
         color: Constants.accentAppColor,

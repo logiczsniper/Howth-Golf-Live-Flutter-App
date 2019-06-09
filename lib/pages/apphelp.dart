@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
@@ -55,10 +56,13 @@ class AppHelpPage extends StatelessWidget {
     return output;
   }
 
-  void applyPrivileges(String codeAttempt) {
+  void applyPrivileges(String codeAttempt) async {
     if (codeAttempt == 'admin') {
-      // TODO
-      print('apply admin');
+      // TODO code change it so that it is not admin
+      final preferences = await SharedPreferences.getInstance();
+      if (preferences.containsKey(Constants.activeAdminText)) {
+        preferences.setBool(Constants.activeAdminText, true);
+      }
     }
   }
 

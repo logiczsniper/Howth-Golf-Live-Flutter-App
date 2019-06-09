@@ -10,6 +10,9 @@ class Constants {
   static const String competitionsText = "Competitions";
   static const String appHelpText = "App Help";
 
+  static const String activeAdminText = "activeAdmin";
+  static const String activeCompetitionText = "activeCompetitions";
+
   static List<Map<String, dynamic>> _appHelpEntryData = [
     {
       'title': 'Gaining Admin Privileges',

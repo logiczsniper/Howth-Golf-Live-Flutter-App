@@ -57,12 +57,10 @@ class AppHelpPage extends StatelessWidget {
   }
 
   void applyPrivileges(String codeAttempt) async {
-    if (codeAttempt == 'admin') {
-      // TODO code change it so that it is not admin
+    if (codeAttempt == '1234') {
+      // TODO change the code
       final preferences = await SharedPreferences.getInstance();
-      if (preferences.containsKey(Constants.activeAdminText)) {
-        preferences.setBool(Constants.activeAdminText, true);
-      }
+      preferences.setBool(Constants.activeAdminText, true);
     }
   }
 

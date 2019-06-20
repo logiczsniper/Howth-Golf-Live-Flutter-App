@@ -114,21 +114,28 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         .first;
     setState(() {
       newData.then((QuerySnapshot snapshot) {
-        Map databaseOutput =
-            snapshot.documents[0].data.entries.toList()[0].value[currentId];
-        this.currentData = DataBaseEntry.buildFromMap(databaseOutput);
+        List<dynamic> databaseOutput =
+            snapshot.documents[0].data.entries.toList()[0].value;
+        List<DataBaseEntry> parsedOutput = [];
+        databaseOutput.forEach((dynamic map) {
+          parsedOutput.add(DataBaseEntry.buildFromMap(map));
+        });
+
+        for (DataBaseEntry entry in parsedOutput) {
+          if (entry.id == currentId) {
+            this.currentData = entry;
+            break;
+          }
+        }
       });
     });
   }
 
   void applyPrivileges(String codeAttempt) async {
     if (codeAttempt == currentData.id.toString()) {
-      // TODO code each competition should have a 5 digit code
       final preferences = await SharedPreferences.getInstance();
-      if (preferences.containsKey(Constants.activeCompetitionText)) {
-        preferences.setString(
-            Constants.activeCompetitionText, currentData.id.toString());
-      }
+      preferences.setString(
+          Constants.activeCompetitionText, currentData.id.toString());
     }
   }
 

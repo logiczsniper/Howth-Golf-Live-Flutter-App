@@ -131,18 +131,23 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     });
   }
 
-  void applyPrivileges(String codeAttempt) async {
+  bool applyPrivileges(String codeAttempt) {
     if (codeAttempt == currentData.id.toString()) {
-      final preferences = await SharedPreferences.getInstance();
-      preferences.setString(
-          Constants.activeCompetitionText, currentData.id.toString());
+      final preferences = SharedPreferences.getInstance();
+      preferences.then((SharedPreferences preferences) {
+        preferences.setString(
+            Constants.activeCompetitionText, currentData.id.toString());
+      });
+      return true;
     }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CodeFieldBar(currentData.title, applyPrivileges),
+      // TODO pass the correct initial state of the bar
+      appBar: CodeFieldBar(currentData.title, applyPrivileges, false),
       body: RefreshIndicator(
         displacement: 50.0,
         color: Constants.accentAppColor,

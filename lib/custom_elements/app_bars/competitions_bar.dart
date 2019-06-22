@@ -2,6 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -113,7 +114,12 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                   icon: Icon(Icons.help_outline),
                   tooltip: 'Tap for help!',
                   onPressed: () {
-                    Navigator.pushNamed(context, '/' + Constants.appHelpText);
+                    final preferences = SharedPreferences.getInstance();
+                    preferences.then((SharedPreferences preferences) {
+                      Navigator.pushNamed(context, '/' + Constants.appHelpText,
+                          arguments:
+                              preferences.getBool(Constants.activeAdminText));
+                    });
                   },
                 ),
                 actions: <Widget>[

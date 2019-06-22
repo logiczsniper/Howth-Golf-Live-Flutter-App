@@ -4,20 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserValidity {
   SharedPreferences sharedPreferences;
 
-  void updatePreferences() async {
-    final preferences = SharedPreferences.getInstance();
-    preferences.then((SharedPreferences preferences) {
-      sharedPreferences = preferences;
-    });
+  updatePreferences() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences;
   }
 
   bool isAdmin() {
-    updatePreferences();
-    return sharedPreferences.getBool(Constants.activeAdminText);
+    return updatePreferences().getBool(Constants.activeAdminText);
   }
 
   String competitionAccess() {
-    updatePreferences();
-    return sharedPreferences.getString(Constants.activeCompetitionText);
+    return updatePreferences().getString(Constants.activeCompetitionText);
   }
 }

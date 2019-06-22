@@ -8,7 +8,12 @@ import 'package:howth_golf_live/pages/specific_pages/help.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 
-class AppHelpPage extends StatelessWidget {
+class AppHelpPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => AppHelpPageState();
+}
+
+class AppHelpPageState extends State<AppHelpPage> {
   List<Widget> tileListBuilder(BuildContext context) {
     List<Widget> output = [MyDetails()];
     for (AppHelpEntry entry in Constants.appHelpEntries) {
@@ -56,18 +61,27 @@ class AppHelpPage extends StatelessWidget {
     return output;
   }
 
-  void applyPrivileges(String codeAttempt) async {
+  bool applyPrivileges(String codeAttempt) {
     if (codeAttempt == '1234') {
       // TODO change the code
-      final preferences = await SharedPreferences.getInstance();
-      preferences.setBool(Constants.activeAdminText, true);
+      final preferences = SharedPreferences.getInstance();
+      preferences.then((SharedPreferences preferences) {
+        preferences.setBool(Constants.activeAdminText, true);
+      });
+      return true;
     }
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isInitVerified =
+        ModalRoute.of(context).settings.arguments == null
+            ? false
+            : ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      appBar: CodeFieldBar(Constants.appHelpText, applyPrivileges),
+      appBar:
+          CodeFieldBar(Constants.appHelpText, applyPrivileges, isInitVerified),
       body: ListView(
         children: tileListBuilder(context),
       ),

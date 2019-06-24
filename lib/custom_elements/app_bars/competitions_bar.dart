@@ -2,6 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
+import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
@@ -118,7 +119,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     preferences.then((SharedPreferences preferences) {
                       Navigator.pushNamed(context, '/' + Constants.appHelpText,
                           arguments:
-                              preferences.getBool(Constants.activeAdminText));
+                              Privileges.buildFromPreferences(preferences));
                     });
                   },
                 ),

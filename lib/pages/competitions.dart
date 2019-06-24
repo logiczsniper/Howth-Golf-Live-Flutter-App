@@ -4,9 +4,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
 import 'package:howth_golf_live/pages/specific_pages/competition.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CompetitionsPage extends StatefulWidget {
   @override
@@ -150,11 +152,24 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             itemBuilder: (BuildContext context, int index) {
               return ComplexCard(_complexTileBuilder(index, activeElements),
                   () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SpecificCompetitionPage(activeElements[index])));
+                final preferences = SharedPreferences.getInstance();
+                preferences.then((SharedPreferences preferences) {
+                  final Privileges arguments =
+                      ModalRoute.of(context).settings.arguments;
+                  final bool isAdmin =
+                      arguments.isAdmin == null ? false : arguments.isAdmin;
+                  final bool isManager = arguments.competitionAccess ==
+                          activeElements[index].id.toString()
+                      ? true
+                      : false;
+                  final bool hasAccess = isAdmin || isManager;
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SpecificCompetitionPage(
+                              activeElements[index], hasAccess)));
+                });
               });
             },
           );
@@ -163,11 +178,19 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Privileges arguments = ModalRoute.of(context).settings.arguments;
+    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
+
+    MyFloatingActionButton floatingActionButton =
+        isAdmin ? MyFloatingActionButton(() {}) : null;
     return Scaffold(
       body: DefaultTabController(
           length: 2,
           child: CompetitionsPageAppBar(_buildElementsList,
               title: Constants.competitionsText)),
+      floatingActionButton: Container(
+          padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Constants.primaryAppColor,
     );
   }

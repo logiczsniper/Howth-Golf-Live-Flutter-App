@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SpecificHelpPage extends StatefulWidget {
   final AppHelpEntry entry;
@@ -91,7 +92,11 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
             icon: Icon(Icons.home),
             tooltip: 'Tap to return to home!',
             onPressed: () {
-              Navigator.pushNamed(context, '/' + Constants.competitionsText);
+              final preferences = SharedPreferences.getInstance();
+              preferences.then((SharedPreferences preferences) {
+                Navigator.pushNamed(context, '/' + Constants.competitionsText,
+                    arguments: Privileges.buildFromPreferences(preferences));
+              });
             },
             color: Constants.primaryAppColorDark,
           )

@@ -9,8 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
   final DataBaseEntry competition;
+  final bool hasAccess;
 
-  SpecificCompetitionPage(this.competition);
+  SpecificCompetitionPage(this.competition, this.hasAccess);
 
   @override
   SpecificCompetitionPageState createState() => SpecificCompetitionPageState();
@@ -146,8 +147,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO pass the correct initial state of the bar
-      appBar: CodeFieldBar(currentData.title, applyPrivileges, false),
+      appBar:
+          CodeFieldBar(currentData.title, applyPrivileges, widget.hasAccess),
       body: RefreshIndicator(
         displacement: 50.0,
         color: Constants.accentAppColor,

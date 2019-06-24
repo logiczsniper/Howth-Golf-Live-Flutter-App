@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/custom_elements/back_button.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
@@ -84,9 +85,11 @@ class CodeFieldBarState extends State<CodeFieldBar> {
     iconMessage =
         isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
     iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
+
     return AppBar(
       title: _appBarTitle,
       centerTitle: true,
+      leading: MyBackButton(Constants.competitionsText),
       actions: <Widget>[
         IconButton(
           icon: Icon(iconData),

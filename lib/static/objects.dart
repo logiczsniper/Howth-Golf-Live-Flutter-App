@@ -1,3 +1,6 @@
+import 'package:howth_golf_live/static/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class DataBaseEntry {
   final String date;
   final int id;
@@ -90,4 +93,18 @@ class HelpStep {
   }
 
   HelpStep({this.title, this.data});
+}
+
+class Privileges {
+  final bool isAdmin;
+  final String competitionAccess;
+
+  static Privileges buildFromPreferences(SharedPreferences preferences) {
+    return Privileges(
+        isAdmin: preferences.getBool(Constants.activeAdminText),
+        competitionAccess:
+            preferences.getString(Constants.activeCompetitionText));
+  }
+
+  Privileges({this.isAdmin, this.competitionAccess});
 }

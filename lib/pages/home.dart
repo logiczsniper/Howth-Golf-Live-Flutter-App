@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,8 +20,11 @@ class HomePage extends StatelessWidget {
 
     return GestureDetector(
         onTap: () {
-          // Navigate into app when tapped.
-          Navigator.pushNamed(context, '/' + Constants.competitionsText);
+          final preferences = SharedPreferences.getInstance();
+          preferences.then((SharedPreferences preferences) {
+            Navigator.pushNamed(context, '/' + Constants.competitionsText,
+                arguments: Privileges.buildFromPreferences(preferences));
+          });
         },
         child: Scaffold(
           body: Center(

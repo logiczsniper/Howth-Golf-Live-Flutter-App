@@ -75,10 +75,9 @@ class AppHelpPageState extends State<AppHelpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isInitVerified =
-        ModalRoute.of(context).settings.arguments == null
-            ? false
-            : ModalRoute.of(context).settings.arguments;
+        arguments.isAdmin == null ? false : arguments.isAdmin;
     return Scaffold(
       appBar:
           CodeFieldBar(Constants.appHelpText, applyPrivileges, isInitVerified),

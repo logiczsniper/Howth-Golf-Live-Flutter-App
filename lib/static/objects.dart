@@ -15,18 +15,32 @@ class DataBaseEntry {
     return "$date $location $time $opposition $title $holes $score";
   }
 
+  Map convertToMap() {
+    return {
+      EntryFields.date: date,
+      EntryFields.id: id,
+      EntryFields.location: location,
+      EntryFields.time: time,
+      EntryFields.opposition: opposition,
+      EntryFields.title: title,
+      EntryFields.holes: holes,
+      EntryFields.score: score
+    };
+  }
+
   static DataBaseEntry buildFromMap(Map map) {
     return DataBaseEntry(
-        date: map['date'],
-        id: map['id'],
-        location: map['location'],
-        time: map['time'],
-        opposition: map['opposition'],
-        title: map['title'],
-        holes: new List<Hole>.generate(map['holes'].length, (int index) {
-          return Hole.buildFromMap(map['holes'][index]);
+        date: map[EntryFields.date],
+        id: map[EntryFields.id],
+        location: map[EntryFields.location],
+        time: map[EntryFields.time],
+        opposition: map[EntryFields.opposition],
+        title: map[EntryFields.title],
+        holes:
+            new List<Hole>.generate(map[EntryFields.holes].length, (int index) {
+          return Hole.buildFromMap(map[EntryFields.holes][index]);
         }),
-        score: Score.buildFromMap(map['score']));
+        score: Score.buildFromMap(map[EntryFields.score]));
   }
 
   DataBaseEntry(
@@ -38,6 +52,17 @@ class DataBaseEntry {
       this.title,
       this.holes,
       this.score});
+}
+
+class EntryFields {
+  static final String date = 'date';
+  static final String id = 'id';
+  static final String location = 'location';
+  static final String time = 'time';
+  static final String opposition = 'opposition';
+  static final String title = 'title';
+  static final String holes = 'holes';
+  static final String score = 'score';
 }
 
 class Score {

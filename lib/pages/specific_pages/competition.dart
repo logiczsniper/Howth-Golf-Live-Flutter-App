@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/competition_details.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -144,8 +145,14 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return false;
   }
 
+  /// TODO build out method
+  void addHole() {}
+
   @override
   Widget build(BuildContext context) {
+    MyFloatingActionButton floatingActionButton = widget.hasAccess
+        ? MyFloatingActionButton(onPressed: addHole, text: 'Add a Hole')
+        : null;
     return Scaffold(
       appBar:
           CodeFieldBar(currentData.title, applyPrivileges, widget.hasAccess),
@@ -158,6 +165,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         ),
         onRefresh: refreshList,
       ),
+      floatingActionButton: Container(
+          padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Constants.primaryAppColor,
     );
   }

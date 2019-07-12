@@ -16,8 +16,57 @@ class CompetitionsPage extends StatefulWidget {
 }
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
-  static Widget tileBuilder(int index, List filteredElements) {
+  static Widget tileBuilder(
+      BuildContext context,
+      int index,
+      List<DataBaseEntry> filteredElements,
+      QuerySnapshot snapshot,
+      List<dynamic> allElements) {
     DataBaseEntry base = filteredElements[index];
+    final Privileges arguments = ModalRoute.of(context).settings.arguments;
+    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
+    Widget trailingIcon = isAdmin
+        ? FadingElement(
+            IconButton(
+              icon: Icon(Icons.remove_circle_outline,
+                  color: Constants.primaryAppColorDark),
+              onPressed: () {
+                /// TODO fix me the icon can not be pressed because the card itself is a button
+                allElements.remove(base.convertToMap());
+                List<Map> updatedData = allElements;
+                snapshot.documents
+                    .elementAt(0)
+                    .reference
+                    .updateData({'data': updatedData});
+              },
+            ),
+            false,
+            duration: Duration(milliseconds: 800),
+          )
+        : FadingElement(
+            Icon(Icons.keyboard_arrow_right,
+                color: Constants.primaryAppColorDark),
+            false,
+            duration: Duration(milliseconds: 800),
+          );
+    if (filteredElements == null)
+      return ListTile(
+          title: Center(
+              child: SpinKitPulse(
+        color: Constants.primaryAppColorDark,
+        size: 45,
+        duration: Duration(milliseconds: 800),
+      )));
+
+    if (filteredElements[0] is bool)
+      return ListTile(
+          title: Center(
+              child: Text(
+                  "No ${Constants.competitionsText.toLowerCase()} found!",
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Color.fromARGB(255, 187, 187, 187),
+                      fontWeight: FontWeight.w300))));
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(
@@ -46,35 +95,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             overflow: TextOverflow.fade,
             maxLines: 1,
             style: Constants.cardSubTitleTextStyle),
-        trailing: FadingElement(
-          Icon(Icons.keyboard_arrow_right,
-              color: Constants.primaryAppColorDark),
-          false,
-          duration: Duration(milliseconds: 800),
-        ));
-  }
-
-  Widget _complexTileBuilder(int index, List filteredElements) {
-    if (filteredElements == null)
-      return ListTile(
-          title: Center(
-              child: SpinKitPulse(
-        color: Constants.primaryAppColorDark,
-        size: 45,
-        duration: Duration(milliseconds: 800),
-      )));
-
-    if (filteredElements[0] is bool)
-      return ListTile(
-          title: Center(
-              child: Text(
-                  "No ${Constants.competitionsText.toLowerCase()} found!",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Color.fromARGB(255, 187, 187, 187),
-                      fontWeight: FontWeight.w300))));
-
-    return tileBuilder(index, filteredElements);
+        trailing: trailingIcon);
   }
 
   Widget _buildElementsList(String _searchText, {bool current = false}) {
@@ -102,6 +123,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               color: Constants.primaryAppColorDark,
             ));
 
+          List<dynamic> allElements =
+              snapshot.data.documents[0].data.entries.toList()[0].value;
           List<DataBaseEntry> elements = new List<DataBaseEntry>.generate(
               snapshot.data.documents[0].data.entries.toList()[0].value.length,
               (int index) {
@@ -150,8 +173,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           return ListView.builder(
             itemCount: activeElements.length,
             itemBuilder: (BuildContext context, int index) {
-              return ComplexCard(_complexTileBuilder(index, activeElements),
-                  () {
+              return ComplexCard(
+                  tileBuilder(context, index, activeElements, snapshot.data,
+                      allElements), () {
                 final preferences = SharedPreferences.getInstance();
                 preferences.then((SharedPreferences preferences) {
                   final Privileges arguments =
@@ -176,13 +200,18 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         });
   }
 
+  /// TODO build out method
+  void addCompetition() {}
+
   @override
   Widget build(BuildContext context) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
 
-    MyFloatingActionButton floatingActionButton =
-        isAdmin ? MyFloatingActionButton(() {}) : null;
+    MyFloatingActionButton floatingActionButton = isAdmin
+        ? MyFloatingActionButton(
+            onPressed: addCompetition, text: 'Add a Competition')
+        : null;
     return Scaffold(
       body: DefaultTabController(
           length: 2,

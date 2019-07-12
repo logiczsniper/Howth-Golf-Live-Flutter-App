@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// REMOVE ME
-    _clearPreferences();
+    ///_clearPreferences();
 
     return GestureDetector(
         onTap: () {
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
               new Image.asset('lib/static/newIcon.png'),
-              Padding(padding: EdgeInsetsDirectional.only(top: 400)),
+              Padding(padding: EdgeInsetsDirectional.only(top: 200)),
               FadingElement(
                 Text(
                   'Tap anywhere to begin!',

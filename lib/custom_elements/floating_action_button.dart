@@ -3,7 +3,8 @@ import 'package:howth_golf_live/static/constants.dart';
 
 class MyFloatingActionButton extends StatelessWidget {
   final Function onPressed;
-  MyFloatingActionButton(this.onPressed);
+  final String text;
+  MyFloatingActionButton({this.onPressed, this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +13,8 @@ class MyFloatingActionButton extends StatelessWidget {
         Icons.add,
         color: Constants.primaryAppColorDark,
       ),
-      label: const Text(
-        'Add a Competition',
+      label: Text(
+        text,
         style: TextStyle(fontSize: 14, color: Constants.primaryAppColorDark),
       ),
       onPressed: onPressed,

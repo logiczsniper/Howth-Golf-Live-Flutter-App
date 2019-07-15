@@ -10,10 +10,8 @@ class CompetitionsPageAppBar extends StatefulWidget
   final String title;
   final Function _listBuilder;
 
-  CompetitionsPageAppBar(this._listBuilder,
-      {Key key, this.title: "Default Title"})
-      : preferredSize = Size.fromHeight(56.0),
-        super(key: key);
+  CompetitionsPageAppBar(this._listBuilder, {this.title})
+      : preferredSize = Size.fromHeight(56.0);
 
   @override
   _CompetitionsPageAppBarState createState() =>
@@ -25,68 +23,27 @@ class CompetitionsPageAppBar extends StatefulWidget
 
 class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     with TickerProviderStateMixin {
-  final TextEditingController _filter = new TextEditingController();
-  String _searchText = "";
+  final TextEditingController _filter = TextEditingController();
   bool _toggleAppBar = true;
-  Widget _searchIcon;
-  Widget _appBarTitle;
+  String _searchText = "";
   String title;
 
   _CompetitionsPageAppBarState(this.title) {
-    _appBarTitle = MyCrossFade(
-      title,
-      _filter,
-      'Search...',
-      _toggleAppBar,
-      Icons.search,
-      TextInputType.text,
-    ).build(context);
-    _searchIcon = AnimatedCrossFade(
-      duration: const Duration(milliseconds: 450),
-      firstChild: new Icon(Icons.search),
-      secondChild: new Icon(Icons.close),
-      crossFadeState:
-          _toggleAppBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-    );
-
     _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
+      setState(() {
+        _searchText = _filter.text.isEmpty ? "" : _filter.text;
+      });
     });
   }
 
   void _searchPressed() {
     setState(() {
-      if (this._toggleAppBar == true) {
-        _toggleAppBar = false;
-      } else {
-        _toggleAppBar = true;
+      _toggleAppBar = !_toggleAppBar;
+
+      if (_toggleAppBar) {
         _filter.clear();
         FocusScope.of(context).requestFocus(new FocusNode());
       }
-      _searchIcon = AnimatedCrossFade(
-        duration: const Duration(milliseconds: 450),
-        firstChild: new Icon(Icons.search),
-        secondChild: new Icon(Icons.close),
-        crossFadeState: _toggleAppBar
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-      );
-      _appBarTitle = MyCrossFade(
-        title,
-        _filter,
-        'Search...',
-        _toggleAppBar,
-        Icons.search,
-        TextInputType.text,
-      ).build(context);
     });
   }
 
@@ -98,6 +55,21 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
   @override
   Widget build(BuildContext context) {
+    AnimatedCrossFade _searchIcon = AnimatedCrossFade(
+      duration: const Duration(milliseconds: 450),
+      firstChild: new Icon(Icons.search),
+      secondChild: new Icon(Icons.close),
+      crossFadeState:
+          _toggleAppBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+    );
+
+    Widget _appBarTitle = TitleCrossFade(_filter, _toggleAppBar,
+        title: title,
+        hintText: 'Search...',
+        iconData: Icons.search,
+        textInputType: TextInputType.text,
+        password: false);
+
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),
@@ -146,8 +118,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         },
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(_searchText, current: true),
-            widget._listBuilder(_searchText, current: false)
+            widget._listBuilder(_searchText, true),
+            widget._listBuilder(_searchText, false)
           ],
         ),
       ),

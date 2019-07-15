@@ -98,7 +98,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         trailing: trailingIcon);
   }
 
-  Widget _buildElementsList(String _searchText, {bool current = false}) {
+  Widget _buildElementsList(String _searchText, bool current) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection(Constants.competitionsText.toLowerCase())
@@ -170,6 +170,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             }
           }
 
+          /// TODO make this an animated list
           return ListView.builder(
             itemCount: activeElements.length,
             itemBuilder: (BuildContext context, int index) {

@@ -75,7 +75,7 @@ class CodeFieldBarState extends State<CodeFieldBar> {
     return AppBar(
       title: _appBarTitle,
       centerTitle: true,
-      leading: MyBackButton(Constants.competitionsText),
+      leading: ParameterBackButton(Constants.competitionsText),
       actions: <Widget>[
         IconButton(
             icon: Icon(iconData),

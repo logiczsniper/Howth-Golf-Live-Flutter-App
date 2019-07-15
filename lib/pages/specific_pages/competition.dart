@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
-import 'package:howth_golf_live/custom_elements/competition_details.dart';
+import 'package:howth_golf_live/custom_elements/competition_details_widgets/competition_details.dart';
 import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
 import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
 import 'package:howth_golf_live/static/constants.dart';

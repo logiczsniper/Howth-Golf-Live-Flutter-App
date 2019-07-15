@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MyBackButton extends StatelessWidget {
+class ParameterBackButton extends StatelessWidget {
   final String destination;
-  MyBackButton(this.destination);
+  ParameterBackButton(this.destination);
   @override
   Widget build(BuildContext context) {
     return IconButton(

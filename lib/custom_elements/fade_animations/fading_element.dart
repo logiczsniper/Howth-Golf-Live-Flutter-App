@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FadingElement extends StatefulWidget {
-  final Widget target;
   final bool flashing;
   final bool fadeIn;
   final Duration duration;
+  final Widget target;
 
   FadingElement(this.target, this.flashing,
-      {this.fadeIn: true, this.duration: const Duration(milliseconds: 800)});
+      {this.fadeIn = true, this.duration = const Duration(milliseconds: 800)});
 
   _FadingElementState createState() => new _FadingElementState(this.target);
 }
@@ -25,9 +25,9 @@ class _FadingElementState extends State<FadingElement>
     super.initState();
     double finalOpacity = this.widget.fadeIn ? 1.0 : 0.1;
     _opacityController =
-        new AnimationController(vsync: this, duration: this.widget.duration);
+        AnimationController(vsync: this, duration: this.widget.duration);
     _opacity =
-        new CurvedAnimation(parent: _opacityController, curve: Curves.easeInOut)
+        CurvedAnimation(parent: _opacityController, curve: Curves.easeInOut)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               _opacityController.reverse();

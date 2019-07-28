@@ -12,7 +12,7 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
       : preferredSize = Size.fromHeight(56.0);
 
   @override
-  CodeFieldBarState createState() => new CodeFieldBarState(title);
+  CodeFieldBarState createState() => new CodeFieldBarState();
 
   @override
   final Size preferredSize;
@@ -24,14 +24,6 @@ class CodeFieldBarState extends State<CodeFieldBar> {
   String title;
   bool _toggleAppBar = true;
   bool isVerified;
-
-  CodeFieldBarState(this.title) {
-    _filter.addListener(() {
-      setState(() {
-        codeText = _filter.text.isEmpty ? "" : _filter.text;
-      });
-    });
-  }
 
   void _actionPressed() {
     if (!isVerified) {
@@ -57,6 +49,12 @@ class CodeFieldBarState extends State<CodeFieldBar> {
     super.initState();
     _toggleAppBar = true;
     isVerified = widget.isInitVerified;
+    title = widget.title;
+    _filter.addListener(() {
+      setState(() {
+        codeText = _filter.text.isEmpty ? "" : _filter.text;
+      });
+    });
   }
 
   @override
@@ -71,6 +69,8 @@ class CodeFieldBarState extends State<CodeFieldBar> {
         iconData: Icons.keyboard_arrow_right,
         textInputType: TextInputType.number,
         password: true);
+
+    /// TODO use AnimatedSwitcher widget instead of this bs
 
     return AppBar(
       title: _appBarTitle,

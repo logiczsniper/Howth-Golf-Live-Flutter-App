@@ -113,6 +113,14 @@ class Constants {
     return AppHelpEntry.buildFromMap(_appHelpEntryData[index]);
   });
 
+  static BoxDecoration rightSideBoxDecoration = BoxDecoration(
+      border: Border(
+          right: BorderSide(width: 1.5, color: Constants.accentAppColor)));
+  static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
+      color: Constants.cardAppColor,
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(10.0));
+
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);

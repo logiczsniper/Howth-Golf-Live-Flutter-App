@@ -10,12 +10,10 @@ class MyDetails extends StatelessWidget {
         padding: EdgeInsets.all(7.0),
         decoration: BoxDecoration(
             border: Border.all(color: Constants.accentAppColor, width: 2.0),
-            borderRadius: BorderRadius.all(
-                Radius.circular(10.0) //         <--- border radius here
-                )),
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
         child: Column(
           children: <Widget>[
-            Icon(Icons.contact_mail),
+            Icon(Icons.contact_mail, color: Constants.primaryAppColorDark),
             Text(
               'Contact the developer:\nhowth.lczernel@gmail.com',
               style: Constants.cardSubTitleTextStyle,

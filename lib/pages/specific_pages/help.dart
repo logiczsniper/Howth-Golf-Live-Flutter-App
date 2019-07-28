@@ -23,10 +23,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
           elevation: 1.85,
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: Container(
-              decoration: BoxDecoration(
-                  color: Constants.cardAppColor,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(10.0)),
+              decoration: Constants.roundedRectBoxDecoration,
               child: ListTile(
                 isThreeLine: true,
                 contentPadding:
@@ -35,11 +32,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
                     padding: EdgeInsets.only(top: 4),
                     child: Container(
                       padding: EdgeInsets.only(right: 15.0),
-                      decoration: new BoxDecoration(
-                          border: new Border(
-                              right: new BorderSide(
-                                  width: 1.5,
-                                  color: Constants.accentAppColor))),
+                      decoration: Constants.rightSideBoxDecoration,
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

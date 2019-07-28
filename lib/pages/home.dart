@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,14 +33,14 @@ class HomePage extends StatelessWidget {
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
               new Image.asset('lib/static/newIcon.png'),
               Padding(padding: EdgeInsetsDirectional.only(top: 200)),
-              FadingElement(
-                Text(
+              OpacityChangeWidget(
+                target: Text(
                   'Tap anywhere to begin!',
                   style: TextStyle(
                       fontSize: 14, color: Constants.primaryAppColorDark),
                 ),
-                true,
-              )
+                flashing: true,
+              ),
             ],
           )),
           backgroundColor: Constants.primaryAppColor,

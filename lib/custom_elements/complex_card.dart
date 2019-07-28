@@ -16,11 +16,7 @@ class ComplexCard extends StatelessWidget {
           elevation: 1.85,
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: Container(
-              decoration: BoxDecoration(
-                  color: Constants.cardAppColor,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: child)),
+              decoration: Constants.roundedRectBoxDecoration, child: child)),
       Positioned.fill(
           child: Material(
               color: Colors.transparent,

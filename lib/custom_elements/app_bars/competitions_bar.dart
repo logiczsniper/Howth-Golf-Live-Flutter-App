@@ -15,7 +15,7 @@ class CompetitionsPageAppBar extends StatefulWidget
 
   @override
   _CompetitionsPageAppBarState createState() =>
-      new _CompetitionsPageAppBarState(this.title);
+      new _CompetitionsPageAppBarState();
 
   @override
   final Size preferredSize; // default is 56.0
@@ -27,14 +27,6 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   bool _toggleAppBar = true;
   String _searchText = "";
   String title;
-
-  _CompetitionsPageAppBarState(this.title) {
-    _filter.addListener(() {
-      setState(() {
-        _searchText = _filter.text.isEmpty ? "" : _filter.text;
-      });
-    });
-  }
 
   void _searchPressed() {
     setState(() {
@@ -51,6 +43,12 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   void initState() {
     super.initState();
     _toggleAppBar = true;
+    title = widget.title;
+    _filter.addListener(() {
+      setState(() {
+        _searchText = _filter.text.isEmpty ? "" : _filter.text;
+      });
+    });
   }
 
   @override

@@ -9,7 +9,7 @@ class MyFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      icon: const Icon(
+      icon: Icon(
         Icons.add,
         color: Constants.primaryAppColorDark,
       ),

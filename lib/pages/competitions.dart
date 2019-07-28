@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
 import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
 import 'package:howth_golf_live/pages/specific_pages/competition.dart';
 import 'package:howth_golf_live/static/constants.dart';
@@ -25,9 +25,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     DataBaseEntry base = filteredElements[index];
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
-    Widget trailingIcon = isAdmin
-        ? FadingElement(
-            IconButton(
+    Widget trailingIcon = OpacityChangeWidget(
+      target: isAdmin
+          ? IconButton(
               icon: Icon(Icons.remove_circle_outline,
                   color: Constants.primaryAppColorDark),
               onPressed: () {
@@ -39,16 +39,11 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                     .reference
                     .updateData({'data': updatedData});
               },
-            ),
-            false,
-            duration: Duration(milliseconds: 800),
-          )
-        : FadingElement(
-            Icon(Icons.keyboard_arrow_right,
-                color: Constants.primaryAppColorDark),
-            false,
-            duration: Duration(milliseconds: 800),
-          );
+            )
+          : Icon(Icons.keyboard_arrow_right,
+              color: Constants.primaryAppColorDark),
+    );
+
     if (filteredElements == null)
       return ListTile(
           title: Center(
@@ -73,10 +68,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             padding: EdgeInsets.only(top: 4),
             child: Container(
               padding: EdgeInsets.only(right: 15.0),
-              decoration: new BoxDecoration(
-                  border: new Border(
-                      right: new BorderSide(
-                          width: 1.5, color: Constants.accentAppColor))),
+              decoration: Constants.rightSideBoxDecoration,
               child: Text("${base.score.howth} - ${base.score.opposition}",
                   overflow: TextOverflow.fade,
                   maxLines: 1,

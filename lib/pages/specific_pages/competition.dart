@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/competition_details_widgets/competition_details.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/fading_element.dart';
+import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
 import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
@@ -21,13 +21,7 @@ class SpecificCompetitionPage extends StatefulWidget {
 class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   DataBaseEntry currentData;
 
-  @override
-  initState() {
-    super.initState();
-    currentData = widget.competition;
-  }
-
-  String processPlayerList(List playerList) {
+  String formatPlayerList(List playerList) {
     String output = '';
     for (String player in playerList) {
       output += player.toString();
@@ -38,10 +32,10 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return output;
   }
 
-  List tileBuilder(BuildContext context) {
-    List holes = currentData.holes;
+  List tilesBuilder(BuildContext context) {
     List<Widget> output = [CompetitionDetails(currentData)];
-    for (Hole hole in holes) {
+
+    for (Hole hole in currentData.holes) {
       IconData trailingIcon;
       if (hole.holeScore.toLowerCase().contains('up')) {
         trailingIcon = Icons.thumb_up;
@@ -56,54 +50,44 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
           elevation: 1.85,
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: Container(
-              decoration: BoxDecoration(
-                  color: Constants.cardAppColor,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(10.0)),
+              decoration: Constants.roundedRectBoxDecoration,
               child: ListTile(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-                leading: Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Container(
-                      padding: EdgeInsets.only(right: 15.0),
-                      decoration: new BoxDecoration(
-                          border: new Border(
-                              right: new BorderSide(
-                                  width: 1.5,
-                                  color: Constants.accentAppColor))),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'HOLE',
-                              style: Constants.cardSubTitleTextStyle
-                                  .apply(fontSizeDelta: -1.5),
-                            ),
-                            Text(hole.holeNumber.toString(),
-                                style: TextStyle(
-                                    fontSize: 21.5,
-                                    color: Constants.primaryAppColorDark,
-                                    fontWeight: FontWeight.w400))
-                          ]),
-                    )),
-                title: Text(
-                  hole.holeScore,
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Constants.cardTitleTextStyle,
-                ),
-                subtitle: Text(processPlayerList(hole.players),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+                  leading: Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Container(
+                        padding: EdgeInsets.only(right: 15.0),
+                        decoration: Constants.rightSideBoxDecoration,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'HOLE',
+                                style: Constants.cardSubTitleTextStyle
+                                    .apply(fontSizeDelta: -1.5),
+                              ),
+                              Text(hole.holeNumber.toString(),
+                                  style: TextStyle(
+                                      fontSize: 21.5,
+                                      color: Constants.primaryAppColorDark,
+                                      fontWeight: FontWeight.w400))
+                            ]),
+                      )),
+                  title: Text(
+                    hole.holeScore,
                     overflow: TextOverflow.fade,
                     maxLines: 1,
-                    style: Constants.cardSubTitleTextStyle),
-                trailing: FadingElement(
-                  Icon(trailingIcon,
-                      color: Constants.primaryAppColorDark, size: 19.0),
-                  false,
-                  duration: Duration(milliseconds: 800),
-                ),
-              ))));
+                    style: Constants.cardTitleTextStyle,
+                  ),
+                  subtitle: Text(formatPlayerList(hole.players),
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Constants.cardSubTitleTextStyle),
+                  trailing: OpacityChangeWidget(
+                      target: Icon(trailingIcon,
+                          color: Constants.primaryAppColorDark,
+                          size: 19.0))))));
     }
     return output;
   }
@@ -149,6 +133,12 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   void addHole() {}
 
   @override
+  initState() {
+    super.initState();
+    currentData = widget.competition;
+  }
+
+  @override
   Widget build(BuildContext context) {
     MyFloatingActionButton floatingActionButton = widget.hasAccess
         ? MyFloatingActionButton(onPressed: addHole, text: 'Add a Hole')
@@ -161,7 +151,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         color: Constants.accentAppColor,
         backgroundColor: Constants.primaryAppColor,
         child: ListView(
-          children: tileBuilder(context),
+          children: tilesBuilder(context),
         ),
         onRefresh: refreshList,
       ),

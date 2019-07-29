@@ -121,6 +121,13 @@ class Constants {
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10.0));
 
+  static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Constants.accentAppColor, width: 1.8),
+    borderRadius: const BorderRadius.all(
+      const Radius.circular(10.0),
+    ),
+  );
+
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);

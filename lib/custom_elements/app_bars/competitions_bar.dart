@@ -1,7 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/base.dart';
 import 'package:howth_golf_live/static/constants.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,35 +18,31 @@ class CompetitionsPageAppBar extends StatefulWidget
       new _CompetitionsPageAppBarState();
 
   @override
-  final Size preferredSize; // default is 56.0
+  final Size preferredSize;
 }
 
 class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
-    with TickerProviderStateMixin {
+    with AppBarBase {
   final TextEditingController _filter = TextEditingController();
-  bool _toggleAppBar = true;
-  String _searchText = "";
-  String title;
 
   void _searchPressed() {
     setState(() {
-      _toggleAppBar = !_toggleAppBar;
-
-      if (_toggleAppBar) {
-        _filter.clear();
-        FocusScope.of(context).requestFocus(new FocusNode());
-      }
+      appBarTitle = actionPressed(
+          appBarTitle, primaryTitle, secondaryTitle, context, _filter);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _toggleAppBar = true;
+    primaryTitle = buildPrimaryBar(widget.title);
+    secondaryTitle = buildSecondaryBar(
+        TextInputType.text, false, 'Enter search here...', _filter);
     title = widget.title;
+    appBarTitle = primaryTitle;
     _filter.addListener(() {
       setState(() {
-        _searchText = _filter.text.isEmpty ? "" : _filter.text;
+        inputText = _filter.text.isEmpty ? "" : _filter.text;
       });
     });
   }
@@ -57,16 +53,10 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       duration: const Duration(milliseconds: 450),
       firstChild: new Icon(Icons.search),
       secondChild: new Icon(Icons.close),
-      crossFadeState:
-          _toggleAppBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState: appBarTitle != secondaryTitle
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
     );
-
-    Widget _appBarTitle = TitleCrossFade(_filter, _toggleAppBar,
-        title: title,
-        hintText: 'Search...',
-        iconData: Icons.search,
-        textInputType: TextInputType.text,
-        password: false);
 
     return SafeArea(
       child: NestedScrollView(
@@ -75,7 +65,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
           return <Widget>[
             SliverAppBar(
                 centerTitle: true,
-                title: _appBarTitle,
+                title: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 800), child: appBarTitle),
                 floating: true,
                 pinned: false,
                 snap: true,
@@ -116,8 +107,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         },
         body: TabBarView(
           children: <Widget>[
-            widget._listBuilder(_searchText, true),
-            widget._listBuilder(_searchText, false)
+            widget._listBuilder(inputText, true),
+            widget._listBuilder(inputText, false)
           ],
         ),
       ),

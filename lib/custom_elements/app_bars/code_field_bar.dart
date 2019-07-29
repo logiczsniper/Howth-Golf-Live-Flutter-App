@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/base.dart';
 import 'package:howth_golf_live/custom_elements/back_button.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/cross_fade.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
@@ -18,27 +18,19 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize;
 }
 
-class CodeFieldBarState extends State<CodeFieldBar> {
+class CodeFieldBarState extends State<CodeFieldBar> with AppBarBase {
   final TextEditingController _filter = new TextEditingController();
-  String codeText = "";
-  String title;
-  bool _toggleAppBar = true;
   bool isVerified;
 
   void _actionPressed() {
     if (!isVerified) {
-      bool isCodeCorrect = widget.applyPrivileges(codeText.toString());
+      bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
 
       setState(() {
+        appBarTitle = actionPressed(
+            appBarTitle, primaryTitle, secondaryTitle, context, _filter);
         if (!isVerified && isCodeCorrect) {
           isVerified = isCodeCorrect;
-        }
-
-        _toggleAppBar = !_toggleAppBar;
-
-        if (_toggleAppBar) {
-          _filter.clear();
-          FocusScope.of(context).requestFocus(new FocusNode());
         }
       });
     }
@@ -47,12 +39,15 @@ class CodeFieldBarState extends State<CodeFieldBar> {
   @override
   void initState() {
     super.initState();
-    _toggleAppBar = true;
+    primaryTitle = buildPrimaryBar(widget.title);
+    secondaryTitle = buildSecondaryBar(
+        TextInputType.number, true, 'Enter code here...', _filter);
     isVerified = widget.isInitVerified;
     title = widget.title;
+    appBarTitle = primaryTitle;
     _filter.addListener(() {
       setState(() {
-        codeText = _filter.text.isEmpty ? "" : _filter.text;
+        inputText = _filter.text.isEmpty ? "" : _filter.text;
       });
     });
   }
@@ -63,17 +58,10 @@ class CodeFieldBarState extends State<CodeFieldBar> {
         isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
     IconData iconData =
         isVerified ? Icons.check_circle_outline : Icons.account_circle;
-    Widget _appBarTitle = TitleCrossFade(_filter, _toggleAppBar,
-        title: title,
-        hintText: 'Enter code here...',
-        iconData: Icons.keyboard_arrow_right,
-        textInputType: TextInputType.number,
-        password: true);
-
-    /// TODO use AnimatedSwitcher widget instead of this bs
 
     return AppBar(
-      title: _appBarTitle,
+      title: AnimatedSwitcher(
+          duration: Duration(milliseconds: 800), child: appBarTitle),
       centerTitle: true,
       leading: ParameterBackButton(Constants.competitionsText),
       actions: <Widget>[

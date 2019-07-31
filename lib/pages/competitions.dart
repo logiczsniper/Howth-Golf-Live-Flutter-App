@@ -16,33 +16,16 @@ class CompetitionsPage extends StatefulWidget {
 }
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
+
   static Widget tileBuilder(
       BuildContext context,
       int index,
       List<DataBaseEntry> filteredElements,
       QuerySnapshot snapshot,
       List<dynamic> allElements) {
-    DataBaseEntry base = filteredElements[index];
+    DataBaseEntry currentEntry = filteredElements[index];
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
-    Widget trailingIcon = OpacityChangeWidget(
-      target: isAdmin
-          ? IconButton(
-              icon: Icon(Icons.remove_circle_outline,
-                  color: Constants.primaryAppColorDark),
-              onPressed: () {
-                /// TODO fix me the icon can not be pressed because the card itself is a button
-                allElements.remove(base.convertToMap());
-                List<Map> updatedData = allElements;
-                snapshot.documents
-                    .elementAt(0)
-                    .reference
-                    .updateData({'data': updatedData});
-              },
-            )
-          : Icon(Icons.keyboard_arrow_right,
-              color: Constants.primaryAppColorDark),
-    );
 
     if (filteredElements == null)
       return ListTile(
@@ -50,7 +33,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               child: SpinKitPulse(
         color: Constants.primaryAppColorDark,
         size: 45,
-        duration: Duration(milliseconds: 800),
+        duration: Duration(milliseconds: 850),
       )));
 
     if (filteredElements[0] is bool)
@@ -60,8 +43,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   "No ${Constants.competitionsText.toLowerCase()} found!",
                   style: TextStyle(
                       fontSize: 18,
-                      color: Color.fromARGB(255, 187, 187, 187),
+                      color: Constants.primaryAppColorDark,
                       fontWeight: FontWeight.w300))));
+
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
         leading: Padding(
@@ -69,7 +53,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             child: Container(
               padding: EdgeInsets.only(right: 15.0),
               decoration: Constants.rightSideBoxDecoration,
-              child: Text("${base.score.howth} - ${base.score.opposition}",
+              child: Text(
+                  "${currentEntry.score.howth} - ${currentEntry.score.opposition}",
                   overflow: TextOverflow.fade,
                   maxLines: 1,
                   style: TextStyle(
@@ -78,19 +63,36 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       fontWeight: FontWeight.w400)),
             )),
         title: Text(
-          base.title,
+          currentEntry.title,
           overflow: TextOverflow.fade,
           maxLines: 1,
           style: Constants.cardTitleTextStyle,
         ),
-        subtitle: Text(base.date,
+        subtitle: Text(currentEntry.date,
             overflow: TextOverflow.fade,
             maxLines: 1,
             style: Constants.cardSubTitleTextStyle),
-        trailing: trailingIcon);
+        trailing: OpacityChangeWidget(
+          target: isAdmin
+              ? IconButton(
+                  icon: Icon(Icons.remove_circle_outline,
+                      color: Constants.primaryAppColorDark),
+                  onPressed: () {
+                    /// TODO fix me the icon can not be pressed because the card itself is a button
+                    allElements.remove(currentEntry.convertToMap());
+                    List<Map> updatedData = allElements;
+                    snapshot.documents
+                        .elementAt(0)
+                        .reference
+                        .updateData({'data': updatedData});
+                  },
+                )
+              : Icon(Icons.keyboard_arrow_right,
+                  color: Constants.primaryAppColorDark),
+        ));
   }
 
-  Widget _buildElementsList(String _searchText, bool current) {
+  Widget _buildElementsList(String _searchText, bool isCurrentTab) {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection(Constants.competitionsText.toLowerCase())
@@ -144,7 +146,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           List<DataBaseEntry> currentElements = [];
           List<DataBaseEntry> archivedElements = [];
           List<DataBaseEntry> activeElements =
-              current ? currentElements : archivedElements;
+              isCurrentTab ? currentElements : archivedElements;
           for (DataBaseEntry filteredElement in filteredElements) {
             DateTime competitionDate = DateTime.parse(filteredElement.date
                     .toString()

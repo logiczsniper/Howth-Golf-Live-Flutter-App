@@ -4,14 +4,18 @@ import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO: is key used below?
 class HomePage extends StatelessWidget {
-  HomePage({Key key}) : super(key: key);
-
   /// TEMPORARY TO CLEAR PREFERENCES EACH BOOT
   void _clearPreferences() async {
     final preferences = await SharedPreferences.getInstance();
     preferences.clear();
+  }
+
+  Text _getTapText() {
+    return Text(
+      'Tap anywhere to begin!',
+      style: TextStyle(fontSize: 14, color: Constants.primaryAppColorDark),
+    );
   }
 
   @override
@@ -34,13 +38,8 @@ class HomePage extends StatelessWidget {
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
               new Image.asset('lib/static/newIcon.png'),
               Padding(padding: EdgeInsetsDirectional.only(top: 200)),
-              // TODO: extract getTapText method
               OpacityChangeWidget(
-                target: Text(
-                  'Tap anywhere to begin!',
-                  style: TextStyle(
-                      fontSize: 14, color: Constants.primaryAppColorDark),
-                ),
+                target: _getTapText(),
                 flashing: true,
               ),
             ],

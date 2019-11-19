@@ -11,6 +11,18 @@ class OpacityChangeWidget extends StatefulWidget {
 
 class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
     with SingleTickerProviderStateMixin {
+  /// Causes the widget to flash or finish.
+  ///
+  /// If [widget.flashing] is True, then the animation is reversed. Else,
+  /// it is let finish.
+  void _statusListener(AnimationStatus status) {
+    if (widget.flashing && status == AnimationStatus.completed) {
+      _controller.reverse();
+    } else if (widget.flashing && status == AnimationStatus.dismissed) {
+      _controller.forward();
+    }
+  }
+
   AnimationController _controller;
   Animation<double> _animation;
   @override
@@ -20,17 +32,9 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
     _controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: duration));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
-      // TODO: extract status listener
-      ..addStatusListener((status) {
-        if (widget.flashing && status == AnimationStatus.completed) {
-          _controller.reverse();
-        } else if (widget.flashing && status == AnimationStatus.dismissed) {
-          _controller.forward();
-        }
-      });
+      ..addStatusListener(_statusListener);
   }
 
-  // TODO: Move this file out to custom_elements
   @override
   void dispose() {
     _controller.dispose();

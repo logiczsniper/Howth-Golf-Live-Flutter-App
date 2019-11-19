@@ -8,6 +8,16 @@ class ComplexCard extends StatelessWidget {
 
   ComplexCard(this.child, this.onTap, {this.iconButton});
 
+  InkWell _getInkWell() {
+    return InkWell(
+      highlightColor: Colors.transparent,
+      radius: 500.0,
+      borderRadius: BorderRadius.circular(10.0),
+      splashColor: Constants.accentAppColor.withAlpha(50),
+      onTap: onTap,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final topWidget = iconButton == null ? Container() : iconButton;
@@ -20,18 +30,11 @@ class ComplexCard extends StatelessWidget {
           child: Container(
               decoration: Constants.roundedRectBoxDecoration, child: child)),
       Positioned.fill(
-          // TODO: builder for InkWell (simple getInkWell static method in this class)
           child: Material(
               color: Colors.transparent,
               child: Container(
                   margin: EdgeInsets.symmetric(vertical: 5.5, horizontal: 9.5),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    radius: 500.0,
-                    borderRadius: BorderRadius.circular(10.0),
-                    splashColor: Constants.accentAppColor.withAlpha(50),
-                    onTap: onTap,
-                  )))),
+                  child: _getInkWell()))),
       Align(
           alignment: Alignment.centerRight,
           child: Padding(padding: EdgeInsets.all(23.5), child: topWidget))

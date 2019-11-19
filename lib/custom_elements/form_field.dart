@@ -5,6 +5,7 @@ class DecoratedFormField extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
   final String hintText;
 
+  /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedFormField(this.hintText);
 
   @override

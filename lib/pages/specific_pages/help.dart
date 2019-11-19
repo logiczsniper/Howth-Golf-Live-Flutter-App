@@ -63,7 +63,10 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
               ))));
     }
     output.add(Padding(
-      child: Icon(Icons.check),
+      child: Icon(
+        Icons.check,
+        color: Constants.primaryAppColorDark,
+      ),
       padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 25.0),
     ));
     return output;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bars/base.dart';
+import 'package:howth_golf_live/custom_elements/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/custom_elements/buttons/back_button.dart';
 import 'package:howth_golf_live/static/constants.dart';
 
@@ -18,7 +18,7 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize;
 }
 
-class CodeFieldBarState extends State<CodeFieldBar> with AppBarBase {
+class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = new TextEditingController();
   bool isVerified;
 

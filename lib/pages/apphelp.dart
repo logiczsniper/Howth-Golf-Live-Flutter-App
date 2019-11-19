@@ -18,6 +18,7 @@ class AppHelpPageState extends State<AppHelpPage> {
     List<Widget> output = [MyDetails()];
     for (AppHelpEntry entry in Constants.appHelpEntries) {
       output.add(ComplexCard(
+          // TODO: create builder methods for the widgets below (e.g. leading, title, etc)
           ListTile(
             contentPadding:
                 EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
@@ -44,10 +45,8 @@ class AppHelpPageState extends State<AppHelpPage> {
                 overflow: TextOverflow.fade,
                 maxLines: 2,
                 style: Constants.cardSubTitleTextStyle),
-            trailing: OpacityChangeWidget(
-              target: Icon(Icons.keyboard_arrow_right,
-                  color: Constants.primaryAppColorDark),
-            ),
+            trailing: Icon(Icons.keyboard_arrow_right,
+                color: Constants.primaryAppColorDark),
           ), () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => SpecificHelpPage(entry)));
@@ -58,7 +57,7 @@ class AppHelpPageState extends State<AppHelpPage> {
 
   bool applyPrivileges(String codeAttempt) {
     if (codeAttempt == '1234') {
-      // TODO change the code
+      // TODO: change the code
       final preferences = SharedPreferences.getInstance();
       preferences.then((SharedPreferences preferences) {
         preferences.setBool(Constants.activeAdminText, true);
@@ -76,8 +75,10 @@ class AppHelpPageState extends State<AppHelpPage> {
     return Scaffold(
       appBar:
           CodeFieldBar(Constants.appHelpText, applyPrivileges, isInitVerified),
-      body: ListView(
-        children: tileListBuilder(context),
+      body: OpacityChangeWidget(
+        target: ListView(
+          children: tileListBuilder(context),
+        ),
       ),
       backgroundColor: Constants.primaryAppColor,
     );

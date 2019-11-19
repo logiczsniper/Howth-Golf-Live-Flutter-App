@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/objects.dart';
 
 class Constants {
+  // TODO: add comments separating these, organise
   static String get appName => "Howth Golf Live";
 
   static const String currentText = "Current";

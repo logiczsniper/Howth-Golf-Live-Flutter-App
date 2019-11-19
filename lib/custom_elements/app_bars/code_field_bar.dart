@@ -27,6 +27,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with AppBarBase {
       bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
 
       setState(() {
+        // TODO: renmae _actionPressed to be more concise (maybe _codePressed)
         appBarTitle = actionPressed(
             appBarTitle, primaryTitle, secondaryTitle, context, _filter);
         if (!isVerified && isCodeCorrect) {
@@ -39,6 +40,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with AppBarBase {
   @override
   void initState() {
     super.initState();
+    // TODO: rename thse bars: secondary -> inputBar, primary -> titleBar
     primaryTitle = buildPrimaryBar(widget.title);
     secondaryTitle = buildSecondaryBar(
         TextInputType.number, true, 'Enter code here...', _filter);
@@ -61,10 +63,11 @@ class CodeFieldBarState extends State<CodeFieldBar> with AppBarBase {
 
     return AppBar(
       title: AnimatedSwitcher(
-          duration: Duration(milliseconds: 800), child: appBarTitle),
+          duration: Duration(milliseconds: 500), child: appBarTitle),
       centerTitle: true,
       leading: ParameterBackButton(Constants.competitionsText),
       actions: <Widget>[
+        // TODO: extract to method. Include the iconMessage and iconData computation in the extraction
         IconButton(
             icon: Icon(iconData),
             tooltip: iconMessage,

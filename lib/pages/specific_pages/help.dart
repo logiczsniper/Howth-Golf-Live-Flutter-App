@@ -17,6 +17,8 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
     List<HelpStep> steps = widget.entry.steps;
     List<Widget> output = [];
     for (HelpStep step in steps) {
+      // TODO: this is insane- create custom builders for the list tile!!!
+      // TODO: I find myself commenting about list tile widget builders- maybe a factory method for these??
       output.add(Card(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -70,6 +72,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // TODO: custom app bar... maybe another factory method for app bars?
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.entry.title,

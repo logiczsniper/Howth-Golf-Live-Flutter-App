@@ -4,11 +4,13 @@ import 'package:howth_golf_live/static/constants.dart';
 class ComplexCard extends StatelessWidget {
   final Widget child;
   final Function onTap;
+  final dynamic iconButton;
 
-  ComplexCard(this.child, this.onTap);
+  ComplexCard(this.child, this.onTap, {this.iconButton});
 
   @override
   Widget build(BuildContext context) {
+    final topWidget = iconButton == null ? Container() : iconButton;
     return Stack(children: <Widget>[
       Card(
           shape:
@@ -18,6 +20,7 @@ class ComplexCard extends StatelessWidget {
           child: Container(
               decoration: Constants.roundedRectBoxDecoration, child: child)),
       Positioned.fill(
+          // TODO: builder for InkWell (simple getInkWell static method in this class)
           child: Material(
               color: Colors.transparent,
               child: Container(
@@ -28,7 +31,10 @@ class ComplexCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                     splashColor: Constants.accentAppColor.withAlpha(50),
                     onTap: onTap,
-                  ))))
+                  )))),
+      Align(
+          alignment: Alignment.centerRight,
+          child: Padding(padding: EdgeInsets.all(23.5), child: topWidget))
     ]);
   }
 }

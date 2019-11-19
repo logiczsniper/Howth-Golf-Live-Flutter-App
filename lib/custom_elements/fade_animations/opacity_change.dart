@@ -16,9 +16,11 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    int duration = widget.flashing ? 1000 : 600;
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: duration));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
+      // TODO: extract status listener
       ..addStatusListener((status) {
         if (widget.flashing && status == AnimationStatus.completed) {
           _controller.reverse();
@@ -28,6 +30,7 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
       });
   }
 
+  // TODO: Move this file out to custom_elements
   @override
   void dispose() {
     _controller.dispose();

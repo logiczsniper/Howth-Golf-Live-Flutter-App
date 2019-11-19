@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        // TODO: extract builder method, use scroll_behavior.dart
         builder: (context, child) {
           return ScrollConfiguration(
             behavior: CustomScrollBehavior(),

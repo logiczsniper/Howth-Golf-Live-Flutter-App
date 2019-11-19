@@ -5,6 +5,7 @@ import 'package:howth_golf_live/static/constants.dart';
 class MyDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: comment what each of these actually ends up doing
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 65.0, vertical: 5.0),
         padding: EdgeInsets.all(7.0),

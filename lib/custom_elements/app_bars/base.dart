@@ -39,6 +39,7 @@ class AppBarBase {
       autocorrect: false,
       controller: _filter,
       style: TextStyle(color: Constants.primaryAppColorDark),
+      // TODO: extract getInputDecoration
       decoration: InputDecoration(
           contentPadding: EdgeInsets.all(1.5),
           enabledBorder: Constants.outlineInputBorder,

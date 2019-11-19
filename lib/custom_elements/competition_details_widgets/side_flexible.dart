@@ -13,6 +13,7 @@ class SideFlexible extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
+                // TODO: extract child, decoration
                 padding: EdgeInsets.all(12.0),
                 child: Text(text,
                     overflow: TextOverflow.fade,

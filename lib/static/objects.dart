@@ -55,6 +55,8 @@ class DataBaseEntry {
 }
 
 class EntryFields {
+  // TODO: specify somewhere here that the date must be in the form:
+  // {TWO DIGIT DAY}/{TWO DIGIT MONTH}/{FOUR DIGIT YEAR}
   static final String date = 'date';
   static final String id = 'id';
   static final String location = 'location';
@@ -77,6 +79,7 @@ class Score {
 }
 
 class Hole {
+  // TODO: rename all fields for consistency- holeNumber -> hole_number (for example)
   final int holeNumber;
   final String holeScore;
   final List<String> players;

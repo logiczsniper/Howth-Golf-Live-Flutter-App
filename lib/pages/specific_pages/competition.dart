@@ -36,6 +36,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     List<Widget> output = [CompetitionDetails(currentData)];
 
     for (Hole hole in currentData.holes) {
+      // TODO: use switch statement here! also isolate to method!
       IconData trailingIcon;
       if (hole.holeScore.toLowerCase().contains('up')) {
         trailingIcon = Icons.thumb_up;
@@ -51,6 +52,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
           child: Container(
               decoration: Constants.roundedRectBoxDecoration,
+              // TODO: more list tile widget build methods...
               child: ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
@@ -84,10 +86,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: Constants.cardSubTitleTextStyle),
-                  trailing: OpacityChangeWidget(
-                      target: Icon(trailingIcon,
-                          color: Constants.primaryAppColorDark,
-                          size: 19.0))))));
+                  trailing: Icon(trailingIcon,
+                      color: Constants.primaryAppColorDark, size: 19.0)))));
     }
     return output;
   }
@@ -99,6 +99,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         .snapshots()
         .first;
     setState(() {
+      // TODO: extract method to set current data to the new data (if new)
       newData.then((QuerySnapshot snapshot) {
         List<dynamic> databaseOutput =
             snapshot.documents[0].data.entries.toList()[0].value;
@@ -129,7 +130,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return false;
   }
 
-  /// TODO build out method
+  /// TODO: build out method
   void addHole() {}
 
   @override
@@ -140,19 +141,22 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: another getActionButton method
     MyFloatingActionButton floatingActionButton = widget.hasAccess
         ? MyFloatingActionButton(onPressed: addHole, text: 'Add a Hole')
         : null;
     return Scaffold(
       appBar:
           CodeFieldBar(currentData.title, applyPrivileges, widget.hasAccess),
+      // TODO: extract to class containing builder method for the widget and refresh method.
       body: RefreshIndicator(
-        displacement: 50.0,
+        displacement: 80.0,
         color: Constants.accentAppColor,
         backgroundColor: Constants.primaryAppColor,
-        child: ListView(
+        child: OpacityChangeWidget(
+            target: ListView(
           children: tilesBuilder(context),
-        ),
+        )),
         onRefresh: refreshList,
       ),
       floatingActionButton: Container(

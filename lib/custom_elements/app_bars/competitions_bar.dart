@@ -35,6 +35,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   @override
   void initState() {
     super.initState();
+    // TODO: renaming app bars
     primaryTitle = buildPrimaryBar(widget.title);
     secondaryTitle = buildSecondaryBar(
         TextInputType.text, false, 'Enter search here...', _filter);
@@ -49,6 +50,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
   @override
   Widget build(BuildContext context) {
+    // TODO: extract to method
     AnimatedCrossFade _searchIcon = AnimatedCrossFade(
       duration: const Duration(milliseconds: 450),
       firstChild: new Icon(Icons.search),
@@ -63,10 +65,12 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         controller: ScrollController(),
         headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
           return <Widget>[
+            // TODO: extract to custom widget class
             SliverAppBar(
                 centerTitle: true,
+                // TODO: both competitions_bar and code_field_bar have this animated switcher. DO somehting
                 title: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 800), child: appBarTitle),
+                    duration: Duration(milliseconds: 500), child: appBarTitle),
                 floating: true,
                 pinned: false,
                 snap: true,
@@ -76,6 +80,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                   icon: Icon(Icons.help_outline),
                   tooltip: 'Tap for help!',
                   onPressed: () {
+                    // TODO: extract method
                     final preferences = SharedPreferences.getInstance();
                     preferences.then((SharedPreferences preferences) {
                       Navigator.pushNamed(context, '/' + Constants.appHelpText,
@@ -85,6 +90,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                   },
                 ),
                 actions: <Widget>[
+                  // TODO: include in above icon extraction
                   IconButton(
                     icon: _searchIcon,
                     tooltip: 'Tap to search!',
@@ -93,12 +99,13 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                 ],
                 bottom: TabBar(
                     labelColor: Constants.primaryAppColorDark,
+                    // TODO: extract bubbletabindicator
                     indicator: BubbleTabIndicator(
                         indicatorColor: Constants.accentAppColor,
                         tabBarIndicatorSize: TabBarIndicatorSize.tab,
                         indicatorHeight: 25.0,
                         insets: EdgeInsets.symmetric(
-                            vertical: 1.0, horizontal: 30.0)),
+                            vertical: 1.0, horizontal: 26.0)),
                     tabs: <Widget>[
                       Tab(text: Constants.currentText),
                       Tab(text: Constants.archivedText)

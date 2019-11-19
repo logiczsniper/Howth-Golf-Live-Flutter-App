@@ -22,7 +22,7 @@ class DecoratedFormField extends StatelessWidget {
           prefixIcon: Icon(Icons.keyboard_arrow_right,
               color: Constants.primaryAppColorDark),
           hintText: hintText,
-          hintStyle: Constants.appTheme.textTheme.subhead),
+          hintStyle: Constants.hintTextStyle),
       validator: (String input) {
         if (input.isEmpty) {
           return 'This field is required.';

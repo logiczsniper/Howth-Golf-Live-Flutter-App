@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
+import 'package:howth_golf_live/custom_elements/opacity_change.dart';
 import 'package:howth_golf_live/custom_elements/my_details.dart';
 import 'package:howth_golf_live/pages/specific_pages/help.dart';
 import 'package:howth_golf_live/static/constants.dart';

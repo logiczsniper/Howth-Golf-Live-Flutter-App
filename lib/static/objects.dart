@@ -1,4 +1,5 @@
 import 'package:howth_golf_live/static/constants.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataBaseEntry {
@@ -11,10 +12,13 @@ class DataBaseEntry {
   final List<Hole> holes;
   final Score score;
 
+  /// Get a single string which contains all the data specific to this event, making
+  /// it easily searchable.
   String get values {
     return "$date $location $time $opposition $title $holes $score";
   }
 
+  /// Converts a database entry into a map so it can be put into the database.
   Map convertToMap() {
     return {
       EntryFields.date: date,
@@ -28,6 +32,9 @@ class DataBaseEntry {
     };
   }
 
+  /// Converts a map into a database entry so it can be displayed in the app.
+  ///
+  /// [map] is the internally linked hashmap straight from firestore.
   static DataBaseEntry buildFromMap(Map map) {
     return DataBaseEntry(
         date: map[EntryFields.date],
@@ -55,8 +62,9 @@ class DataBaseEntry {
 }
 
 class EntryFields {
-  // TODO: specify somewhere here that the date must be in the form:
-  // {TWO DIGIT DAY}/{TWO DIGIT MONTH}/{FOUR DIGIT YEAR}
+  /// Note:
+  ///
+  /// The [date] field below must be in the form '{TWO DIGIT DAY}/{TWO DIGIT MONTH}/{FOUR DIGIT YEAR}'
   static final String date = 'date';
   static final String id = 'id';
   static final String location = 'location';
@@ -79,11 +87,15 @@ class Score {
 }
 
 class Hole {
-  // TODO: rename all fields for consistency- holeNumber -> hole_number (for example)
+  /// Note:
+  ///
+  /// In the database, [holeNumber] is actually 'hole_number' and
+  ///                  [holeScore] is actually 'hole_score'.
   final int holeNumber;
   final String holeScore;
   final List<String> players;
 
+  /// Convert a map into a Hole object.
   static Hole buildFromMap(Map map) {
     return Hole(
         holeNumber: map['hole_number'],
@@ -101,6 +113,9 @@ class AppHelpEntry {
   final String subtitle;
   final List<HelpStep> steps;
 
+  /// Convert a map to an AppHelpEntry instance.
+  ///
+  /// This is used to convert the underlying _appHelpData in [Constants] into entries.
   static AppHelpEntry buildFromMap(Map map) {
     return AppHelpEntry(
         title: map['title'],
@@ -116,6 +131,8 @@ class AppHelpEntry {
 class HelpStep {
   final String title;
   final String data;
+
+  /// Convert a map into a single HelpStep instance.
   static HelpStep buildFromMap(Map map) {
     return HelpStep(title: map['title'], data: map['data']);
   }
@@ -127,6 +144,7 @@ class Privileges {
   final bool isAdmin;
   final String competitionAccess;
 
+  /// Converting preferences into Privileges object.
   static Privileges buildFromPreferences(SharedPreferences preferences) {
     return Privileges(
         isAdmin: preferences.getBool(Constants.activeAdminText),

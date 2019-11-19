@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
-import 'package:howth_golf_live/custom_elements/floating_action_button.dart';
+import 'package:howth_golf_live/custom_elements/opacity_change.dart';
+import 'package:howth_golf_live/custom_elements/buttons/floating_action_button.dart';
+
 import 'package:howth_golf_live/pages/create_competition.dart';
 import 'package:howth_golf_live/pages/specific_pages/competition.dart';
+
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CompetitionsPage extends StatefulWidget {
   @override
@@ -163,6 +166,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 }
               }
 
+              // TODO: clean this up, these lines occur higher up in program
+              final Privileges arguments =
+                  ModalRoute.of(context).settings.arguments;
+              final bool isAdmin =
+                  arguments.isAdmin == null ? false : arguments.isAdmin;
+
               return ListView.builder(
                 itemCount: activeElements.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -189,14 +198,16 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                                   activeElements[index], hasAccess)));
                     });
                   },
-                      iconButton: IconButton(
-                        icon: Icon(Icons.remove_circle_outline,
-                            color: Constants.primaryAppColorDark),
-                        onPressed: () {
-                          showAlertDialog(context, allElements, activeElements,
-                              index, snapshot);
-                        },
-                      ));
+                      iconButton: isAdmin
+                          ? IconButton(
+                              icon: Icon(Icons.remove_circle_outline,
+                                  color: Constants.primaryAppColorDark),
+                              onPressed: () {
+                                showAlertDialog(context, allElements,
+                                    activeElements, index, snapshot);
+                              },
+                            )
+                          : null);
                 },
               );
             }));

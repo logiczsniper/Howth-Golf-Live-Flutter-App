@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/fade_animations/opacity_change.dart';
+import 'package:howth_golf_live/custom_elements/opacity_change.dart';
 import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 import 'package:shared_preferences/shared_preferences.dart';

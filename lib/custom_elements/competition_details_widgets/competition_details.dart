@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/custom_elements/competition_details_widgets/side_flexible.dart';
+import 'package:howth_golf_live/static/constants.dart';
 import 'package:howth_golf_live/static/objects.dart';
 
 import 'middle_row.dart';
@@ -30,19 +31,19 @@ class CompetitionDetails extends StatelessWidget {
                     Icon(
                       FontAwesomeIcons.fistRaised,
                       size: 15.5,
+                      color: Constants.primaryAppColorDark,
                     )),
                 MiddleRow(
                     data.location,
                     Icon(
                       Icons.location_on,
                       size: 18.5,
+                      color: Constants.primaryAppColorDark,
                     )),
                 MiddleRow(
                     data.time,
-                    Icon(
-                      Icons.access_time,
-                      size: 18.0,
-                    )),
+                    Icon(Icons.access_time,
+                        size: 18.0, color: Constants.primaryAppColorDark)),
               ],
             )),
           ),

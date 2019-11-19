@@ -13,6 +13,7 @@ class MyFloatingActionButton extends StatelessWidget {
         Icons.add,
         color: Constants.primaryAppColorDark,
       ),
+      backgroundColor: Constants.accentAppColor,
       label: Text(
         text,
         style: TextStyle(fontSize: 14, color: Constants.primaryAppColorDark),

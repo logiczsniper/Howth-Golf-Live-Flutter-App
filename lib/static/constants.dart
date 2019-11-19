@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+
 import 'package:howth_golf_live/static/objects.dart';
 
 class Constants {
-  // TODO: add comments separating these, organise
   static String get appName => "Howth Golf Live";
 
+  /// App page texts. Also used for fetching data from firestore.
   static const String currentText = "Current";
   static const String archivedText = "Archived";
-
   static const String competitionsText = "Competitions";
   static const String appHelpText = "App Help";
 
+  /// When getting data from preferences, it is vital that these values are used as keys.
   static const String activeAdminText = "activeAdmin";
   static const String activeCompetitionText = "activeCompetitions";
 
+  /// The actual instructions for each of the guides in app help.
   static List<Map<String, dynamic>> _appHelpEntryData = [
     {
       'title': 'Gaining Admin Privileges',
@@ -109,11 +111,14 @@ class Constants {
       ]
     }
   ];
+
+  /// Converting the hidden data (above) into a useful list of AppHelpEntries. These are constant.
   static List<AppHelpEntry> appHelpEntries =
       new List<AppHelpEntry>.generate(_appHelpEntryData.length, (int index) {
     return AppHelpEntry.buildFromMap(_appHelpEntryData[index]);
   });
 
+  /// Some common widgets.
   static BoxDecoration rightSideBoxDecoration = BoxDecoration(
       border: Border(
           right: BorderSide(width: 1.5, color: Constants.accentAppColor)));
@@ -121,7 +126,6 @@ class Constants {
       color: Constants.cardAppColor,
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10.0));
-
   static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
     borderSide: BorderSide(color: Constants.accentAppColor, width: 1.8),
     borderRadius: const BorderRadius.all(
@@ -129,6 +133,7 @@ class Constants {
     ),
   );
 
+  /// Colors and text styles used throughout the app. Ensures consistency in the theme.
   static const Color primaryAppColor = Colors.white;
   static const Color primaryAppColorDark = Color.fromARGB(255, 187, 187, 187);
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);
@@ -138,28 +143,6 @@ class Constants {
       fontSize: 16, color: primaryAppColorDark, fontWeight: FontWeight.w300);
   static const TextStyle cardSubTitleTextStyle =
       TextStyle(fontSize: 13, color: primaryAppColorDark);
-
-  static ThemeData get appTheme => ThemeData(
-      primaryColor: primaryAppColor,
-      primaryColorDark: primaryAppColorDark,
-      accentColor: accentAppColor,
-      secondaryHeaderColor: secondaryHeaderAppColor,
-      iconTheme: IconThemeData(color: primaryAppColorDark),
-      textTheme: TextTheme(
-        headline: TextStyle(
-          fontSize: 24,
-          color: Colors.black,
-        ),
-        subhead: TextStyle(fontSize: 16, color: primaryAppColorDark),
-        body1: TextStyle(
-            fontSize: 21, color: Colors.black, fontWeight: FontWeight.w300),
-        body2: TextStyle(
-            fontSize: 21,
-            color: primaryAppColorDark,
-            fontWeight: FontWeight.w300),
-        caption: TextStyle(
-            fontSize: 26,
-            color: primaryAppColorDark,
-            fontWeight: FontWeight.w500),
-      ));
+  static const TextStyle hintTextStyle =
+      TextStyle(fontSize: 16, color: primaryAppColorDark);
 }

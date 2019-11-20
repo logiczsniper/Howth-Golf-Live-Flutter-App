@@ -6,6 +6,23 @@ class SideFlexible extends StatelessWidget {
 
   const SideFlexible(this.text);
 
+  Text _getText() {
+    return Text(text,
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        style: TextStyle(
+            fontSize: 21,
+            color: Constants.primaryAppColorDark,
+            fontWeight: FontWeight.w400));
+  }
+
+  Decoration _getDecoration() {
+    return ShapeDecoration(
+                    color: Constants.accentAppColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -13,20 +30,9 @@ class SideFlexible extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-                // TODO: extract child, decoration
                 padding: EdgeInsets.all(12.0),
-                child: Text(text,
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 21,
-                        color: Constants.primaryAppColorDark,
-                        fontWeight: FontWeight.w400)),
-                decoration: ShapeDecoration(
-                    color: Constants.accentAppColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)))),
-          ],
-        ));
+                child: _getText(),
+                decoration: _getDecoration()
+        )]));
   }
 }

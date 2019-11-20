@@ -27,20 +27,19 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
   void _searchPressed() {
     setState(() {
-      appBarTitle = actionPressed(
-          appBarTitle, primaryTitle, secondaryTitle, context, _filter);
+      appBarTitle =
+          actionPressed(appBarTitle, titleBar, inputBar, context, _filter);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // TODO: renaming app bars
-    primaryTitle = buildPrimaryBar(widget.title);
-    secondaryTitle = buildSecondaryBar(
+    titleBar = buildTitleBar(widget.title);
+    inputBar = buildInputBar(
         TextInputType.text, false, 'Enter search here...', _filter);
     title = widget.title;
-    appBarTitle = primaryTitle;
+    appBarTitle = titleBar;
     _filter.addListener(() {
       setState(() {
         inputText = _filter.text.isEmpty ? "" : _filter.text;
@@ -48,64 +47,63 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: extract to method
-    AnimatedCrossFade _searchIcon = AnimatedCrossFade(
+  AnimatedCrossFade _getIconData() {
+    return AnimatedCrossFade(
       duration: const Duration(milliseconds: 450),
       firstChild: new Icon(Icons.search),
       secondChild: new Icon(Icons.close),
-      crossFadeState: appBarTitle != secondaryTitle
+      crossFadeState: appBarTitle != inputBar
           ? CrossFadeState.showFirst
           : CrossFadeState.showSecond,
     );
+  }
 
+  BubbleTabIndicator _getTabIndicator() {
+    return BubbleTabIndicator(
+        indicatorColor: Constants.accentAppColor,
+        tabBarIndicatorSize: TabBarIndicatorSize.tab,
+        indicatorHeight: 25.0,
+        insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 26.0));
+  }
+
+  void _toAppHelp() {
+    final preferences = SharedPreferences.getInstance();
+
+    preferences.then((SharedPreferences preferences) {
+      Navigator.pushNamed(context, '/' + Constants.appHelpText,
+          arguments: Privileges.buildFromPreferences(preferences));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),
         headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
           return <Widget>[
-            // TODO: extract to custom widget class
             SliverAppBar(
                 centerTitle: true,
-                // TODO: both competitions_bar and code_field_bar have this animated switcher. DO somehting
-                title: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 500), child: appBarTitle),
+                title: getTitle(appBarTitle),
                 floating: true,
                 pinned: false,
                 snap: true,
                 backgroundColor: Constants.primaryAppColor,
                 iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
                 leading: IconButton(
-                  icon: Icon(Icons.help_outline),
-                  tooltip: 'Tap for help!',
-                  onPressed: () {
-                    // TODO: extract method
-                    final preferences = SharedPreferences.getInstance();
-                    preferences.then((SharedPreferences preferences) {
-                      Navigator.pushNamed(context, '/' + Constants.appHelpText,
-                          arguments:
-                              Privileges.buildFromPreferences(preferences));
-                    });
-                  },
-                ),
+                    icon: Icon(Icons.help_outline),
+                    tooltip: 'Tap for help!',
+                    onPressed: _toAppHelp),
                 actions: <Widget>[
-                  // TODO: include in above icon extraction
                   IconButton(
-                    icon: _searchIcon,
+                    icon: _getIconData(),
                     tooltip: 'Tap to search!',
                     onPressed: _searchPressed,
                   )
                 ],
                 bottom: TabBar(
                     labelColor: Constants.primaryAppColorDark,
-                    // TODO: extract bubbletabindicator
-                    indicator: BubbleTabIndicator(
-                        indicatorColor: Constants.accentAppColor,
-                        tabBarIndicatorSize: TabBarIndicatorSize.tab,
-                        indicatorHeight: 25.0,
-                        insets: EdgeInsets.symmetric(
-                            vertical: 1.0, horizontal: 26.0)),
+                    indicator: _getTabIndicator(),
                     tabs: <Widget>[
                       Tab(text: Constants.currentText),
                       Tab(text: Constants.archivedText)

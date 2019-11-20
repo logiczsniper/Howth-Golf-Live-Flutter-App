@@ -5,8 +5,8 @@ class StatefulAppBar {
   String inputText = "";
   String title;
   Widget appBarTitle;
-  Widget primaryTitle;
-  Widget secondaryTitle;
+  Widget titleBar;
+  Widget inputBar;
 
   Widget actionPressed(
       Widget appBarTitle,
@@ -21,7 +21,23 @@ class StatefulAppBar {
     return appBarTitle == primaryTitle ? secondaryTitle : primaryTitle;
   }
 
-  Center buildPrimaryBar(String title) {
+  InputDecoration _getInputDecoration(String hintText) {
+    return InputDecoration(
+        contentPadding: EdgeInsets.all(1.5),
+        enabledBorder: Constants.outlineInputBorder,
+        focusedBorder: Constants.outlineInputBorder,
+        prefixIcon: Icon(Icons.keyboard_arrow_right,
+            color: Constants.primaryAppColorDark),
+        hintText: hintText,
+        hintStyle: Constants.hintTextStyle);
+  }
+
+  AnimatedSwitcher getTitle(Widget appBarTitle) {
+    return AnimatedSwitcher(
+        duration: Duration(milliseconds: 500), child: appBarTitle);
+  }
+
+  Center buildTitleBar(String title) {
     return Center(
         child: Text(title,
             style: TextStyle(
@@ -29,25 +45,16 @@ class StatefulAppBar {
             )));
   }
 
-  TextField buildSecondaryBar(TextInputType textType, bool obscureText,
+  TextField buildInputBar(TextInputType textType, bool obscureText,
       String hintText, TextEditingController _filter) {
     return TextField(
-      keyboardType: textType,
-      obscureText: obscureText,
-      cursorColor: Constants.accentAppColor,
-      textCapitalization: TextCapitalization.sentences,
-      autocorrect: false,
-      controller: _filter,
-      style: TextStyle(color: Constants.primaryAppColorDark),
-      // TODO: extract getInputDecoration
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(1.5),
-          enabledBorder: Constants.outlineInputBorder,
-          focusedBorder: Constants.outlineInputBorder,
-          prefixIcon: Icon(Icons.keyboard_arrow_right,
-              color: Constants.primaryAppColorDark),
-          hintText: hintText,
-          hintStyle: Constants.hintTextStyle),
-    );
+        keyboardType: textType,
+        obscureText: obscureText,
+        cursorColor: Constants.accentAppColor,
+        textCapitalization: TextCapitalization.sentences,
+        autocorrect: false,
+        controller: _filter,
+        style: TextStyle(color: Constants.primaryAppColorDark),
+        decoration: _getInputDecoration(hintText));
   }
 }

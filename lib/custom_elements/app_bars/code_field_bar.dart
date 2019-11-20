@@ -22,14 +22,13 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = new TextEditingController();
   bool isVerified;
 
-  void _actionPressed() {
+  void _codePressed() {
     if (!isVerified) {
       bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
 
       setState(() {
-        // TODO: renmae _actionPressed to be more concise (maybe _codePressed)
-        appBarTitle = actionPressed(
-            appBarTitle, primaryTitle, secondaryTitle, context, _filter);
+        appBarTitle =
+            actionPressed(appBarTitle, titleBar, inputBar, context, _filter);
         if (!isVerified && isCodeCorrect) {
           isVerified = isCodeCorrect;
         }
@@ -37,16 +36,24 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     }
   }
 
+  IconButton _getIconButton(bool isVerified) {
+    String iconMessage =
+        isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
+    IconData iconData =
+        isVerified ? Icons.check_circle_outline : Icons.account_circle;
+    return IconButton(
+        icon: Icon(iconData), tooltip: iconMessage, onPressed: _codePressed);
+  }
+
   @override
   void initState() {
     super.initState();
-    // TODO: rename thse bars: secondary -> inputBar, primary -> titleBar
-    primaryTitle = buildPrimaryBar(widget.title);
-    secondaryTitle = buildSecondaryBar(
+    titleBar = buildTitleBar(widget.title);
+    inputBar = buildInputBar(
         TextInputType.number, true, 'Enter code here...', _filter);
     isVerified = widget.isInitVerified;
     title = widget.title;
-    appBarTitle = primaryTitle;
+    appBarTitle = titleBar;
     _filter.addListener(() {
       setState(() {
         inputText = _filter.text.isEmpty ? "" : _filter.text;
@@ -56,23 +63,11 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   @override
   Widget build(BuildContext context) {
-    String iconMessage =
-        isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
-    IconData iconData =
-        isVerified ? Icons.check_circle_outline : Icons.account_circle;
-
     return AppBar(
-      title: AnimatedSwitcher(
-          duration: Duration(milliseconds: 500), child: appBarTitle),
+      title: getTitle(appBarTitle),
       centerTitle: true,
       leading: ParameterBackButton(Constants.competitionsText),
-      actions: <Widget>[
-        // TODO: extract to method. Include the iconMessage and iconData computation in the extraction
-        IconButton(
-            icon: Icon(iconData),
-            tooltip: iconMessage,
-            onPressed: _actionPressed)
-      ],
+      actions: <Widget>[_getIconButton(isVerified)],
       backgroundColor: Constants.primaryAppColor,
       elevation: 0.0,
       iconTheme: IconThemeData(color: Constants.primaryAppColorDark),

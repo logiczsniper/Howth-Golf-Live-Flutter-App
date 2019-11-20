@@ -18,21 +18,20 @@ class SideFlexible extends StatelessWidget {
 
   Decoration _getDecoration() {
     return ShapeDecoration(
-                    color: Constants.accentAppColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0));
+        color: Constants.accentAppColor,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
         flex: 1,
-        child: Column(
-          children: <Widget>[
-            Container(
-                padding: EdgeInsets.all(12.0),
-                child: _getText(),
-                decoration: _getDecoration()
-        )]));
+        child: Column(children: <Widget>[
+          Container(
+              padding: EdgeInsets.all(12.0),
+              child: _getText(),
+              decoration: _getDecoration())
+        ]));
   }
 }

@@ -19,7 +19,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
     return Form(
         child: Padding(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [titleField, locationField, oppositionField],
             ),
             padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));
@@ -28,7 +28,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: extract app bar into class in custom_elements/app_bars
+      // TODO: create app bar which makes sense- home button not needed.
       appBar: AppBar(
         centerTitle: true,
         title: Text('New Competition',

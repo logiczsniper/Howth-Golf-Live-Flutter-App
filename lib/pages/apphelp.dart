@@ -19,7 +19,7 @@ class AppHelpPageState extends State<AppHelpPage> {
     for (AppHelpEntry entry in Constants.appHelpEntries) {
       output.add(ComplexCard(
           // TODO: create builder methods for the widgets below (e.g. leading, title, etc)
-          ListTile(
+          child: ListTile(
             contentPadding:
                 EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
             leading: Padding(
@@ -47,10 +47,13 @@ class AppHelpPageState extends State<AppHelpPage> {
                 style: Constants.cardSubTitleTextStyle),
             trailing: Icon(Icons.keyboard_arrow_right,
                 color: Constants.primaryAppColorDark),
-          ), () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SpecificHelpPage(entry)));
-      }));
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SpecificHelpPage(entry)));
+          }));
     }
     return output;
   }

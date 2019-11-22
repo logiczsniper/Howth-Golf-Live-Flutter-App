@@ -6,7 +6,7 @@ class ComplexCard extends StatelessWidget {
   final Function onTap;
   final dynamic iconButton;
 
-  ComplexCard(this.child, this.onTap, {this.iconButton});
+  ComplexCard({this.child, this.onTap, this.iconButton});
 
   InkWell _getInkWell() {
     return InkWell(

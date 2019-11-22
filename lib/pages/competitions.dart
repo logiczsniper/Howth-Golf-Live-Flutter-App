@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:howth_golf_live/custom_elements/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
@@ -20,18 +21,42 @@ class CompetitionsPage extends StatefulWidget {
 }
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
-  // TODO: create getters and setters for all these params, set them in the method that calls tileBuilder (which is also in this class)
-  static Widget tileBuilder(
-      BuildContext context,
-      int index,
-      List<DataBaseEntry> filteredElements,
-      QuerySnapshot snapshot,
-      List<dynamic> allElements) {
-    DataBaseEntry currentEntry = filteredElements[index];
-    final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
+  /// Handles special situations with [snapshot].
+  ///
+  /// If an error occurs, returns a [Center] widget to notify the user
+  /// to contact the developer.
+  /// If the snapshot is still loading, return a loading widget, the
+  /// [SpinKitPulse].
+  static Center _checkSnapshot(AsyncSnapshot<QuerySnapshot> snapshot) {
+    if (snapshot.error != null) {
+      return Center(
+          child: Column(
+        children: <Widget>[
+          Icon(Icons.error, color: Constants.primaryAppColorDark),
+          Text(
+            'Oof, please email the address in App Help to report this error.',
+            style: Constants.cardSubTitleTextStyle,
+          )
+        ],
+      ));
+    }
 
-    // TODO: make function to check filteredElements
+    if (!snapshot.hasData)
+      return Center(
+          child: SpinKitPulse(
+        color: Constants.primaryAppColorDark,
+      ));
+
+    return null;
+  }
+
+  /// Handles special situations with [filteredElements].
+  ///
+  /// In the case where the data is still being fetched, return a
+  /// loading widget [SpinKitPulse].
+  /// In the case where the user searched for something with no results,
+  /// return a [Text] widget to notify the user of that.
+  static ListTile _checkFilteredElements(List<DataBaseEntry> filteredElements) {
     if (filteredElements == null)
       return ListTile(
           title: Center(
@@ -41,7 +66,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         duration: Duration(milliseconds: 850),
       )));
 
-    if (filteredElements[0] is bool)
+    if (filteredElements == [])
       return ListTile(
           title: Center(
               child: Text(
@@ -50,161 +75,178 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       fontSize: 18,
                       color: Constants.primaryAppColorDark,
                       fontWeight: FontWeight.w300))));
+    return null;
+  }
 
-    // TODO: create methods to build each of these (leading, title, subtitle, etc), passing in the variant as parameter.
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-      leading: Padding(
-          padding: EdgeInsets.only(top: 4),
-          child: Container(
-            padding: EdgeInsets.only(right: 15.0),
-            decoration: Constants.rightSideBoxDecoration,
-            child: Text(
-                "${currentEntry.score.howth} - ${currentEntry.score.opposition}",
-                overflow: TextOverflow.fade,
-                maxLines: 1,
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Constants.primaryAppColorDark,
-                    fontWeight: FontWeight.w400)),
-          )),
-      title: Text(
-        currentEntry.title,
-        overflow: TextOverflow.fade,
-        maxLines: 1,
-        style: Constants.cardTitleTextStyle,
-      ),
-      subtitle: Text(currentEntry.date,
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-          style: Constants.cardSubTitleTextStyle),
-      trailing: isAdmin
-          ? null
-          : Icon(Icons.keyboard_arrow_right,
-              color: Constants.primaryAppColorDark),
-    );
+  static Stream<QuerySnapshot> _getStream() {
+    return Firestore.instance
+        .collection(Constants.competitionsText.toLowerCase())
+        .snapshots();
+  }
+
+  static List<DataBaseEntry> _getDataBaseEntries(
+      AsyncSnapshot<QuerySnapshot> snapshot) {
+    /// The [entries] in my [Firestore] instance.
+    List<dynamic> rawElements =
+        snapshot.data.documents[0].data.entries.toList()[0].value;
+
+    /// Those same [entries] but in a structured format- [DataBaseEntry].
+    List<DataBaseEntry> parsedElements =
+        new List<DataBaseEntry>.generate(rawElements.length, (int index) {
+      return DataBaseEntry.buildFromMap(rawElements[index]);
+    });
+    return parsedElements;
+  }
+
+  /// Based on the user's [_searchText], filters the competitions.
+  ///
+  /// Utilizes the [DataBaseEntry.values] function to get all of the
+  /// data for the entry in one string.
+  static List<DataBaseEntry> _filterElements(
+      List<DataBaseEntry> parsedElements, String _searchText) {
+    List<DataBaseEntry> filteredElements = new List();
+    if (_searchText.isNotEmpty) {
+      for (int i = 0; i < parsedElements.length; i++) {
+        DataBaseEntry currentEntry = parsedElements[i];
+        String entryString = currentEntry.values.toLowerCase();
+        String query = _searchText.toLowerCase();
+        if (entryString.contains(query)) {
+          filteredElements.add(parsedElements[i]);
+        }
+      }
+      return filteredElements;
+    }
+    return parsedElements;
+  }
+
+  /// Transform the strings found in the database into
+  /// a [DateTime] object.
+  static DateTime _parseDate(String date) {
+    return DateTime.parse(
+        date.toString().split('/').reversed.join().replaceAll('/', '-') +
+            ' 00:00:00');
+  }
+
+  /// Sorts elements into either current or archived lists.
+  static List<List<DataBaseEntry>> _sortElements(
+      List<DataBaseEntry> filteredElements) {
+    /// All entries are classified as current or archived.
+    /// If the [competitionDate] is greater than 9 days in the past,
+    /// it is archived. Otherwise, it is current.
+    List<DataBaseEntry> currentElements = [];
+    List<DataBaseEntry> archivedElements = [];
+    for (DataBaseEntry filteredElement in filteredElements) {
+      DateTime competitionDate = _parseDate(filteredElement.date);
+      int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
+      bool inPast = competitionDate.isBefore(DateTime.now());
+      if (daysFromNow >= 8 && inPast) {
+        archivedElements.add(filteredElement);
+      } else {
+        currentElements.add(filteredElement);
+      }
+    }
+    return [currentElements, archivedElements];
+  }
+
+  /// Get whether or not the user [isAdmin].
+  ///
+  /// If they are, they are granted access to modify any
+  /// competition, create and delete competitions.
+  static bool _isAdmin(BuildContext context) {
+    final Privileges arguments = ModalRoute.of(context).settings.arguments;
+    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
+    return isAdmin;
+  }
+
+  /// Get whether or not the user [isManager].
+  ///
+  /// This would grant them admin privileges however only to
+  /// the competition which they are admin of. In this case,
+  /// tests if they are an given these rights for [currentEntry].
+  static bool _isManager(BuildContext context, DataBaseEntry currentEntry) {
+    final Privileges arguments = ModalRoute.of(context).settings.arguments;
+    final bool isManager =
+        arguments.competitionAccess == currentEntry.id.toString()
+            ? true
+            : false;
+    return isManager;
+  }
+
+  static Widget _tileBuilder(BuildContext context, DataBaseEntry currentEntry) {
+    return BaseListTile(
+        leadingChild: Text(
+            "${currentEntry.score.howth} - ${currentEntry.score.opposition}",
+            overflow: TextOverflow.fade,
+            maxLines: 1,
+            style: TextStyle(
+                fontSize: 20,
+                color: Constants.primaryAppColorDark,
+                fontWeight: FontWeight.w400)),
+        trailingWidget: _isAdmin(context)
+            ? null
+            : Icon(
+                Icons.keyboard_arrow_right,
+                color: Constants.primaryAppColorDark,
+              ),
+        subtitleMaxLines: 1,
+        subtitleText: currentEntry.date,
+        titleText: currentEntry.title);
   }
 
   Widget _buildElementsList(String _searchText, bool isCurrentTab) {
     return OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance
-                .collection(Constants.competitionsText.toLowerCase())
-                .snapshots(),
+            stream: _getStream(),
             builder: (context, snapshot) {
-              // TODO: extract the following two if statements to check snapshot validity.
-              if (snapshot.error != null) {
-                return Center(
-                    child: Column(
-                  children: <Widget>[
-                    Icon(Icons.error, color: Constants.primaryAppColorDark),
-                    Text(
-                      'Oof, please email the address in App Help to report this error.',
-                      style: Constants.cardSubTitleTextStyle,
-                    )
-                  ],
-                ));
+              if (_checkSnapshot(snapshot) != null) {
+                return _checkSnapshot(snapshot);
               }
 
-              if (!snapshot.hasData)
-                return Center(
-                    child: SpinKitPulse(
-                  color: Constants.primaryAppColorDark,
-                ));
+              List<DataBaseEntry> parsedElements =
+                  _getDataBaseEntries(snapshot);
 
-              // TODO: sort out following few definitions
-              List<dynamic> allElements =
-                  snapshot.data.documents[0].data.entries.toList()[0].value;
-              List<DataBaseEntry> elements = new List<DataBaseEntry>.generate(
-                  snapshot.data.documents[0].data.entries
-                      .toList()[0]
-                      .value
-                      .length, (int index) {
-                return DataBaseEntry.buildFromMap(snapshot
-                    .data.documents[0].data.entries
-                    .toList()[0]
-                    .value[index]);
-              });
+              List<DataBaseEntry> filteredElements =
+                  _filterElements(parsedElements, _searchText);
 
-              List<DataBaseEntry> filteredElements = elements;
-
-              if (_searchText.isNotEmpty) {
-                List<DataBaseEntry> tempList = new List();
-                for (int i = 0; i < elements.length; i++) {
-                  // TODO: create variable to make conditional more readable.
-                  if (elements[i]
-                      .values
-                      .toLowerCase()
-                      .contains(_searchText.toLowerCase())) {
-                    tempList.add(elements[i]);
-                  }
-                }
-                filteredElements = tempList.isNotEmpty ? tempList : [];
+              if (_checkFilteredElements(filteredElements) != null) {
+                return _checkFilteredElements(filteredElements);
               }
 
-              List<DataBaseEntry> currentElements = [];
-              List<DataBaseEntry> archivedElements = [];
+              /// At the 0th index of [sortedElements] will be the currentElements,
+              /// and at the 1st index will be the archivedElements.
+              List<List<DataBaseEntry>> sortedElements =
+                  _sortElements(filteredElements);
+
               List<DataBaseEntry> activeElements =
-                  isCurrentTab ? currentElements : archivedElements;
-              for (DataBaseEntry filteredElement in filteredElements) {
-                // TODO: extract method to parse competition date
-                DateTime competitionDate = DateTime.parse(filteredElement.date
-                        .toString()
-                        .split('/')
-                        .reversed
-                        .join()
-                        .replaceAll('/', '-') +
-                    ' 00:00:00');
-                // TODO: create variables to make this conditional more readable.
-                if ((competitionDate.difference(DateTime.now()).inDays.abs() <
-                            7 &&
-                        competitionDate.isBefore(DateTime.now())) ||
-                    competitionDate.isAfter(DateTime.now())) {
-                  currentElements.add(filteredElement);
-                } else {
-                  archivedElements.add(filteredElement);
-                }
-              }
-
-              // TODO: clean this up, these lines occur higher up in program
-              final Privileges arguments =
-                  ModalRoute.of(context).settings.arguments;
-              final bool isAdmin =
-                  arguments.isAdmin == null ? false : arguments.isAdmin;
+                  isCurrentTab ? sortedElements[0] : sortedElements[1];
 
               return ListView.builder(
                 itemCount: activeElements.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ComplexCard(
-                      tileBuilder(context, index, activeElements, snapshot.data,
-                          allElements), () {
-                    // TODO: extract methods here to clean up
+                  DataBaseEntry currentEntry = activeElements[index];
+                  Function toCompetition = () {
                     final preferences = SharedPreferences.getInstance();
                     preferences.then((SharedPreferences preferences) {
-                      final Privileges arguments =
-                          ModalRoute.of(context).settings.arguments;
-                      final bool isAdmin =
-                          arguments.isAdmin == null ? false : arguments.isAdmin;
-                      final bool isManager = arguments.competitionAccess ==
-                              activeElements[index].id.toString()
-                          ? true
-                          : false;
-                      final bool hasAccess = isAdmin || isManager;
+                      final bool hasAccess = _isAdmin(context) ||
+                          _isManager(context, currentEntry);
 
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SpecificCompetitionPage(
-                                  activeElements[index], hasAccess)));
+                                  currentEntry, hasAccess)));
                     });
-                  },
-                      iconButton: isAdmin
+                  };
+                  return ComplexCard(
+                      child: _tileBuilder(context, currentEntry),
+                      onTap: toCompetition,
+                      iconButton: _isAdmin(context)
                           ? IconButton(
                               icon: Icon(Icons.remove_circle_outline,
                                   color: Constants.primaryAppColorDark),
                               onPressed: () {
-                                showAlertDialog(context, allElements,
-                                    activeElements, index, snapshot);
+                                _showAlertDialog(
+                                    context, activeElements[index], snapshot);
                               },
                             )
                           : null);
@@ -213,12 +255,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
             }));
   }
 
-  // TODO: create dialogParams class to pass parameters
-  showAlertDialog(
-      BuildContext context,
-      List allElements,
-      List<DataBaseEntry> activeElements,
-      int index,
+  _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
       title: Text("Are you sure?", style: Constants.cardTitleTextStyle),
@@ -237,20 +274,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           onPressed: () {
             Navigator.of(context).pop();
 
-            DocumentSnapshot documentSnapshot =
-                snapshot.data.documents.elementAt(0);
-
-            // TODO: extract competition deletion method.
-            var dataBaseEntries =
-                new List<dynamic>.from(documentSnapshot.data['data']);
-
-            dataBaseEntries.removeWhere(
-                (rawEntry) => predicate(rawEntry, activeElements, index));
-
-            Map<String, dynamic> newData = {'data': dataBaseEntries};
-
-            print(newData.runtimeType);
-            documentSnapshot.reference.updateData(newData);
+            _deleteCompetition(snapshot, currentEntry);
           },
         )
       ],
@@ -263,53 +287,47 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     );
   }
 
-  // TODO: rename!!!!!! >:(
-  bool predicate(Map rawEntry, activeElements, index) {
+  bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
     DataBaseEntry parsedEntry = DataBaseEntry.buildFromMap(rawEntry);
 
-    if (activeElements[index].values == parsedEntry.values) {
+    if (currentEntry.values == parsedEntry.values) {
       return true;
     }
     return false;
   }
 
-  void addCompetition() {
+  void _addCompetition() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => CreateCompetition()));
   }
 
+  void _deleteCompetition(
+      AsyncSnapshot<QuerySnapshot> snapshot, DataBaseEntry currentEntry) {
+    DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
+    var dataBaseEntries = new List<dynamic>.from(documentSnapshot.data['data']);
+
+    dataBaseEntries
+        .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));
+
+    Map<String, dynamic> newData = {'data': dataBaseEntries};
+    documentSnapshot.reference.updateData(newData);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
-
-    // TODO: extract to getActionButton
-    MyFloatingActionButton floatingActionButton = isAdmin
+    MyFloatingActionButton floatingActionButton = _isAdmin(context)
         ? MyFloatingActionButton(
-            onPressed: addCompetition, text: 'Add a Competition')
+            onPressed: _addCompetition, text: 'Add a Competition')
         : null;
     return Scaffold(
       body: DefaultTabController(
           length: 2,
           child: CompetitionsPageAppBar(_buildElementsList,
               title: Constants.competitionsText)),
-      // TODO: include in above TODO
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Constants.primaryAppColor,
     );
   }
-
-  // TODO: is redundant???
-  void removeCurrentElement(
-      DocumentSnapshot documentSnapshot, Map convertToMap) {
-    List databaseEntries = documentSnapshot.data['data'];
-
-    for (var entry in databaseEntries) {
-      DataBaseEntry parsedEntry = DataBaseEntry.buildFromMap(entry);
-    }
-  }
-
-  // TODO: organise class! sort methods in some order!
 }

@@ -172,16 +172,17 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return isManager;
   }
 
+  static Text _getLeadingText(String text) {
+    return Text(text,
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        style: Constants.leadingChildTextStyle);
+  }
+
   static Widget _tileBuilder(BuildContext context, DataBaseEntry currentEntry) {
     return BaseListTile(
-        leadingChild: Text(
-            "${currentEntry.score.howth} - ${currentEntry.score.opposition}",
-            overflow: TextOverflow.fade,
-            maxLines: 1,
-            style: TextStyle(
-                fontSize: 20,
-                color: Constants.primaryAppColorDark,
-                fontWeight: FontWeight.w400)),
+        leadingChild: _getLeadingText(
+            "${currentEntry.score.howth} - ${currentEntry.score.opposition}"),
         trailingWidget: _isAdmin(context)
             ? null
             : Icon(

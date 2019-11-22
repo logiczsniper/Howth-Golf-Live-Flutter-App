@@ -139,10 +139,16 @@ class Constants {
   static const Color accentAppColor = Color.fromARGB(255, 153, 0, 0);
   static const Color cardAppColor = Color.fromARGB(255, 248, 248, 248);
   static const Color secondaryHeaderAppColor = Color.fromARGB(255, 57, 57, 57);
+
+  /// Text Styles.
   static const TextStyle cardTitleTextStyle = TextStyle(
       fontSize: 16, color: primaryAppColorDark, fontWeight: FontWeight.w300);
   static const TextStyle cardSubTitleTextStyle =
       TextStyle(fontSize: 13, color: primaryAppColorDark);
   static const TextStyle hintTextStyle =
       TextStyle(fontSize: 16, color: primaryAppColorDark);
+  static const TextStyle leadingChildTextStyle = TextStyle(
+      fontSize: 20,
+      color: Constants.primaryAppColorDark,
+      fontWeight: FontWeight.w400);
 }

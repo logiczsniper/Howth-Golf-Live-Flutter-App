@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/custom_elements/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
@@ -14,48 +15,37 @@ class AppHelpPage extends StatefulWidget {
 }
 
 class AppHelpPageState extends State<AppHelpPage> {
-  List<Widget> tileListBuilder(BuildContext context) {
-    List<Widget> output = [MyDetails()];
-    for (AppHelpEntry entry in Constants.appHelpEntries) {
-      output.add(ComplexCard(
-          // TODO: create builder methods for the widgets below (e.g. leading, title, etc)
-          child: ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-            leading: Padding(
-                padding: EdgeInsets.only(top: 4),
-                child: Container(
-                  padding: EdgeInsets.only(right: 15.0),
-                  decoration: Constants.rightSideBoxDecoration,
-                  child: Text("${Constants.appHelpEntries.indexOf(entry) + 1}",
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Constants.primaryAppColorDark,
-                          fontWeight: FontWeight.w400)),
-                )),
-            title: Text(
-              entry.title,
-              overflow: TextOverflow.fade,
-              maxLines: 2,
-              style: Constants.cardTitleTextStyle,
-            ),
-            subtitle: Text(entry.subtitle,
-                overflow: TextOverflow.fade,
-                maxLines: 2,
-                style: Constants.cardSubTitleTextStyle),
-            trailing: Icon(Icons.keyboard_arrow_right,
-                color: Constants.primaryAppColorDark),
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SpecificHelpPage(entry)));
-          }));
+  static Text _getLeadingText(String text) {
+    return Text(text,
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        style: Constants.leadingChildTextStyle);
+  }
+
+  static Widget _tileBuilder(BuildContext context, int index) {
+    /// At the top of the list, [MyDetails] are displayed.
+    if (index == 0) {
+      return MyDetails();
     }
-    return output;
+
+    AppHelpEntry currentHelpEntry = Constants.appHelpEntries[index];
+    return ComplexCard(
+        child: BaseListTile(
+            leadingChild: Container(
+                padding: EdgeInsets.fromLTRB(0.0, 4.0, 15.0, 0.0),
+                decoration: Constants.rightSideBoxDecoration,
+                child: _getLeadingText(index.toString())),
+            trailingWidget: Icon(Icons.keyboard_arrow_right,
+                color: Constants.primaryAppColorDark),
+            subtitleMaxLines: 2,
+            subtitleText: currentHelpEntry.subtitle,
+            titleText: currentHelpEntry.title),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SpecificHelpPage(currentHelpEntry)));
+        });
   }
 
   bool applyPrivileges(String codeAttempt) {
@@ -79,9 +69,7 @@ class AppHelpPageState extends State<AppHelpPage> {
       appBar:
           CodeFieldBar(Constants.appHelpText, applyPrivileges, isInitVerified),
       body: OpacityChangeWidget(
-        target: ListView(
-          children: tileListBuilder(context),
-        ),
+        target: ListView.builder(itemBuilder: _tileBuilder),
       ),
       backgroundColor: Constants.primaryAppColor,
     );

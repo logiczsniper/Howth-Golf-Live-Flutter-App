@@ -18,17 +18,21 @@ class ComplexCard extends StatelessWidget {
     );
   }
 
+  static Card _getCard(Widget child) {
+    return Card(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        elevation: 1.85,
+        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+        child: Container(
+            decoration: Constants.roundedRectBoxDecoration, child: child));
+  }
+
   @override
   Widget build(BuildContext context) {
     final topWidget = iconButton == null ? Container() : iconButton;
     return Stack(children: <Widget>[
-      Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 1.85,
-          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-          child: Container(
-              decoration: Constants.roundedRectBoxDecoration, child: child)),
+      _getCard(child),
       Positioned.fill(
           child: Material(
               color: Colors.transparent,

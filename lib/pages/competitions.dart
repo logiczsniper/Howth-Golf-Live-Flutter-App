@@ -84,11 +84,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         .snapshots();
   }
 
-  static List<DataBaseEntry> _getDataBaseEntries(
-      AsyncSnapshot<QuerySnapshot> snapshot) {
+  static List<DataBaseEntry> _getDataBaseEntries(DocumentSnapshot document) {
     /// The [entries] in my [Firestore] instance.
-    List<dynamic> rawElements =
-        snapshot.data.documents[0].data.entries.toList()[0].value;
+    List<dynamic> rawElements = document.data.entries.toList()[0].value;
 
     /// Those same [entries] but in a structured format- [DataBaseEntry].
     List<DataBaseEntry> parsedElements =
@@ -203,8 +201,10 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 return _checkSnapshot(snapshot);
               }
 
+              DocumentSnapshot document = snapshot.data.documents[0];
+
               List<DataBaseEntry> parsedElements =
-                  _getDataBaseEntries(snapshot);
+                  _getDataBaseEntries(document);
 
               List<DataBaseEntry> filteredElements =
                   _filterElements(parsedElements, _searchText);

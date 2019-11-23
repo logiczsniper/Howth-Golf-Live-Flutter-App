@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:howth_golf_live/custom_elements/list_tile.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/custom_elements/complex_card.dart';
 import 'package:howth_golf_live/custom_elements/opacity_change.dart';
@@ -22,19 +23,11 @@ class AppHelpPageState extends State<AppHelpPage> {
         style: Constants.leadingChildTextStyle);
   }
 
-  static Widget _tileBuilder(BuildContext context, int index) {
-    /// At the top of the list, [MyDetails] are displayed.
-    if (index == 0) {
-      return MyDetails();
-    }
-
-    AppHelpEntry currentHelpEntry = Constants.appHelpEntries[index];
+  static Widget _tileBuilder(
+      BuildContext context, AppHelpEntry currentHelpEntry, int index) {
     return ComplexCard(
         child: BaseListTile(
-            leadingChild: Container(
-                padding: EdgeInsets.fromLTRB(0.0, 4.0, 15.0, 0.0),
-                decoration: Constants.rightSideBoxDecoration,
-                child: _getLeadingText(index.toString())),
+            leadingChild: _getLeadingText(index.toString()),
             trailingWidget: Icon(Icons.keyboard_arrow_right,
                 color: Constants.primaryAppColorDark),
             subtitleMaxLines: 2,
@@ -69,7 +62,17 @@ class AppHelpPageState extends State<AppHelpPage> {
       appBar:
           CodeFieldBar(Constants.appHelpText, applyPrivileges, isInitVerified),
       body: OpacityChangeWidget(
-        target: ListView.builder(itemBuilder: _tileBuilder),
+        target: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              /// At the top of the list, [MyDetails] are displayed.
+              if (index == 0) {
+                return MyDetails();
+              }
+              AppHelpEntry currentHelpEntry =
+                  Constants.appHelpEntries[index - 1];
+              return _tileBuilder(context, currentHelpEntry, index);
+            },
+            itemCount: Constants.appHelpEntries.length + 1),
       ),
       backgroundColor: Constants.primaryAppColor,
     );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class ComplexCard extends StatelessWidget {
   final Widget child;
@@ -13,26 +13,16 @@ class ComplexCard extends StatelessWidget {
       highlightColor: Colors.transparent,
       radius: 500.0,
       borderRadius: BorderRadius.circular(10.0),
-      splashColor: Constants.accentAppColor.withAlpha(50),
+      splashColor: Toolkit.accentAppColor.withAlpha(50),
       onTap: onTap,
     );
-  }
-
-  static Card _getCard(Widget child) {
-    return Card(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        elevation: 1.85,
-        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-        child: Container(
-            decoration: Constants.roundedRectBoxDecoration, child: child));
   }
 
   @override
   Widget build(BuildContext context) {
     final topWidget = iconButton == null ? Container() : iconButton;
     return Stack(children: <Widget>[
-      _getCard(child),
+      Toolkit.getCard(child),
       Positioned.fill(
           child: Material(
               color: Colors.transparent,

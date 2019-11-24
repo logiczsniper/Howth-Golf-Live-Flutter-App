@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class SideFlexible extends StatelessWidget {
   final String text;
@@ -12,13 +12,13 @@ class SideFlexible extends StatelessWidget {
         maxLines: 1,
         style: TextStyle(
             fontSize: 21,
-            color: Constants.primaryAppColorDark,
+            color: Toolkit.primaryAppColorDark,
             fontWeight: FontWeight.w400));
   }
 
   Decoration _getDecoration() {
     return ShapeDecoration(
-        color: Constants.accentAppColor,
+        color: Toolkit.accentAppColor,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
   }

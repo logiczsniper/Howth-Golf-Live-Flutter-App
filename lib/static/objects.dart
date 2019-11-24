@@ -1,4 +1,4 @@
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,8 +18,25 @@ class DataBaseEntry {
     return "$date $location $time $opposition $title $holes $score";
   }
 
+  /// Construct a [DataBaseEntry] from a JSON object.
+  ///
+  /// The [Firestore] instance will output [_InternalLinkedHashMap]
+  /// which must be converted into objects here.
+  DataBaseEntry.fromJson(Map map)
+      : date = map[EntryFields.date],
+        id = map[EntryFields.id],
+        location = map[EntryFields.location],
+        time = map[EntryFields.time],
+        opposition = map[EntryFields.opposition],
+        title = map[EntryFields.title],
+        holes =
+            new List<Hole>.generate(map[EntryFields.holes].length, (int index) {
+          return Hole.fromMap(map[EntryFields.holes][index]);
+        }),
+        score = Score.fromMap(map[EntryFields.score]);
+
   /// Converts a database entry into a map so it can be put into the database.
-  Map convertToMap() {
+  Map toJson() {
     return {
       EntryFields.date: date,
       EntryFields.id: id,
@@ -30,24 +47,6 @@ class DataBaseEntry {
       EntryFields.holes: holes,
       EntryFields.score: score
     };
-  }
-
-  /// Converts a map into a database entry so it can be displayed in the app.
-  ///
-  /// [map] is the internally linked hashmap straight from firestore.
-  static DataBaseEntry buildFromMap(Map map) {
-    return DataBaseEntry(
-        date: map[EntryFields.date],
-        id: map[EntryFields.id],
-        location: map[EntryFields.location],
-        time: map[EntryFields.time],
-        opposition: map[EntryFields.opposition],
-        title: map[EntryFields.title],
-        holes:
-            new List<Hole>.generate(map[EntryFields.holes].length, (int index) {
-          return Hole.buildFromMap(map[EntryFields.holes][index]);
-        }),
-        score: Score.buildFromMap(map[EntryFields.score]));
   }
 
   DataBaseEntry(
@@ -79,9 +78,10 @@ class Score {
   final String howth;
   final String opposition;
 
-  static Score buildFromMap(Map map) {
-    return Score(howth: map['howth'], opposition: map['opposition']);
-  }
+  /// Convert a map to a [Score] object.
+  Score.fromMap(Map map)
+      : howth = map['howth'],
+        opposition = map['opposition'];
 
   Score({this.howth, this.opposition});
 }
@@ -95,15 +95,13 @@ class Hole {
   final String holeScore;
   final List<String> players;
 
-  /// Convert a map into a Hole object.
-  static Hole buildFromMap(Map map) {
-    return Hole(
-        holeNumber: map['hole_number'],
-        holeScore: map['hole_score'],
-        players: new List<String>.generate(map['players'].length, (int index) {
+  /// Convert a map into a [Hole] object.
+  Hole.fromMap(Map map)
+      : holeNumber = map['hole_number'],
+        holeScore = map['hole_score'],
+        players = new List<String>.generate(map['players'].length, (int index) {
           return map['players'][index].toString();
-        }));
-  }
+        });
 
   Hole({this.holeNumber, this.holeScore, this.players});
 }
@@ -113,17 +111,15 @@ class AppHelpEntry {
   final String subtitle;
   final List<HelpStep> steps;
 
-  /// Convert a map to an AppHelpEntry instance.
+  /// Convert a map to a [AppHelpEntry] instance.
   ///
-  /// This is used to convert the underlying _appHelpData in [Constants] into entries.
-  static AppHelpEntry buildFromMap(Map map) {
-    return AppHelpEntry(
-        title: map['title'],
-        subtitle: map['subtitle'],
-        steps: new List<HelpStep>.generate(map['steps'].length, (int index) {
-          return HelpStep.buildFromMap(map['steps'][index]);
-        }));
-  }
+  /// This is used to convert the underlying _appHelpData in [Toolkit] into entries.
+  AppHelpEntry.fromMap(Map map)
+      : title = map['title'],
+        subtitle = map['subtitle'],
+        steps = new List<HelpStep>.generate(map['steps'].length, (int index) {
+          return HelpStep.fromMap(map['steps'][index]);
+        });
 
   AppHelpEntry({this.title, this.subtitle, this.steps});
 }
@@ -132,10 +128,10 @@ class HelpStep {
   final String title;
   final String data;
 
-  /// Convert a map into a single HelpStep instance.
-  static HelpStep buildFromMap(Map map) {
-    return HelpStep(title: map['title'], data: map['data']);
-  }
+  /// Convert a map into a single [HelpStep] instance.
+  HelpStep.fromMap(Map map)
+      : title = map['title'],
+        data = map['data'];
 
   HelpStep({this.title, this.data});
 }
@@ -144,13 +140,11 @@ class Privileges {
   final bool isAdmin;
   final String competitionAccess;
 
-  /// Converting preferences into Privileges object.
-  static Privileges buildFromPreferences(SharedPreferences preferences) {
-    return Privileges(
-        isAdmin: preferences.getBool(Constants.activeAdminText),
-        competitionAccess:
-            preferences.getString(Constants.activeCompetitionText));
-  }
+  /// Converting preferences into [Privileges] object.
+  Privileges.fromPreferences(SharedPreferences preferences)
+      : isAdmin = preferences.getBool(Toolkit.activeAdminText),
+        competitionAccess =
+            preferences.getString(Toolkit.activeCompetitionText);
 
   Privileges({this.isAdmin, this.competitionAccess});
 }

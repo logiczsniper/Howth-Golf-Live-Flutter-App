@@ -1,9 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/stateful_app_bar.dart';
-import 'package:howth_golf_live/static/constants.dart';
-import 'package:howth_golf_live/static/objects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -50,29 +48,20 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   AnimatedCrossFade _getIconData() {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 450),
-      firstChild: new Icon(Icons.search),
-      secondChild: new Icon(Icons.close),
+      firstChild: Icon(Icons.search),
+      secondChild: Icon(Icons.close),
       crossFadeState: appBarTitle != inputBar
           ? CrossFadeState.showFirst
           : CrossFadeState.showSecond,
     );
   }
 
-  BubbleTabIndicator _getTabIndicator() {
+  static BubbleTabIndicator _getTabIndicator() {
     return BubbleTabIndicator(
-        indicatorColor: Constants.accentAppColor,
+        indicatorColor: Toolkit.accentAppColor,
         tabBarIndicatorSize: TabBarIndicatorSize.tab,
         indicatorHeight: 25.0,
         insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 26.0));
-  }
-
-  void _toAppHelp() {
-    final preferences = SharedPreferences.getInstance();
-
-    preferences.then((SharedPreferences preferences) {
-      Navigator.pushNamed(context, '/' + Constants.appHelpText,
-          arguments: Privileges.buildFromPreferences(preferences));
-    });
   }
 
   @override
@@ -88,12 +77,13 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                 floating: true,
                 pinned: false,
                 snap: true,
-                backgroundColor: Constants.primaryAppColor,
-                iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
+                backgroundColor: Toolkit.primaryAppColor,
+                iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
                 leading: IconButton(
                     icon: Icon(Icons.help_outline),
                     tooltip: 'Tap for help!',
-                    onPressed: _toAppHelp),
+                    onPressed: () =>
+                        Toolkit.navigateTo(context, Toolkit.appHelpText)),
                 actions: <Widget>[
                   IconButton(
                     icon: _getIconData(),
@@ -102,11 +92,11 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                   )
                 ],
                 bottom: TabBar(
-                    labelColor: Constants.primaryAppColorDark,
+                    labelColor: Toolkit.primaryAppColorDark,
                     indicator: _getTabIndicator(),
                     tabs: <Widget>[
-                      Tab(text: Constants.currentText),
-                      Tab(text: Constants.archivedText)
+                      Tab(text: Toolkit.currentText),
+                      Tab(text: Toolkit.archivedText)
                     ])),
           ];
         },

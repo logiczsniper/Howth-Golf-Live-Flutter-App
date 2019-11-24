@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/custom_elements/buttons/back_button.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -66,11 +66,11 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     return AppBar(
       title: getTitle(appBarTitle),
       centerTitle: true,
-      leading: ParameterBackButton(Constants.competitionsText),
+      leading: ParameterBackButton(Toolkit.competitionsText),
       actions: <Widget>[_getIconButton(isVerified)],
-      backgroundColor: Constants.primaryAppColor,
+      backgroundColor: Toolkit.primaryAppColor,
       elevation: 0.0,
-      iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
+      iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
     );
   }
 }

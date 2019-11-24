@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/custom_elements/scroll_behavior.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/pages/apphelp.dart';
 import 'package:howth_golf_live/pages/home.dart';
 import 'package:howth_golf_live/pages/competitions.dart';
@@ -20,12 +20,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         builder: appBuilder,
-        title: Constants.appName,
+        title: Toolkit.appName,
         initialRoute: '/',
         routes: <String, WidgetBuilder>{
           '/': (context) => HomePage(),
-          '/' + Constants.competitionsText: (context) => CompetitionsPage(),
-          '/' + Constants.appHelpText: (context) => AppHelpPage()
+          '/' + Toolkit.competitionsText: (context) => CompetitionsPage(),
+          '/' + Toolkit.appHelpText: (context) => AppHelpPage()
         });
   }
 }

@@ -12,7 +12,7 @@ import 'package:howth_golf_live/custom_elements/buttons/floating_action_button.d
 import 'package:howth_golf_live/pages/create_competition.dart';
 import 'package:howth_golf_live/pages/specific_pages/competition.dart';
 
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/static/objects.dart';
 
 class CompetitionsPage extends StatefulWidget {
@@ -32,10 +32,10 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       return Center(
           child: Column(
         children: <Widget>[
-          Icon(Icons.error, color: Constants.primaryAppColorDark),
+          Icon(Icons.error, color: Toolkit.primaryAppColorDark),
           Text(
             'Oof, please email the address in App Help to report this error.',
-            style: Constants.cardSubTitleTextStyle,
+            style: Toolkit.cardSubTitleTextStyle,
           )
         ],
       ));
@@ -44,7 +44,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     if (!snapshot.hasData)
       return Center(
           child: SpinKitPulse(
-        color: Constants.primaryAppColorDark,
+        color: Toolkit.primaryAppColorDark,
       ));
 
     return null;
@@ -61,7 +61,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       return ListTile(
           title: Center(
               child: SpinKitPulse(
-        color: Constants.primaryAppColorDark,
+        color: Toolkit.primaryAppColorDark,
         size: 45,
         duration: Duration(milliseconds: 850),
       )));
@@ -69,31 +69,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     if (filteredElements == [])
       return ListTile(
           title: Center(
-              child: Text(
-                  "No ${Constants.competitionsText.toLowerCase()} found!",
+              child: Text("No ${Toolkit.competitionsText.toLowerCase()} found!",
                   style: TextStyle(
                       fontSize: 18,
-                      color: Constants.primaryAppColorDark,
+                      color: Toolkit.primaryAppColorDark,
                       fontWeight: FontWeight.w300))));
     return null;
-  }
-
-  static Stream<QuerySnapshot> _getStream() {
-    return Firestore.instance
-        .collection(Constants.competitionsText.toLowerCase())
-        .snapshots();
-  }
-
-  static List<DataBaseEntry> _getDataBaseEntries(DocumentSnapshot document) {
-    /// The [entries] in my [Firestore] instance.
-    List<dynamic> rawElements = document.data.entries.toList()[0].value;
-
-    /// Those same [entries] but in a structured format- [DataBaseEntry].
-    List<DataBaseEntry> parsedElements =
-        new List<DataBaseEntry>.generate(rawElements.length, (int index) {
-      return DataBaseEntry.buildFromMap(rawElements[index]);
-    });
-    return parsedElements;
   }
 
   /// Based on the user's [_searchText], filters the competitions.
@@ -170,23 +151,11 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return isManager;
   }
 
-  static Text _getLeadingText(String text) {
-    return Text(text,
-        overflow: TextOverflow.fade,
-        maxLines: 1,
-        style: Constants.leadingChildTextStyle);
-  }
-
   static Widget _tileBuilder(BuildContext context, DataBaseEntry currentEntry) {
     return BaseListTile(
-        leadingChild: _getLeadingText(
+        leadingChild: Toolkit.getLeadingText(
             "${currentEntry.score.howth} - ${currentEntry.score.opposition}"),
-        trailingWidget: _isAdmin(context)
-            ? null
-            : Icon(
-                Icons.keyboard_arrow_right,
-                color: Constants.primaryAppColorDark,
-              ),
+        trailingIconData: _isAdmin(context) ? null : Icons.keyboard_arrow_right,
         subtitleMaxLines: 1,
         subtitleText: currentEntry.date,
         titleText: currentEntry.title);
@@ -195,7 +164,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   Widget _buildElementsList(String _searchText, bool isCurrentTab) {
     return OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
-            stream: _getStream(),
+            stream: Toolkit.getStream(),
             builder: (context, snapshot) {
               if (_checkSnapshot(snapshot) != null) {
                 return _checkSnapshot(snapshot);
@@ -204,7 +173,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               DocumentSnapshot document = snapshot.data.documents[0];
 
               List<DataBaseEntry> parsedElements =
-                  _getDataBaseEntries(document);
+                  Toolkit.getDataBaseEntries(document);
 
               List<DataBaseEntry> filteredElements =
                   _filterElements(parsedElements, _searchText);
@@ -244,7 +213,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       iconButton: _isAdmin(context)
                           ? IconButton(
                               icon: Icon(Icons.remove_circle_outline,
-                                  color: Constants.primaryAppColorDark),
+                                  color: Toolkit.primaryAppColorDark),
                               onPressed: () {
                                 _showAlertDialog(
                                     context, activeElements[index], snapshot);
@@ -259,9 +228,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
-      title: Text("Are you sure?", style: Constants.cardTitleTextStyle),
+      title: Text("Are you sure?", style: Toolkit.cardTitleTextStyle),
       content: Text("This action is irreversible.",
-          style: Constants.cardSubTitleTextStyle),
+          style: Toolkit.cardSubTitleTextStyle),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       actions: <Widget>[
         FlatButton(
@@ -289,7 +258,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
-    DataBaseEntry parsedEntry = DataBaseEntry.buildFromMap(rawEntry);
+    DataBaseEntry parsedEntry = DataBaseEntry.fromJson(rawEntry);
 
     if (currentEntry.values == parsedEntry.values) {
       return true;
@@ -324,11 +293,11 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       body: DefaultTabController(
           length: 2,
           child: CompetitionsPageAppBar(_buildElementsList,
-              title: Constants.competitionsText)),
+              title: Toolkit.competitionsText)),
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Constants.primaryAppColor,
+      backgroundColor: Toolkit.primaryAppColor,
     );
   }
 }

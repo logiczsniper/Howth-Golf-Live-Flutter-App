@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/objects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class ParameterBackButton extends StatelessWidget {
+  /// Custom back button which allows the passage of arguemnts.
+  ///
+  /// When navigating to Competitions, any Competition, and App Help,
+  /// [preferences] must be passed. This button mimics the provided
+  /// [BackButtonIcon] in Flutter, except passes [preferences] to the
+  /// [destination] page.
   final String destination;
   ParameterBackButton(this.destination);
-  @override
+
   Widget build(BuildContext context) {
     return IconButton(
         icon: const BackButtonIcon(),
         onPressed: () {
-          final preferences = SharedPreferences.getInstance();
-          preferences.then(
-            (SharedPreferences preferences) {
-              Navigator.pushNamed(context, '/' + destination,
-                  arguments: Privileges.buildFromPreferences(preferences));
-            },
-          );
+          Toolkit.navigateTo(context, destination);
         });
   }
 }

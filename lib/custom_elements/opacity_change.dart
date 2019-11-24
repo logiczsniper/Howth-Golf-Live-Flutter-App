@@ -16,10 +16,17 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
   /// If [widget.flashing] is True, then the animation is reversed. Else,
   /// it is let finish.
   void _statusListener(AnimationStatus status) {
-    if (widget.flashing && status == AnimationStatus.completed) {
-      _controller.reverse();
-    } else if (widget.flashing && status == AnimationStatus.dismissed) {
-      _controller.forward();
+    if (widget.flashing) {
+      switch (status) {
+        case AnimationStatus.completed:
+          _controller.reverse();
+          break;
+        case AnimationStatus.dismissed:
+          _controller.forward();
+          break;
+        default:
+          break;
+      }
     }
   }
 

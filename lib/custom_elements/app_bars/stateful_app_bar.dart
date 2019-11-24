@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class StatefulAppBar {
   String inputText = "";
@@ -21,15 +21,14 @@ class StatefulAppBar {
     return appBarTitle == primaryTitle ? secondaryTitle : primaryTitle;
   }
 
-  InputDecoration _getInputDecoration(String hintText) {
+  static InputDecoration _getInputDecoration(String hintText) {
     return InputDecoration(
         contentPadding: EdgeInsets.all(1.5),
-        enabledBorder: Constants.outlineInputBorder,
-        focusedBorder: Constants.outlineInputBorder,
-        prefixIcon: Icon(Icons.keyboard_arrow_right,
-            color: Constants.primaryAppColorDark),
+        enabledBorder: Toolkit.outlineInputBorder,
+        focusedBorder: Toolkit.outlineInputBorder,
+        prefixIcon: Icon(Icons.keyboard_arrow_right),
         hintText: hintText,
-        hintStyle: Constants.hintTextStyle);
+        hintStyle: Toolkit.hintTextStyle);
   }
 
   AnimatedSwitcher getTitle(Widget appBarTitle) {
@@ -41,7 +40,7 @@ class StatefulAppBar {
     return Center(
         child: Text(title,
             style: TextStyle(
-              color: Constants.primaryAppColorDark,
+              color: Toolkit.primaryAppColorDark,
             )));
   }
 
@@ -50,11 +49,11 @@ class StatefulAppBar {
     return TextField(
         keyboardType: textType,
         obscureText: obscureText,
-        cursorColor: Constants.accentAppColor,
+        cursorColor: Toolkit.accentAppColor,
         textCapitalization: TextCapitalization.sentences,
         autocorrect: false,
         controller: _filter,
-        style: TextStyle(color: Constants.primaryAppColorDark),
+        style: TextStyle(color: Toolkit.primaryAppColorDark),
         decoration: _getInputDecoration(hintText));
   }
 }

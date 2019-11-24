@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/form_field.dart';
-import 'package:howth_golf_live/static/constants.dart';
-import 'package:howth_golf_live/static/objects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 // TODO: all of this
 class CreateCompetition extends StatefulWidget {
@@ -35,28 +33,23 @@ class CreateCompetitionState extends State<CreateCompetition> {
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(
-              color: Constants.primaryAppColorDark,
+              color: Toolkit.primaryAppColorDark,
             )),
-        backgroundColor: Constants.primaryAppColor,
-        iconTheme: IconThemeData(color: Constants.primaryAppColorDark),
+        backgroundColor: Toolkit.primaryAppColor,
+        iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.home),
             tooltip: 'Tap to return to home!',
-            onPressed: () {
-              final preferences = SharedPreferences.getInstance();
-              preferences.then((SharedPreferences preferences) {
-                Navigator.pushNamed(context, '/' + Constants.competitionsText,
-                    arguments: Privileges.buildFromPreferences(preferences));
-              });
-            },
-            color: Constants.primaryAppColorDark,
+            onPressed: () =>
+                Toolkit.navigateTo(context, Toolkit.competitionsText),
+            color: Toolkit.primaryAppColorDark,
           )
         ],
         elevation: 0.0,
       ),
       body: formBuilder(),
-      backgroundColor: Constants.primaryAppColor,
+      backgroundColor: Toolkit.primaryAppColor,
     );
   }
 }

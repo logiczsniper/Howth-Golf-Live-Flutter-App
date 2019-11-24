@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/custom_elements/opacity_change.dart';
-import 'package:howth_golf_live/static/constants.dart';
-import 'package:howth_golf_live/static/objects.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,10 +10,10 @@ class HomePage extends StatelessWidget {
     preferences.clear();
   }
 
-  Text _getTapText() {
+  static Text _getTapText() {
     return Text(
       'Tap anywhere to begin!',
-      style: TextStyle(fontSize: 14, color: Constants.primaryAppColorDark),
+      style: TextStyle(fontSize: 14, color: Toolkit.primaryAppColorDark),
     );
   }
 
@@ -24,13 +23,7 @@ class HomePage extends StatelessWidget {
     /// _clearPreferences();
 
     return GestureDetector(
-        onTap: () {
-          final preferences = SharedPreferences.getInstance();
-          preferences.then((SharedPreferences preferences) {
-            Navigator.pushNamed(context, '/' + Constants.competitionsText,
-                arguments: Privileges.buildFromPreferences(preferences));
-          });
-        },
+        onTap: () => Toolkit.navigateTo(context, Toolkit.competitionsText),
         child: Scaffold(
           body: Center(
               child: Column(
@@ -44,7 +37,7 @@ class HomePage extends StatelessWidget {
               ),
             ],
           )),
-          backgroundColor: Constants.primaryAppColor,
+          backgroundColor: Toolkit.primaryAppColor,
         ));
   }
 }

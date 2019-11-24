@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:howth_golf_live/custom_elements/competition_details_widgets/side_flexible.dart';
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/static/objects.dart';
 
 import 'middle_row.dart';
@@ -13,7 +13,7 @@ class CompetitionDetails extends StatelessWidget {
 
   MiddleRow _getMiddleRow(String data, IconData iconData, double size) {
     return MiddleRow(
-        data, Icon(iconData, size: size, color: Constants.primaryAppColorDark));
+        data, Icon(iconData, size: size, color: Toolkit.primaryAppColorDark));
   }
 
   Flexible _getCentralFlexible() {

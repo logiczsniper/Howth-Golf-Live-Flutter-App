@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:howth_golf_live/static/constants.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class MyFloatingActionButton extends StatelessWidget {
   final Function onPressed;
@@ -12,12 +12,12 @@ class MyFloatingActionButton extends StatelessWidget {
     return FloatingActionButton.extended(
       icon: Icon(
         Icons.add,
-        color: Constants.primaryAppColorDark,
+        color: Toolkit.primaryAppColorDark,
       ),
-      backgroundColor: Constants.accentAppColor,
+      backgroundColor: Toolkit.accentAppColor,
       label: Text(
         text,
-        style: TextStyle(fontSize: 14, color: Constants.primaryAppColorDark),
+        style: TextStyle(fontSize: 14, color: Toolkit.primaryAppColorDark),
       ),
       onPressed: onPressed,
     );

@@ -17,6 +17,8 @@ dependencies:
   font_awesome_flutter: 8.4.0
   shared_preferences: ^0.5.3+1
   test: ^1.6.1
+  uuid: 2.0.4
+  datetime_picker_formfield: 0.4.3
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +26,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets: 
+  assets:
     - lib/static/home_image.png
     - lib/static/newIcon.png

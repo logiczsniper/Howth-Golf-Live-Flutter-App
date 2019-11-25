@@ -100,6 +100,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   /// Transform the strings found in the database into
   /// a [DateTime] object.
+  /// TODO: update method to parse the dates created by [create_competition.dart].
   static DateTime _parseDate(String date) {
     return DateTime.parse(
         date.toString().split('/').reversed.join().replaceAll('/', '-') +

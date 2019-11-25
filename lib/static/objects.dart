@@ -23,29 +23,28 @@ class DataBaseEntry {
   /// The [Firestore] instance will output [_InternalLinkedHashMap]
   /// which must be converted into objects here.
   DataBaseEntry.fromJson(Map map)
-      : date = map[EntryFields.date],
-        id = map[EntryFields.id],
-        location = map[EntryFields.location],
-        time = map[EntryFields.time],
-        opposition = map[EntryFields.opposition],
-        title = map[EntryFields.title],
-        holes =
-            new List<Hole>.generate(map[EntryFields.holes].length, (int index) {
-          return Hole.fromMap(map[EntryFields.holes][index]);
+      : date = map[Toolkit.date],
+        id = map[Toolkit.id],
+        location = map[Toolkit.location],
+        time = map[Toolkit.time],
+        opposition = map[Toolkit.opposition],
+        title = map[Toolkit.title],
+        holes = new List<Hole>.generate(map[Toolkit.holes].length, (int index) {
+          return Hole.fromMap(map[Toolkit.holes][index]);
         }),
-        score = Score.fromMap(map[EntryFields.score]);
+        score = Score.fromMap(map[Toolkit.score]);
 
   /// Converts a database entry into a map so it can be put into the database.
   Map toJson() {
     return {
-      EntryFields.date: date,
-      EntryFields.id: id,
-      EntryFields.location: location,
-      EntryFields.time: time,
-      EntryFields.opposition: opposition,
-      EntryFields.title: title,
-      EntryFields.holes: holes,
-      EntryFields.score: score
+      Toolkit.date: date,
+      Toolkit.id: id,
+      Toolkit.location: location,
+      Toolkit.time: time,
+      Toolkit.opposition: opposition,
+      Toolkit.title: title,
+      Toolkit.holes: holes,
+      Toolkit.score: score
     };
   }
 
@@ -58,20 +57,6 @@ class DataBaseEntry {
       this.title,
       this.holes,
       this.score});
-}
-
-class EntryFields {
-  /// Note:
-  ///
-  /// The [date] field below must be in the form '{TWO DIGIT DAY}/{TWO DIGIT MONTH}/{FOUR DIGIT YEAR}'
-  static final String date = 'date';
-  static final String id = 'id';
-  static final String location = 'location';
-  static final String time = 'time';
-  static final String opposition = 'opposition';
-  static final String title = 'title';
-  static final String holes = 'holes';
-  static final String score = 'score';
 }
 
 class Score {

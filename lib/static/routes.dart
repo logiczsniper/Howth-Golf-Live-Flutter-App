@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/competitions.dart';
-import 'package:howth_golf_live/pages/appHelp.dart';
+import 'package:howth_golf_live/pages/app_help.dart';
 import 'package:howth_golf_live/pages/home.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 

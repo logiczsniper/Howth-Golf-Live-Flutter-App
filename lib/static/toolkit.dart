@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/dataBaseEntry.dart';
+import 'package:howth_golf_live/static/database_entry.dart';
 
 import 'package:howth_golf_live/static/privileges.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -18,7 +18,7 @@ class Toolkit {
   static const String helpText = "App Help";
 
   /// Paths to graphics used in the app.
-  static const String iconPath = "lib/graphics/newIcon.png";
+  static const String iconPath = "lib/graphics/icon.png";
 
   /// When getting data from preferences, it is vital that these values are used as keys.
   static const String activeAdminText = "activeAdmin";

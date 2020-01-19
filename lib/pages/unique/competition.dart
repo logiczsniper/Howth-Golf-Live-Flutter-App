@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/dataBaseEntry.dart';
+import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';

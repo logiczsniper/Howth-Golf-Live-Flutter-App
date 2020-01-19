@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/list_tile.dart';
+import 'package:howth_golf_live/static/dataBaseEntry.dart';
+import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:howth_golf_live/custom_elements/app_bars/code_field_bar.dart';
-import 'package:howth_golf_live/custom_elements/competition_details_widgets/competition_details.dart';
-import 'package:howth_golf_live/custom_elements/opacity_change.dart';
-import 'package:howth_golf_live/custom_elements/buttons/floating_action_button.dart';
+import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
+import 'package:howth_golf_live/widgets/competition_details/competition_details.dart';
+import 'package:howth_golf_live/widgets/opacity_change.dart';
+import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
-import 'package:howth_golf_live/static/objects.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
   final DataBaseEntry competition;
@@ -79,7 +80,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// that we want fresh data for. Sets [currentData] to this new entry.
   Future<void> _refreshList() async {
     final int currentId = currentData.id;
-    Future<QuerySnapshot> newData = Toolkit.getStream().first;
+    Future<QuerySnapshot> newData = Toolkit.stream.first;
 
     setState(() {
       newData.then((QuerySnapshot snapshot) {
@@ -114,19 +115,17 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return false;
   }
 
-  RefreshIndicator _getRefreshIndicator() {
-    return RefreshIndicator(
-      displacement: 80.0,
-      color: Toolkit.accentAppColor,
-      backgroundColor: Toolkit.primaryAppColor,
-      child: OpacityChangeWidget(
-          target: ListView.builder(
-        itemBuilder: _tileBuilder,
-        itemCount: currentData.holes.length + 1,
-      )),
-      onRefresh: _refreshList,
-    );
-  }
+  RefreshIndicator get _refreshIndicator => RefreshIndicator(
+        displacement: 80.0,
+        color: Palette.maroon,
+        backgroundColor: Palette.light,
+        child: OpacityChangeWidget(
+            target: ListView.builder(
+          itemBuilder: _tileBuilder,
+          itemCount: currentData.holes.length + 1,
+        )),
+        onRefresh: _refreshList,
+      );
 
   /// TODO: build out method
   void addHole() {}
@@ -145,11 +144,11 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return Scaffold(
       appBar:
           CodeFieldBar(currentData.title, _applyPrivileges, widget.hasAccess),
-      body: _getRefreshIndicator(),
+      body: _refreshIndicator,
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Toolkit.primaryAppColor,
+      backgroundColor: Palette.light,
     );
   }
 }

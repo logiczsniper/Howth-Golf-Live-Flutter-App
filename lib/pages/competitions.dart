@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:howth_golf_live/custom_elements/list_tile.dart';
+import 'package:howth_golf_live/static/dataBaseEntry.dart';
+import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:howth_golf_live/custom_elements/app_bars/competitions_bar.dart';
-import 'package:howth_golf_live/custom_elements/complex_card.dart';
-import 'package:howth_golf_live/custom_elements/opacity_change.dart';
-import 'package:howth_golf_live/custom_elements/buttons/floating_action_button.dart';
+import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
+import 'package:howth_golf_live/widgets/complex_card.dart';
+import 'package:howth_golf_live/widgets/opacity_change.dart';
+import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 
-import 'package:howth_golf_live/pages/create_competition.dart';
-import 'package:howth_golf_live/pages/specific_pages/competition.dart';
+import 'package:howth_golf_live/pages/unique/create_competition.dart';
+import 'package:howth_golf_live/pages/unique/competition.dart';
 
 import 'package:howth_golf_live/static/toolkit.dart';
-import 'package:howth_golf_live/static/objects.dart';
+import 'package:howth_golf_live/static/privileges.dart';
 
 class CompetitionsPage extends StatefulWidget {
   @override
-  _CompetitionsPageState createState() => new _CompetitionsPageState();
+  _CompetitionsPageState createState() => _CompetitionsPageState();
 }
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
@@ -28,23 +30,22 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// If the snapshot is still loading, return a loading widget, the
   /// [SpinKitPulse].
   static Center _checkSnapshot(AsyncSnapshot<QuerySnapshot> snapshot) {
-    if (snapshot.error != null) {
+    if (snapshot.error != null)
       return Center(
           child: Column(
         children: <Widget>[
-          Icon(Icons.error, color: Toolkit.primaryAppColorDark),
+          Icon(Icons.error, color: Palette.dark),
           Text(
             'Oof, please email the address in App Help to report this error.',
             style: Toolkit.cardSubTitleTextStyle,
           )
         ],
       ));
-    }
 
     if (!snapshot.hasData)
       return Center(
           child: SpinKitPulse(
-        color: Toolkit.primaryAppColorDark,
+        color: Palette.dark,
       ));
 
     return null;
@@ -61,7 +62,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       return ListTile(
           title: Center(
               child: SpinKitPulse(
-        color: Toolkit.primaryAppColorDark,
+        color: Palette.dark,
         size: 45,
         duration: Duration(milliseconds: 850),
       )));
@@ -72,7 +73,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               child: Text("No ${Toolkit.competitionsText.toLowerCase()} found!",
                   style: TextStyle(
                       fontSize: 18,
-                      color: Toolkit.primaryAppColorDark,
+                      color: Palette.dark,
                       fontWeight: FontWeight.w300))));
     return null;
   }
@@ -83,8 +84,16 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// data for the entry in one string.
   static List<DataBaseEntry> _filterElements(
       List<DataBaseEntry> parsedElements, String _searchText) {
-    List<DataBaseEntry> filteredElements = new List();
+    List<DataBaseEntry> filteredElements = List();
     if (_searchText.isNotEmpty) {
+      parsedElements.forEach((DataBaseEntry currentEntry) {
+        String entryString = currentEntry.values.toLowerCase();
+        String query = _searchText.toLowerCase();
+        if (entryString.contains(query)) {
+          filteredElements.add(currentEntry);
+        }
+      });
+/* 
       for (int i = 0; i < parsedElements.length; i++) {
         DataBaseEntry currentEntry = parsedElements[i];
         String entryString = currentEntry.values.toLowerCase();
@@ -92,7 +101,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         if (entryString.contains(query)) {
           filteredElements.add(parsedElements[i]);
         }
-      }
+      } */
       return filteredElements;
     }
     return parsedElements;
@@ -101,11 +110,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// Transform the strings found in the database into
   /// a [DateTime] object.
   /// TODO: update method to parse the dates created by [create_competition.dart].
-  static DateTime _parseDate(String date) {
-    return DateTime.parse(
-        date.toString().split('/').reversed.join().replaceAll('/', '-') +
-            ' 00:00:00');
-  }
+  static DateTime _parseDate(String date) => DateTime.parse(
+      date.toString().split('/').reversed.join().replaceAll('/', '-') +
+          ' 00:00:00');
 
   /// Sorts elements into either current or archived lists.
   static List<List<DataBaseEntry>> _sortElements(
@@ -134,7 +141,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// competition, create and delete competitions.
   static bool _isAdmin(BuildContext context) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin;
+    /* TODO: final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin; */
+    final bool isAdmin = arguments.isAdmin ?? false;
     return isAdmin;
   }
 
@@ -146,85 +154,81 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   static bool _isManager(BuildContext context, DataBaseEntry currentEntry) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isManager =
-        arguments.competitionAccess == currentEntry.id.toString()
-            ? true
-            : false;
+        arguments.competitionAccess == currentEntry.id.toString();
     return isManager;
   }
 
-  static Widget _tileBuilder(BuildContext context, DataBaseEntry currentEntry) {
-    return BaseListTile(
-        leadingChild: Toolkit.getLeadingText(
-            "${currentEntry.score.howth} - ${currentEntry.score.opposition}"),
-        trailingIconData: _isAdmin(context) ? null : Icons.keyboard_arrow_right,
-        subtitleMaxLines: 1,
-        subtitleText: currentEntry.date,
-        titleText: currentEntry.title);
-  }
+  static Widget _tileBuilder(
+          BuildContext context, DataBaseEntry currentEntry) =>
+      BaseListTile(
+          leadingChild: Toolkit.getLeadingText(
+              "${currentEntry.score.howth} - ${currentEntry.score.opposition}"),
+          trailingIconData:
+              _isAdmin(context) ? null : Icons.keyboard_arrow_right,
+          subtitleMaxLines: 1,
+          subtitleText: currentEntry.date,
+          titleText: currentEntry.title);
 
-  Widget _buildElementsList(String _searchText, bool isCurrentTab) {
-    return OpacityChangeWidget(
-        target: StreamBuilder<QuerySnapshot>(
-            stream: Toolkit.getStream(),
-            builder: (context, snapshot) {
-              if (_checkSnapshot(snapshot) != null) {
-                return _checkSnapshot(snapshot);
-              }
+  Widget _buildElementsList(String _searchText, bool isCurrentTab) =>
+      OpacityChangeWidget(
+          target: StreamBuilder<QuerySnapshot>(
+              stream: Toolkit.stream,
+              builder: (context, snapshot) {
+                if (_checkSnapshot(snapshot) != null)
+                  return _checkSnapshot(snapshot);
 
-              DocumentSnapshot document = snapshot.data.documents[0];
+                DocumentSnapshot document = snapshot.data.documents[0];
 
-              List<DataBaseEntry> parsedElements =
-                  Toolkit.getDataBaseEntries(document);
+                List<DataBaseEntry> parsedElements =
+                    Toolkit.getDataBaseEntries(document);
 
-              List<DataBaseEntry> filteredElements =
-                  _filterElements(parsedElements, _searchText);
+                List<DataBaseEntry> filteredElements =
+                    _filterElements(parsedElements, _searchText);
 
-              if (_checkFilteredElements(filteredElements) != null) {
-                return _checkFilteredElements(filteredElements);
-              }
+                if (_checkFilteredElements(filteredElements) != null)
+                  return _checkFilteredElements(filteredElements);
 
-              /// At the 0th index of [sortedElements] will be the currentElements,
-              /// and at the 1st index will be the archivedElements.
-              List<List<DataBaseEntry>> sortedElements =
-                  _sortElements(filteredElements);
+                /// At the 0th index of [sortedElements] will be the currentElements,
+                /// and at the 1st index will be the archivedElements.
+                List<List<DataBaseEntry>> sortedElements =
+                    _sortElements(filteredElements);
 
-              List<DataBaseEntry> activeElements =
-                  isCurrentTab ? sortedElements[0] : sortedElements[1];
+                List<DataBaseEntry> activeElements =
+                    isCurrentTab ? sortedElements[0] : sortedElements[1];
 
-              return ListView.builder(
-                itemCount: activeElements.length,
-                itemBuilder: (BuildContext context, int index) {
-                  DataBaseEntry currentEntry = activeElements[index];
-                  Function toCompetition = () {
-                    final preferences = SharedPreferences.getInstance();
-                    preferences.then((SharedPreferences preferences) {
-                      final bool hasAccess = _isAdmin(context) ||
-                          _isManager(context, currentEntry);
+                return ListView.builder(
+                  itemCount: activeElements.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DataBaseEntry currentEntry = activeElements[index];
+                    Function toCompetition = () {
+                      final preferences = SharedPreferences.getInstance();
+                      preferences.then((SharedPreferences preferences) {
+                        final bool hasAccess = _isAdmin(context) ||
+                            _isManager(context, currentEntry);
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SpecificCompetitionPage(
-                                  currentEntry, hasAccess)));
-                    });
-                  };
-                  return ComplexCard(
-                      child: _tileBuilder(context, currentEntry),
-                      onTap: toCompetition,
-                      iconButton: _isAdmin(context)
-                          ? IconButton(
-                              icon: Icon(Icons.remove_circle_outline,
-                                  color: Toolkit.primaryAppColorDark),
-                              onPressed: () {
-                                _showAlertDialog(
-                                    context, activeElements[index], snapshot);
-                              },
-                            )
-                          : null);
-                },
-              );
-            }));
-  }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SpecificCompetitionPage(
+                                    currentEntry, hasAccess)));
+                      });
+                    };
+                    return ComplexCard(
+                        child: _tileBuilder(context, currentEntry),
+                        onTap: toCompetition,
+                        iconButton: _isAdmin(context)
+                            ? IconButton(
+                                icon: Icon(Icons.remove_circle_outline,
+                                    color: Palette.dark),
+                                onPressed: () {
+                                  _showAlertDialog(
+                                      context, activeElements[index], snapshot);
+                                },
+                              )
+                            : null);
+                  },
+                );
+              }));
 
   _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -236,15 +240,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       actions: <Widget>[
         FlatButton(
           child: Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: Navigator.of(context).pop,
         ),
         FlatButton(
           child: Text("Continue"),
           onPressed: () {
             Navigator.of(context).pop();
-
             _deleteCompetition(snapshot, currentEntry);
           },
         )
@@ -252,19 +253,13 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     );
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return alertDialog;
-      },
+      builder: (BuildContext context) => alertDialog,
     );
   }
 
   bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
     DataBaseEntry parsedEntry = DataBaseEntry.fromJson(rawEntry);
-
-    if (currentEntry.values == parsedEntry.values) {
-      return true;
-    }
-    return false;
+    return currentEntry.values == parsedEntry.values;
   }
 
   void _addCompetition() {
@@ -275,7 +270,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   void _deleteCompetition(
       AsyncSnapshot<QuerySnapshot> snapshot, DataBaseEntry currentEntry) {
     DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
-    var dataBaseEntries = new List<dynamic>.from(documentSnapshot.data['data']);
+    var dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
 
     dataBaseEntries
         .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));
@@ -298,7 +293,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Toolkit.primaryAppColor,
+      backgroundColor: Palette.light,
     );
   }
 }

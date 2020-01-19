@@ -6,7 +6,7 @@ class OpacityChangeWidget extends StatefulWidget {
 
   OpacityChangeWidget({@required this.target, this.flashing = false});
   @override
-  State<StatefulWidget> createState() => new _OpacityChangeWidgetState();
+  State<StatefulWidget> createState() => _OpacityChangeWidgetState();
 }
 
 class _OpacityChangeWidgetState extends State<OpacityChangeWidget>

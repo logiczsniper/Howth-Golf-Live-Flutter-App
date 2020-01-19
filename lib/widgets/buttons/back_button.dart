@@ -11,11 +11,9 @@ class ParameterBackButton extends StatelessWidget {
   final String destination;
   ParameterBackButton(this.destination);
 
-  Widget build(BuildContext context) {
-    return IconButton(
-        icon: const BackButtonIcon(),
-        onPressed: () {
-          Toolkit.navigateTo(context, destination);
-        });
-  }
+  Widget build(BuildContext context) => IconButton(
+      icon: const BackButtonIcon(),
+      onPressed: () {
+        Toolkit.navigateTo(context, destination);
+      });
 }

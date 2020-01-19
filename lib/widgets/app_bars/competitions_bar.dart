@@ -1,6 +1,7 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bars/stateful_app_bar.dart';
+import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
@@ -12,8 +13,7 @@ class CompetitionsPageAppBar extends StatefulWidget
       : preferredSize = Size.fromHeight(56.0);
 
   @override
-  _CompetitionsPageAppBarState createState() =>
-      new _CompetitionsPageAppBarState();
+  _CompetitionsPageAppBarState createState() => _CompetitionsPageAppBarState();
 
   @override
   final Size preferredSize;
@@ -25,8 +25,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
   void _searchPressed() {
     setState(() {
-      appBarTitle =
-          actionPressed(appBarTitle, titleBar, inputBar, context, _filter);
+      appBarTitle = actionPressed(appBarTitle, context, _filter);
     });
   }
 
@@ -45,24 +44,20 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     });
   }
 
-  AnimatedCrossFade _getIconData() {
-    return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 450),
-      firstChild: Icon(Icons.search),
-      secondChild: Icon(Icons.close),
-      crossFadeState: appBarTitle != inputBar
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
-    );
-  }
+  AnimatedCrossFade get _iconData => AnimatedCrossFade(
+        duration: const Duration(milliseconds: 450),
+        firstChild: Icon(Icons.search),
+        secondChild: Icon(Icons.close),
+        crossFadeState: appBarTitle != inputBar
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+      );
 
-  static BubbleTabIndicator _getTabIndicator() {
-    return BubbleTabIndicator(
-        indicatorColor: Toolkit.accentAppColor,
-        tabBarIndicatorSize: TabBarIndicatorSize.tab,
-        indicatorHeight: 25.0,
-        insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 26.0));
-  }
+  static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
+      indicatorColor: Palette.maroon,
+      tabBarIndicatorSize: TabBarIndicatorSize.tab,
+      indicatorHeight: 25.0,
+      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 26.0));
 
   @override
   Widget build(BuildContext context) {
@@ -77,23 +72,23 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                 floating: true,
                 pinned: false,
                 snap: true,
-                backgroundColor: Toolkit.primaryAppColor,
-                iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
+                backgroundColor: Palette.light,
+                iconTheme: IconThemeData(color: Palette.dark),
                 leading: IconButton(
                     icon: Icon(Icons.help_outline),
                     tooltip: 'Tap for help!',
                     onPressed: () =>
-                        Toolkit.navigateTo(context, Toolkit.appHelpText)),
+                        Toolkit.navigateTo(context, Toolkit.helpText)),
                 actions: <Widget>[
                   IconButton(
-                    icon: _getIconData(),
+                    icon: _iconData,
                     tooltip: 'Tap to search!',
                     onPressed: _searchPressed,
                   )
                 ],
                 bottom: TabBar(
-                    labelColor: Toolkit.primaryAppColorDark,
-                    indicator: _getTabIndicator(),
+                    labelColor: Palette.dark,
+                    indicator: _tabIndicator,
                     tabs: <Widget>[
                       Tab(text: Toolkit.currentText),
                       Tab(text: Toolkit.archivedText)

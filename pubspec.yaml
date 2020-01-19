@@ -18,7 +18,7 @@ dependencies:
   shared_preferences: ^0.5.3+1
   test: ^1.6.1
   uuid: 2.0.4
-  datetime_picker_formfield: 0.4.3
+  datetime_picker_formfield: 1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +27,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/static/home_image.png
-    - lib/static/newIcon.png
+    - lib/graphics/

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/opacity_change.dart';
+import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,12 +11,10 @@ class HomePage extends StatelessWidget {
     preferences.clear();
   }
 
-  static Text _getTapText() {
-    return Text(
-      'Tap anywhere to begin!',
-      style: TextStyle(fontSize: 14, color: Toolkit.primaryAppColorDark),
-    );
-  }
+  static Text get _tapText => Text(
+        'Tap anywhere to begin!',
+        style: TextStyle(fontSize: 14, color: Palette.dark),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +28,15 @@ class HomePage extends StatelessWidget {
               child: Column(
             children: <Widget>[
               Padding(padding: EdgeInsetsDirectional.only(top: 90)),
-              new Image.asset('lib/static/newIcon.png'),
+              Image.asset(Toolkit.iconPath),
               Padding(padding: EdgeInsetsDirectional.only(top: 200)),
               OpacityChangeWidget(
-                target: _getTapText(),
+                target: _tapText,
                 flashing: true,
               ),
             ],
           )),
-          backgroundColor: Toolkit.primaryAppColor,
+          backgroundColor: Palette.light,
         ));
   }
 }

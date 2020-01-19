@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/static/palette.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:howth_golf_live/custom_elements/form_field.dart';
+import 'package:howth_golf_live/widgets/form_field.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreateCompetition extends StatefulWidget {
@@ -34,13 +36,13 @@ class CreateCompetitionState extends State<CreateCompetition> {
 
   Form formBuilder() {
     DecoratedTextField titleField =
-        DecoratedTextField(_capitalize(Toolkit.title));
+        DecoratedTextField(_capitalize(Fields.title));
     DecoratedTextField locationField =
-        DecoratedTextField(_capitalize(Toolkit.location));
+        DecoratedTextField(_capitalize(Fields.location));
     DecoratedTextField oppositionField =
-        DecoratedTextField(_capitalize(Toolkit.opposition));
+        DecoratedTextField(_capitalize(Fields.opposition));
     DecoratedDateTimeField dateField = DecoratedDateTimeField(
-        "${_capitalize(Toolkit.date)} & ${_capitalize(Toolkit.time)}");
+        "${_capitalize(Fields.date)} & ${_capitalize(Fields.time)}");
 
     return Form(
         child: Padding(
@@ -61,23 +63,23 @@ class CreateCompetitionState extends State<CreateCompetition> {
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(
-              color: Toolkit.primaryAppColorDark,
+              color: Palette.dark,
             )),
-        backgroundColor: Toolkit.primaryAppColor,
-        iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
+        backgroundColor: Palette.light,
+        iconTheme: IconThemeData(color: Palette.dark),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.home),
             tooltip: 'Tap to return to home!',
             onPressed: () =>
                 Toolkit.navigateTo(context, Toolkit.competitionsText),
-            color: Toolkit.primaryAppColorDark,
+            color: Palette.dark,
           )
         ],
         elevation: 0.0,
       ),
       body: formBuilder(),
-      backgroundColor: Toolkit.primaryAppColor,
+      backgroundColor: Palette.light,
     );
   }
 }

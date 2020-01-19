@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/custom_elements/app_bars/stateful_app_bar.dart';
-import 'package:howth_golf_live/custom_elements/buttons/back_button.dart';
+import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
+import 'package:howth_golf_live/widgets/buttons/back_button.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
@@ -12,14 +13,14 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
       : preferredSize = Size.fromHeight(56.0);
 
   @override
-  CodeFieldBarState createState() => new CodeFieldBarState();
+  CodeFieldBarState createState() => CodeFieldBarState();
 
   @override
   final Size preferredSize;
 }
 
 class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
-  final TextEditingController _filter = new TextEditingController();
+  final TextEditingController _filter = TextEditingController();
   bool isVerified;
 
   void _codePressed() {
@@ -27,8 +28,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
 
       setState(() {
-        appBarTitle =
-            actionPressed(appBarTitle, titleBar, inputBar, context, _filter);
+        appBarTitle = actionPressed(appBarTitle, context, _filter);
         if (!isVerified && isCodeCorrect) {
           isVerified = isCodeCorrect;
         }
@@ -48,7 +48,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   @override
   void initState() {
     super.initState();
-    titleBar = buildTitleBar(widget.title);
+
     inputBar = buildInputBar(
         TextInputType.number, true, 'Enter code here...', _filter);
     isVerified = widget.isInitVerified;
@@ -68,9 +68,9 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       centerTitle: true,
       leading: ParameterBackButton(Toolkit.competitionsText),
       actions: <Widget>[_getIconButton(isVerified)],
-      backgroundColor: Toolkit.primaryAppColor,
+      backgroundColor: Palette.light,
       elevation: 0.0,
-      iconTheme: IconThemeData(color: Toolkit.primaryAppColorDark),
+      iconTheme: IconThemeData(color: Palette.dark),
     );
   }
 }

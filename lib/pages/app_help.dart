@@ -55,8 +55,6 @@ class HelpPageState extends State<HelpPage> {
   Widget build(BuildContext context) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isInitVerified = arguments.isAdmin ?? false;
-
-    /// TODO: remove if this works, change others: arguments.isAdmin == null ? false : arguments.isAdmin;
     return Scaffold(
       appBar: CodeFieldBar(Toolkit.helpText, _applyPrivileges, isInitVerified),
       body: OpacityChangeWidget(

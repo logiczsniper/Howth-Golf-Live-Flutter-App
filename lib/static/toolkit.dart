@@ -108,6 +108,8 @@ class Toolkit {
       TextStyle(fontSize: 13, color: Palette.dark);
   static const TextStyle hintTextStyle =
       TextStyle(fontSize: 16, color: Palette.dark);
+  static const TextStyle dialogTextStyle =
+      TextStyle(fontSize: 16, color: Palette.maroon);
   static const TextStyle leadingChildTextStyle =
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
 }

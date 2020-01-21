@@ -38,7 +38,7 @@ class DataBaseEntry {
         Fields.opposition: opposition,
         Fields.title: title,
         Fields.holes: holes,
-        Fields.score: score
+        Fields.score: score.toJson
       };
 
   DataBaseEntry(
@@ -61,6 +61,10 @@ class Score {
       : howth = map[Fields.howth],
         opposition = map[Fields.opposition];
 
+  static Score get fresh => Score(howth: "0", opposition: "0");
+
+  Map get toJson => {Fields.howth: howth, Fields.opposition: opposition};
+
   Score({this.howth, this.opposition});
 }
 
@@ -75,10 +79,16 @@ class Hole {
 
   /// Convert a map into a [Hole] object.
   Hole.fromMap(Map map)
-      : holeNumber = map['hole_number'],
-        holeScore = map['hole_score'],
-        players = List<String>.generate(map['players'].length,
-            (int index) => map['players'][index].toString());
+      : holeNumber = map[Fields.holeNumber],
+        holeScore = map[Fields.holeScore],
+        players = List<String>.generate(map[Fields.players].length,
+            (int index) => map[Fields.players][index].toString());
+
+  Map get toJson => {
+        Fields.holeNumber: holeNumber,
+        Fields.holeScore: holeScore,
+        Fields.players: players
+      };
 
   Hole({this.holeNumber, this.holeScore, this.players});
 }

@@ -20,7 +20,6 @@ class ComplexCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget topWidget = iconButton ?? Container();
-    /* TODO: could be wrong final topWidget = iconButton == null ? Container() : iconButton; */
     return Stack(children: <Widget>[
       Toolkit.getCard(child),
       Positioned.fill(

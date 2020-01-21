@@ -48,7 +48,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   @override
   void initState() {
     super.initState();
-
+    titleBar = buildTitleBar(widget.title);
     inputBar = buildInputBar(
         TextInputType.number, true, 'Enter code here...', _filter);
     isVerified = widget.isInitVerified;

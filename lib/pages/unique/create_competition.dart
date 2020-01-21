@@ -1,62 +1,101 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/fields.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:uuid/uuid.dart';
-
-import 'package:howth_golf_live/widgets/form_field.dart';
+import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
+import 'package:howth_golf_live/widgets/input_fields/text.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreateCompetition extends StatefulWidget {
+  final AsyncSnapshot<QuerySnapshot> snapshot;
+
+  CreateCompetition(this.snapshot);
+
   @override
   CreateCompetitionState createState() => CreateCompetitionState();
 }
 
 class CreateCompetitionState extends State<CreateCompetition> {
-  static String _capitalize(String input) =>
-      input[0].toUpperCase() + input.substring(1);
+  final _formKey = GlobalKey<FormState>();
+  DecoratedTextField titleField = DecoratedTextField(Fields.title);
+  DecoratedTextField locationField = DecoratedTextField(Fields.location);
+  DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
+  DecoratedDateTimeField dateTimeField =
+      DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
+  Spacer spacer = Spacer(
+    flex: 1,
+  );
+  Spacer spacerLarge = Spacer(
+    flex: 4,
+  );
 
   /// Generate the next 6-digit ID.
-  ///
-  /// Uses [Uuid] to generate a long random id. While the output
-  /// id is less than 7 characters, it will continue to add the numeric
-  /// characters from the [v4] uuid to the output id. Returns [null]
-  /// in the case that the id could not be parsed at the end.
-  static int _generateId() {
-    var uuid = Uuid();
-    var fullId = uuid.v4();
-    List idCharacters = fullId.toString().split('');
-    String id = '';
-    for (String character in idCharacters) {
-      if (id.length < 7 && character is int) {
-        id += character.toString();
+  int get _id {
+    String code = '';
+    final Random randomIntGenerator = Random();
+
+    for (var i = 0; i < 6; i++) {
+      int nextInt = randomIntGenerator.nextInt(10);
+      if (nextInt == 0 && code == '') {
+        i -= 1;
+        continue;
       }
+      code += nextInt.toString();
     }
-    return int.tryParse(id);
+    return int.parse(code);
   }
 
-  Form formBuilder() {
-    DecoratedTextField titleField =
-        DecoratedTextField(_capitalize(Fields.title));
-    DecoratedTextField locationField =
-        DecoratedTextField(_capitalize(Fields.location));
-    DecoratedTextField oppositionField =
-        DecoratedTextField(_capitalize(Fields.opposition));
-    DecoratedDateTimeField dateField = DecoratedDateTimeField(
-        "${_capitalize(Fields.date)} & ${_capitalize(Fields.time)}");
+  Form get _form => Form(
+      key: _formKey,
+      child: Padding(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              titleField,
+              spacer,
+              locationField,
+              spacer,
+              oppositionField,
+              spacer,
+              dateTimeField,
+              spacerLarge
+            ],
+          ),
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));
 
-    return Form(
-        child: Padding(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [titleField, locationField, oppositionField, dateField],
-            ),
-            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));
+  String get _date => dateTimeField.controller.value.text.split(" ")[0];
+  String get _time => dateTimeField.controller.value.text.split(" ")[1];
+
+  void _addCompetition() {
+    /// If the form inputs have been validated, add to competitions.
+    if (_formKey.currentState.validate()) {
+      DataBaseEntry newEntry = DataBaseEntry(
+          id: _id,
+          title: titleField.controller.value.text,
+          location: locationField.controller.value.text,
+          opposition: oppositionField.controller.value.text,
+          holes: [],
+          score: Score.fresh,
+          date: _date,
+          time: _time);
+
+      DocumentSnapshot documentSnapshot =
+          widget.snapshot.data.documents.elementAt(0);
+      var dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
+      dataBaseEntries.add(newEntry.toJson);
+      Map<String, dynamic> newData = {'data': dataBaseEntries};
+      documentSnapshot.reference.updateData(newData);
+
+      Toolkit.navigateTo(context, Toolkit.competitionsText);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: create app bar which makes sense- home button not needed.
       appBar: AppBar(
         centerTitle: true,
         title: Text('New Competition',
@@ -69,16 +108,15 @@ class CreateCompetitionState extends State<CreateCompetition> {
         iconTheme: IconThemeData(color: Palette.dark),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.home),
-            tooltip: 'Tap to return to home!',
-            onPressed: () =>
-                Toolkit.navigateTo(context, Toolkit.competitionsText),
+            icon: Icon(Icons.check),
+            tooltip: 'Tap to submit!',
+            onPressed: _addCompetition,
             color: Palette.dark,
           )
         ],
         elevation: 0.0,
       ),
-      body: formBuilder(),
+      body: _form,
       backgroundColor: Palette.light,
     );
   }

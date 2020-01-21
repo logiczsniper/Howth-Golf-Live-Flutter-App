@@ -23,6 +23,9 @@ class CompetitionsPage extends StatefulWidget {
 }
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
+  AsyncSnapshot<QuerySnapshot> _snapshot;
+  Widget tabs;
+
   /// Handles special situations with [snapshot].
   ///
   /// If an error occurs, returns a [Center] widget to notify the user
@@ -93,15 +96,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           filteredElements.add(currentEntry);
         }
       });
-/* 
-      for (int i = 0; i < parsedElements.length; i++) {
-        DataBaseEntry currentEntry = parsedElements[i];
-        String entryString = currentEntry.values.toLowerCase();
-        String query = _searchText.toLowerCase();
-        if (entryString.contains(query)) {
-          filteredElements.add(parsedElements[i]);
-        }
-      } */
       return filteredElements;
     }
     return parsedElements;
@@ -109,10 +103,10 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   /// Transform the strings found in the database into
   /// a [DateTime] object.
-  /// TODO: update method to parse the dates created by [create_competition.dart].
-  static DateTime _parseDate(String date) => DateTime.parse(
-      date.toString().split('/').reversed.join().replaceAll('/', '-') +
-          ' 00:00:00');
+  ///
+  /// The format provided by field: 'YYYY-DD-MM HH:MM'
+  static DateTime _parseDate(String date, String time) =>
+      DateTime.parse("$date $time");
 
   /// Sorts elements into either current or archived lists.
   static List<List<DataBaseEntry>> _sortElements(
@@ -123,7 +117,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     List<DataBaseEntry> currentElements = [];
     List<DataBaseEntry> archivedElements = [];
     for (DataBaseEntry filteredElement in filteredElements) {
-      DateTime competitionDate = _parseDate(filteredElement.date);
+      DateTime competitionDate =
+          _parseDate(filteredElement.date, filteredElement.time);
       int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
       bool inPast = competitionDate.isBefore(DateTime.now());
       if (daysFromNow >= 8 && inPast) {
@@ -141,7 +136,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// competition, create and delete competitions.
   static bool _isAdmin(BuildContext context) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    /* TODO: final bool isAdmin = arguments.isAdmin == null ? false : arguments.isAdmin; */
     final bool isAdmin = arguments.isAdmin ?? false;
     return isAdmin;
   }
@@ -176,6 +170,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               builder: (context, snapshot) {
                 if (_checkSnapshot(snapshot) != null)
                   return _checkSnapshot(snapshot);
+
+                _snapshot = snapshot;
 
                 DocumentSnapshot document = snapshot.data.documents[0];
 
@@ -239,14 +235,14 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       actions: <Widget>[
         FlatButton(
-          child: Text("Cancel"),
+          child: Text("Cancel", style: Toolkit.dialogTextStyle),
           onPressed: Navigator.of(context).pop,
         ),
         FlatButton(
-          child: Text("Continue"),
+          child: Text("Continue", style: Toolkit.dialogTextStyle),
           onPressed: () {
             Navigator.of(context).pop();
-            _deleteCompetition(snapshot, currentEntry);
+            _deleteCompetition(currentEntry);
           },
         )
       ],
@@ -263,13 +259,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   void _addCompetition() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateCompetition()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
   }
 
-  void _deleteCompetition(
-      AsyncSnapshot<QuerySnapshot> snapshot, DataBaseEntry currentEntry) {
-    DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
+  void _deleteCompetition(DataBaseEntry currentEntry) {
+    DocumentSnapshot documentSnapshot = _snapshot.data.documents.elementAt(0);
     var dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
 
     dataBaseEntries
@@ -280,16 +275,20 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    tabs = CompetitionsPageAppBar(_buildElementsList,
+        title: Toolkit.competitionsText);
+  }
+
+  @override
   Widget build(BuildContext context) {
     MyFloatingActionButton floatingActionButton = _isAdmin(context)
         ? MyFloatingActionButton(
             onPressed: _addCompetition, text: 'Add a Competition')
         : null;
     return Scaffold(
-      body: DefaultTabController(
-          length: 2,
-          child: CompetitionsPageAppBar(_buildElementsList,
-              title: Toolkit.competitionsText)),
+      body: DefaultTabController(length: 2, child: tabs),
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

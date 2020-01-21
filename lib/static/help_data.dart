@@ -97,14 +97,9 @@ class HelpData {
   ];
 
   /// Converting the hidden data (above) into a useful list of AppHelpEntries. These are constant.
-  static List<AppHelpEntry> entries = _entryData
-      .map((Map<String, dynamic> entry) => AppHelpEntry.fromMap(entry));
-
-  /// TODO: if this works, remove this and change all
-  ///  list generate methods (particularly in objects.dart)
-/*   static List<AppHelpEntry> appHelpEntries = List<AppHelpEntry>.generate(
-      _appHelpEntryData.length,
-      (int index) => AppHelpEntry.fromMap(_appHelpEntryData[index])); */
+  static List<AppHelpEntry> entries = List<AppHelpEntry>.generate(
+      _entryData.length,
+      (int index) => AppHelpEntry.fromMap(_entryData[index]));
 }
 
 class AppHelpEntry {

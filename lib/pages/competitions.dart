@@ -24,7 +24,6 @@ class CompetitionsPage extends StatefulWidget {
 
 class _CompetitionsPageState extends State<CompetitionsPage> {
   AsyncSnapshot<QuerySnapshot> _snapshot;
-  Widget tabs;
 
   /// Handles special situations with [snapshot].
   ///
@@ -171,7 +170,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 if (_checkSnapshot(snapshot) != null)
                   return _checkSnapshot(snapshot);
 
-                _snapshot = snapshot;
+                //_snapshot = snapshot;
 
                 DocumentSnapshot document = snapshot.data.documents[0];
 
@@ -275,20 +274,16 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    tabs = CompetitionsPageAppBar(_buildElementsList,
-        title: Toolkit.competitionsText);
-  }
-
-  @override
   Widget build(BuildContext context) {
     MyFloatingActionButton floatingActionButton = _isAdmin(context)
         ? MyFloatingActionButton(
             onPressed: _addCompetition, text: 'Add a Competition')
         : null;
     return Scaffold(
-      body: DefaultTabController(length: 2, child: tabs),
+      body: DefaultTabController(
+          length: 2,
+          child: CompetitionsPageAppBar(_buildElementsList,
+              title: Toolkit.competitionsText)),
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

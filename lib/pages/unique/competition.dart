@@ -43,7 +43,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// The [trailingIcon] depends on [holeScore] - whether or not Howth's team
   /// is 'up', 'under' or tied of the [currentHole].
   static IconData _getTrailingIcon(Hole currentHole) {
-    String score = currentHole.holeScore.toLowerCase();
+    String score = currentHole.holeScore.toString().toLowerCase();
     if (score.contains('up')) {
       return Icons.thumb_up;
     } else if (score.contains('under')) {
@@ -71,7 +71,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
           trailingIconData: trailingIcon,
           subtitleMaxLines: 1,
           subtitleText: _formatPlayerList(currentHole.players),
-          titleText: currentHole.holeScore,
+          titleText: currentHole.holeScore.toString(),
         )));
   }
 

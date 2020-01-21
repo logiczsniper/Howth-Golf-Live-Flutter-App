@@ -13,6 +13,6 @@ class Fields {
   static final String holes = 'holes';
   static final String score = 'score';
   static final String holeNumber = 'hole_number';
-  static final String holeScore = 'holeScore';
+  static final String holeScore = 'hole_score';
   static final String players = 'players';
 }

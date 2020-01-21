@@ -37,7 +37,8 @@ class DataBaseEntry {
         Fields.time: time,
         Fields.opposition: opposition,
         Fields.title: title,
-        Fields.holes: holes,
+        Fields.holes: List<Map>.generate(
+            holes.length, (int index) => holes[index].toJson),
         Fields.score: score.toJson
       };
 

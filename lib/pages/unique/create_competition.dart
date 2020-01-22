@@ -37,7 +37,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
     String code = '';
     final Random randomIntGenerator = Random();
 
-    for (var i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
       int nextInt = randomIntGenerator.nextInt(10);
       if (nextInt == 0 && code == '') {
         i -= 1;
@@ -84,7 +84,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
 
       DocumentSnapshot documentSnapshot =
           widget.snapshot.data.documents.elementAt(0);
-      var dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
+      List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
       dataBaseEntries.add(newEntry.toJson);
       Map<String, dynamic> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData);

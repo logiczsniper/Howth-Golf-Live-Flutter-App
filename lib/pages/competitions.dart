@@ -170,7 +170,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 if (_checkSnapshot(snapshot) != null)
                   return _checkSnapshot(snapshot);
 
-                //_snapshot = snapshot;
+                _snapshot = snapshot;
 
                 DocumentSnapshot document = snapshot.data.documents[0];
 
@@ -264,7 +264,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   void _deleteCompetition(DataBaseEntry currentEntry) {
     DocumentSnapshot documentSnapshot = _snapshot.data.documents.elementAt(0);
-    var dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
+    List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
 
     dataBaseEntries
         .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));

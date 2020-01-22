@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/unique/create_hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
+import 'package:howth_golf_live/static/fields.dart';
 import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,9 +45,11 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
   /// The [trailingIcon] depends on [holeScore] - whether or not Howth's team
   /// is 'up', 'under' or tied of the [currentHole].
-  static IconData _getTrailingIcon(Hole currentHole) {
+  IconData _getTrailingIcon(Hole currentHole) {
     String score = currentHole.holeScore.toString().toLowerCase();
-    if (score.contains('up')) {
+    if (widget.hasAccess) {
+      return Icons.remove_circle_outline;
+    } else if (score.contains('up')) {
       return Icons.thumb_up;
     } else if (score.contains('under')) {
       return Icons.thumb_down;
@@ -64,16 +68,25 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     Hole currentHole = currentData.holes[index - 1];
     IconData trailingIcon = _getTrailingIcon(currentHole);
 
-    return Toolkit.getCard(Container(
-        decoration: Toolkit.roundedRectBoxDecoration,
-        child: BaseListTile(
-          leadingChild: Toolkit.getLeadingColumn(
-              "HOLE", currentHole.holeNumber.toString()),
-          trailingIconData: trailingIcon,
-          subtitleMaxLines: 1,
-          subtitleText: _formatPlayerList(currentHole.players),
-          titleText: currentHole.holeScore.toString(),
-        )));
+    return ComplexCard(
+      child: BaseListTile(
+        leadingChild:
+            Toolkit.getLeadingColumn("HOLE", currentHole.holeNumber.toString()),
+        trailingIconData: null,
+        subtitleMaxLines: 1,
+        subtitleText: _formatPlayerList(currentHole.players),
+        titleText: currentHole.holeScore.toString(),
+      ),
+      onTap: () {},
+      iconButton: widget.hasAccess
+          ? IconButton(
+              icon: Icon(Icons.remove_circle_outline, color: Palette.dark),
+              onPressed: () {
+                _deleteHole(index);
+              },
+            )
+          : null,
+    );
   }
 
   /// Gets all of the database entries, parses them, iterates through each [DataBaseEntry],
@@ -138,6 +151,49 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => CreateHole(snapshot, currentId)));
+      });
+    });
+  }
+
+  bool _checkHole(dynamic hole, Map data) {
+    List splitHole = hole.toString().split("");
+    List splitData = data.toString().split("");
+    splitHole.sort();
+    splitData.sort();
+    print("$splitHole $splitData");
+    return splitHole == splitData;
+  }
+
+  /// Deletes the holes at the given [index] within the list of holes
+  /// for this competition.
+  void _deleteHole(int index) {
+    final int currentId = currentData.id;
+    Future<QuerySnapshot> newData = Toolkit.stream.first;
+
+    setState(() {
+      newData.then((QuerySnapshot snapshot) {
+        DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
+        List dataBaseEntries =
+            List<dynamic>.from(documentSnapshot.data['data']);
+
+        List newHoles = List();
+
+        for (Map entry in dataBaseEntries) {
+          if (entry[Fields.id] == currentId) {
+            /// This is the competition which contains the hole to be removed.
+            for (int i = 0; i < entry[Fields.holes].length; i++) {
+              var hole = entry[Fields.holes][i];
+              if (i != index - 1) newHoles.add(hole);
+            }
+            entry[Fields.holes] = newHoles;
+            break;
+          }
+        }
+
+        Map<String, dynamic> newData = {'data': dataBaseEntries};
+        documentSnapshot.reference.updateData(newData);
+
+        Toolkit.navigateTo(context, Toolkit.competitionsText);
       });
     });
   }

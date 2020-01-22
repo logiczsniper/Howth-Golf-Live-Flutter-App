@@ -4,7 +4,6 @@ import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/fields.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreateHole extends StatefulWidget {
   final QuerySnapshot snapshot;
@@ -80,11 +79,10 @@ class CreateHoleState extends State<CreateHole> {
         }
       }
 
-      /// TODO: shallow type competition deletion as well as all other 'var'
       Map<String, List> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData);
 
-      Toolkit.navigateTo(context, Toolkit.competitionsText);
+      Navigator.of(context).pop();
     }
   }
 

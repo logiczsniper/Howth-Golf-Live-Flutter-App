@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/pages/unique/create_hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
@@ -127,8 +128,19 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         onRefresh: _refreshList,
       );
 
-  /// TODO: build out method
-  void addHole() {}
+  void addHole() {
+    final int currentId = currentData.id;
+    Future<QuerySnapshot> newData = Toolkit.stream.first;
+
+    setState(() {
+      newData.then((QuerySnapshot snapshot) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CreateHole(snapshot, currentId)));
+      });
+    });
+  }
 
   @override
   initState() {

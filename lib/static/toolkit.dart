@@ -74,10 +74,7 @@ class Toolkit {
     /// The [entries] in my [Firestore] instance.
     List<dynamic> rawElements = document.data.entries.toList()[0].value;
 
-    for (var el in rawElements) print(el);
-
     /// Those same [entries] but in a structured format- [DataBaseEntry].
-    /// TODO: fix here hole score is null
     List<DataBaseEntry> parsedElements = List<DataBaseEntry>.generate(
         rawElements.length,
         (int index) => DataBaseEntry.fromJson(rawElements[index]));

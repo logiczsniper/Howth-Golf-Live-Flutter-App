@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
+import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 
-import 'package:howth_golf_live/pages/unique/create_competition.dart';
+import 'package:howth_golf_live/pages/creation/create_competition.dart';
 import 'package:howth_golf_live/pages/unique/competition.dart';
 
 import 'package:howth_golf_live/static/toolkit.dart';
@@ -241,7 +242,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           child: Text("Continue", style: Toolkit.dialogTextStyle),
           onPressed: () {
             Navigator.of(context).pop();
-            _deleteCompetition(currentEntry);
+            DataBaseInteraction.deleteCompetition(currentEntry, snapshot);
           },
         )
       ],
@@ -252,25 +253,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     );
   }
 
-  bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
-    DataBaseEntry parsedEntry = DataBaseEntry.fromJson(rawEntry);
-    return currentEntry.values == parsedEntry.values;
-  }
-
   void _addCompetition() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
-  }
-
-  void _deleteCompetition(DataBaseEntry currentEntry) {
-    DocumentSnapshot documentSnapshot = _snapshot.data.documents.elementAt(0);
-    List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
-
-    dataBaseEntries
-        .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));
-
-    Map<String, dynamic> newData = {'data': dataBaseEntries};
-    documentSnapshot.reference.updateData(newData);
   }
 
   @override

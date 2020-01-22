@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/pages/unique/create_hole.dart';
+import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
-import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
@@ -80,7 +80,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       onTap: () {},
       iconButton: widget.hasAccess
           ? IconButton(
-              icon: Icon(Icons.remove_circle_outline, color: Palette.dark),
+              icon: Icon(trailingIcon, color: Palette.dark),
               onPressed: () {
                 _deleteHole(index);
               },
@@ -141,7 +141,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         onRefresh: _refreshList,
       );
 
-  void addHole() {
+  void _addHole() {
     final int currentId = currentData.id;
     Future<QuerySnapshot> newData = Toolkit.stream.first;
 
@@ -155,14 +155,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     });
   }
 
-  bool _checkHole(dynamic hole, Map data) {
-    List splitHole = hole.toString().split("");
-    List splitData = data.toString().split("");
-    splitHole.sort();
-    splitData.sort();
-    print("$splitHole $splitData");
-    return splitHole == splitData;
-  }
+  /// TODO: create interface for methods pertaining to CRUD operations on the database
+  /// e.g. delete add hole, delete add competition.
 
   /// Deletes the holes at the given [index] within the list of holes
   /// for this competition.
@@ -172,28 +166,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
     setState(() {
       newData.then((QuerySnapshot snapshot) {
-        DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
-        List dataBaseEntries =
-            List<dynamic>.from(documentSnapshot.data['data']);
-
-        List newHoles = List();
-
-        for (Map entry in dataBaseEntries) {
-          if (entry[Fields.id] == currentId) {
-            /// This is the competition which contains the hole to be removed.
-            for (int i = 0; i < entry[Fields.holes].length; i++) {
-              var hole = entry[Fields.holes][i];
-              if (i != index - 1) newHoles.add(hole);
-            }
-            entry[Fields.holes] = newHoles;
-            break;
-          }
-        }
-
-        Map<String, dynamic> newData = {'data': dataBaseEntries};
-        documentSnapshot.reference.updateData(newData);
-
-        Toolkit.navigateTo(context, Toolkit.competitionsText);
+        DataBaseInteraction.deleteHole(context, snapshot, index, currentId);
       });
     });
   }
@@ -207,7 +180,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   @override
   Widget build(BuildContext context) {
     MyFloatingActionButton floatingActionButton = widget.hasAccess
-        ? MyFloatingActionButton(onPressed: addHole, text: 'Add a Hole')
+        ? MyFloatingActionButton(onPressed: _addHole, text: 'Add a Hole')
         : null;
     return Scaffold(
       appBar:

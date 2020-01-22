@@ -48,7 +48,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   IconData _getTrailingIcon(Hole currentHole) {
     String score = currentHole.holeScore.toString().toLowerCase();
     if (widget.hasAccess) {
-      return Icons.remove_circle_outline;
+      return null;
     } else if (score.contains('up')) {
       return Icons.thumb_up;
     } else if (score.contains('under')) {
@@ -72,7 +72,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       child: BaseListTile(
         leadingChild:
             Toolkit.getLeadingColumn("HOLE", currentHole.holeNumber.toString()),
-        trailingIconData: null,
+        trailingIconData: trailingIcon,
         subtitleMaxLines: 1,
         subtitleText: _formatPlayerList(currentHole.players),
         titleText: currentHole.holeScore.toString(),
@@ -80,7 +80,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       onTap: () {},
       iconButton: widget.hasAccess
           ? IconButton(
-              icon: Icon(trailingIcon, color: Palette.dark),
+              icon: Icon(Icons.remove_circle_outline, color: Palette.dark),
               onPressed: () {
                 _deleteHole(index);
               },
@@ -154,9 +154,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       });
     });
   }
-
-  /// TODO: create interface for methods pertaining to CRUD operations on the database
-  /// e.g. delete add hole, delete add competition.
 
   /// Deletes the holes at the given [index] within the list of holes
   /// for this competition.

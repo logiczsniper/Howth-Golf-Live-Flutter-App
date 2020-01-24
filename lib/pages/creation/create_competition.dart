@@ -22,11 +22,9 @@ class CreateCompetitionState extends State<CreateCompetition> {
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
-  Spacer spacer = Spacer(
-    flex: 1,
-  );
+
   Spacer spacerLarge = Spacer(
-    flex: 4,
+    flex: 6,
   );
 
   Form get _form => Form(
@@ -36,11 +34,11 @@ class CreateCompetitionState extends State<CreateCompetition> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               titleField,
-              spacer,
+              CreationPage.spacer,
               locationField,
-              spacer,
+              CreationPage.spacer,
               oppositionField,
-              spacer,
+              CreationPage.spacer,
               dateTimeField,
               spacerLarge
             ],

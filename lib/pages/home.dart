@@ -5,7 +5,7 @@ import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatelessWidget {
-  /// TEMPORARY TO CLEAR PREFERENCES EACH BOOT
+  /// TEMPORARY TO CLEAR PREFERENCES (privileges) EACH BOOT
   void _clearPreferences() async {
     final preferences = await SharedPreferences.getInstance();
     preferences.clear();

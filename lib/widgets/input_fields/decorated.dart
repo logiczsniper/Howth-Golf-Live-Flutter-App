@@ -6,7 +6,12 @@ import 'package:intl/intl.dart';
 class DecoratedField {
   final DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
 
-  String _capitalize(String input) {
+  /// Modifies the field to a nicer looking string.
+  ///
+  /// Does this by capitalising each term and replaces "_" with " ".
+  String _format(String input) {
+    input = input.replaceAll("_", " ");
+
     String caps = "";
 
     for (String word in input.split(" ")) {
@@ -18,10 +23,12 @@ class DecoratedField {
 
   InputDecoration getDecoration(String hintText) => InputDecoration(
       contentPadding: EdgeInsets.all(16.0),
-      enabledBorder: Toolkit.outlineInputBorder,
-      focusedBorder: Toolkit.outlineInputBorder,
       prefixIcon: Icon(Icons.keyboard_arrow_right, color: Palette.dark),
-      hintText: _capitalize(hintText),
+      enabledBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
+      disabledBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
+      hintText: _format(hintText),
       hintStyle: Toolkit.hintTextStyle);
 
   EdgeInsets getPadding(bool withPadding) =>

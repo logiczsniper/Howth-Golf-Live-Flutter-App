@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreationPage {
+  static final Spacer spacer = Spacer(
+    flex: 1,
+  );
+
   static Scaffold construct(
       String title, void Function() onPressed, Form form) {
     return Scaffold(
@@ -25,7 +30,7 @@ class CreationPage {
         ],
         elevation: 0.0,
       ),
-      body: form,
+      body: Padding(child: Toolkit.getCard(form), padding: EdgeInsets.all(5.0)),
       backgroundColor: Palette.light,
     );
   }

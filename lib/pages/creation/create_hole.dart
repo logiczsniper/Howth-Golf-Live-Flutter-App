@@ -20,11 +20,9 @@ class CreateHoleState extends State<CreateHole> {
   DecoratedTextField numberField = DecoratedTextField(Fields.holeNumber);
   DecoratedTextField scoreField = DecoratedTextField(Fields.holeScore);
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
-  Spacer spacer = Spacer(
-    flex: 1,
-  );
+
   Spacer spacerLarge = Spacer(
-    flex: 5,
+    flex: 7,
   );
 
   Form get _form => Form(
@@ -34,9 +32,9 @@ class CreateHoleState extends State<CreateHole> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               numberField,
-              spacer,
+              CreationPage.spacer,
               scoreField,
-              spacer,
+              CreationPage.spacer,
               playersField,
               spacerLarge
             ],

@@ -7,6 +7,7 @@ import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
 class CreateCompetition extends StatefulWidget {
+  /// A page for the form to reside when an admin is creating a competition.
   final AsyncSnapshot<QuerySnapshot> snapshot;
 
   CreateCompetition(this.snapshot);
@@ -17,6 +18,8 @@ class CreateCompetition extends StatefulWidget {
 
 class CreateCompetitionState extends State<CreateCompetition> {
   final _formKey = GlobalKey<FormState>();
+
+  /// The various fields the user must fill out.
   DecoratedTextField titleField = DecoratedTextField(Fields.title);
   DecoratedTextField locationField = DecoratedTextField(Fields.location);
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
@@ -27,6 +30,10 @@ class CreateCompetitionState extends State<CreateCompetition> {
     flex: 6,
   );
 
+  /// Gets a padded [Form] with [Spacer] widgets
+  ///
+  /// These are required to prevent errors when dealing with
+  /// screens of smaller sizes.
   Form get _form => Form(
       key: _formKey,
       child: Padding(
@@ -40,7 +47,6 @@ class CreateCompetitionState extends State<CreateCompetition> {
               oppositionField,
               CreationPage.spacer,
               dateTimeField,
-              spacerLarge
             ],
           ),
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));

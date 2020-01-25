@@ -226,6 +226,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 );
               }));
 
+  /// When deleting a [DataBaseEntry], prompts the user to double check their intent
+  /// is to do so as this can have major consquences if an accident.
   _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
@@ -253,6 +255,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     );
   }
 
+  /// Push to [CreateCompetition] page.
   void _addCompetition() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));

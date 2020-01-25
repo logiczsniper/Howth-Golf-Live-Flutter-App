@@ -23,6 +23,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
   bool isVerified;
 
+  /// TODO: left off documentation here.
   void _codePressed() {
     if (!isVerified) {
       bool isCodeCorrect = widget.applyPrivileges(inputText.toString());

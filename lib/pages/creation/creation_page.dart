@@ -3,13 +3,17 @@ import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreationPage {
+  /// A common spacer used among the competition creation
+  /// pages.
   static final Spacer spacer = Spacer(
     flex: 1,
   );
 
+  /// Builds a page with a suitable [AppBar] and style.
   static Scaffold construct(
       String title, void Function() onPressed, Form form) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(title,

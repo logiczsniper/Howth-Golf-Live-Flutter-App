@@ -87,6 +87,12 @@ class Toolkit {
       maxLines: 1,
       style: Toolkit.leadingChildTextStyle);
 
+  /// The text that appears in a form.
+  static Text getFormText(String text) => Text(
+        "NOTE: " + text,
+        style: Toolkit.formTextStyle,
+      );
+
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].
   static Column getLeadingColumn(String smallText, String relevantNumber) =>
@@ -113,4 +119,6 @@ class Toolkit {
       TextStyle(fontSize: 16, color: Palette.maroon);
   static const TextStyle leadingChildTextStyle =
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
+  static const TextStyle formTextStyle =
+      TextStyle(fontSize: 14, color: Palette.dark);
 }

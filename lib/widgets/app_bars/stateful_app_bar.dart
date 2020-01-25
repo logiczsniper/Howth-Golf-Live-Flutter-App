@@ -24,7 +24,7 @@ class StatefulAppBar {
           contentPadding: EdgeInsets.all(1.5),
           enabledBorder: Toolkit.outlineInputBorder,
           focusedBorder: Toolkit.outlineInputBorder,
-          prefixIcon: Icon(Icons.keyboard_arrow_right),
+          prefixIcon: Icon(Icons.keyboard_arrow_right, color: Palette.dark),
           hintText: hintText,
           hintStyle: Toolkit.hintTextStyle);
 

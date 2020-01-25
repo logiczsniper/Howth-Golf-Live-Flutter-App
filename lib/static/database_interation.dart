@@ -11,6 +11,7 @@ import 'package:howth_golf_live/widgets/input_fields/text.dart';
 class DataBaseInteraction {
   DataBaseInteraction();
 
+  /// Remove [currentEntry] from the entries in the database.
   static void deleteCompetition(
       DataBaseEntry currentEntry, AsyncSnapshot<QuerySnapshot> snapshot) {
     DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
@@ -23,11 +24,14 @@ class DataBaseInteraction {
     documentSnapshot.reference.updateData(newData);
   }
 
+  /// Assert whether or not [rawEntry] is the entry to be deleted, [currentEntry].
   static bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
     DataBaseEntry parsedEntry = DataBaseEntry.fromJson(rawEntry);
     return currentEntry.values == parsedEntry.values;
   }
 
+  /// With the form fields, create a database entry, convert to json form and add to
+  /// the database.
   static void addCompetition(
       BuildContext context,
       AsyncSnapshot<QuerySnapshot> snapshot,
@@ -74,6 +78,8 @@ class DataBaseInteraction {
     return int.parse(code);
   }
 
+  /// Remove the hole at the [index] within [DataBaseEntry.holes] at the
+  /// competition with the [currentId].
   static void deleteHole(
       BuildContext context, QuerySnapshot snapshot, int index, int currentId) {
     DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
@@ -99,6 +105,8 @@ class DataBaseInteraction {
     Toolkit.navigateTo(context, Toolkit.competitionsText);
   }
 
+  /// Using the form fields, create a [Hole] and add it to the
+  /// competitions holes with the [currentId].
   static void addHole(
       BuildContext context,
       GlobalKey<FormState> _formKey,

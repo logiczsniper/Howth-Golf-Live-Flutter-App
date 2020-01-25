@@ -1,8 +1,5 @@
 class Fields {
-  /// [DataBaseEntry] fields.
-  /// Note:
-  ///
-  /// The [date] field below must be in the form '{TWO DIGIT DAY}/{TWO DIGIT MONTH}/{FOUR DIGIT YEAR}'
+  /// [DataBaseEntry], [Hole] and [Score] fields.
   static final String date = 'date';
   static final String id = 'id';
   static final String location = 'location';

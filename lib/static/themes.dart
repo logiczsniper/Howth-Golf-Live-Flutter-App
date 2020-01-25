@@ -6,7 +6,6 @@ class Themes {
       primaryColor: Palette.light,
       primaryColorDark: Palette.dark,
       accentColor: Palette.maroon,
-/*       fontFamily: AssetNames.font, */
       textTheme: textTheme,
       iconTheme: iconTheme);
 

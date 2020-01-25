@@ -6,7 +6,7 @@ class HelpData {
       'subtitle': 'Highest level permissions',
       'steps': [
         {
-          'title': 'Return to the app help page',
+          'title': 'Go to the app help page',
           'data':
               'Click the arrow icon in the top left corner of this page to go back to the App Help page.'
         },
@@ -32,17 +32,17 @@ class HelpData {
       'subtitle': 'Low level permissions',
       'steps': [
         {
-          'title': 'Return to the competitions page',
+          'title': 'Go to the competitions page',
           'data':
               'Click the home icon in the top right corner of this page to return to the Competitions page.'
         },
         {
-          'title': 'Locate competition to be accessed',
+          'title': 'Locate your competition',
           'data':
               'Scroll through the current & archived competitions to find your competition.'
         },
         {
-          'title': 'Click on the compeition',
+          'title': 'Click on the competition',
           'data':
               'Tap anywhere on it\'s card to enter page with the details of your competition.'
         },
@@ -52,7 +52,7 @@ class HelpData {
               'Click the admin icon in the top right corner of the page. A text field should appear.'
         },
         {
-          'title': 'Enter your competition code',
+          'title': 'Enter your code',
           'data':
               'Click on the text field that has appeared & type in your competition code.'
         },
@@ -83,7 +83,7 @@ class HelpData {
               'On a specific competition page, drag the list from top to bottom.'
         },
         {
-          'title': 'Understanding competition details',
+          'title': 'Competition details',
           'data':
               'At the top middle of a specific competition page: opposition, location & lastly the time.'
         },

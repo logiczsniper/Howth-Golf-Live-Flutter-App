@@ -9,6 +9,7 @@ Widget get competitionsPage => CompetitionsPage();
 Widget get helpPage => HelpPage();
 
 class Routes {
+  /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
         Toolkit.home: (context) => homePage,
         Toolkit.home + Toolkit.competitionsText: (context) => competitionsPage,

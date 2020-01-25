@@ -141,6 +141,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         onRefresh: _refreshList,
       );
 
+  /// Push to the [CreateHole] page.
   void _addHole() {
     final int currentId = currentData.id;
     Future<QuerySnapshot> newData = Toolkit.stream.first;
@@ -176,6 +177,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
   @override
   Widget build(BuildContext context) {
+    /// If the user is an admin or manager, they are able to both
+    /// see and press the [MyFloatingActionButton] in order to create
+    /// a hole.
     MyFloatingActionButton floatingActionButton = widget.hasAccess
         ? MyFloatingActionButton(onPressed: _addHole, text: 'Add a Hole')
         : null;

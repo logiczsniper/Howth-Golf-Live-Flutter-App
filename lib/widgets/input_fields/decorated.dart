@@ -24,6 +24,10 @@ class DecoratedField {
   InputDecoration getDecoration(String hintText) => InputDecoration(
       contentPadding: EdgeInsets.all(16.0),
       prefixIcon: Icon(Icons.keyboard_arrow_right, color: Palette.dark),
+      focusedBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
+      errorBorder:
+          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
       enabledBorder:
           UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
       disabledBorder:

@@ -14,6 +14,7 @@ class SpecificHelpPage extends StatefulWidget {
 }
 
 class SpecificHelpPageState extends State<SpecificHelpPage> {
+  /// Converts each of the [HelpStep]s into suitable [ListTile]s.
   Widget _tileBuilder(BuildContext context, int index) {
     List<HelpStep> steps = widget.entry.steps;
     if (index == steps.length)

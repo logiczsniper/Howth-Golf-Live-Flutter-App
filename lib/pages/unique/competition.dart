@@ -92,7 +92,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       onTap: () {},
       iconButton: widget.hasAccess
           ? IconButton(
-              icon: Icon(Icons.remove_circle_outline, color: Palette.dark),
+              icon: Icon(Icons.remove_circle_outline,
+                  color: Palette.dark, size: 22.0),
               onPressed: () {
                 _deleteHole(index);
               },

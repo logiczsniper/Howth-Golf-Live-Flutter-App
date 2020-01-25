@@ -215,7 +215,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         iconButton: _isAdmin(context)
                             ? IconButton(
                                 icon: Icon(Icons.remove_circle_outline,
-                                    color: Palette.dark),
+                                    color: Palette.dark, size: 22.0),
                                 onPressed: () {
                                   _showAlertDialog(
                                       context, activeElements[index], snapshot);

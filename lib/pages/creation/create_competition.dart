@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
@@ -26,30 +27,24 @@ class CreateCompetitionState extends State<CreateCompetition> {
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
 
-  Spacer spacerLarge = Spacer(
-    flex: 6,
-  );
-
   /// Gets a padded [Form] with [Spacer] widgets
   ///
   /// These are required to prevent errors when dealing with
   /// screens of smaller sizes.
   Form get _form => Form(
       key: _formKey,
-      child: Padding(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+      child: Toolkit.getCard(Padding(
+          child: ListView(
+            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+            shrinkWrap: true,
+            children: <Widget>[
               titleField,
-              CreationPage.spacer,
               locationField,
-              CreationPage.spacer,
               oppositionField,
-              CreationPage.spacer,
-              dateTimeField,
+              dateTimeField
             ],
           ),
-          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));
+          padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
     DataBaseInteraction.addCompetition(context, widget.snapshot, _formKey,

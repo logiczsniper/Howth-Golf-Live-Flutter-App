@@ -88,10 +88,11 @@ class Toolkit {
       style: Toolkit.leadingChildTextStyle);
 
   /// The text that appears in a form.
-  static Text getFormText(String text) => Text(
+  static Widget getFormText(String text) => Center(
+          child: Text(
         "NOTE: " + text,
         style: Toolkit.formTextStyle,
-      );
+      ));
 
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].

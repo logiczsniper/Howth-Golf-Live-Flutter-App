@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreationPage {
-  /// A common spacer used among the competition creation
-  /// pages.
-  static final Spacer spacer = Spacer(
-    flex: 1,
-  );
-
   /// Builds a page with a suitable [AppBar] and style.
   static Scaffold construct(
       String title, void Function() onPressed, Form form) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(title,
@@ -34,7 +27,7 @@ class CreationPage {
         ],
         elevation: 0.0,
       ),
-      body: Padding(child: Toolkit.getCard(form), padding: EdgeInsets.all(5.0)),
+      body: Padding(child: form, padding: EdgeInsets.all(5.0)),
       backgroundColor: Palette.light,
     );
   }

@@ -32,24 +32,24 @@ class CreateHoleState extends State<CreateHole> {
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
       key: _formKey,
-      child: Padding(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+      child: Toolkit.getCard(
+        Padding(
+          child: ListView(
+            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+            shrinkWrap: true,
+            children: <Widget>[
               numberField,
               Toolkit.getFormText("Any Number"),
-              CreationPage.spacer,
               scoreField,
               Toolkit.getFormText(
                   "Number followed by 'up' or 'under', E.g. 3 up"),
-              CreationPage.spacer,
               playersField,
-              Padding(
-                  child: Toolkit.getFormText("Names separated by commas"),
-                  padding: EdgeInsets.only(bottom: 15.0))
+              Toolkit.getFormText("Names separated by commas")
             ],
           ),
-          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0)));
+          padding: EdgeInsets.all(5.0),
+        ),
+      ));
 
   void _onPressed() {
     DataBaseInteraction.addHole(context, _formKey, numberField, scoreField,

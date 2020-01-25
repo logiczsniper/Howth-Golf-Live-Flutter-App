@@ -6,12 +6,14 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
   final TextEditingController controller = TextEditingController();
   final String hintText;
   final bool withPadding;
+  final bool number;
 
   /// [hintText] is the text that will be displayed before the user types anything.
-  DecoratedTextField(this.hintText, {this.withPadding = true});
+  DecoratedTextField(this.hintText,
+      {this.withPadding = true, this.number = false});
 
   /// A basic test to see if the user has inserted text.
-  String _validator(String input) {
+  static String _validator(String input) {
     if (input.isEmpty)
       return 'This field is required.';
     else
@@ -25,6 +27,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
           cursorColor: Palette.maroon,
           textCapitalization: TextCapitalization.sentences,
           autocorrect: false,
+          keyboardType: number ? TextInputType.number : TextInputType.text,
           controller: controller,
           style: TextStyle(color: Palette.dark),
           decoration: getDecoration(hintText),

@@ -91,6 +91,7 @@ class Toolkit {
   static Widget getFormText(String text) => Center(
           child: Text(
         "NOTE: " + text,
+        textAlign: TextAlign.center,
         style: Toolkit.formTextStyle,
       ));
 

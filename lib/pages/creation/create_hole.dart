@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
@@ -19,15 +20,40 @@ class CreateHole extends StatefulWidget {
 
 class CreateHoleState extends State<CreateHole> {
   final _formKey = GlobalKey<FormState>();
+  String scoreStatus = "Up";
 
   /// Fields the user must fill out to create a hole.
-  DecoratedTextField numberField = DecoratedTextField(Fields.holeNumber);
-  DecoratedTextField scoreField = DecoratedTextField(Fields.holeScore);
+  DecoratedTextField numberField =
+      DecoratedTextField(Fields.holeNumber, number: true);
+  DecoratedTextField scoreField = DecoratedTextField(
+    Fields.holeScore,
+    number: true,
+  );
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
 
-  Spacer spacerLarge = Spacer(
-    flex: 7,
-  );
+  DropdownButton get _score => DropdownButton<String>(
+      value: scoreStatus,
+      iconEnabledColor: Palette.dark,
+      iconSize: 21.0,
+      style: TextStyle(color: Palette.dark, fontSize: 15.5),
+      underline: Container(
+        height: 0.0,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+          if (scoreStatus == "Draw" && newValue != scoreStatus) {
+            scoreField.controller.text = "";
+          }
+          scoreStatus = newValue;
+          if (scoreStatus == "Draw") {
+            scoreField.controller.text = "-";
+          }
+        });
+      },
+      items: <String>["Up", "Under", "Draw"]
+          .map<DropdownMenuItem<String>>((String value) =>
+              DropdownMenuItem<String>(value: value, child: Text(value)))
+          .toList());
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
@@ -39,10 +65,18 @@ class CreateHoleState extends State<CreateHole> {
             shrinkWrap: true,
             children: <Widget>[
               numberField,
-              Toolkit.getFormText("Any Number"),
-              scoreField,
-              Toolkit.getFormText(
-                  "Number followed by 'up' or 'under', E.g. 3 up"),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: scoreField,
+                  ),
+                  /* Padding(padding: EdgeInsets.only(bottom: 4.8), child: _score), */
+                  Baseline(
+                      child: _score,
+                      baseline: 0,
+                      baselineType: TextBaseline.alphabetic)
+                ],
+              ),
               playersField,
               Toolkit.getFormText("Names separated by commas")
             ],
@@ -53,7 +87,7 @@ class CreateHoleState extends State<CreateHole> {
 
   void _onPressed() {
     DataBaseInteraction.addHole(context, _formKey, numberField, scoreField,
-        playersField, widget.snapshot, widget.currentId);
+        scoreStatus, playersField, widget.snapshot, widget.currentId);
   }
 
   @override

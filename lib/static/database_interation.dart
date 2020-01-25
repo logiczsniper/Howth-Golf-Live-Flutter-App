@@ -87,14 +87,45 @@ class DataBaseInteraction {
 
     List newHoles = List();
 
+    /// A list of all holes without the deleted one!
+    List<Hole> parsedHoles = List();
+
     for (Map entry in dataBaseEntries) {
       if (entry[Fields.id] == currentId) {
         /// This is the competition which contains the hole to be removed.
         for (int i = 0; i < entry[Fields.holes].length; i++) {
           var hole = entry[Fields.holes][i];
-          if (i != index - 1) newHoles.add(hole);
+          if (i != index - 1) {
+            /// This is NOT the hole that will be removed. Add to holes.
+            newHoles.add(hole);
+            parsedHoles.add(Hole.fromMap(hole));
+          }
         }
         entry[Fields.holes] = newHoles;
+
+        /// Must also update the competition score!
+        double howth = 0;
+        double opposition = 0;
+        for (Hole hole in parsedHoles) {
+          if (hole.holeScore.contains("Up")) {
+            howth++;
+          } else if (hole.holeScore.contains("Under")) {
+            opposition++;
+          } else {
+            /// Its a draw- both go up by 0.5!
+            howth += 0.5;
+            opposition += 0.5;
+          }
+        }
+
+        /// If the scores are whole numbers, parse to int before making [Score].
+        Score newScore = howth == howth.roundToDouble()
+            ? Score(
+                howth: howth.toInt().toString(),
+                opposition: opposition.toInt().toString())
+            : Score(howth: howth.toString(), opposition: opposition.toString());
+
+        entry[Fields.score] = newScore.toJson;
         break;
       }
     }
@@ -107,19 +138,24 @@ class DataBaseInteraction {
 
   /// Using the form fields, create a [Hole] and add it to the
   /// competitions holes with the [currentId].
+  ///
+  /// Furthermore, this must update the [score] field of the database entry
+  /// in accordance with the new hole.
   static void addHole(
-      BuildContext context,
-      GlobalKey<FormState> _formKey,
-      DecoratedTextField numberField,
-      DecoratedTextField scoreField,
-      DecoratedTextField playersField,
-      QuerySnapshot snapshot,
-      int currentId) {
+    BuildContext context,
+    GlobalKey<FormState> _formKey,
+    DecoratedTextField numberField,
+    DecoratedTextField scoreField,
+    String scoreStatus,
+    DecoratedTextField playersField,
+    QuerySnapshot snapshot,
+    int currentId,
+  ) {
     /// If the form inputs have been validated, add to holes.
     if (_formKey.currentState.validate()) {
       Hole newHole = Hole(
         holeNumber: int.tryParse(numberField.controller.value.text),
-        holeScore: scoreField.controller.value.text,
+        holeScore: scoreField.controller.text.toString() + " " + scoreStatus,
 
         /// Note: this means that the text provided by the user which contains
         /// player names must be separated with ", " between each player.
@@ -138,13 +174,37 @@ class DataBaseInteraction {
           /// Thus, a new holes list must be made.
           List newHoles = List();
 
+          /// A list of all holes including the new one!
+          List<Hole> parsedHoles = List();
+
           for (var hole in entry[Fields.holes]) {
             newHoles.add(hole);
+            parsedHoles.add(Hole.fromMap(hole));
           }
 
           newHoles.add(newHole.toJson);
+          parsedHoles.add(newHole);
 
           entry[Fields.holes] = newHoles;
+
+          /// Must also update the competition score!
+          double howth = 0;
+          double opposition = 0;
+          for (Hole hole in parsedHoles) {
+            if (hole.holeScore.contains("Up")) {
+              howth++;
+            } else if (hole.holeScore.contains("Under")) {
+              opposition++;
+            } else {
+              /// Its a draw- both go up by 0.5!
+              howth += 0.5;
+              opposition += 0.5;
+            }
+          }
+
+          Score newScore =
+              Score(howth: howth.toString(), opposition: opposition.toString());
+          entry[Fields.score] = newScore.toJson;
           break;
         }
       }
@@ -152,7 +212,7 @@ class DataBaseInteraction {
       Map<String, List> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData);
 
-      Navigator.of(context).pop();
+      Toolkit.navigateTo(context, Toolkit.competitionsText);
     }
   }
 }

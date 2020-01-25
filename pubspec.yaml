@@ -19,6 +19,7 @@ dependencies:
   test: ^1.6.1
   uuid: 2.0.4
   datetime_picker_formfield: 1.0.0
+  numberpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

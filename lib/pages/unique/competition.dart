@@ -64,6 +64,19 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     if (index == 0) {
       return CompetitionDetails(currentData, widget.hasAccess);
     }
+
+    /// If there are no holes, display a small text saying
+    /// there are no holes yet!
+    if (currentData.holes.length == 0) {
+      return Center(
+          child: Padding(
+              child: Text(
+                "No hole data found for this competition!",
+                style: Toolkit.cardTitleTextStyle,
+              ),
+              padding: EdgeInsets.only(top: 25.0)));
+    }
+
     Hole currentHole = currentData.holes[index - 1];
     IconData trailingIcon = _getTrailingIcon(currentHole);
 
@@ -128,6 +141,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return false;
   }
 
+  int get _itemCount =>
+      currentData.holes.length == 0 ? 2 : currentData.holes.length + 1;
+
   RefreshIndicator get _refreshIndicator => RefreshIndicator(
         displacement: 80.0,
         color: Palette.maroon,
@@ -135,7 +151,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         child: OpacityChangeWidget(
             target: ListView.builder(
           itemBuilder: _tileBuilder,
-          itemCount: currentData.holes.length + 1,
+          itemCount: _itemCount,
         )),
         onRefresh: _refreshList,
       );

@@ -39,6 +39,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
             shrinkWrap: true,
             children: <Widget>[
               titleField,
+              Toolkit.getFormText("Try to stay less than 20 characters"),
               locationField,
               oppositionField,
               dateTimeField

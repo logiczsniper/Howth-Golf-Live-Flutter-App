@@ -11,10 +11,10 @@ class HomePage extends StatelessWidget {
     preferences.clear();
   }
 
-  static Text get _tapText => Text(
-        'Tap anywhere to begin!',
-        style: TextStyle(fontSize: 14, color: Palette.dark),
-      );
+  final Text _tapText = Text(
+    'Tap anywhere to begin!',
+    style: TextStyle(fontSize: 14, color: Palette.dark),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
   bool isVerified;
 
-  /// TODO: left off documentation here.
+  /// Change the app bar, adjust [isVerified] accordingly.
   void _codePressed() {
     if (!isVerified) {
       bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
@@ -37,7 +37,9 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     }
   }
 
-  IconButton _getIconButton(bool isVerified) {
+  /// This depends greatly on whether or not the user is verified.
+  /// TODO: here
+  IconButton get _iconButton {
     String iconMessage =
         isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
     IconData iconData =
@@ -68,7 +70,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       title: getTitle(appBarTitle),
       centerTitle: true,
       leading: ParameterBackButton(Toolkit.competitionsText),
-      actions: <Widget>[_getIconButton(isVerified)],
+      actions: <Widget>[_iconButton],
       backgroundColor: Palette.light,
       elevation: 0.0,
       iconTheme: IconThemeData(color: Palette.dark),

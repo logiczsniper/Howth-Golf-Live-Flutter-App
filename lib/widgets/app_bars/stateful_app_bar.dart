@@ -33,6 +33,7 @@ class StatefulAppBar {
 
   Center buildTitleBar(String title) => Center(
       child: Text(title,
+          maxLines: 2,
           style: TextStyle(
             color: Palette.dark,
           )));

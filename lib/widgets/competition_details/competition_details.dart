@@ -8,10 +8,15 @@ import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
 class CompetitionDetails extends StatelessWidget {
   final DataBaseEntry data;
-  CompetitionDetails(this.data);
+  final bool hasAccess;
+  CompetitionDetails(this.data, this.hasAccess);
 
-  MiddleRow _getMiddleRow(String data, IconData iconData, double size) {
-    return MiddleRow(data, Icon(iconData, size: size, color: Palette.dark));
+  Widget _getMiddleRow(String data, IconData iconData, double size) {
+    return Padding(
+      child: MiddleRow(
+          data.trim(), Icon(iconData, size: size, color: Palette.dark)),
+      padding: EdgeInsets.symmetric(vertical: 1.0),
+    );
   }
 
   Flexible get _centralFlexible => Flexible(
@@ -20,9 +25,12 @@ class CompetitionDetails extends StatelessWidget {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _getMiddleRow(data.opposition, FontAwesomeIcons.fistRaised, 15.5),
+            _getMiddleRow(data.opposition, FontAwesomeIcons.fistRaised, 14.7),
             _getMiddleRow(data.location, Icons.location_on, 18.5),
-            _getMiddleRow(data.time, Icons.access_time, 18)
+            _getMiddleRow(data.time, Icons.access_time, 18),
+            hasAccess
+                ? _getMiddleRow(data.id.toString(), Icons.vpn_key, 17.0)
+                : Container()
           ],
         )),
       );

@@ -62,9 +62,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     /// The first element in the [ListView] should be the
     /// details of the competition, i.e. a [CompetitionDetails] widget.
     if (index == 0) {
-      return CompetitionDetails(currentData);
+      return CompetitionDetails(currentData, widget.hasAccess);
     }
-
     Hole currentHole = currentData.holes[index - 1];
     IconData trailingIcon = _getTrailingIcon(currentHole);
 

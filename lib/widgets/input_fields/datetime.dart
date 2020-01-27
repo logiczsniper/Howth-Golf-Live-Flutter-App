@@ -11,6 +11,7 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedDateTimeField(this.hintText, {this.withPadding = true});
 
+  /// Require some form of input.
   String _validator(DateTime input) {
     if (input == null)
       return 'This field is required.';

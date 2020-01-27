@@ -7,6 +7,9 @@ import 'package:howth_golf_live/static/toolkit.dart';
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
   final String title;
+
+  /// Each tab has its own [_listBuilder] as they are sourced from different
+  /// lists- one from current and the other from archived.
   final Function _listBuilder;
 
   CompetitionsPageAppBar(this._listBuilder, {this.title})
@@ -23,6 +26,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
 
+  /// Update the [appBarTitle] to the opposite title.
   void _searchPressed() {
     setState(() {
       appBarTitle = actionPressed(appBarTitle, context, _filter);
@@ -32,10 +36,15 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   @override
   void initState() {
     super.initState();
+
+    /// Build the two bars.
     titleBar = buildTitleBar(widget.title);
     inputBar = buildInputBar(
         TextInputType.text, false, 'Enter search here...', _filter);
+
     title = widget.title;
+
+    /// [appBarTitle] defaults to the title bar.
     appBarTitle = titleBar;
     _filter.addListener(() {
       setState(() {
@@ -44,6 +53,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     });
   }
 
+  /// The [IconData] switches between a search icon (if [titleBar]) and
+  /// a close icon (if [inputBar]).
   AnimatedCrossFade get _iconData => AnimatedCrossFade(
         duration: const Duration(milliseconds: 450),
         firstChild: Icon(Icons.search),
@@ -53,6 +64,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             : CrossFadeState.showSecond,
       );
 
+  /// Get a custom instantiated [BubbleTabIndicator].
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
       indicatorColor: Palette.maroon,
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
@@ -97,6 +109,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         },
         body: TabBarView(
           children: <Widget>[
+            /// The second parameter indicates whether or not this
+            /// list builder is for current events or archived.
             widget._listBuilder(inputText, true),
             widget._listBuilder(inputText, false)
           ],

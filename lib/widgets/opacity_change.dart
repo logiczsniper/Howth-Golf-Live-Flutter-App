@@ -35,6 +35,9 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
   @override
   void initState() {
     super.initState();
+
+    /// If [widget.flashing], the duration should be longer and slower versus
+    /// else, the duration should be quick and snappy.
     int duration = widget.flashing ? 1000 : 600;
     _controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: duration));

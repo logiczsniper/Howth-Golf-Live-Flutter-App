@@ -5,6 +5,7 @@ class MiddleRow extends StatelessWidget {
   final String text;
   final Icon icon;
 
+  /// Shows an icon, [icon] followed by a value of the competition, [text].
   const MiddleRow(this.text, this.icon);
 
   @override

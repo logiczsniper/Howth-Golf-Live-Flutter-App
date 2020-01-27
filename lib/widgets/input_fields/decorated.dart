@@ -6,6 +6,9 @@ import 'package:intl/intl.dart';
 class DecoratedField {
   final DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
 
+  UnderlineInputBorder get _border =>
+      UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon));
+
   /// Modifies the field to a nicer looking string.
   ///
   /// Does this by capitalising each term and replaces "_" with " ".
@@ -21,17 +24,15 @@ class DecoratedField {
     return caps.trim();
   }
 
+  /// [InputDecoration] with a red underline in every state and custom
+  /// [hintText].
   InputDecoration getDecoration(String hintText) => InputDecoration(
       contentPadding: EdgeInsets.all(16.0),
       prefixIcon: Icon(Icons.keyboard_arrow_right, color: Palette.dark),
-      focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
-      errorBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
-      enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
-      disabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon)),
+      focusedBorder: _border,
+      errorBorder: _border,
+      enabledBorder: _border,
+      disabledBorder: _border,
       hintText: _format(hintText),
       hintStyle: Toolkit.hintTextStyle);
 

@@ -10,6 +10,8 @@ class BaseListTile extends StatelessWidget {
   final int subtitleMaxLines;
   final String subtitleText;
 
+  /// A special [ListTile] with padding and decoration,
+  /// and formated text.
   BaseListTile(
       {this.leadingChild,
       this.titleText,

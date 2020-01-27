@@ -19,6 +19,7 @@ class StatefulAppBar {
     return appBarTitle == titleBar ? inputBar : titleBar;
   }
 
+  /// Get a custom instantiated [InputDecoration].
   static InputDecoration _getInputDecoration(String hintText) =>
       InputDecoration(
           contentPadding: EdgeInsets.all(1.5),
@@ -28,9 +29,11 @@ class StatefulAppBar {
           hintText: hintText,
           hintStyle: Toolkit.hintTextStyle);
 
+  /// The title must be an [AnimatedSwitcher].
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
       duration: Duration(milliseconds: 500), child: appBarTitle);
 
+  /// The simpler app bar that just displays text- the title.
   Center buildTitleBar(String title) => Center(
       child: Text(title,
           softWrap: true,
@@ -40,6 +43,7 @@ class StatefulAppBar {
             color: Palette.dark,
           )));
 
+  /// The search app bar which enables the user to type into a search box.
   TextField buildInputBar(TextInputType textType, bool obscureText,
           String hintText, TextEditingController _filter) =>
       TextField(

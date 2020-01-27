@@ -7,8 +7,11 @@ class ComplexCard extends StatelessWidget {
   final Function onTap;
   final dynamic iconButton;
 
+  /// A [Card] with a custom [InkWell] and uses a [Stack] to enable
+  /// a button to exist on top of the already tap-able card.
   ComplexCard({this.child, this.onTap, this.iconButton});
 
+  /// A maroon coloured [InkWell] that stays within the bounds of the card.
   InkWell get _inkWell => InkWell(
         highlightColor: Colors.transparent,
         radius: 500.0,
@@ -19,6 +22,8 @@ class ComplexCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// The tap-able widget to lie on top of the card, positioned
+    /// where a standard ending icon would be.
     final Widget topWidget = iconButton ?? Container();
     return Stack(children: <Widget>[
       Toolkit.getCard(child),

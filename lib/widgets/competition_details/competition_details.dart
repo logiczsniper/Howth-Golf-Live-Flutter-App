@@ -11,6 +11,9 @@ class CompetitionDetails extends StatelessWidget {
   final bool hasAccess;
   CompetitionDetails(this.data, this.hasAccess);
 
+  /// Get a padded [MiddleRow].
+  ///
+  /// Displays an icon followed by text ([data]).
   Widget _getMiddleRow(String data, IconData iconData, double size) {
     return Padding(
       child: MiddleRow(
@@ -19,6 +22,10 @@ class CompetitionDetails extends StatelessWidget {
     );
   }
 
+  /// The central piece of a [CompetitionDetails].
+  ///
+  /// If [hasAccess], a fourth row must be displayed which shows the key ([id])
+  /// of the competition.
   Flexible get _centralFlexible => Flexible(
         flex: 2,
         child: Center(

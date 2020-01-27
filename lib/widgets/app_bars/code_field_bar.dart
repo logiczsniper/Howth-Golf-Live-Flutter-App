@@ -38,7 +38,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   }
 
   /// This depends greatly on whether or not the user is verified.
-  /// TODO: here
+  ///
+  /// Both the message and the icon image itself change based on [isVerified].
   IconButton get _iconButton {
     String iconMessage =
         isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
@@ -51,12 +52,18 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   @override
   void initState() {
     super.initState();
+
+    /// Build the two bars.
     titleBar = buildTitleBar(widget.title);
     inputBar = buildInputBar(
         TextInputType.number, true, 'Enter code here...', _filter);
+
     isVerified = widget.isInitVerified;
     title = widget.title;
+
+    /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
+
     _filter.addListener(() {
       setState(() {
         inputText = _filter.text.isEmpty ? "" : _filter.text;

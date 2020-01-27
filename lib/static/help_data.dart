@@ -93,6 +93,54 @@ class HelpData {
               'In the Competitions page, hit the magnifying glass icon in the top right & enter search text.'
         },
       ]
+    },
+
+    /// Team manager & admin entries.
+    {
+      'title': 'Updating Scores',
+      'subtitle': 'Available to admins and team managers.',
+      'steps': [
+        {
+          'title': 'Add/Remove a hole',
+          'data': 'Adding/Removing a hole will update the competition score!'
+        },
+        {
+          'title': 'Add a hole part 1',
+          'data':
+              'Click on the \'Add a Hole\' button at the bottom of the hole.'
+        },
+        {
+          'title': 'Add a hole part 2',
+          'data': 'Fill out the form and press the check icon in the top right.'
+        },
+        {
+          'title': 'Remove a hole',
+          'data':
+              'In the competition, click the remove icon to the right of the hole to be removed.'
+        },
+      ]
+    },
+
+    /// Admin entries.
+    {
+      'title': 'Updating Competitions',
+      'subtitle': 'Available to admins only.',
+      'steps': [
+        {
+          'title': 'Add a competition part 1',
+          'data':
+              'Click on the \'Add a Competition\' button at the bottom of competitions.'
+        },
+        {
+          'title': 'Add a competition part 2',
+          'data': 'Fill out the form and press the check icon in the top right.'
+        },
+        {
+          'title': 'Remove a competition',
+          'data':
+              'In competitions, click the remove icon to the right of the competition to be removed.'
+        },
+      ]
     }
   ];
 

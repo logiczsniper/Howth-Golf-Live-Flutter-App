@@ -51,10 +51,23 @@ class HelpPageState extends State<HelpPage> {
     return false;
   }
 
+  /// If they have special privileges, display extra entries depending on
+  /// their access level.
+  int _bonusEntries(String competitionAccess, bool isAdmin) {
+    if (isAdmin)
+      return 2;
+    else if (competitionAccess.isNotEmpty)
+      return 1;
+    else
+      return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
     final bool isInitVerified = arguments.isAdmin ?? false;
+    final String competitionAccess = arguments.competitionAccess ?? "";
+
     return Scaffold(
       appBar: CodeFieldBar(Toolkit.helpText, _applyPrivileges, isInitVerified),
       body: OpacityChangeWidget(
@@ -66,7 +79,20 @@ class HelpPageState extends State<HelpPage> {
               AppHelpEntry currentHelpEntry = HelpData.entries[index - 1];
               return _tileBuilder(context, currentHelpEntry, index);
             },
-            itemCount: HelpData.entries.length + 1),
+
+            /// The [itemCount] must change depending on the user's
+            /// privileges.
+            ///
+            /// If they have higher access, add X to [itemCount],
+            /// where X is the number of entries specific to higher
+            /// privilege tasks of their level.
+            ///
+            /// Normally, 1 would be added to the length of the entries to account
+            /// for [MyDetails] widget. However, the number of higher access entries
+            /// must be subtracted before the bonus entries are added.
+            itemCount: HelpData.entries.length -
+                1 +
+                _bonusEntries(competitionAccess, isInitVerified)),
       ),
       backgroundColor: Palette.light,
     );

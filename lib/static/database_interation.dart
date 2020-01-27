@@ -119,11 +119,11 @@ class DataBaseInteraction {
         }
 
         /// If the scores are whole numbers, parse to int before making [Score].
-        Score newScore = howth == howth.roundToDouble()
-            ? Score(
+        Score newScore = howth - howth.toInt() != 0
+            ? Score(howth: howth.toString(), opposition: opposition.toString())
+            : Score(
                 howth: howth.toInt().toString(),
-                opposition: opposition.toInt().toString())
-            : Score(howth: howth.toString(), opposition: opposition.toString());
+                opposition: opposition.toInt().toString());
 
         entry[Fields.score] = newScore.toJson;
         break;
@@ -202,8 +202,14 @@ class DataBaseInteraction {
             }
           }
 
-          Score newScore =
-              Score(howth: howth.toString(), opposition: opposition.toString());
+          /// If the scores are whole numbers, parse to int before making [Score].
+          Score newScore = howth - howth.toInt() != 0
+              ? Score(
+                  howth: howth.toString(), opposition: opposition.toString())
+              : Score(
+                  howth: howth.toInt().toString(),
+                  opposition: opposition.toInt().toString());
+
           entry[Fields.score] = newScore.toJson;
           break;
         }

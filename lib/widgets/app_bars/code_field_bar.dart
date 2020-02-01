@@ -26,13 +26,13 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   /// Change the app bar, adjust [isVerified] accordingly.
   void _codePressed() {
     if (!isVerified) {
-      bool isCodeCorrect = widget.applyPrivileges(inputText.toString());
-
-      setState(() {
-        appBarTitle = actionPressed(appBarTitle, context, _filter);
-        if (!isVerified && isCodeCorrect) {
-          isVerified = isCodeCorrect;
-        }
+      widget.applyPrivileges(inputText.toString()).then((bool isCodeCorrect) {
+        setState(() {
+          appBarTitle = actionPressed(appBarTitle, context, _filter);
+          if (!isVerified && isCodeCorrect) {
+            isVerified = isCodeCorrect;
+          }
+        });
       });
     }
   }

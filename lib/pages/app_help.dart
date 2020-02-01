@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/help_data.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -39,16 +40,24 @@ class HelpPageState extends State<HelpPage> {
                     builder: (context) => SpecificHelpPage(currentHelpEntry)));
           });
 
-  bool _applyPrivileges(String codeAttempt) {
-    if (codeAttempt == '1234') {
-      // TODO: change the code
-      final preferences = SharedPreferences.getInstance();
-      preferences.then((SharedPreferences preferences) {
-        preferences.setBool(Toolkit.activeAdminText, true);
-      });
-      return true;
-    }
-    return false;
+  Future<bool> _applyPrivileges(String codeAttempt) {
+    /// Fetch the admin code from the database.
+    return Future<bool>.value(
+        Toolkit.stream.first.then((QuerySnapshot snapshot) {
+      DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
+      int adminCode = documentSnapshot.data['admin_code'];
+
+      if (codeAttempt == adminCode.toString()) {
+        /// TODO: catch all .then() errors. may have to surround with try catch block
+        final preferences = SharedPreferences.getInstance();
+        preferences.then((SharedPreferences preferences) {
+          preferences.setBool(Toolkit.activeAdminText, true);
+        });
+        print("ADMIN");
+        return true;
+      }
+      return false;
+    }));
   }
 
   /// If they have special privileges, display extra entries depending on

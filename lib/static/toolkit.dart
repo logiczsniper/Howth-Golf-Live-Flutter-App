@@ -55,6 +55,7 @@ class Toolkit {
   /// an argument to [pushNamed] so the new page can determine whether or
   /// not the user is an admin and if so, adjust how it displays certain
   /// elements.
+  /// TODO: catch error here
   static void navigateTo(BuildContext context, String destination) {
     final preferences = SharedPreferences.getInstance();
     preferences.then((SharedPreferences preferences) {
@@ -71,8 +72,8 @@ class Toolkit {
   /// from [Firestore]. The [document] contains the data which, in turn,
   /// contains the [rawElements] in the database.
   static List<DataBaseEntry> getDataBaseEntries(DocumentSnapshot document) {
-    /// The [entries] in my [Firestore] instance.
-    List<dynamic> rawElements = document.data.entries.toList()[0].value;
+    /// The [entries] in my [Firestore] instance, at index 1- the admin code is at 0.
+    List<dynamic> rawElements = document.data.entries.toList()[1].value;
 
     /// Those same [entries] but in a structured format- [DataBaseEntry].
     List<DataBaseEntry> parsedElements = List<DataBaseEntry>.generate(

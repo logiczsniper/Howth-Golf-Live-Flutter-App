@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// REMOVE ME
-    /// _clearPreferences();
+    _clearPreferences();
 
     return GestureDetector(
         onTap: () => Toolkit.navigateTo(context, Toolkit.competitionsText),

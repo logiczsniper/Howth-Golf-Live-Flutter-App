@@ -103,27 +103,8 @@ class DataBaseInteraction {
         }
         entry[Fields.holes] = newHoles;
 
-        /// Must also update the competition score!
-        double howth = 0;
-        double opposition = 0;
-        for (Hole hole in parsedHoles) {
-          if (hole.holeScore.contains("Up")) {
-            howth++;
-          } else if (hole.holeScore.contains("Under")) {
-            opposition++;
-          } else {
-            /// Its a draw- both go up by 0.5!
-            howth += 0.5;
-            opposition += 0.5;
-          }
-        }
-
-        /// If the scores are whole numbers, parse to int before making [Score].
-        Score newScore = howth - howth.toInt() != 0
-            ? Score(howth: howth.toString(), opposition: opposition.toString())
-            : Score(
-                howth: howth.toInt().toString(),
-                opposition: opposition.toInt().toString());
+        /// Updating the score.
+        Score newScore = _getScore(parsedHoles);
 
         entry[Fields.score] = newScore.toJson;
         break;
@@ -187,28 +168,8 @@ class DataBaseInteraction {
 
           entry[Fields.holes] = newHoles;
 
-          /// Must also update the competition score!
-          double howth = 0;
-          double opposition = 0;
-          for (Hole hole in parsedHoles) {
-            if (hole.holeScore.contains("Up")) {
-              howth++;
-            } else if (hole.holeScore.contains("Under")) {
-              opposition++;
-            } else {
-              /// Its a draw- both go up by 0.5!
-              howth += 0.5;
-              opposition += 0.5;
-            }
-          }
-
-          /// If the scores are whole numbers, parse to int before making [Score].
-          Score newScore = howth - howth.toInt() != 0
-              ? Score(
-                  howth: howth.toString(), opposition: opposition.toString())
-              : Score(
-                  howth: howth.toInt().toString(),
-                  opposition: opposition.toInt().toString());
+          /// Updating the score.
+          Score newScore = _getScore(parsedHoles);
 
           entry[Fields.score] = newScore.toJson;
           break;
@@ -216,9 +177,45 @@ class DataBaseInteraction {
       }
 
       Map<String, List> newData = {'data': dataBaseEntries};
-      documentSnapshot.reference.updateData(newData);
+      documentSnapshot.reference.updateData(newData).catchError(onError);
 
       Toolkit.navigateTo(context, Toolkit.competitionsText);
     }
+  }
+
+  /// TODO: catchError
+  static void onError(var e) {
+    print("Error ${e.toString()}");
+  }
+
+  /// Generate the score that corresponds to a competition with [parsedHoles].
+  ///
+  /// Get the updated competition score with the new hole scores,
+  /// [parsedHoles], and format the score based on whether
+  /// or not the scores are floats.
+  static Score _getScore(List<Hole> parsedHoles) {
+    /// Must also update the competition score!
+    double howth = 0;
+    double opposition = 0;
+    for (Hole hole in parsedHoles) {
+      if (hole.holeScore.contains("Up")) {
+        howth++;
+      } else if (hole.holeScore.contains("Under")) {
+        opposition++;
+      } else {
+        /// Its a draw- both go up by 0.5!
+        howth += 0.5;
+        opposition += 0.5;
+      }
+    }
+
+    /// If the scores are whole numbers, parse to int before making [Score].
+    Score newScore = howth - howth.toInt() != 0
+        ? Score(howth: howth.toString(), opposition: opposition.toString())
+        : Score(
+            howth: howth.toInt().toString(),
+            opposition: opposition.toInt().toString());
+
+    return newScore;
   }
 }

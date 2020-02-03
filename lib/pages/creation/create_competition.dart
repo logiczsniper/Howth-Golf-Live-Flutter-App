@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -19,6 +20,7 @@ class CreateCompetition extends StatefulWidget {
 
 class CreateCompetitionState extends State<CreateCompetition> {
   final _formKey = GlobalKey<FormState>();
+  bool isHome = false;
 
   /// The various fields the user must fill out.
   DecoratedTextField titleField = DecoratedTextField(Fields.title);
@@ -26,6 +28,25 @@ class CreateCompetitionState extends State<CreateCompetition> {
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
+
+  DropdownButton get _home => DropdownButton<bool>(
+      value: isHome,
+      iconEnabledColor: Palette.dark,
+      iconSize: 30.0,
+      style: TextStyle(color: Palette.dark, fontSize: 15.5),
+      underline: Container(
+        height: 0.0,
+      ),
+      onChanged: (bool newValue) {
+        setState(() {
+          isHome = newValue;
+          locationField.controller.text = isHome ? "Howth Golf Club" : "";
+        });
+      },
+      items: <bool>[true, false]
+          .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
+              value: value, child: Text(value.toString())))
+          .toList());
 
   /// Gets a padded [Form] with [Spacer] widgets
   ///
@@ -39,8 +60,8 @@ class CreateCompetitionState extends State<CreateCompetition> {
             shrinkWrap: true,
             children: <Widget>[
               titleField,
-              Toolkit.getFormText("Try to stay less than 20 characters"),
-              locationField,
+              CreationPage.getSpecialInput("At home: ", _home),
+              isHome ? Container() : locationField,
               oppositionField,
               dateTimeField
             ],

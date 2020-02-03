@@ -80,7 +80,6 @@ class HelpPageState extends State<HelpPage> {
   @override
   void initState() {
     super.initState();
-    /* isVerified = false; */
   }
 
   @override

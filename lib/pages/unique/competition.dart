@@ -205,8 +205,16 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               }
             }
 
+            /// If there is no hole data, [_tileBuilder] must be called one more
+            /// time in order to return the text notifying the user that no hole
+            /// data has been added yet.
+            ///
+            /// Both cases must add atleast one to account for the competition details
+            /// at index 0.
+            int _countBonus = currentData.holes.length == 0 ? 2 : 1;
+
             return ListView.builder(
-                itemCount: currentData.holes.length + 1,
+                itemCount: currentData.holes.length + _countBonus,
                 itemBuilder: _tileBuilder);
           },
         ),

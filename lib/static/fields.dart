@@ -12,4 +12,6 @@ class Fields {
   static final String holeNumber = 'hole_number';
   static final String holeScore = 'hole_score';
   static final String players = 'players';
+  static final String address = 'address';
+  static final String isHome = 'is_home';
 }

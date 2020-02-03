@@ -3,7 +3,7 @@ import 'package:howth_golf_live/static/fields.dart';
 class DataBaseEntry {
   final String date;
   final int id;
-  final String location;
+  final Location location;
   final String time;
   final String opposition;
   final String title;
@@ -21,7 +21,7 @@ class DataBaseEntry {
   DataBaseEntry.fromJson(Map map)
       : date = map[Fields.date],
         id = map[Fields.id],
-        location = map[Fields.location],
+        location = Location.fromMap(map[Fields.location]),
         time = map[Fields.time],
         opposition = map[Fields.opposition],
         title = map[Fields.title],
@@ -33,7 +33,7 @@ class DataBaseEntry {
   Map get toJson => {
         Fields.date: date,
         Fields.id: id,
-        Fields.location: location,
+        Fields.location: location.toJson,
         Fields.time: time,
         Fields.opposition: opposition,
         Fields.title: title,
@@ -92,4 +92,21 @@ class Hole {
       };
 
   Hole({this.holeNumber, this.holeScore, this.players});
+}
+
+class Location {
+  /// Note:
+  ///
+  /// In the database, [isHome] is actually 'is_home'.
+  final String address;
+  final bool isHome;
+
+  /// Convert a map into a [Location] object.
+  Location.fromMap(Map map)
+      : address = map[Fields.address],
+        isHome = map[Fields.isHome];
+
+  Map get toJson => {Fields.address: address, Fields.isHome: isHome};
+
+  Location({this.address, this.isHome});
 }

@@ -183,8 +183,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       });
                     };
                     return ComplexCard(
-
-                        /// Was a call to _tileBuilder
                         child: _tileBuilder(context, currentEntry),
                         onTap: toCompetition,
                         iconButton: _isAdmin(context)

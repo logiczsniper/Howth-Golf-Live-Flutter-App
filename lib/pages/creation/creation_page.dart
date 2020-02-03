@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 class CreationPage {
+  static Padding getSpecialInput(String text, DropdownButton dropdownButton) =>
+      Padding(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                    child: Text(
+                      text,
+                      style: Toolkit.formTextStyle,
+                    ),
+                    padding: EdgeInsets.only(left: 16.0)),
+                dropdownButton
+              ],
+            ),
+            decoration: Toolkit.bottomSideBoxDecoration,
+            padding: EdgeInsets.only(bottom: 2.0),
+          ),
+          padding: EdgeInsets.only(bottom: 16.0));
+
   /// Builds a page with a suitable [AppBar] and style.
   static Scaffold construct(
       String title, void Function() onPressed, Form form) {

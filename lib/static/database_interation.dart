@@ -45,7 +45,8 @@ class DataBaseInteraction {
       DataBaseEntry newEntry = DataBaseEntry(
           id: _id,
           title: titleField.controller.value.text,
-          location: locationField.controller.value.text,
+          location: Location(
+              address: locationField.controller.value.text, isHome: true),
           opposition: oppositionField.controller.value.text,
           holes: [],
           score: Score.fresh,

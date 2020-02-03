@@ -33,7 +33,7 @@ class CompetitionDetails extends StatelessWidget {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _getMiddleRow(data.location, Icons.location_on, 18.5),
+            _getMiddleRow(data.location.address, Icons.location_on, 18.5),
             _getMiddleRow(data.date, Icons.date_range, 18.0),
             _getMiddleRow(data.time, Icons.access_time, 18),
             hasAccess

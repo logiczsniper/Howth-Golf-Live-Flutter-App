@@ -34,23 +34,18 @@ class CreateHoleState extends State<CreateHole> {
   DropdownButton get _score => DropdownButton<String>(
       value: scoreStatus,
       iconEnabledColor: Palette.dark,
-      iconSize: 21.0,
+      iconSize: 30.0,
       style: TextStyle(color: Palette.dark, fontSize: 15.5),
       underline: Container(
         height: 0.0,
       ),
       onChanged: (String newValue) {
         setState(() {
-          if (scoreStatus == "Draw" && newValue != scoreStatus) {
-            scoreField.controller.text = "";
-          }
           scoreStatus = newValue;
-          if (scoreStatus == "Draw") {
-            scoreField.controller.text = "-";
-          }
+          scoreField.controller.text = scoreStatus == "A\\S" ? "-" : "";
         });
       },
-      items: <String>["Up", "Under", "Draw"]
+      items: <String>["Up", "Under", "A\\S"]
           .map<DropdownMenuItem<String>>((String value) =>
               DropdownMenuItem<String>(value: value, child: Text(value)))
           .toList());
@@ -65,18 +60,8 @@ class CreateHoleState extends State<CreateHole> {
             shrinkWrap: true,
             children: <Widget>[
               numberField,
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: scoreField,
-                  ),
-                  /* Padding(padding: EdgeInsets.only(bottom: 4.8), child: _score), */
-                  Baseline(
-                      child: _score,
-                      baseline: 0,
-                      baselineType: TextBaseline.alphabetic)
-                ],
-              ),
+              CreationPage.getSpecialInput("Howth is: ", _score),
+              scoreStatus == "A\\S" ? Container() : scoreField,
               playersField,
               Toolkit.getFormText("Names separated by commas")
             ],

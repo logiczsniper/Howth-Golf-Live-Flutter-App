@@ -113,8 +113,6 @@ class DataBaseInteraction {
 
     Map<String, dynamic> newData = {'data': dataBaseEntries};
     documentSnapshot.reference.updateData(newData);
-
-    Toolkit.navigateTo(context, Toolkit.competitionsText);
   }
 
   /// Using the form fields, create a [Hole] and add it to the
@@ -179,11 +177,10 @@ class DataBaseInteraction {
       Map<String, List> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData).catchError(onError);
 
-      Toolkit.navigateTo(context, Toolkit.competitionsText);
+      Navigator.of(context).pop();
     }
   }
 
-  /// TODO: catchError
   static void onError(var e) {
     print("Error ${e.toString()}");
   }

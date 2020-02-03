@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
+import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -26,6 +27,7 @@ class SpecificCompetitionPage extends StatefulWidget {
 
 class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   DataBaseEntry currentData;
+  bool hasAccess;
 
   /// Turn a list of players, [playerList], into one string with
   /// those individual player names separated by commas, apart from the last
@@ -47,7 +49,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// is 'up', 'under' or tied of the [currentHole].
   IconData _getTrailingIcon(Hole currentHole) {
     String score = currentHole.holeScore.toString().toLowerCase();
-    if (widget.hasAccess) {
+    if (hasAccess) {
       return null;
     } else if (score.contains('up')) {
       return Icons.thumb_up;
@@ -62,7 +64,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     /// The first element in the [ListView] should be the
     /// details of the competition, i.e. a [CompetitionDetails] widget.
     if (index == 0) {
-      return CompetitionDetails(currentData, widget.hasAccess);
+      return CompetitionDetails(currentData, hasAccess);
     }
 
     /// If there are no holes, display a small text saying
@@ -79,7 +81,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
     Hole currentHole = currentData.holes[index - 1];
     IconData trailingIcon = _getTrailingIcon(currentHole);
-
     return ComplexCard(
       child: BaseListTile(
         leadingChild:
@@ -89,8 +90,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         subtitleText: _formatPlayerList(currentHole.players),
         titleText: currentHole.holeScore.toString(),
       ),
-      onTap: () {},
-      iconButton: widget.hasAccess
+      iconButton: hasAccess
           ? IconButton(
               icon: Icon(Icons.remove_circle_outline,
                   color: Palette.dark, size: 22.0),
@@ -99,63 +99,47 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               },
             )
           : null,
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    HolePage(currentData.title, currentData)));
+      },
     );
-  }
-
-  /// Gets all of the database entries, parses them, iterates through each [DataBaseEntry],
-  /// until the [entry.id] is equivalent to [currentData.id]. It is this entry
-  /// that we want fresh data for. Sets [currentData] to this new entry.
-  Future<void> _refreshList() async {
-    final int currentId = currentData.id;
-    Future<QuerySnapshot> newData = Toolkit.stream.first;
-
-    setState(() {
-      newData.then((QuerySnapshot snapshot) {
-        DocumentSnapshot document = snapshot.documents[0];
-        List<DataBaseEntry> parsedOutput = Toolkit.getDataBaseEntries(document);
-
-        for (DataBaseEntry entry in parsedOutput) {
-          if (entry.id == currentId) {
-            this.currentData = entry;
-            break;
-          }
-        }
-      });
-    });
   }
 
   /// In order to get access to a competition, the [codeAttempt]
   /// made must be equal to the [currentData.id].
   ///
-  /// Upon success, sets the [activeCompetitionText] in [SharedPreferences]
-  /// to the [currentData.id], signifying that this device has access to this
-  /// competition.
-  bool _applyPrivileges(String codeAttempt) {
+  /// Upon success, adds the [currentData.id] to the list of strings
+  /// stored in [SharedPreferences], with a key value equal to [Toolkit.activeCompetitionsText],
+  /// signifying that this user has access to this competition.
+  Future<bool> _applyPrivileges(String codeAttempt) {
     if (codeAttempt == currentData.id.toString()) {
       final preferences = SharedPreferences.getInstance();
       preferences.then((SharedPreferences preferences) {
-        preferences.setString(
-            Toolkit.activeCompetitionText, currentData.id.toString());
+        /// Get current competitions that the user has access to.
+        List<String> competitionsAccessed =
+            preferences.getStringList(Toolkit.activeCompetitionsText) ?? [];
+
+        /// Append this competition.
+        competitionsAccessed.add(currentData.id.toString());
+
+        /// Write this to [SharedPreferences].
+        preferences.setStringList(
+            Toolkit.activeCompetitionsText, competitionsAccessed);
       });
-      return true;
+      setState(() {
+        hasAccess = true;
+      });
+      return Future.value(true);
     }
-    return false;
+    setState(() {
+      hasAccess = false;
+    });
+    return Future.value(false);
   }
-
-  int get _itemCount =>
-      currentData.holes.length == 0 ? 2 : currentData.holes.length + 1;
-
-  RefreshIndicator get _refreshIndicator => RefreshIndicator(
-        displacement: 80.0,
-        color: Palette.maroon,
-        backgroundColor: Palette.light,
-        child: OpacityChangeWidget(
-            target: ListView.builder(
-          itemBuilder: _tileBuilder,
-          itemCount: _itemCount,
-        )),
-        onRefresh: _refreshList,
-      );
 
   /// Push to the [CreateHole] page.
   void _addHole() {
@@ -189,6 +173,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   initState() {
     super.initState();
     currentData = widget.competition;
+    hasAccess = widget.hasAccess;
   }
 
   @override
@@ -196,13 +181,36 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     /// If the user is an admin or manager, they are able to both
     /// see and press the [MyFloatingActionButton] in order to create
     /// a hole.
-    MyFloatingActionButton floatingActionButton = widget.hasAccess
+    MyFloatingActionButton floatingActionButton = hasAccess
         ? MyFloatingActionButton(onPressed: _addHole, text: 'Add a Hole')
         : null;
     return Scaffold(
-      appBar:
-          CodeFieldBar(currentData.title, _applyPrivileges, widget.hasAccess),
-      body: _refreshIndicator,
+      appBar: CodeFieldBar(currentData.title, _applyPrivileges, hasAccess),
+      body: OpacityChangeWidget(
+        target: StreamBuilder<QuerySnapshot>(
+          stream: Toolkit.stream,
+          builder: (context, snapshot) {
+            if (Toolkit.checkSnapshot(snapshot) != null)
+              return Toolkit.checkSnapshot(snapshot);
+
+            DocumentSnapshot document = snapshot.data.documents[0];
+
+            List<DataBaseEntry> parsedElements =
+                Toolkit.getDataBaseEntries(document);
+
+            for (DataBaseEntry dataBaseEntry in parsedElements) {
+              if (dataBaseEntry.id == currentData.id) {
+                /// This entry in [parsedElements] is the current competition.
+                currentData = dataBaseEntry;
+              }
+            }
+
+            return ListView.builder(
+                itemCount: currentData.holes.length + 1,
+                itemBuilder: _tileBuilder);
+          },
+        ),
+      ),
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

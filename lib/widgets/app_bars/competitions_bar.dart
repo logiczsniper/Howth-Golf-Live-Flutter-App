@@ -69,7 +69,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       indicatorColor: Palette.maroon,
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
       indicatorHeight: 25.0,
-      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 26.0));
+      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0));
 
   @override
   Widget build(BuildContext context) {

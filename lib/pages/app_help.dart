@@ -19,6 +19,8 @@ class HelpPage extends StatefulWidget {
 }
 
 class HelpPageState extends State<HelpPage> {
+  bool isVerified;
+
   static Text _getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
@@ -48,21 +50,25 @@ class HelpPageState extends State<HelpPage> {
       int adminCode = documentSnapshot.data['admin_code'];
 
       if (codeAttempt == adminCode.toString()) {
-        /// TODO: catch all .then() errors. may have to surround with try catch block
         final preferences = SharedPreferences.getInstance();
         preferences.then((SharedPreferences preferences) {
           preferences.setBool(Toolkit.activeAdminText, true);
         });
-        print("ADMIN");
+        setState(() {
+          isVerified = true;
+        });
         return true;
       }
+      setState(() {
+        isVerified = false;
+      });
       return false;
     }));
   }
 
   /// If they have special privileges, display extra entries depending on
   /// their access level.
-  int _bonusEntries(String competitionAccess, bool isAdmin) {
+  int _bonusEntries(List<String> competitionAccess, bool isAdmin) {
     if (isAdmin)
       return 2;
     else if (competitionAccess.isNotEmpty)
@@ -72,13 +78,21 @@ class HelpPageState extends State<HelpPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    /* isVerified = false; */
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    final bool isInitVerified = arguments.isAdmin ?? false;
-    final String competitionAccess = arguments.competitionAccess ?? "";
+    Privileges arguments = ModalRoute.of(context).settings.arguments;
+    List<String> competitionAccess = arguments.competitionAccess ?? [];
+    if (isVerified == null) {
+      isVerified = arguments.isAdmin ?? false;
+    }
 
     return Scaffold(
-      appBar: CodeFieldBar(Toolkit.helpText, _applyPrivileges, isInitVerified),
+      appBar: CodeFieldBar(Toolkit.helpText, _applyPrivileges, isVerified),
       body: OpacityChangeWidget(
         target: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
@@ -101,7 +115,7 @@ class HelpPageState extends State<HelpPage> {
             /// must be subtracted before the bonus entries are added.
             itemCount: HelpData.entries.length -
                 1 +
-                _bonusEntries(competitionAccess, isInitVerified)),
+                _bonusEntries(competitionAccess, isVerified)),
       ),
       backgroundColor: Palette.light,
     );

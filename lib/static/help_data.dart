@@ -145,9 +145,8 @@ class HelpData {
   ];
 
   /// Converting the hidden data (above) into a useful list of AppHelpEntries. These are constant.
-  static List<AppHelpEntry> entries = List<AppHelpEntry>.generate(
-      _entryData.length,
-      (int index) => AppHelpEntry.fromMap(_entryData[index]));
+  static List<AppHelpEntry> entries =
+      _entryData.map((Map data) => AppHelpEntry.fromMap(data)).toList();
 }
 
 class AppHelpEntry {

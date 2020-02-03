@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/static/toolkit.dart';
 
 import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
@@ -26,14 +27,14 @@ class CompetitionDetails extends StatelessWidget {
   ///
   /// If [hasAccess], a fourth row must be displayed which shows the key ([id])
   /// of the competition.
-  Flexible get _centralFlexible => Flexible(
+  Widget get _centralFlexible => Flexible(
         flex: 2,
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _getMiddleRow(data.opposition, FontAwesomeIcons.fistRaised, 14.7),
             _getMiddleRow(data.location, Icons.location_on, 18.5),
+            _getMiddleRow(data.date, Icons.date_range, 18.0),
             _getMiddleRow(data.time, Icons.access_time, 18),
             hasAccess
                 ? _getMiddleRow(data.id.toString(), Icons.vpn_key, 17.0)
@@ -44,15 +45,47 @@ class CompetitionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 1.5, 0.0, 2.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SideFlexible(data.score.howth),
-            _centralFlexible,
-            SideFlexible(data.score.opposition)
-          ],
-        ),
-      );
+      padding: EdgeInsets.fromLTRB(0.0, 1.5, 0.0, 2.0),
+      child: Column(
+        children: <Widget>[
+          Container(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Text(
+                    "Howth Golf Club",
+                    textAlign: TextAlign.right,
+                    style: Toolkit.cardSubTitleTextStyle,
+                  )),
+                  Padding(
+                      child: Icon(
+                        FontAwesomeIcons.fistRaised,
+                        color: Palette.dark,
+                        size: 16.7,
+                      ),
+                      padding: EdgeInsets.all(3.0)),
+                  Expanded(
+                      child: Text(
+                    data.opposition,
+                    textAlign: TextAlign.left,
+                    style: Toolkit.cardSubTitleTextStyle,
+                  ))
+                ],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 9.0)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SideFlexible(
+                data.score.howth,
+              ),
+              _centralFlexible,
+              SideFlexible(
+                data.score.opposition,
+              )
+            ],
+          ),
+        ],
+      ));
 }

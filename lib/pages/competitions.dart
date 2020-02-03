@@ -26,34 +26,6 @@ class CompetitionsPage extends StatefulWidget {
 class _CompetitionsPageState extends State<CompetitionsPage> {
   AsyncSnapshot<QuerySnapshot> _snapshot;
 
-  /// Handles special situations with [snapshot].
-  ///
-  /// If an error occurs, returns a [Center] widget to notify the user
-  /// to contact the developer.
-  /// If the snapshot is still loading, return a loading widget, the
-  /// [SpinKitPulse].
-  static Center _checkSnapshot(AsyncSnapshot<QuerySnapshot> snapshot) {
-    if (snapshot.error != null)
-      return Center(
-          child: Column(
-        children: <Widget>[
-          Icon(Icons.error, color: Palette.dark),
-          Text(
-            'Oof, please email the address in App Help to report this error.',
-            style: Toolkit.cardSubTitleTextStyle,
-          )
-        ],
-      ));
-
-    if (!snapshot.hasData)
-      return Center(
-          child: SpinKitPulse(
-        color: Palette.dark,
-      ));
-
-    return null;
-  }
-
   /// Handles special situations with [filteredElements].
   ///
   /// In the case where the data is still being fetched, return a
@@ -147,8 +119,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// tests if they are an given these rights for [currentEntry].
   static bool _isManager(BuildContext context, DataBaseEntry currentEntry) {
     final Privileges arguments = ModalRoute.of(context).settings.arguments;
+    if (arguments.competitionAccess == null) return false;
     final bool isManager =
-        arguments.competitionAccess == currentEntry.id.toString();
+        arguments.competitionAccess.contains(currentEntry.id.toString());
     return isManager;
   }
 
@@ -168,8 +141,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           target: StreamBuilder<QuerySnapshot>(
               stream: Toolkit.stream,
               builder: (context, snapshot) {
-                if (_checkSnapshot(snapshot) != null)
-                  return _checkSnapshot(snapshot);
+                if (Toolkit.checkSnapshot(snapshot) != null)
+                  return Toolkit.checkSnapshot(snapshot);
 
                 _snapshot = snapshot;
 
@@ -210,6 +183,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                       });
                     };
                     return ComplexCard(
+
+                        /// Was a call to _tileBuilder
                         child: _tileBuilder(context, currentEntry),
                         onTap: toCompetition,
                         iconButton: _isAdmin(context)

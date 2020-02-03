@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 
 import 'package:howth_golf_live/static/privileges.dart';
@@ -22,7 +23,7 @@ class Toolkit {
 
   /// When getting data from preferences, it is vital that these values are used as keys.
   static const String activeAdminText = "activeAdmin";
-  static const String activeCompetitionText = "activeCompetitions";
+  static const String activeCompetitionsText = "activeCompetitions";
 
   /// Serves as the builder method for the [MaterialApp].
   ///
@@ -33,10 +34,15 @@ class Toolkit {
   /// Some common widgets.
   static BoxDecoration rightSideBoxDecoration = BoxDecoration(
       border: Border(right: BorderSide(width: 1.5, color: Palette.maroon)));
+
+  static BoxDecoration bottomSideBoxDecoration = BoxDecoration(
+      border: Border(bottom: BorderSide(width: 1.5, color: Palette.maroon)));
+
   static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
       color: Palette.card,
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10.0));
+
   static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide(color: Palette.maroon, width: 1.8),
       borderRadius: const BorderRadius.all(const Radius.circular(10.0)));
@@ -55,7 +61,6 @@ class Toolkit {
   /// an argument to [pushNamed] so the new page can determine whether or
   /// not the user is an admin and if so, adjust how it displays certain
   /// elements.
-  /// TODO: catch error here
   static void navigateTo(BuildContext context, String destination) {
     final preferences = SharedPreferences.getInstance();
     preferences.then((SharedPreferences preferences) {
@@ -95,6 +100,34 @@ class Toolkit {
         textAlign: TextAlign.center,
         style: Toolkit.formTextStyle,
       ));
+
+  /// Handles special situations with [snapshot].
+  ///
+  /// If an error occurs, returns a [Center] widget to notify the user
+  /// to contact the developer.
+  /// If the snapshot is still loading, return a loading widget, the
+  /// [SpinKitPulse].
+  static Center checkSnapshot(AsyncSnapshot<QuerySnapshot> snapshot) {
+    if (snapshot.error != null)
+      return Center(
+          child: Column(
+        children: <Widget>[
+          Icon(Icons.error, color: Palette.dark),
+          Text(
+            'Oof, please email the address in App Help to report this error.',
+            style: Toolkit.cardSubTitleTextStyle,
+          )
+        ],
+      ));
+
+    if (!snapshot.hasData)
+      return Center(
+          child: SpinKitPulse(
+        color: Palette.dark,
+      ));
+
+    return null;
+  }
 
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].

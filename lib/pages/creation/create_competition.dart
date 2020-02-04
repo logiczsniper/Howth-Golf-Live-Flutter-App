@@ -70,7 +70,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
 
   void _onPressed() {
     DataBaseInteraction.addCompetition(context, widget.snapshot, _formKey,
-        titleField, locationField, oppositionField, dateTimeField);
+        titleField, isHome, locationField, oppositionField, dateTimeField);
   }
 
   @override

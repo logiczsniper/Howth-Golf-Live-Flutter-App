@@ -37,6 +37,7 @@ class DataBaseInteraction {
       AsyncSnapshot<QuerySnapshot> snapshot,
       GlobalKey<FormState> _formKey,
       DecoratedTextField titleField,
+      bool isHome,
       DecoratedTextField locationField,
       DecoratedTextField oppositionField,
       DecoratedDateTimeField dateTimeField) {
@@ -46,7 +47,10 @@ class DataBaseInteraction {
           id: _id,
           title: titleField.controller.value.text,
           location: Location(
-              address: locationField.controller.value.text, isHome: true),
+              address: isHome
+                  ? "Howth Golf Club"
+                  : locationField.controller.value.text,
+              isHome: isHome),
           opposition: oppositionField.controller.value.text,
           holes: [],
           score: Score.fresh,

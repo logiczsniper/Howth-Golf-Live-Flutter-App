@@ -95,7 +95,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               icon: Icon(Icons.remove_circle_outline,
                   color: Palette.dark, size: 22.0),
               onPressed: () {
-                _deleteHole(index);
+                setState(() {
+                  _deleteHole(index);
+                });
               },
             )
           : null,

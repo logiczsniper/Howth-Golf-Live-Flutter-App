@@ -53,7 +53,7 @@ class CompetitionDetails extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                       child: Text(
-                    "Howth Golf Club",
+                    data.location.isHome ? "Howth Golf Club" : data.opposition,
                     textAlign: TextAlign.right,
                     style: Toolkit.cardSubTitleTextStyle,
                   )),
@@ -66,7 +66,7 @@ class CompetitionDetails extends StatelessWidget {
                       padding: EdgeInsets.all(3.0)),
                   Expanded(
                       child: Text(
-                    data.opposition,
+                    !data.location.isHome ? "Howth Golf Club" : data.opposition,
                     textAlign: TextAlign.left,
                     style: Toolkit.cardSubTitleTextStyle,
                   ))
@@ -77,12 +77,14 @@ class CompetitionDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SideFlexible(
-                data.score.howth,
-              ),
+              SideFlexible(data.location.isHome
+                  ? data.score.howth
+                  : data.score.opposition),
               _centralFlexible,
               SideFlexible(
-                data.score.opposition,
+                !data.location.isHome
+                    ? data.score.howth
+                    : data.score.opposition,
               )
             ],
           ),

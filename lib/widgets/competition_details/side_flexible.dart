@@ -11,7 +11,9 @@ class SideFlexible extends StatelessWidget {
       overflow: TextOverflow.fade,
       maxLines: 1,
       style: TextStyle(
-          fontSize: 21, color: Palette.dark, fontWeight: FontWeight.w400));
+          fontSize: 21,
+          color: Palette.buttonText,
+          fontWeight: FontWeight.w400));
 
   /// The maroon decoration around the [text].
   Decoration get _decoration => ShapeDecoration(

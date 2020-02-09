@@ -64,6 +64,18 @@ class Score {
 
   static Score get fresh => Score(howth: "0", opposition: "0");
 
+  String get leader {
+    double howth = double.tryParse(this.howth);
+    double opposition = double.tryParse(this.opposition);
+
+    if (howth == null || howth == opposition) {
+      /// The teams are all square, [tryParse] returned null.
+      return null;
+    }
+
+    return howth > opposition ? Fields.howth : Fields.opposition;
+  }
+
   Map get toJson => {Fields.howth: howth, Fields.opposition: opposition};
 
   Score({this.howth, this.opposition});
@@ -75,19 +87,19 @@ class Hole {
   /// In the database, [holeNumber] is actually 'hole_number' and
   ///                  [holeScore] is actually 'hole_score'.
   final int holeNumber;
-  final String holeScore;
+  final Score holeScore;
   final List<String> players;
 
   /// Convert a map into a [Hole] object.
   Hole.fromMap(Map map)
       : holeNumber = map[Fields.holeNumber],
-        holeScore = map[Fields.holeScore],
+        holeScore = Score.fromMap(map[Fields.holeScore]),
         players = List<String>.generate(map[Fields.players].length,
             (int index) => map[Fields.players][index].toString());
 
   Map get toJson => {
         Fields.holeNumber: holeNumber,
-        Fields.holeScore: holeScore,
+        Fields.holeScore: holeScore.toJson,
         Fields.players: players
       };
 

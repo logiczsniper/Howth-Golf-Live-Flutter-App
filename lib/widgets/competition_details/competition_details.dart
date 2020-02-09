@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 
 import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
@@ -45,34 +43,9 @@ class CompetitionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 1.5, 0.0, 2.0),
+      padding: EdgeInsets.fromLTRB(0.0, 1.5, 0.0, 0.0),
       child: Column(
         children: <Widget>[
-          Container(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      child: Text(
-                    data.location.isHome ? "Howth Golf Club" : data.opposition,
-                    textAlign: TextAlign.right,
-                    style: Toolkit.cardSubTitleTextStyle,
-                  )),
-                  Padding(
-                      child: Icon(
-                        FontAwesomeIcons.fistRaised,
-                        color: Palette.dark,
-                        size: 16.7,
-                      ),
-                      padding: EdgeInsets.all(3.0)),
-                  Expanded(
-                      child: Text(
-                    !data.location.isHome ? "Howth Golf Club" : data.opposition,
-                    textAlign: TextAlign.left,
-                    style: Toolkit.cardSubTitleTextStyle,
-                  ))
-                ],
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 9.0)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,

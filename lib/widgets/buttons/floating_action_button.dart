@@ -13,12 +13,12 @@ class MyFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) => FloatingActionButton.extended(
         icon: Icon(
           Icons.add,
-          color: Palette.dark,
+          color: Palette.buttonText,
         ),
         backgroundColor: Palette.maroon,
         label: Text(
           text,
-          style: TextStyle(fontSize: 14, color: Palette.dark),
+          style: TextStyle(fontSize: 14, color: Palette.buttonText),
         ),
         onPressed: onPressed,
       );

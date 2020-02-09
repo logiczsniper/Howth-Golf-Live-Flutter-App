@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
@@ -45,72 +46,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     return output;
   }
 
-  /// The [trailingIcon] depends on [holeScore] - whether or not Howth's team
-  /// is 'up', 'under' or tied of the [currentHole].
-  IconData _getTrailingIcon(Hole currentHole) {
-    String score = currentHole.holeScore.toString().toLowerCase();
-    if (hasAccess) {
-      return null;
-    } else if (score.contains('up')) {
-      return Icons.thumb_up;
-    } else if (score.contains('under')) {
-      return Icons.thumb_down;
-    } else {
-      return Icons.thumbs_up_down;
-    }
-  }
-
-  Widget _tileBuilder(BuildContext context, int index) {
-    /// The first element in the [ListView] should be the
-    /// details of the competition, i.e. a [CompetitionDetails] widget.
-    if (index == 0) {
-      return CompetitionDetails(currentData, hasAccess);
-    }
-
-    /// If there are no holes, display a small text saying
-    /// there are no holes yet!
-    if (currentData.holes.length == 0) {
-      return Center(
-          child: Padding(
-              child: Text(
-                "No hole data found for this competition!",
-                style: Toolkit.cardTitleTextStyle,
-              ),
-              padding: EdgeInsets.only(top: 25.0)));
-    }
-
-    Hole currentHole = currentData.holes[index - 1];
-    IconData trailingIcon = _getTrailingIcon(currentHole);
-    return ComplexCard(
-      child: BaseListTile(
-        leadingChild:
-            Toolkit.getLeadingColumn("HOLE", currentHole.holeNumber.toString()),
-        trailingIconData: trailingIcon,
-        subtitleMaxLines: 1,
-        subtitleText: _formatPlayerList(currentHole.players),
-        titleText: currentHole.holeScore.toString(),
-      ),
-      iconButton: hasAccess
-          ? IconButton(
-              icon: Icon(Icons.remove_circle_outline,
-                  color: Palette.dark, size: 22.0),
-              onPressed: () {
-                setState(() {
-                  _deleteHole(index);
-                });
-              },
-            )
-          : null,
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    HolePage(currentData.title, currentData)));
-      },
-    );
-  }
-
   /// In order to get access to a competition, the [codeAttempt]
   /// made must be equal to the [currentData.id].
   ///
@@ -137,6 +72,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       });
       return Future.value(true);
     }
+
     setState(() {
       hasAccess = false;
     });
@@ -170,6 +106,119 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       });
     });
   }
+
+  /// Constructs a single row in the table of holes.
+  ///
+  /// This row contains details of one [Hole] as given by [hole].
+  /// Depending on [isHome], howth's information will be on the
+  /// right or the left.
+  ///
+  /// The [index] is the index of the [hole] within [currentData], which must be known
+  /// when navigating to the individual hole page so that the user can update a single hole-
+  /// the hole specified by the index.
+  Widget _rowBuilder(Hole hole, bool isHome, String opposition, int index) =>
+      GestureDetector(
+          child: Container(
+            child: Padding(
+              padding: EdgeInsets.all(5.3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  /// Home team section.
+                  Expanded(
+                      child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                        /// Home player.
+                        Expanded(
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                      color: index % 2 != 0
+                                          ? Palette.light
+                                          : Palette.tableLight,
+                                      borderRadius: BorderRadius.circular(6.0)),
+                                  child: Text(
+                                      isHome
+                                          ? hole.players.join(" ")
+                                          : opposition,
+                                      textAlign: TextAlign.left,
+                                      style: Toolkit.cardSubTitleTextStyle))),
+                        ),
+
+                        /// Home score.
+                        Container(
+                            child: Text(
+                                isHome
+                                    ? hole.holeScore.howth
+                                    : hole.holeScore.opposition,
+                                style: Toolkit.leadingChildTextStyle),
+                            padding: EdgeInsets.fromLTRB(16.0, 3.0, 12.0, 3.0))
+                      ])),
+
+                  /// Hole Number
+                  Container(
+                      margin: EdgeInsets.symmetric(vertical: 2.0),
+                      padding: EdgeInsets.all(2.5),
+                      child: Padding(
+                          child: Text(
+                              hole.holeNumber.toString().length == 1
+                                  ? "0${hole.holeNumber}"
+                                  : hole.holeNumber.toString(),
+                              style: Toolkit.cardSubTitleTextStyle),
+                          padding: EdgeInsets.all(4.0)),
+                      decoration: BoxDecoration(
+                          color: Palette.light,
+                          border: Border.all(color: Palette.maroon, width: 1.5),
+                          borderRadius: BorderRadius.circular(9.0))),
+
+                  /// Away team section.
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      /// Away team score.
+                      Container(
+                          child: Text(
+                              !isHome
+                                  ? hole.holeScore.howth
+                                  : hole.holeScore.opposition,
+                              style: Toolkit.leadingChildTextStyle),
+                          padding: EdgeInsets.fromLTRB(12.0, 3.0, 16.0, 3.0)),
+
+                      /// Away team player.
+                      Expanded(
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                      color: index % 2 != 0
+                                          ? Palette.light
+                                          : Palette.tableLight,
+                                      borderRadius: BorderRadius.circular(6.0)),
+                                  child: Text(
+                                      !isHome
+                                          ? hole.players.join(" ")
+                                          : opposition,
+                                      textAlign: TextAlign.right,
+                                      style: Toolkit.cardSubTitleTextStyle)))),
+                    ],
+                  ))
+                ],
+              ),
+            ),
+          ),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HolePage(
+                        hole.holeNumber.toString(), currentData, index)));
+          });
 
   @override
   initState() {
@@ -207,17 +256,73 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               }
             }
 
-            /// If there is no hole data, [_tileBuilder] must be called one more
-            /// time in order to return the text notifying the user that no hole
-            /// data has been added yet.
-            ///
-            /// Both cases must add atleast one to account for the competition details
-            /// at index 0.
-            int _countBonus = currentData.holes.length == 0 ? 2 : 1;
+            int _countBonus = currentData.holes.length == 0 ? 3 : 2;
 
-            return ListView.builder(
-                itemCount: currentData.holes.length + _countBonus,
-                itemBuilder: _tileBuilder);
+            return ListView.separated(
+              padding: EdgeInsets.only(bottom: 100.0),
+              separatorBuilder: (BuildContext context, int index) {
+                if (index != 0 && index != 1)
+                  return Divider(
+                    indent: 50.0,
+                    endIndent: 50.0,
+                    thickness: 1.5,
+                    color: Palette.divider,
+                  );
+                else
+                  return Container();
+              },
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0)
+                  return CompetitionDetails(currentData, hasAccess);
+                else if (index == 1)
+                  return Container(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(
+                            currentData.location.isHome
+                                ? "Howth Golf Club"
+                                : currentData.opposition,
+                            textAlign: TextAlign.right,
+                            style: Toolkit.formTextStyle,
+                          )),
+                          Padding(
+                              child: Icon(
+                                FontAwesomeIcons.fistRaised,
+                                color: Palette.dark,
+                                size: 16.7,
+                              ),
+                              padding: EdgeInsets.all(3.0)),
+                          Expanded(
+                              child: Text(
+                            !currentData.location.isHome
+                                ? "Howth Golf Club"
+                                : currentData.opposition,
+                            textAlign: TextAlign.left,
+                            style: Toolkit.formTextStyle,
+                          ))
+                        ],
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 9.0, vertical: 10.0));
+                else if (currentData.holes.length == 0)
+                  return Center(
+                      child: Padding(
+                          child: Text(
+                            "No hole data found for this competition!",
+                            style: Toolkit.cardTitleTextStyle,
+                          ),
+                          padding: EdgeInsets.only(top: 25.0)));
+                else
+                  return _rowBuilder(
+                    currentData.holes[index - 2],
+                    currentData.location.isHome,
+                    currentData.opposition,
+                    index,
+                  );
+              },
+              itemCount: currentData.holes.length + _countBonus,
+            );
           },
         ),
       ),

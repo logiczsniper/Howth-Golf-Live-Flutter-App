@@ -129,7 +129,8 @@ class DataBaseInteraction {
     BuildContext context,
     GlobalKey<FormState> _formKey,
     DecoratedTextField numberField,
-    DecoratedTextField scoreField,
+    DecoratedTextField howthScoreField,
+    DecoratedTextField oppositionScoreField,
     String scoreStatus,
     DecoratedTextField playersField,
     QuerySnapshot snapshot,
@@ -139,7 +140,12 @@ class DataBaseInteraction {
     if (_formKey.currentState.validate()) {
       Hole newHole = Hole(
         holeNumber: int.tryParse(numberField.controller.value.text),
-        holeScore: scoreField.controller.text.toString() + " " + scoreStatus,
+        holeScore: scoreStatus == "A\\S"
+            ? Score.fresh
+            : Score(
+                howth: howthScoreField.controller.text,
+                opposition: oppositionScoreField.controller.text),
+        /* holeScore: scoreField.controller.text.toString() + " " + scoreStatus, */
 
         /// Note: this means that the text provided by the user which contains
         /// player names must be separated with ", " between each player.
@@ -200,9 +206,9 @@ class DataBaseInteraction {
     double howth = 0;
     double opposition = 0;
     for (Hole hole in parsedHoles) {
-      if (hole.holeScore.contains("Up")) {
+      if (hole.holeScore.leader == Fields.howth) {
         howth++;
-      } else if (hole.holeScore.contains("Under")) {
+      } else if (hole.holeScore.leader == Fields.opposition) {
         opposition++;
       } else {
         /// Its a draw- both go up by 0.5!

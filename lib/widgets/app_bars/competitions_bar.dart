@@ -79,6 +79,10 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
           return <Widget>[
             SliverAppBar(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(40),
+                )),
                 centerTitle: true,
                 title: getTitle(appBarTitle),
                 floating: true,
@@ -98,8 +102,10 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     onPressed: _searchPressed,
                   )
                 ],
+
+                /// TODO: potentially add ink well here
                 bottom: TabBar(
-                    labelColor: Palette.dark,
+                    labelColor: Palette.buttonText,
                     indicator: _tabIndicator,
                     tabs: <Widget>[
                       Tab(text: Toolkit.currentText),

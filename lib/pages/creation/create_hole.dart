@@ -20,13 +20,17 @@ class CreateHole extends StatefulWidget {
 
 class CreateHoleState extends State<CreateHole> {
   final _formKey = GlobalKey<FormState>();
-  String scoreStatus = "Up";
+  String scoreStatus = "A\\S";
 
   /// Fields the user must fill out to create a hole.
   DecoratedTextField numberField =
       DecoratedTextField(Fields.holeNumber, number: true);
-  DecoratedTextField scoreField = DecoratedTextField(
-    Fields.holeScore,
+  DecoratedTextField howthScoreField = DecoratedTextField(
+    "${Fields.howth} Score",
+    number: true,
+  );
+  DecoratedTextField oppositionScoreField = DecoratedTextField(
+    "${Fields.opposition} Score",
     number: true,
   );
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
@@ -42,7 +46,9 @@ class CreateHoleState extends State<CreateHole> {
       onChanged: (String newValue) {
         setState(() {
           scoreStatus = newValue;
-          scoreField.controller.text = scoreStatus == "A\\S" ? "-" : "";
+          howthScoreField.controller.text = scoreStatus == "A\\S" ? "-" : "";
+          oppositionScoreField.controller.text =
+              scoreStatus == "A\\S" ? "-" : "";
         });
       },
       items: <String>["Up", "Under", "A\\S"]
@@ -61,7 +67,8 @@ class CreateHoleState extends State<CreateHole> {
             children: <Widget>[
               numberField,
               CreationPage.getSpecialInput("Howth is: ", _score),
-              scoreStatus == "A\\S" ? Container() : scoreField,
+              scoreStatus == "A\\S" ? Container() : howthScoreField,
+              scoreStatus == "A\\S" ? Container() : oppositionScoreField,
               playersField,
               Toolkit.getFormText("Names separated by commas")
             ],
@@ -71,8 +78,16 @@ class CreateHoleState extends State<CreateHole> {
       ));
 
   void _onPressed() {
-    DataBaseInteraction.addHole(context, _formKey, numberField, scoreField,
-        scoreStatus, playersField, widget.snapshot, widget.currentId);
+    DataBaseInteraction.addHole(
+        context,
+        _formKey,
+        numberField,
+        howthScoreField,
+        oppositionScoreField,
+        scoreStatus,
+        playersField,
+        widget.snapshot,
+        widget.currentId);
   }
 
   @override

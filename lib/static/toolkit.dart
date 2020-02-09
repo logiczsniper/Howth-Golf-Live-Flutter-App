@@ -38,6 +38,11 @@ class Toolkit {
   static BoxDecoration bottomSideBoxDecoration = BoxDecoration(
       border: Border(bottom: BorderSide(width: 1.5, color: Palette.maroon)));
 
+  static BoxDecoration verticalSideBoxDecoration = BoxDecoration(
+      border: Border(
+          bottom: BorderSide(width: 1.5, color: Palette.maroon),
+          top: BorderSide(width: 1.5, color: Palette.maroon)));
+
   static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
       color: Palette.card,
       shape: BoxShape.rectangle,
@@ -150,7 +155,7 @@ class Toolkit {
   static const TextStyle cardSubTitleTextStyle =
       TextStyle(fontSize: 13, color: Palette.dark);
   static const TextStyle hintTextStyle =
-      TextStyle(fontSize: 16, color: Palette.dark);
+      TextStyle(fontSize: 15, color: Palette.dark);
   static const TextStyle dialogTextStyle =
       TextStyle(fontSize: 16, color: Palette.maroon);
   static const TextStyle leadingChildTextStyle =

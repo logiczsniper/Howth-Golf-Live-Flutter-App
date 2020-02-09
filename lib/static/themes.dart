@@ -6,10 +6,13 @@ class Themes {
       primaryColor: Palette.light,
       primaryColorDark: Palette.dark,
       accentColor: Palette.maroon,
+      cardTheme: cardTheme,
       textTheme: textTheme,
       iconTheme: iconTheme);
 
   static TextTheme get textTheme => TextTheme().apply(bodyColor: Palette.dark);
+
+  static CardTheme get cardTheme => CardTheme(color: Palette.maroon);
 
   static IconThemeData get iconTheme =>
       IconThemeData(color: Palette.maroon, size: 22.0);

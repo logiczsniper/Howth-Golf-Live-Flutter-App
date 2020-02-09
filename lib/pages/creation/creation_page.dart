@@ -26,7 +26,6 @@ class CreationPage {
   static Scaffold construct(
       String title, void Function() onPressed, Form form) {
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         centerTitle: true,
         title: Text(title,

@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 class DecoratedField {
   final DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
 
-  UnderlineInputBorder get _border =>
-      UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon));
+  UnderlineInputBorder get _border => UnderlineInputBorder(
+      borderSide: BorderSide(color: Palette.maroon, width: 1.5));
 
   /// Modifies the field to a nicer looking string.
   ///

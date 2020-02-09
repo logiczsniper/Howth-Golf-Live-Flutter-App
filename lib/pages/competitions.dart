@@ -166,6 +166,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                     isCurrentTab ? sortedElements[0] : sortedElements[1];
 
                 return ListView.builder(
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 100.0),
                   itemCount: activeElements.length,
                   itemBuilder: (BuildContext context, int index) {
                     DataBaseEntry currentEntry = activeElements[index];
@@ -182,6 +183,45 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                                     currentEntry, hasAccess)));
                       });
                     };
+                    /* return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        color: Palette.lightMaroon,
+                        elevation: 0,
+                        margin: EdgeInsets.fromLTRB(30.0, 9.0, 30.0, 9.0),
+                        child: ListTile(
+                            title: Container(
+                                child: Text(
+                                  "1 - 2",
+                                  style: TextStyle(color: Palette.buttonText),
+                                  textAlign: TextAlign.center,
+                                ),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1.5, color: Palette.light))),
+                                padding: EdgeInsets.fromLTRB(3.0, 0, 3.0, 13.0),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 120.0, vertical: 13.0)),
+                            subtitle: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                      child: Text(
+                                        "Best Golf Cup Ever",
+                                        style: TextStyle(
+                                            color: Palette.buttonText,
+                                            fontSize: 20.0),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      padding: EdgeInsets.all(0)),
+                                  Text(
+                                    "16/35/23 15:12",
+                                    style: TextStyle(color: Palette.buttonText),
+                                    textAlign: TextAlign.center,
+                                  )
+                                ]))); */
                     return ComplexCard(
                         child: _tileBuilder(context, currentEntry),
                         onTap: toCompetition,

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
@@ -33,6 +32,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// Upon success, adds the [currentData.id] to the list of strings
   /// stored in [SharedPreferences], with a key value equal to [Toolkit.activeCompetitionsText],
   /// signifying that this user has access to this competition.
+  ///
+  /// [setState] is also called to rebuild the page with the potentially newly aquired
+  /// privileges.
   Future<bool> _applyPrivileges(String codeAttempt) {
     if (codeAttempt == currentData.id.toString()) {
       final preferences = SharedPreferences.getInstance();
@@ -75,6 +77,28 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     });
   }
 
+  /// Get the styled and positioned widget to display the name of the player(s)
+  /// for the designated [hole].
+  Expanded _getPlayer(Hole hole, String text, int index, {bool away = false}) =>
+      Expanded(
+          child: Align(
+              alignment: away ? Alignment.centerRight : Alignment.centerLeft,
+              child: Container(
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color:
+                          index % 2 != 0 ? Palette.light : Palette.tableLight,
+                      borderRadius: BorderRadius.circular(6.0)),
+                  child: Text(text,
+                      textAlign: away ? TextAlign.right : TextAlign.left,
+                      style: Toolkit.cardSubTitleTextStyle))));
+
+  /// Gets the properly padded and styled score widget.
+  Container _getScore(String text, {bool away = false}) => Container(
+      child: Text(text, style: Toolkit.leadingChildTextStyle),
+      padding: EdgeInsets.fromLTRB(
+          away ? 12.0 : 16.0, 3.0, !away ? 12.0 : 16.0, 3.0));
+
   /// Constructs a single row in the table of holes.
   ///
   /// This row contains details of one [Hole] as given by [hole].
@@ -99,50 +123,21 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                         /// Home player.
-                        Expanded(
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                      color: index % 2 != 0
-                                          ? Palette.light
-                                          : Palette.tableLight,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  child: Text(
-                                      isHome
-                                          ? Toolkit.formatPlayerList(
-                                              hole.players)
-                                          : opposition,
-                                      textAlign: TextAlign.left,
-                                      style: Toolkit.cardSubTitleTextStyle))),
-                        ),
+                        _getPlayer(
+                            hole,
+                            isHome
+                                ? Toolkit.formatPlayerList(hole.players)
+                                : opposition,
+                            index),
 
                         /// Home score.
-                        Container(
-                            child: Text(
-                                isHome
-                                    ? hole.holeScore.howth
-                                    : hole.holeScore.opposition,
-                                style: Toolkit.leadingChildTextStyle),
-                            padding: EdgeInsets.fromLTRB(16.0, 3.0, 12.0, 3.0))
+                        _getScore(isHome
+                            ? hole.holeScore.howth
+                            : hole.holeScore.opposition)
                       ])),
 
                   /// Hole Number
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 2.0),
-                      padding: EdgeInsets.all(2.5),
-                      child: Padding(
-                          child: Text(
-                              hole.holeNumber.toString().length == 1
-                                  ? "0${hole.holeNumber}"
-                                  : hole.holeNumber.toString(),
-                              style: Toolkit.cardSubTitleTextStyle),
-                          padding: EdgeInsets.all(4.0)),
-                      decoration: BoxDecoration(
-                          color: Palette.light,
-                          border: Border.all(color: Palette.maroon, width: 1.5),
-                          borderRadius: BorderRadius.circular(9.0))),
+                  Toolkit.getHoleNumberDecorated(hole.holeNumber),
 
                   /// Away team section.
                   Expanded(
@@ -150,32 +145,20 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       /// Away team score.
-                      Container(
-                          child: Text(
-                              !isHome
-                                  ? hole.holeScore.howth
-                                  : hole.holeScore.opposition,
-                              style: Toolkit.leadingChildTextStyle),
-                          padding: EdgeInsets.fromLTRB(12.0, 3.0, 16.0, 3.0)),
+                      _getScore(
+                          !isHome
+                              ? hole.holeScore.howth
+                              : hole.holeScore.opposition,
+                          away: true),
 
                       /// Away team player.
-                      Expanded(
-                          child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                      color: index % 2 != 0
-                                          ? Palette.light
-                                          : Palette.tableLight,
-                                      borderRadius: BorderRadius.circular(6.0)),
-                                  child: Text(
-                                      !isHome
-                                          ? Toolkit.formatPlayerList(
-                                              hole.players)
-                                          : opposition,
-                                      textAlign: TextAlign.right,
-                                      style: Toolkit.cardSubTitleTextStyle)))),
+                      _getPlayer(
+                          hole,
+                          !isHome
+                              ? Toolkit.formatPlayerList(hole.players)
+                              : opposition,
+                          index,
+                          away: true),
                     ],
                   ))
                 ],
@@ -245,42 +228,13 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                 if (index == 0)
                   return CompetitionDetails(currentData, hasAccess);
                 else if (index == 1)
-                  return Container(
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Text(
-                            currentData.location.isHome
-                                ? "Howth Golf Club"
-                                : currentData.opposition,
-                            textAlign: TextAlign.right,
-                            style: Toolkit.formTextStyle,
-                          )),
-                          Padding(
-                              child: Icon(
-                                FontAwesomeIcons.fistRaised,
-                                color: Palette.dark,
-                                size: 16.7,
-                              ),
-                              padding: EdgeInsets.all(3.0)),
-                          Expanded(
-                              child: Text(
-                            !currentData.location.isHome
-                                ? "Howth Golf Club"
-                                : currentData.opposition,
-                            textAlign: TextAlign.left,
-                            style: Toolkit.formTextStyle,
-                          ))
-                        ],
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 9.0, vertical: 10.0));
+                  return Toolkit.getVersus(currentData, "Howth Golf Club");
                 else if (currentData.holes.length == 0)
                   return Center(
                       child: Padding(
                           child: Text(
-                            "No hole data found for this competition!",
-                            style: Toolkit.cardTitleTextStyle,
+                            "No hole data found for the ${currentData.title}!",
+                            style: Toolkit.noDataTextStyle,
                           ),
                           padding: EdgeInsets.only(top: 25.0)));
                 else

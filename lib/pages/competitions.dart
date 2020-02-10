@@ -117,43 +117,62 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return isManager;
   }
 
+  /// Returns the main number as a string from the [score].
+  ///
+  /// If the main number is 0, this will display just 1 / 2 rather than
+  /// 0 and 1 / 2.
+  static String _getTextSpanText(String score) =>
+      double.tryParse(score).toInt() == 0 && Toolkit.isFraction(score)
+          ? ""
+          : double.tryParse(score).toInt().toString();
+
   static Widget _tileBuilder(
           BuildContext context, DataBaseEntry currentEntry) =>
       BaseListTile(
+
+          /// The score of the competition.
+          ///
+          /// Uses [RichText] to display fractions when needed.
           leadingChild: RichText(
+            /// Conditions similar to the ternary operator below are
+            /// ensuring that whichever team is home has their information
+            /// on the left, and whoever is away on the right.
             text: TextSpan(
-                text: double.tryParse(currentEntry.score.howth).toInt() == 0 &&
-                        Toolkit.isFraction(currentEntry.score.howth)
-                    ? ""
-                    : double.tryParse(currentEntry.score.howth)
-                        .toInt()
-                        .toString(),
+                text: _getTextSpanText(currentEntry.location.isHome
+                    ? currentEntry.score.howth
+                    : currentEntry.score.opposition),
                 style: Toolkit.leadingChildTextStyle,
                 children: <TextSpan>[
                   TextSpan(
-                      text: Toolkit.isFraction(currentEntry.score.howth)
+
+                      /// The ternary operator (and others like it) below ensure that
+                      /// no fraction is displayed if the [currentEntry.score] is whole.
+                      text: Toolkit.isFraction(currentEntry.location.isHome
+                              ? currentEntry.score.howth
+                              : currentEntry.score.opposition)
                           ? "1/2"
                           : "",
                       style: TextStyle(
                           fontFeatures: [FontFeature.enable('frac')])),
                   TextSpan(text: " - "),
                   TextSpan(
-                      text: double.tryParse(currentEntry.score.opposition)
-                                      .toInt() ==
-                                  0 &&
-                              Toolkit.isFraction(currentEntry.score.opposition)
-                          ? ""
-                          : double.tryParse(currentEntry.score.opposition)
-                              .toInt()
-                              .toString()),
+                      text: _getTextSpanText(currentEntry.location.isHome
+                          ? currentEntry.score.opposition
+                          : currentEntry.score.howth)),
                   TextSpan(
-                      text: Toolkit.isFraction(currentEntry.score.opposition)
+                      text: Toolkit.isFraction(currentEntry.location.isHome
+                              ? currentEntry.score.opposition
+                              : currentEntry.score.howth)
                           ? "1/2"
                           : "",
                       style: TextStyle(
                           fontFeatures: [FontFeature.enable('frac')])),
                 ]),
           ),
+
+          /// If [_isAdmin], the remove competition button will rest in place of this
+          /// [trailingIconData] above this [BaseListTile] in the [Stack]. Hence, no [IconData]
+          /// is provided in this case.
           trailingIconData:
               _isAdmin(context) ? null : Icons.keyboard_arrow_right,
           subtitleMaxLines: 1,
@@ -201,13 +220,13 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                           title: Center(
                               child: Text(
                                   "No ${Toolkit.competitionsText.toLowerCase()} found!",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Palette.dark,
-                                      fontWeight: FontWeight.w300))));
+                                  style: Toolkit.noDataTextStyle)));
                     }
 
                     DataBaseEntry currentEntry = activeElements[index];
+
+                    /// Fetches [SharedPreferences] to pass as initial values into
+                    /// the [SpecificCompetitionPage].
                     Function toCompetition = () {
                       final preferences = SharedPreferences.getInstance();
                       preferences.then((SharedPreferences preferences) {

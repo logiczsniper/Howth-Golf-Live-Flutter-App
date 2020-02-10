@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -94,22 +93,7 @@ class HolePageState extends State<HolePage> {
                       : Padding(
                           padding: EdgeInsets.only(top: 50.0),
                         ),
-
-                  /// Hole Number TODO: extract this
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 2.0),
-                      padding: EdgeInsets.all(2.5),
-                      child: Padding(
-                          child: Text(
-                              hole.holeNumber.toString().length == 1
-                                  ? "0${hole.holeNumber}"
-                                  : hole.holeNumber.toString(),
-                              style: Toolkit.cardSubTitleTextStyle),
-                          padding: EdgeInsets.all(4.0)),
-                      decoration: BoxDecoration(
-                          color: Palette.light,
-                          border: Border.all(color: Palette.maroon, width: 1.5),
-                          borderRadius: BorderRadius.circular(9.0))),
+                  Toolkit.getHoleNumberDecorated(hole.holeNumber),
                   widget.hasAccess
                       ? IconButton(
                           icon: Icon(Icons.remove, color: Palette.dark),
@@ -120,38 +104,8 @@ class HolePageState extends State<HolePage> {
                       : Container(),
                 ],
               ),
-
-              /// TODO: Extract this
-              Container(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Text(
-                        isHome
-                            ? Toolkit.formatPlayerList(hole.players)
-                            : widget.entry.opposition,
-                        textAlign: TextAlign.right,
-                        style: Toolkit.formTextStyle,
-                      )),
-                      Padding(
-                          child: Icon(
-                            FontAwesomeIcons.fistRaised,
-                            color: Palette.dark,
-                            size: 16.7,
-                          ),
-                          padding: EdgeInsets.all(3.0)),
-                      Expanded(
-                          child: Text(
-                        !isHome
-                            ? Toolkit.formatPlayerList(hole.players)
-                            : widget.entry.opposition,
-                        textAlign: TextAlign.left,
-                        style: Toolkit.formTextStyle,
-                      ))
-                    ],
-                  ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 9.0, vertical: 10.0)),
+              Toolkit.getVersus(
+                  widget.entry, Toolkit.formatPlayerList(hole.players)),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: <
                   Widget>[
                 widget.hasAccess

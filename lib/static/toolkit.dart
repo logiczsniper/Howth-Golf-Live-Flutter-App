@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 
 import 'package:howth_golf_live/static/privileges.dart';
@@ -111,6 +112,23 @@ class Toolkit {
     return output;
   }
 
+  /// Returns the [Hole.holeNumber] with apt decoration - a smalled
+  /// rounded box with padding.
+  static Container getHoleNumberDecorated(int holeNumber) => Container(
+      margin: EdgeInsets.symmetric(vertical: 2.0),
+      padding: EdgeInsets.all(2.5),
+      child: Padding(
+          child: Text(
+              holeNumber.toString().length == 1
+                  ? "0$holeNumber"
+                  : holeNumber.toString(),
+              style: Toolkit.cardSubTitleTextStyle),
+          padding: EdgeInsets.all(4.0)),
+      decoration: BoxDecoration(
+          color: Palette.light,
+          border: Border.all(color: Palette.maroon, width: 1.5),
+          borderRadius: BorderRadius.circular(9.0)));
+
   static Text getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
@@ -124,6 +142,7 @@ class Toolkit {
         style: Toolkit.formTextStyle,
       ));
 
+  /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
         icon: Icon(Icons.home),
         tooltip: 'Tap to return to home!',
@@ -179,6 +198,40 @@ class Toolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
+  /// Returns the centered and padded [Row] containing the [howthText] and the
+  /// [currentData.opposition] text in the correct order depending on
+  /// [currentData.location.isHome].
+  static Container getVersus(DataBaseEntry currentData, String howthText) =>
+      Container(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                  child: Text(
+                currentData.location.isHome
+                    ? howthText
+                    : currentData.opposition,
+                textAlign: TextAlign.right,
+                style: Toolkit.formTextStyle,
+              )),
+              Padding(
+                  child: Icon(
+                    FontAwesomeIcons.fistRaised,
+                    color: Palette.dark,
+                    size: 16.7,
+                  ),
+                  padding: EdgeInsets.all(3.0)),
+              Expanded(
+                  child: Text(
+                !currentData.location.isHome
+                    ? howthText
+                    : currentData.opposition,
+                textAlign: TextAlign.left,
+                style: Toolkit.formTextStyle,
+              ))
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 10.0));
+
   /// Text Styles.
   static const TextStyle cardTitleTextStyle =
       TextStyle(fontSize: 16, color: Palette.dark, fontWeight: FontWeight.w300);
@@ -192,6 +245,8 @@ class Toolkit {
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
   static const TextStyle formTextStyle =
       TextStyle(fontSize: 14, color: Palette.dark);
+  static const TextStyle noDataTextStyle =
+      TextStyle(fontSize: 18, color: Palette.dark, fontWeight: FontWeight.w300);
   static const TextStyle titleTextStyle = TextStyle(
       color: Palette.dark,
       fontFamily: "CormorantGaramond",

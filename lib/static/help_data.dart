@@ -98,7 +98,7 @@ class HelpData {
     /// Team manager & admin entries.
     {
       'title': 'Updating Scores',
-      'subtitle': 'Available to admins and team managers.',
+      'subtitle': 'For admins & team managers.',
       'steps': [
         {
           'title': 'Add/Remove a hole',
@@ -124,7 +124,7 @@ class HelpData {
     /// Admin entries.
     {
       'title': 'Updating Competitions',
-      'subtitle': 'Available to admins only.',
+      'subtitle': 'For admins only.',
       'steps': [
         {
           'title': 'Add a competition part 1',

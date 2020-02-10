@@ -10,17 +10,12 @@ class SideFlexible extends StatelessWidget {
   /// Shows the overall competition score, [text] for a specific competition.
   const SideFlexible(this.score);
 
-/*   Text get _text => Text(score,
-      overflow: TextOverflow.fade,
-      maxLines: 1,
-      style: TextStyle(
-          fontSize: 21,
-          color: Palette.buttonText,
-          fontWeight: FontWeight.w400)); */
-
   Widget get _text => RichText(
           text: TextSpan(
-              text: double.tryParse(score).toInt().toString(),
+              text: double.tryParse(score).toInt() == 0 &&
+                      Toolkit.isFraction(score)
+                  ? ""
+                  : double.tryParse(score).toInt().toString(),
               style: TextStyle(
                   fontSize: 21,
                   color: Palette.buttonText,

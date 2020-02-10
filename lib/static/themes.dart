@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/palette.dart';
 
 class Themes {
+  /// TODO: set all of the themes here.
   static ThemeData get appTheme => ThemeData(
       primaryColor: Palette.light,
       primaryColorDark: Palette.dark,
@@ -11,7 +12,8 @@ class Themes {
       textTheme: textTheme,
       iconTheme: iconTheme);
 
-  static TextTheme get textTheme => TextTheme().apply(bodyColor: Palette.dark);
+  static TextTheme get textTheme =>
+      TextTheme().apply(bodyColor: Palette.dark, displayColor: Palette.dark);
 
   static CardTheme get cardTheme => CardTheme(color: Palette.maroon);
 

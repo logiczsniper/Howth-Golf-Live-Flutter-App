@@ -122,9 +122,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       BaseListTile(
           leadingChild: RichText(
             text: TextSpan(
-                text: double.tryParse(currentEntry.score.howth)
-                    .toInt()
-                    .toString(),
+                text: double.tryParse(currentEntry.score.howth).toInt() == 0 &&
+                        Toolkit.isFraction(currentEntry.score.howth)
+                    ? ""
+                    : double.tryParse(currentEntry.score.howth)
+                        .toInt()
+                        .toString(),
                 style: Toolkit.leadingChildTextStyle,
                 children: <TextSpan>[
                   TextSpan(
@@ -136,8 +139,13 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   TextSpan(text: " - "),
                   TextSpan(
                       text: double.tryParse(currentEntry.score.opposition)
-                          .toInt()
-                          .toString()),
+                                      .toInt() ==
+                                  0 &&
+                              Toolkit.isFraction(currentEntry.score.opposition)
+                          ? ""
+                          : double.tryParse(currentEntry.score.opposition)
+                              .toInt()
+                              .toString()),
                   TextSpan(
                       text: Toolkit.isFraction(currentEntry.score.opposition)
                           ? "1/2"

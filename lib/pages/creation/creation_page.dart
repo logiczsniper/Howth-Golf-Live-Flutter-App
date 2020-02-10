@@ -31,9 +31,7 @@ class CreationPage {
         title: Text(title,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: TextStyle(
-              color: Palette.dark,
-            )),
+            style: Toolkit.titleTextStyle),
         backgroundColor: Palette.light,
         iconTheme: IconThemeData(color: Palette.dark),
         actions: <Widget>[

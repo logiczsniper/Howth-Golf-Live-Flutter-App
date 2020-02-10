@@ -95,6 +95,22 @@ class Toolkit {
     return parsedElements;
   }
 
+  /// Turn a list of players, [playerList], into one string with
+  /// those individual player names separated by commas, apart from the last
+  /// player in the list.
+  static String formatPlayerList(List playerList) {
+    String output = '';
+    bool isLastPlayer = false;
+    for (String player in playerList) {
+      output += player.toString();
+      isLastPlayer = playerList.indexOf(player) == playerList.length - 1;
+      if (!isLastPlayer) {
+        output += ', ';
+      }
+    }
+    return output;
+  }
+
   static Text getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,

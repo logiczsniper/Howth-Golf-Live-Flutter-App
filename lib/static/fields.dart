@@ -14,4 +14,5 @@ class Fields {
   static final String players = 'players';
   static final String address = 'address';
   static final String isHome = 'is_home';
+  static final String comment = 'comment';
 }

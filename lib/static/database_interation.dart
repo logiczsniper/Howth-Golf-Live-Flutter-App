@@ -129,6 +129,7 @@ class DataBaseInteraction {
     BuildContext context,
     GlobalKey<FormState> _formKey,
     DecoratedTextField numberField,
+    DecoratedTextField commentField,
     DecoratedTextField howthScoreField,
     DecoratedTextField oppositionScoreField,
     String scoreStatus,
@@ -145,7 +146,7 @@ class DataBaseInteraction {
             : Score(
                 howth: howthScoreField.controller.text,
                 opposition: oppositionScoreField.controller.text),
-        /* holeScore: scoreField.controller.text.toString() + " " + scoreStatus, */
+        comment: commentField.controller.text,
 
         /// Note: this means that the text provided by the user which contains
         /// player names must be separated with ", " between each player.

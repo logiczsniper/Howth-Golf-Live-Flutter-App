@@ -89,21 +89,24 @@ class Hole {
   final int holeNumber;
   final Score holeScore;
   final List<String> players;
+  final String comment;
 
   /// Convert a map into a [Hole] object.
   Hole.fromMap(Map map)
       : holeNumber = map[Fields.holeNumber],
         holeScore = Score.fromMap(map[Fields.holeScore]),
         players = List<String>.generate(map[Fields.players].length,
-            (int index) => map[Fields.players][index].toString());
+            (int index) => map[Fields.players][index].toString()),
+        comment = map[Fields.comment];
 
   Map get toJson => {
         Fields.holeNumber: holeNumber,
         Fields.holeScore: holeScore.toJson,
-        Fields.players: players
+        Fields.players: players,
+        Fields.comment: comment
       };
 
-  Hole({this.holeNumber, this.holeScore, this.players});
+  Hole({this.holeNumber, this.holeScore, this.players, this.comment});
 }
 
 class Location {

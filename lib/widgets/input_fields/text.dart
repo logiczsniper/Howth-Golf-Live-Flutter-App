@@ -8,14 +8,15 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
   final String hintText;
   final bool withPadding;
   final bool number;
+  final bool isRequired;
 
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedTextField(this.hintText,
-      {this.withPadding = true, this.number = false});
+      {this.withPadding = true, this.number = false, this.isRequired = true});
 
   /// A basic test to see if the user has inserted text.
-  static String _validator(String input) {
-    if (input.isEmpty)
+  String _validator(String input) {
+    if (input.isEmpty && isRequired)
       return 'This field is required.';
     else
       return null;

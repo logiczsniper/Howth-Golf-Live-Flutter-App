@@ -25,6 +25,10 @@ class CreateHoleState extends State<CreateHole> {
   /// Fields the user must fill out to create a hole.
   DecoratedTextField numberField =
       DecoratedTextField(Fields.holeNumber, number: true);
+  DecoratedTextField commentField = DecoratedTextField(
+    Fields.comment,
+    isRequired: false,
+  );
   DecoratedTextField howthScoreField = DecoratedTextField(
     "${Fields.howth} Score",
     number: true,
@@ -70,7 +74,9 @@ class CreateHoleState extends State<CreateHole> {
               scoreStatus == "A\\S" ? Container() : howthScoreField,
               scoreStatus == "A\\S" ? Container() : oppositionScoreField,
               playersField,
-              Toolkit.getFormText("Names separated by commas")
+              Toolkit.getFormText("Names separated by commas."),
+              commentField,
+              Toolkit.getFormText("This is completely optional.")
             ],
           ),
           padding: EdgeInsets.all(5.0),
@@ -82,6 +88,7 @@ class CreateHoleState extends State<CreateHole> {
         context,
         _formKey,
         numberField,
+        commentField,
         howthScoreField,
         oppositionScoreField,
         scoreStatus,

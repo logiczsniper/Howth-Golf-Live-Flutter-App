@@ -6,8 +6,6 @@ import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/widgets/complex_card.dart';
-import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -90,19 +88,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => CreateHole(snapshot, currentId)));
-      });
-    });
-  }
-
-  /// Deletes the holes at the given [index] within the list of holes
-  /// for this competition.
-  void _deleteHole(int index) {
-    final int currentId = currentData.id;
-    Future<QuerySnapshot> newData = Toolkit.stream.first;
-
-    setState(() {
-      newData.then((QuerySnapshot snapshot) {
-        DataBaseInteraction.deleteHole(context, snapshot, index, currentId);
       });
     });
   }
@@ -216,8 +201,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => HolePage(
-                        hole.holeNumber.toString(), currentData, index)));
+                    builder: (context) => HolePage(currentData, index - 2)));
           });
 
   @override

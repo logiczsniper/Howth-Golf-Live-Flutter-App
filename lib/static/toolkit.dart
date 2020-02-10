@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -134,6 +136,11 @@ class Toolkit {
     return null;
   }
 
+  /// Determines whether [score] is a string containing a fraction or whole
+  /// number.
+  static bool isFraction(String score) =>
+      double.tryParse(score) - double.tryParse(score).toInt() != 0;
+
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].
   static Column getLeadingColumn(String smallText, String relevantNumber) =>
@@ -162,4 +169,6 @@ class Toolkit {
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
   static const TextStyle formTextStyle =
       TextStyle(fontSize: 14, color: Palette.dark);
+  static const TextStyle titleTextStyle = TextStyle(
+      color: Palette.dark, fontFamily: "CormorantGaramond", fontSize: 27.0);
 }

@@ -20,6 +20,7 @@ dependencies:
   uuid: 2.0.4
   datetime_picker_formfield: 1.0.0
   numberpicker: ^1.1.0
+  stepper_touch: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +28,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: CormorantGaramond
+      fonts:
+        - asset: lib/graphics/fonts/Cormorant_Garamond/CormorantGaramond-BoldItalic.ttf
+    - family: FiraSans
+      fonts:
+        - asset: lib/graphics/fonts/Fira_Sans/FiraSans-Regular.ttf
   assets:
     - lib/graphics/

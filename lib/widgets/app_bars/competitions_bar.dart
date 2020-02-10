@@ -68,8 +68,9 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
       indicatorColor: Palette.maroon,
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
-      indicatorHeight: 25.0,
-      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0));
+      indicatorHeight: 70.0,
+      indicatorRadius: 15.0,
+      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 40.0));
 
   @override
   Widget build(BuildContext context) {
@@ -102,14 +103,14 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     onPressed: _searchPressed,
                   )
                 ],
-
-                /// TODO: potentially add ink well here
                 bottom: TabBar(
                     labelColor: Palette.buttonText,
                     indicator: _tabIndicator,
                     tabs: <Widget>[
-                      Tab(text: Toolkit.currentText),
-                      Tab(text: Toolkit.archivedText)
+                      Tab(
+                          icon: Icon(Icons.whatshot),
+                          text: Toolkit.currentText),
+                      Tab(text: Toolkit.archivedText, icon: Icon(Icons.cached))
                     ])),
           ];
         },

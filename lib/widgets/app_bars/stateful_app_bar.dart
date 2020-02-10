@@ -38,19 +38,27 @@ class StatefulAppBar {
       child: Text(title,
           softWrap: true,
           textAlign: TextAlign.center,
+
+          /// TODO: CANNOT MAKE LARGER: warn admins to keep competition titles less than 25 charachers!
           maxLines: 2,
-          style: TextStyle(color: Palette.dark)));
+          style: Toolkit.titleTextStyle));
 
   /// The search app bar which enables the user to type into a search box.
   TextField buildInputBar(TextInputType textType, bool obscureText,
           String hintText, TextEditingController _filter) =>
       TextField(
-          keyboardType: textType,
-          obscureText: obscureText,
-          cursorColor: Palette.maroon,
-          textCapitalization: TextCapitalization.sentences,
-          autocorrect: false,
-          controller: _filter,
-          style: TextStyle(color: Palette.dark),
-          decoration: _getInputDecoration(hintText));
+        keyboardType: textType,
+        obscureText: obscureText,
+        cursorColor: Palette.maroon,
+        textCapitalization: TextCapitalization.sentences,
+        autocorrect: false,
+        controller: _filter,
+        style: TextStyle(color: Palette.dark),
+        decoration: _getInputDecoration(hintText),
+        onSubmitted: (String input) {
+          print("HELLO: $input");
+
+          /// TODO: here call validation
+        },
+      );
 }

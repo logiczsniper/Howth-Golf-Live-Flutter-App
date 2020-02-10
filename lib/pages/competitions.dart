@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -128,8 +130,35 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   static Widget _tileBuilder(
           BuildContext context, DataBaseEntry currentEntry) =>
       BaseListTile(
-          leadingChild: Toolkit.getLeadingText(
-              "${currentEntry.score.howth} - ${currentEntry.score.opposition}"),
+          leadingChild:
+              /* Toolkit.getLeadingText(
+              "${currentEntry.score.howth} - ${currentEntry.score.opposition}"), */
+              RichText(
+            text: TextSpan(
+                text: double.tryParse(currentEntry.score.howth)
+                    .toInt()
+                    .toString(),
+                style: Toolkit.leadingChildTextStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                      text: Toolkit.isFraction(currentEntry.score.howth)
+                          ? "1/2"
+                          : "",
+                      style: TextStyle(
+                          fontFeatures: [FontFeature.enable('frac')])),
+                  TextSpan(text: " - "),
+                  TextSpan(
+                      text: double.tryParse(currentEntry.score.opposition)
+                          .toInt()
+                          .toString()),
+                  TextSpan(
+                      text: Toolkit.isFraction(currentEntry.score.opposition)
+                          ? "1/2"
+                          : "",
+                      style: TextStyle(
+                          fontFeatures: [FontFeature.enable('frac')])),
+                ]),
+          ),
           trailingIconData:
               _isAdmin(context) ? null : Icons.keyboard_arrow_right,
           subtitleMaxLines: 1,
@@ -183,45 +212,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                                     currentEntry, hasAccess)));
                       });
                     };
-                    /* return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        color: Palette.lightMaroon,
-                        elevation: 0,
-                        margin: EdgeInsets.fromLTRB(30.0, 9.0, 30.0, 9.0),
-                        child: ListTile(
-                            title: Container(
-                                child: Text(
-                                  "1 - 2",
-                                  style: TextStyle(color: Palette.buttonText),
-                                  textAlign: TextAlign.center,
-                                ),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            width: 1.5, color: Palette.light))),
-                                padding: EdgeInsets.fromLTRB(3.0, 0, 3.0, 13.0),
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 120.0, vertical: 13.0)),
-                            subtitle: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                      child: Text(
-                                        "Best Golf Cup Ever",
-                                        style: TextStyle(
-                                            color: Palette.buttonText,
-                                            fontSize: 20.0),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      padding: EdgeInsets.all(0)),
-                                  Text(
-                                    "16/35/23 15:12",
-                                    style: TextStyle(color: Palette.buttonText),
-                                    textAlign: TextAlign.center,
-                                  )
-                                ]))); */
+
                     return ComplexCard(
                         child: _tileBuilder(context, currentEntry),
                         onTap: toCompetition,

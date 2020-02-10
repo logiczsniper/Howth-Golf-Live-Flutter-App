@@ -6,7 +6,8 @@ class Themes {
       primaryColor: Palette.light,
       primaryColorDark: Palette.dark,
       accentColor: Palette.maroon,
-      cardTheme: cardTheme,
+      splashColor: Palette.maroon.withAlpha(50),
+      fontFamily: "FiraSans",
       textTheme: textTheme,
       iconTheme: iconTheme);
 
@@ -18,5 +19,5 @@ class Themes {
       IconThemeData(color: Palette.maroon, size: 22.0);
 
   static TextStyle get textStyle =>
-      TextStyle(color: Palette.dark, fontSize: 40.0);
+      TextStyle(color: Palette.dark, fontFamily: "FiraSans");
 }

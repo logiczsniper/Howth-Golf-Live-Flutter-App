@@ -40,11 +40,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   }
 
   Text get _title => Text(widget.entry.title,
-      textAlign: TextAlign.center,
-      maxLines: 2,
-      style: TextStyle(
-        color: Palette.dark,
-      ));
+      textAlign: TextAlign.center, maxLines: 2, style: Toolkit.titleTextStyle);
 
   IconButton get _homeButton => IconButton(
         icon: Icon(Icons.home),

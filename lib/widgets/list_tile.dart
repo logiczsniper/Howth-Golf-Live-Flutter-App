@@ -31,7 +31,7 @@ class BaseListTile extends StatelessWidget {
               child: leadingChild)),
       title: Text(
         titleText,
-        overflow: TextOverflow.fade,
+        overflow: TextOverflow.ellipsis,
         maxLines: 2,
         style: Toolkit.cardTitleTextStyle,
       ),

@@ -42,8 +42,13 @@ class StatefulAppBar {
           style: Toolkit.titleTextStyle));
 
   /// The search app bar which enables the user to type into a search box.
-  TextField buildInputBar(TextInputType textType, bool obscureText,
-          String hintText, TextEditingController _filter) =>
+  /// Also the code field input bar.
+  TextField buildInputBar(
+          TextInputType textType,
+          bool obscureText,
+          String hintText,
+          TextEditingController _filter,
+          Function _codePressed) =>
       TextField(
         keyboardType: textType,
         obscureText: obscureText,
@@ -54,9 +59,7 @@ class StatefulAppBar {
         style: TextStyle(color: Palette.dark),
         decoration: _getInputDecoration(hintText),
         onSubmitted: (String input) {
-          print("HELLO: $input");
-
-          /// TODO: here call validation
+          _codePressed();
         },
       );
 }

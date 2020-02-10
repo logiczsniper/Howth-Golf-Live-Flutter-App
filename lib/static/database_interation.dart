@@ -100,7 +100,7 @@ class DataBaseInteraction {
         /// This is the competition which contains the hole to be removed.
         for (int i = 0; i < entry[Fields.holes].length; i++) {
           var hole = entry[Fields.holes][i];
-          if (i != index - 1) {
+          if (i != index) {
             /// This is NOT the hole that will be removed. Add to holes.
             newHoles.add(hole);
             parsedHoles.add(Hole.fromMap(hole));

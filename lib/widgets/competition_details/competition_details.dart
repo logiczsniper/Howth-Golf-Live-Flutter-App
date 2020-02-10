@@ -43,7 +43,7 @@ class CompetitionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 1.5, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 1.5),
       child: Column(
         children: <Widget>[
           Row(

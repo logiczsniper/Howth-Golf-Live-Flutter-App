@@ -60,6 +60,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
             shrinkWrap: true,
             children: <Widget>[
               titleField,
+              Toolkit.getFormText("Try to keep title length < ~30 characters."),
               CreationPage.getSpecialInput("At home: ", _home),
               isHome ? Container() : locationField,
               oppositionField,

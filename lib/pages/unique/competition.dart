@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
-import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -201,7 +200,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => HolePage(currentData, index - 2)));
+                    builder: (context) =>
+                        HolePage(currentData, index - 2, hasAccess)));
           });
 
   @override

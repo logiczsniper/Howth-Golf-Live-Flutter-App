@@ -32,8 +32,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   ///
   /// In the case where the data is still being fetched, return a
   /// loading widget [SpinKitPulse].
-  /// In the case where the user searched for something with no results,
-  /// return a [Text] widget to notify the user of that.
   static ListTile _checkFilteredElements(List<DataBaseEntry> filteredElements) {
     if (filteredElements == null)
       return ListTile(
@@ -44,14 +42,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         duration: Duration(milliseconds: 850),
       )));
 
-    if (filteredElements == [])
-      return ListTile(
-          title: Center(
-              child: Text("No ${Toolkit.competitionsText.toLowerCase()} found!",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Palette.dark,
-                      fontWeight: FontWeight.w300))));
     return null;
   }
 
@@ -130,10 +120,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   static Widget _tileBuilder(
           BuildContext context, DataBaseEntry currentEntry) =>
       BaseListTile(
-          leadingChild:
-              /* Toolkit.getLeadingText(
-              "${currentEntry.score.howth} - ${currentEntry.score.opposition}"), */
-              RichText(
+          leadingChild: RichText(
             text: TextSpan(
                 text: double.tryParse(currentEntry.score.howth)
                     .toInt()
@@ -196,8 +183,22 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
                 return ListView.builder(
                   padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 100.0),
-                  itemCount: activeElements.length,
+                  itemCount:
+                      activeElements.length == 0 ? 1 : activeElements.length,
                   itemBuilder: (BuildContext context, int index) {
+                    /// In the case where the user searched for something with no results,
+                    /// return a [Text] widget to notify the user of that.
+                    if (activeElements.length == 0) {
+                      return ListTile(
+                          title: Center(
+                              child: Text(
+                                  "No ${Toolkit.competitionsText.toLowerCase()} found!",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Palette.dark,
+                                      fontWeight: FontWeight.w300))));
+                    }
+
                     DataBaseEntry currentEntry = activeElements[index];
                     Function toCompetition = () {
                       final preferences = SharedPreferences.getInstance();

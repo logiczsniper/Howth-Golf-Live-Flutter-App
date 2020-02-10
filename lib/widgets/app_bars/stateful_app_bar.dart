@@ -38,8 +38,6 @@ class StatefulAppBar {
       child: Text(title,
           softWrap: true,
           textAlign: TextAlign.center,
-
-          /// TODO: CANNOT MAKE LARGER: warn admins to keep competition titles less than 25 charachers!
           maxLines: 2,
           style: Toolkit.titleTextStyle));
 

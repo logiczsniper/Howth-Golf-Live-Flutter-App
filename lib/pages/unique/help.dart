@@ -42,13 +42,6 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   Text get _title => Text(widget.entry.title,
       textAlign: TextAlign.center, maxLines: 2, style: Toolkit.titleTextStyle);
 
-  IconButton get _homeButton => IconButton(
-        icon: Icon(Icons.home),
-        tooltip: 'Tap to return to home!',
-        onPressed: () => Toolkit.navigateTo(context, Toolkit.competitionsText),
-        color: Palette.dark,
-      );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +51,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
           backgroundColor: Palette.light,
           iconTheme: IconThemeData(color: Palette.dark),
           elevation: 0.0,
-          actions: <Widget>[_homeButton],
+          actions: <Widget>[Toolkit.getHomeButton(context)],
         ),
         body: ListView.builder(
           itemBuilder: _tileBuilder,

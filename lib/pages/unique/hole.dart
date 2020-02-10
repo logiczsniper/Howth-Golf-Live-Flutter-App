@@ -4,13 +4,13 @@ import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
-import 'package:stepper_touch/stepper_touch.dart';
 
 class HolePage extends StatefulWidget {
   final DataBaseEntry entry;
   final int index;
+  final bool hasAccess;
 
-  HolePage(this.entry, this.index);
+  HolePage(this.entry, this.index, this.hasAccess);
 
   @override
   HolePageState createState() => HolePageState();
@@ -26,12 +26,12 @@ class HolePageState extends State<HolePage> {
     final int currentId = widget.entry.id;
     Future<QuerySnapshot> newData = Toolkit.stream.first;
 
-    setState(() {
-      newData.then((QuerySnapshot snapshot) {
-        DataBaseInteraction.deleteHole(
-            context, snapshot, widget.index, currentId);
-      });
+    newData.then((QuerySnapshot snapshot) {
+      DataBaseInteraction.deleteHole(
+          context, snapshot, widget.index, currentId);
     });
+
+    Navigator.of(context).pop();
   }
 
   /// TODO: this method
@@ -63,10 +63,12 @@ class HolePageState extends State<HolePage> {
           backgroundColor: Palette.light,
           iconTheme: IconThemeData(color: Palette.dark),
           actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.remove_circle_outline),
-                tooltip: "Delete this hole!",
-                onPressed: _deleteHole),
+            widget.hasAccess
+                ? IconButton(
+                    icon: Icon(Icons.remove_circle_outline),
+                    tooltip: "Delete this hole!",
+                    onPressed: _deleteHole)
+                : Toolkit.getHomeButton(context),
           ],
           elevation: 0.0,
         ),

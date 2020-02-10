@@ -108,6 +108,13 @@ class Toolkit {
         style: Toolkit.formTextStyle,
       ));
 
+  static IconButton getHomeButton(BuildContext context) => IconButton(
+        icon: Icon(Icons.home),
+        tooltip: 'Tap to return to home!',
+        onPressed: () => Toolkit.navigateTo(context, Toolkit.competitionsText),
+        color: Palette.dark,
+      );
+
   /// Handles special situations with [snapshot].
   ///
   /// If an error occurs, returns a [Center] widget to notify the user
@@ -170,5 +177,8 @@ class Toolkit {
   static const TextStyle formTextStyle =
       TextStyle(fontSize: 14, color: Palette.dark);
   static const TextStyle titleTextStyle = TextStyle(
-      color: Palette.dark, fontFamily: "CormorantGaramond", fontSize: 27.0);
+      color: Palette.dark,
+      fontFamily: "CormorantGaramond",
+      fontSize: 27.0,
+      height: 0.95);
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
+import 'package:howth_golf_live/static/fields.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
@@ -35,7 +36,7 @@ class HolePageState extends State<HolePage> {
     Navigator.of(context).pop();
   }
 
-  /// TODO: this method
+  /// TODO: this method ensure that lastUpdated becomes DateTime.now()
   void _updateHole(Score newScore) {}
 
   @override
@@ -56,7 +57,7 @@ class HolePageState extends State<HolePage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            widget.entry.title,
+            "Specific Hole",
             style: Toolkit.titleTextStyle,
             textAlign: TextAlign.center,
             maxLines: 2,
@@ -77,35 +78,11 @@ class HolePageState extends State<HolePage> {
             padding: EdgeInsets.all(5.0),
             child:
                 Toolkit.getCard(ListView(shrinkWrap: true, children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  widget.hasAccess
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: Palette.dark,
-                          ),
-                          onPressed: () {
-                            print("Add one");
-                          },
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(top: 50.0),
-                        ),
-                  Toolkit.getHoleNumberDecorated(hole.holeNumber),
-                  widget.hasAccess
-                      ? IconButton(
-                          icon: Icon(Icons.remove, color: Palette.dark),
-                          onPressed: () {
-                            print("Subtract one");
-                          },
-                        )
-                      : Container(),
-                ],
-              ),
-              Toolkit.getVersus(
-                  widget.entry, Toolkit.formatPlayerList(hole.players)),
+              widget.hasAccess
+                  ? Container()
+                  : Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                    ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: <
                   Widget>[
                 widget.hasAccess
@@ -165,13 +142,53 @@ class HolePageState extends State<HolePage> {
                       )
                     : Container(),
               ]),
+              Toolkit.getVersus(
+                  widget.entry, Toolkit.formatPlayerList(hole.players)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  widget.hasAccess
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.add,
+                            color: Palette.dark,
+                          ),
+                          onPressed: () {
+                            print("Add one");
+                          },
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(top: 50.0),
+                        ),
+                  Toolkit.getHoleNumberDecorated(hole.holeNumber),
+                  widget.hasAccess
+                      ? IconButton(
+                          icon: Icon(Icons.remove, color: Palette.dark),
+                          onPressed: () {
+                            print("Subtract one");
+                          },
+                        )
+                      : Container(),
+                ],
+              ),
               Container(
-                  padding: EdgeInsets.symmetric(vertical: 6.0),
+                  padding: hole.comment.isEmpty
+                      ? EdgeInsets.only(bottom: 8.0)
+                      : null,
                   child: Text(
-                    hole.comment.isEmpty ? "" : "Comment: ${hole.comment}",
+                    "Last updated: ${hole.lastUpdated}",
                     textAlign: TextAlign.center,
                     style: Toolkit.cardTitleTextStyle,
-                  ))
+                  )),
+              hole.comment.isEmpty
+                  ? Container()
+                  : Container(
+                      padding: EdgeInsets.symmetric(vertical: 6.0),
+                      child: Text(
+                        "Comment: ${hole.comment}",
+                        textAlign: TextAlign.center,
+                        style: Toolkit.cardTitleTextStyle,
+                      ))
             ]))),
         backgroundColor: Palette.light);
   }

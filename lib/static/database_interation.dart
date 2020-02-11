@@ -147,6 +147,7 @@ class DataBaseInteraction {
                 howth: howthScoreField.controller.text,
                 opposition: oppositionScoreField.controller.text),
         comment: commentField.controller.text,
+        lastUpdated: DateTime.now(),
 
         /// Note: this means that the text provided by the user which contains
         /// player names must be separated with ", " between each player.

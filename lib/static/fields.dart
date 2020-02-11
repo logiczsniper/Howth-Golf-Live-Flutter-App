@@ -15,4 +15,5 @@ class Fields {
   static final String address = 'address';
   static final String isHome = 'is_home';
   static final String comment = 'comment';
+  static final String lastUpdated = 'last_updated';
 }

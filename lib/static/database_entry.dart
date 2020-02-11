@@ -84,12 +84,17 @@ class Score {
 class Hole {
   /// Note:
   ///
-  /// In the database, [holeNumber] is actually 'hole_number' and
-  ///                  [holeScore] is actually 'hole_score'.
+  /// In the database, [holeNumber] is actually 'hole_number',
+  ///                  [holeScore] is actually 'hole_score' and
+  ///                  [lastUpdated] is actually 'last_updated'. (stored as string)
   final int holeNumber;
   final Score holeScore;
   final List<String> players;
   final String comment;
+
+  /// TODO: implement functionality, display this information to user
+  /// in individual hole page!
+  final DateTime lastUpdated;
 
   /// Convert a map into a [Hole] object.
   Hole.fromMap(Map map)
@@ -97,16 +102,23 @@ class Hole {
         holeScore = Score.fromMap(map[Fields.holeScore]),
         players = List<String>.generate(map[Fields.players].length,
             (int index) => map[Fields.players][index].toString()),
-        comment = map[Fields.comment];
+        comment = map[Fields.comment],
+        lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
   Map get toJson => {
         Fields.holeNumber: holeNumber,
         Fields.holeScore: holeScore.toJson,
         Fields.players: players,
-        Fields.comment: comment
+        Fields.comment: comment,
+        Fields.lastUpdated: lastUpdated.toString()
       };
 
-  Hole({this.holeNumber, this.holeScore, this.players, this.comment});
+  Hole(
+      {this.holeNumber,
+      this.holeScore,
+      this.players,
+      this.comment,
+      this.lastUpdated});
 }
 
 class Location {

@@ -61,7 +61,43 @@ class Toolkit {
       elevation: 1.85,
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
-          decoration: Toolkit.roundedRectBoxDecoration, child: child));
+          padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+          decoration: Toolkit.roundedRectBoxDecoration,
+          child: child));
+
+  /// The maroon decoration around the [text].
+  static Decoration get scoreDecoration => ShapeDecoration(
+      color: Palette.maroon,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
+
+  /// Displays the text of the score.
+  ///
+  /// If the value is not whole and not equal to 0, it
+  /// will display a fraction. Else, will display the whole number.
+  static Widget scoreText(String score, String oldScore) => RichText(
+
+      /// Uses a [Key] to distinguish between the children widgets of the
+      /// [AnimatedSwitcher], forcing the fade transition to occur.
+      key: score == oldScore ? null : ValueKey(DateTime.now()),
+
+      /// Primary text value.
+      text: TextSpan(
+          text: double.tryParse(score).toInt() == 0 && Toolkit.isFraction(score)
+              ? ""
+              : double.tryParse(score).toInt().toString(),
+          style: TextStyle(
+              fontSize: 21,
+              color: Palette.buttonText,
+              fontWeight: FontWeight.w400),
+          children: <TextSpan>[
+            /// Secondary text value (fractional).
+            TextSpan(
+                text: Toolkit.isFraction(score) ? "1/2" : "",
+                style: TextStyle(
+                    fontSize: 21,
+                    color: Palette.buttonText,
+                    fontFeatures: [FontFeature.enable('frac')]))
+          ]));
 
   /// Use [Navigator] to take the user to the main compeitions page.
   ///
@@ -230,7 +266,7 @@ class Toolkit {
               ))
             ],
           ),
-          padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 10.0));
+          padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0));
 
   /// Text Styles.
   static const TextStyle cardTitleTextStyle =

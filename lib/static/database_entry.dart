@@ -76,6 +76,22 @@ class Score {
     return howth > opposition ? Fields.howth : Fields.opposition;
   }
 
+  /// Updates the home team in this score by the [value].
+  ///
+  /// Returns the equivalent hole with the updated value.
+  /// [value] will be either 1 or -1 to increment or decrement the home team.
+  Score updateScore(bool isHome, int value) {
+    int parsedHowth = int.tryParse(howth);
+    int parsedOpposition = int.tryParse(opposition);
+
+    Score newScore = Score(
+        howth: isHome ? (parsedHowth + value).toString() : howth,
+        opposition:
+            !isHome ? (parsedOpposition + value).toString() : opposition);
+
+    return newScore;
+  }
+
   Map get toJson => {Fields.howth: howth, Fields.opposition: opposition};
 
   Score({this.howth, this.opposition});
@@ -91,9 +107,6 @@ class Hole {
   final Score holeScore;
   final List<String> players;
   final String comment;
-
-  /// TODO: implement functionality, display this information to user
-  /// in individual hole page!
   final DateTime lastUpdated;
 
   /// Convert a map into a [Hole] object.
@@ -112,6 +125,17 @@ class Hole {
         Fields.comment: comment,
         Fields.lastUpdated: lastUpdated.toString()
       };
+
+  /// Updates this [Hole] instance with the given [value].
+  ///
+  /// [value] will be -1 or 1, to increment or decrement this [holeNumber].
+  /// Furthermore, [lastUpdated] is updated to [DateTime.now]
+  Hole updateNumber(int value) => Hole(
+      holeNumber: holeNumber + value,
+      holeScore: holeScore,
+      players: players,
+      comment: comment,
+      lastUpdated: DateTime.now());
 
   Hole(
       {this.holeNumber,

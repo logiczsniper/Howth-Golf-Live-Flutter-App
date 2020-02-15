@@ -10,7 +10,13 @@ class SideFlexible extends StatelessWidget {
   /// Shows the overall competition score, [text] for a specific competition.
   const SideFlexible(this.score);
 
+  /// Displays the text of the score.
+  ///
+  /// If the value is not whole and not equal to 0, it
+  /// will display a fraction. Else, will display the whole number.
   Widget get _text => RichText(
+
+          /// Primary text value.
           text: TextSpan(
               text: double.tryParse(score).toInt() == 0 &&
                       Toolkit.isFraction(score)
@@ -21,6 +27,7 @@ class SideFlexible extends StatelessWidget {
                   color: Palette.buttonText,
                   fontWeight: FontWeight.w400),
               children: <TextSpan>[
+            /// Secondary text value (fractional).
             TextSpan(
                 text: Toolkit.isFraction(score) ? "1/2" : "",
                 style: TextStyle(
@@ -40,7 +47,8 @@ class SideFlexible extends StatelessWidget {
       child: Column(children: <Widget>[
         Container(
             padding: EdgeInsets.all(12.0),
-            child: _text,
+            child:
+                AnimatedSwitcher(child: _text, duration: Duration(seconds: 2)),
             decoration: _decoration)
       ]));
 }

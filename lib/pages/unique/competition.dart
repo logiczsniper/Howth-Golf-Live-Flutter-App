@@ -137,6 +137,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                       ])),
 
                   /// Hole Number
+
                   Toolkit.getHoleNumberDecorated(hole.holeNumber),
 
                   /// Away team section.
@@ -216,6 +217,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               separatorBuilder: (BuildContext context, int index) {
                 if (index != 0 && index != 1)
                   return Divider(
+                    height: 30.0,
                     indent: 50.0,
                     endIndent: 50.0,
                     thickness: 1.5,

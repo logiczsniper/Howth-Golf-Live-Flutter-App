@@ -35,7 +35,9 @@ class ComplexCard extends StatelessWidget {
                   child: _inkWell))),
       Align(
           alignment: Alignment.centerRight,
-          child: Padding(padding: EdgeInsets.all(23.5), child: topWidget))
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(5.0, 32.5, 10.0, 13.0),
+              child: topWidget))
     ]);
   }
 }

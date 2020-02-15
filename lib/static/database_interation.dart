@@ -198,6 +198,46 @@ class DataBaseInteraction {
     print("Error ${e.toString()}");
   }
 
+  static void updateHole(BuildContext context, QuerySnapshot snapshot,
+      int index, int currentId, Hole updatedHole) {
+    DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
+    List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
+
+    List newHoles = List();
+
+    /// A list of all holes with the updated one!
+    List<Hole> parsedHoles = List();
+
+    for (Map entry in dataBaseEntries) {
+      if (entry[Fields.id] == currentId) {
+        /// This is the competition which contains the hole to be updated.
+        for (int i = 0; i < entry[Fields.holes].length; i++) {
+          var hole = entry[Fields.holes][i];
+          if (i == index) {
+            /// This is the hole that will be updated.
+            newHoles.add(updatedHole.toJson);
+            parsedHoles.add(updatedHole);
+          } else {
+            /// This is not the hole to be updated. Add as regular, do
+            /// not modify.
+            newHoles.add(hole);
+            parsedHoles.add(Hole.fromMap(hole));
+          }
+        }
+        entry[Fields.holes] = newHoles;
+
+        /// Updating the score.
+        Score newScore = _getScore(parsedHoles);
+
+        entry[Fields.score] = newScore.toJson;
+        break;
+      }
+    }
+
+    Map<String, dynamic> newData = {'data': dataBaseEntries};
+    documentSnapshot.reference.updateData(newData);
+  }
+
   /// Generate the score that corresponds to a competition with [parsedHoles].
   ///
   /// Get the updated competition score with the new hole scores,
@@ -208,7 +248,10 @@ class DataBaseInteraction {
     double howth = 0;
     double opposition = 0;
     for (Hole hole in parsedHoles) {
-      if (hole.holeScore.leader == Fields.howth) {
+      if (hole.holeScore.howth == hole.holeScore.opposition &&
+          hole.holeScore.howth == "0") {
+        /// The match is all square: do nothing with score!
+      } else if (hole.holeScore.leader == Fields.howth) {
         howth++;
       } else if (hole.holeScore.leader == Fields.opposition) {
         opposition++;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/static/help_data.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class SpecificHelpPage extends StatefulWidget {
@@ -21,22 +20,34 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
       return Padding(
           child: Icon(
             Icons.check,
-            color: Palette.dark,
+            color: Palette.maroon,
           ),
           padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 25.0));
 
     HelpStep currentStep = steps[index];
-    return Toolkit.getCard(Container(
-        decoration: Toolkit.roundedRectBoxDecoration,
-        child: BaseListTile(
-          leadingChild:
-              Toolkit.getLeadingColumn("STEP", (index + 1).toString()),
-          trailingIconData: null,
-          subtitleText: currentStep.data,
-          subtitleMaxLines: 4,
-          titleText: currentStep.title,
-          threeLine: true,
-        )));
+
+    return Container(
+      padding: EdgeInsets.all(4.0),
+      margin: EdgeInsets.all(2.0),
+      child: Column(
+        children: <Widget>[
+          Padding(
+              child: Text(
+                currentStep.title,
+                style: Toolkit.cardTitleTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              padding: EdgeInsets.only(bottom: 3.0)),
+          Padding(
+              child: Text(
+                currentStep.data,
+                style: Toolkit.cardSubTitleTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              padding: EdgeInsets.only(left: 4.5))
+        ],
+      ),
+    );
   }
 
   Text get _title => Text(widget.entry.title,
@@ -53,10 +64,20 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
           elevation: 0.0,
           actions: <Widget>[Toolkit.getHomeButton(context)],
         ),
-        body: ListView.builder(
-          itemBuilder: _tileBuilder,
-          itemCount: widget.entry.steps.length + 1,
-        ),
+        body: ListView.separated(
+            itemBuilder: _tileBuilder,
+            itemCount: widget.entry.steps.length + 1,
+            separatorBuilder: (context, index) {
+              return index != widget.entry.steps.length - 1
+                  ? Divider(
+                      thickness: 1.5,
+                      color: Palette.maroon,
+                      indent: 70.0,
+                      endIndent: 70.0,
+                      height: 25.0,
+                    )
+                  : Container();
+            }),
         backgroundColor: Palette.light);
   }
 }

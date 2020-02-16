@@ -22,6 +22,7 @@ class BaseListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTile(
+      isThreeLine: threeLine,
       contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
       leading: Padding(
           padding: EdgeInsets.only(top: 4),

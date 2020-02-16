@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/widgets/buttons/back_button.dart';
 

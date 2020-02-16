@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class MiddleRow extends StatelessWidget {
   final String text;

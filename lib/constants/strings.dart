@@ -1,6 +1,8 @@
 class Strings {
   static const String appName = "Howth Golf Live";
+
   static const String tapMe = "Tap anywhere to begin!";
+  static const String returnHome = "Tap to return to home!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -16,6 +18,7 @@ class Strings {
 
   static const String error =
       "Oof, please email the address in App Help to report this error.";
+  static const String note = "NOTE: ";
 
   /// Determines whether [score] is a string containing a fraction or whole
   /// number.

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/help_data.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -10,7 +10,7 @@ import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/my_details.dart';
 import 'package:howth_golf_live/pages/unique/help.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/services/privileges.dart';
 
 class HelpPage extends StatefulWidget {

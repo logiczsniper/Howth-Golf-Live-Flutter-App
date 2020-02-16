@@ -8,7 +8,7 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/models.dart';
 
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 class Toolkit {
@@ -108,7 +108,7 @@ class Toolkit {
   /// The text that appears in a form.
   static Widget getFormText(String text) => Center(
           child: Text(
-        "NOTE: " + text,
+        Strings.note + text,
         textAlign: TextAlign.center,
         style: Toolkit.formTextStyle,
       ));
@@ -116,7 +116,7 @@ class Toolkit {
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
         icon: Icon(Icons.home),
-        tooltip: 'Tap to return to home!',
+        tooltip: Strings.returnHome,
         onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
         color: Palette.dark,
       );

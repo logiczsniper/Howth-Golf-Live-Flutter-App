@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:intl/intl.dart';
 
 class DecoratedField {

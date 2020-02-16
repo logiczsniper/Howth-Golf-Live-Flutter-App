@@ -2,7 +2,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget

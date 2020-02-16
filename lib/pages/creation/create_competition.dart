@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
-import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 
 class MyFloatingActionButton extends StatelessWidget {
   final Function onPressed;

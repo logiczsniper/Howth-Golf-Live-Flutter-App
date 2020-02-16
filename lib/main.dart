@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/static/themes.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 
 import 'constants/strings.dart';
 

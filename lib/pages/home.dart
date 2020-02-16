@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 
 class HomePage extends StatelessWidget {

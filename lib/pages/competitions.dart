@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
-import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +18,7 @@ import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 import 'package:howth_golf_live/pages/creation/create_competition.dart';
 import 'package:howth_golf_live/pages/unique/competition.dart';
 
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/services/privileges.dart';
 
 class CompetitionsPage extends StatefulWidget {

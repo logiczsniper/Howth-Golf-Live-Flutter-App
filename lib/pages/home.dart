@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 
 class HomePage extends StatelessWidget {
   Text get _tapText => Text(
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
     /// Privileges.clearPreferences();
 
     return GestureDetector(
-        onTap: () => Toolkit.navigateTo(context, Strings.competitionsText),
+        onTap: () => Routes.navigateTo(context, Strings.competitionsText),
         child: Scaffold(
           body: Center(
               child: Column(

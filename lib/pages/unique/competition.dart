@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
+import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/services/privileges.dart';
@@ -46,7 +48,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// Push to the [CreateHole] page.
   void _addHole() {
     final int currentId = currentData.id;
-    Future<QuerySnapshot> newData = Toolkit.stream.first;
+    Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
     setState(() {
       newData.then((QuerySnapshot snapshot) {
@@ -107,7 +109,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                         _getPlayer(
                             hole,
                             isHome
-                                ? Toolkit.formatPlayerList(hole.players)
+                                ? Strings.formatPlayers(hole.players)
                                 : opposition,
                             index),
 
@@ -137,7 +139,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                       _getPlayer(
                           hole,
                           !isHome
-                              ? Toolkit.formatPlayerList(hole.players)
+                              ? Strings.formatPlayers(hole.players)
                               : opposition,
                           index,
                           away: true),
@@ -176,7 +178,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
           id: currentData.id),
       body: OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
-          stream: Toolkit.stream,
+          stream: DataBaseInteraction.stream,
           builder: (context, snapshot) {
             if (Toolkit.checkSnapshot(snapshot) != null)
               return Toolkit.checkSnapshot(snapshot);
@@ -184,7 +186,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             DocumentSnapshot document = snapshot.data.documents[0];
 
             List<DataBaseEntry> parsedElements =
-                Toolkit.getDataBaseEntries(document);
+                DataBaseInteraction.getDataBaseEntries(document);
 
             for (DataBaseEntry dataBaseEntry in parsedElements) {
               if (dataBaseEntry.id == currentData.id) {

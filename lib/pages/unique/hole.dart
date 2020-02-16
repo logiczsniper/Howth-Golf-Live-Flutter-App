@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -28,7 +29,7 @@ class HolePageState extends State<HolePage> {
   /// for this competition.
   void _deleteHole() {
     final int currentId = widget.entry.id;
-    Future<QuerySnapshot> newData = Toolkit.stream.first;
+    Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
     newData.then((QuerySnapshot snapshot) {
       DataBaseInteraction.deleteHole(
@@ -49,7 +50,7 @@ class HolePageState extends State<HolePage> {
         lastUpdated: DateTime.now());
 
     final int currentId = widget.entry.id;
-    Future<QuerySnapshot> newData = Toolkit.stream.first;
+    Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
     newData.then((QuerySnapshot snapshot) {
       DataBaseInteraction.updateHole(
@@ -252,7 +253,7 @@ class HolePageState extends State<HolePage> {
                         : Container(),
                   ]),
               Toolkit.getVersus(
-                  widget.entry, Toolkit.formatPlayerList(hole.players)),
+                  widget.entry, Strings.formatPlayers(hole.players)),
 
               /// Edit the hole number.
               Row(

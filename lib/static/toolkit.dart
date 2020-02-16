@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/models.dart';
 
-import 'package:howth_golf_live/services/privileges.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Toolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -67,7 +66,7 @@ class Toolkit {
 
       /// Primary text value.
       text: TextSpan(
-          text: double.tryParse(score).toInt() == 0 && Toolkit.isFraction(score)
+          text: double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
               ? ""
               : double.tryParse(score).toInt().toString(),
           style: TextStyle(
@@ -77,61 +76,12 @@ class Toolkit {
           children: <TextSpan>[
             /// Secondary text value (fractional).
             TextSpan(
-                text: Toolkit.isFraction(score) ? "1/2" : "",
+                text: Strings.isFraction(score) ? "1/2" : "",
                 style: TextStyle(
                     fontSize: 21,
                     color: Palette.buttonText,
                     fontFeatures: [FontFeature.enable('frac')]))
           ]));
-
-  /// Use [Navigator] to take the user to the main compeitions page.
-  ///
-  /// The [SharedPreferences] instance must be fetched and passed as
-  /// an argument to [pushNamed] so the new page can determine whether or
-  /// not the user is an admin and if so, adjust how it displays certain
-  /// elements.
-  static void navigateTo(BuildContext context, String destination) {
-    final preferences = SharedPreferences.getInstance();
-    preferences.then((SharedPreferences preferences) {
-      Navigator.pushNamed(context, '/' + destination,
-          arguments: Privileges.fromPreferences(preferences));
-    });
-  }
-
-  static Stream<QuerySnapshot> get stream => Firestore.instance
-      .collection(Strings.competitionsText.toLowerCase())
-      .snapshots();
-
-  /// Fetch and parse (to [DataBaseEntry] objects) all of the competitions
-  /// from [Firestore]. The [document] contains the data which, in turn,
-  /// contains the [rawElements] in the database.
-  static List<DataBaseEntry> getDataBaseEntries(DocumentSnapshot document) {
-    /// The [entries] in my [Firestore] instance, at index 1- the admin code is at 0.
-    List<dynamic> rawElements = document.data.entries.toList()[1].value;
-
-    /// Those same [entries] but in a structured format- [DataBaseEntry].
-    List<DataBaseEntry> parsedElements = List<DataBaseEntry>.generate(
-        rawElements.length,
-        (int index) => DataBaseEntry.fromJson(rawElements[index]));
-
-    return parsedElements;
-  }
-
-  /// Turn a list of players, [playerList], into one string with
-  /// those individual player names separated by commas, apart from the last
-  /// player in the list.
-  static String formatPlayerList(List playerList) {
-    String output = '';
-    bool isLastPlayer = false;
-    for (String player in playerList) {
-      output += player.toString();
-      isLastPlayer = playerList.indexOf(player) == playerList.length - 1;
-      if (!isLastPlayer) {
-        output += ', ';
-      }
-    }
-    return output;
-  }
 
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
@@ -167,7 +117,7 @@ class Toolkit {
   static IconButton getHomeButton(BuildContext context) => IconButton(
         icon: Icon(Icons.home),
         tooltip: 'Tap to return to home!',
-        onPressed: () => Toolkit.navigateTo(context, Strings.competitionsText),
+        onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
         color: Palette.dark,
       );
 
@@ -184,7 +134,7 @@ class Toolkit {
         children: <Widget>[
           Icon(Icons.error, color: Palette.dark),
           Text(
-            'Oof, please email the address in App Help to report this error.',
+            Strings.error,
             style: Toolkit.cardSubTitleTextStyle,
           )
         ],
@@ -198,11 +148,6 @@ class Toolkit {
 
     return null;
   }
-
-  /// Determines whether [score] is a string containing a fraction or whole
-  /// number.
-  static bool isFraction(String score) =>
-      double.tryParse(score) - double.tryParse(score).toInt() != 0;
 
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].

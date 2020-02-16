@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/routes.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/static/themes.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 

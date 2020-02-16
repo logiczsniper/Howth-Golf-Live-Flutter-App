@@ -3,14 +3,33 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/constants/fields.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
 class DataBaseInteraction {
   DataBaseInteraction();
+
+  static Stream<QuerySnapshot> get stream => Firestore.instance
+      .collection(Strings.competitionsText.toLowerCase())
+      .snapshots();
+
+  /// Fetch and parse (to [DataBaseEntry] objects) all of the competitions
+  /// from [Firestore]. The [document] contains the data which, in turn,
+  /// contains the [rawElements] in the database.
+  static List<DataBaseEntry> getDataBaseEntries(DocumentSnapshot document) {
+    /// The [entries] in my [Firestore] instance, at index 1- the admin code is at 0.
+    List<dynamic> rawElements = document.data.entries.toList()[1].value;
+
+    /// Those same [entries] but in a structured format- [DataBaseEntry].
+    List<DataBaseEntry> parsedElements = List<DataBaseEntry>.generate(
+        rawElements.length,
+        (int index) => DataBaseEntry.fromJson(rawElements[index]));
+
+    return parsedElements;
+  }
 
   /// Remove [currentEntry] from the entries in the database.
   static void deleteCompetition(BuildContext context,
@@ -67,7 +86,7 @@ class DataBaseInteraction {
       Map<String, dynamic> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData);
 
-      Toolkit.navigateTo(context, Strings.competitionsText);
+      Routes.navigateTo(context, Strings.competitionsText);
     }
   }
 

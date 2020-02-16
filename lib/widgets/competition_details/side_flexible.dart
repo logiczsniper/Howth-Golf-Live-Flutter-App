@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
 
 class SideFlexible extends StatelessWidget {
   final String score;
@@ -19,7 +19,7 @@ class SideFlexible extends StatelessWidget {
           /// Primary text value.
           text: TextSpan(
               text: double.tryParse(score).toInt() == 0 &&
-                      Toolkit.isFraction(score)
+                      Strings.isFraction(score)
                   ? ""
                   : double.tryParse(score).toInt().toString(),
               style: TextStyle(
@@ -29,7 +29,7 @@ class SideFlexible extends StatelessWidget {
               children: <TextSpan>[
             /// Secondary text value (fractional).
             TextSpan(
-                text: Toolkit.isFraction(score) ? "1/2" : "",
+                text: Strings.isFraction(score) ? "1/2" : "",
                 style: TextStyle(
                     fontSize: 21,
                     color: Palette.buttonText,

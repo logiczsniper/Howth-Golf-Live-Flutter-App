@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,8 +31,8 @@ class Privileges {
   static Future<bool> adminAttempt(
       String codeAttempt, int id, Function(Future<bool>) _onComplete) {
     /// Fetch the admin code from the database.
-    Future<bool> result =
-        Future<bool>.value(Toolkit.stream.first.then((QuerySnapshot snapshot) {
+    Future<bool> result = Future<bool>.value(
+        DataBaseInteraction.stream.first.then((QuerySnapshot snapshot) {
       DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
       int adminCode = documentSnapshot.data['admin_code'];
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/toolkit.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 
 class ParameterBackButton extends StatelessWidget {
   /// Custom back button which allows the passage of arguemnts.
@@ -14,6 +14,6 @@ class ParameterBackButton extends StatelessWidget {
   Widget build(BuildContext context) => IconButton(
       icon: const BackButtonIcon(),
       onPressed: () {
-        Toolkit.navigateTo(context, destination);
+        Routes.navigateTo(context, destination);
       });
 }

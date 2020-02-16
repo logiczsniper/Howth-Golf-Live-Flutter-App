@@ -117,7 +117,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   /// If the main number is 0, this will display just 1 / 2 rather than
   /// 0 and 1 / 2.
   static String _getTextSpanText(String score) =>
-      double.tryParse(score).toInt() == 0 && Toolkit.isFraction(score)
+      double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
           ? ""
           : double.tryParse(score).toInt().toString();
 
@@ -142,7 +142,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
                       /// The ternary operator (and others like it) below ensure that
                       /// no fraction is displayed if the [currentEntry.score] is whole.
-                      text: Toolkit.isFraction(currentEntry.location.isHome
+                      text: Strings.isFraction(currentEntry.location.isHome
                               ? currentEntry.score.howth
                               : currentEntry.score.opposition)
                           ? "1/2"
@@ -155,7 +155,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                           ? currentEntry.score.opposition
                           : currentEntry.score.howth)),
                   TextSpan(
-                      text: Toolkit.isFraction(currentEntry.location.isHome
+                      text: Strings.isFraction(currentEntry.location.isHome
                               ? currentEntry.score.opposition
                               : currentEntry.score.howth)
                           ? "1/2"
@@ -181,7 +181,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               duration: Duration(seconds: 1),
               child: StreamBuilder<QuerySnapshot>(
                   key: ValueKey(DateTime.now()),
-                  stream: Toolkit.stream,
+                  stream: DataBaseInteraction.stream,
                   builder: (context, snapshot) {
                     if (Toolkit.checkSnapshot(snapshot) != null)
                       return Toolkit.checkSnapshot(snapshot);
@@ -191,7 +191,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                     DocumentSnapshot document = snapshot.data.documents[0];
 
                     List<DataBaseEntry> parsedElements =
-                        Toolkit.getDataBaseEntries(document);
+                        DataBaseInteraction.getDataBaseEntries(document);
 
                     List<DataBaseEntry> filteredElements =
                         _filterElements(parsedElements, _searchText);

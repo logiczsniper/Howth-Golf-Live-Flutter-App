@@ -11,13 +11,15 @@ dependencies:
     sdk: flutter
 
   cloud_firestore: ^0.12.5+1
+  meta: ^1.1.8
+  shared_preferences: ^0.5.3+1
+  test: ^1.6.1
+  uuid: 2.0.4
+
   bubble_tab_indicator: ^0.1.4
   cupertino_icons: ^0.1.2
   flutter_spinkit: ^3.1.0
   font_awesome_flutter: 8.4.0
-  shared_preferences: ^0.5.3+1
-  test: ^1.6.1
-  uuid: 2.0.4
   datetime_picker_formfield: 1.0.0
   numberpicker: ^1.1.0
 
@@ -30,9 +32,9 @@ flutter:
   fonts:
     - family: CormorantGaramond
       fonts:
-        - asset: lib/graphics/fonts/Cormorant_Garamond/CormorantGaramond-BoldItalic.ttf
+        - asset: lib/assets/fonts/Cormorant_Garamond/CormorantGaramond-BoldItalic.ttf
     - family: FiraSans
       fonts:
-        - asset: lib/graphics/fonts/Fira_Sans/FiraSans-Regular.ttf
+        - asset: lib/assets/fonts/Fira_Sans/FiraSans-Regular.ttf
   assets:
-    - lib/graphics/
+    - lib/assets/

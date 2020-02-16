@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/static/database_entry.dart';
-import 'package:howth_golf_live/static/database_interation.dart';
+import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 

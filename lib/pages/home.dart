@@ -5,10 +5,14 @@ import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
 class HomePage extends StatelessWidget {
-  final Text _tapText = Text(
-    'Tap anywhere to begin!',
-    style: TextStyle(fontSize: 14, color: Palette.dark),
-  );
+  Text get _tapText => Text(
+        Strings.tapMe,
+        style: TextStyle(fontSize: 14, color: Palette.dark),
+      );
+
+  Padding get _howthLogo => Padding(
+      child: Image.asset(Strings.iconPath),
+      padding: EdgeInsets.symmetric(vertical: 100));
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +25,7 @@ class HomePage extends StatelessWidget {
           body: Center(
               child: Column(
             children: <Widget>[
-              Padding(padding: EdgeInsetsDirectional.only(top: 90)),
-              Image.asset(Strings.iconPath),
-              Padding(padding: EdgeInsetsDirectional.only(top: 200)),
+              _howthLogo,
               OpacityChangeWidget(
                 target: _tapText,
                 flashing: true,

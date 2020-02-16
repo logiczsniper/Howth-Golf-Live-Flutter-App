@@ -161,3 +161,32 @@ class Location {
 
   Location({this.address, this.isHome});
 }
+
+class AppHelpEntry {
+  final String title;
+  final String subtitle;
+  final List<HelpStep> steps;
+
+  /// Convert a map to a [AppHelpEntry] instance.
+  ///
+  /// This is used to convert the underlying _appHelpData in [Toolkit] into entries.
+  AppHelpEntry.fromMap(Map map)
+      : title = map['title'],
+        subtitle = map['subtitle'],
+        steps = List<HelpStep>.generate(map['steps'].length,
+            (int index) => HelpStep.fromMap(map['steps'][index]));
+
+  AppHelpEntry({this.title, this.subtitle, this.steps});
+}
+
+class HelpStep {
+  final String title;
+  final String data;
+
+  /// Convert a map into a single [HelpStep] instance.
+  HelpStep.fromMap(Map map)
+      : title = map['title'],
+        data = map['data'];
+
+  HelpStep({this.title, this.data});
+}

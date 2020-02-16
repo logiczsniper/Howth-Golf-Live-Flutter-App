@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/static/database_entry.dart';
+import 'package:howth_golf_live/services/models.dart';
 
-import 'package:howth_golf_live/static/privileges.dart';
+import 'package:howth_golf_live/services/privileges.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 import 'package:shared_preferences/shared_preferences.dart';

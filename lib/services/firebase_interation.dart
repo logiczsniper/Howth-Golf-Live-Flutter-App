@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/static/database_entry.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';

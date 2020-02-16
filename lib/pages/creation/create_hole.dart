@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
-import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';

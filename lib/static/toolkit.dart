@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 
 import 'package:howth_golf_live/static/privileges.dart';
@@ -12,22 +13,6 @@ import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Toolkit {
-  static String get appName => "Howth Golf Live";
-
-  /// App page texts. Also used for fetching data from firestore and app routing.
-  static const String home = "/";
-  static const String currentText = "Current";
-  static const String archivedText = "Archived";
-  static const String competitionsText = "Competitions";
-  static const String helpText = "App Help";
-
-  /// Paths to graphics used in the app.
-  static const String iconPath = "lib/graphics/icon.png";
-
-  /// When getting data from preferences, it is vital that these values are used as keys.
-  static const String activeAdminText = "activeAdmin";
-  static const String activeCompetitionsText = "activeCompetitions";
-
   /// Serves as the builder method for the [MaterialApp].
   ///
   /// Uses [CustomScrollBehavior] to improve app aesthetic.
@@ -114,7 +99,7 @@ class Toolkit {
   }
 
   static Stream<QuerySnapshot> get stream => Firestore.instance
-      .collection(Toolkit.competitionsText.toLowerCase())
+      .collection(Strings.competitionsText.toLowerCase())
       .snapshots();
 
   /// Fetch and parse (to [DataBaseEntry] objects) all of the competitions
@@ -182,7 +167,7 @@ class Toolkit {
   static IconButton getHomeButton(BuildContext context) => IconButton(
         icon: Icon(Icons.home),
         tooltip: 'Tap to return to home!',
-        onPressed: () => Toolkit.navigateTo(context, Toolkit.competitionsText),
+        onPressed: () => Toolkit.navigateTo(context, Strings.competitionsText),
         color: Palette.dark,
       );
 

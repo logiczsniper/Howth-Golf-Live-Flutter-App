@@ -3,6 +3,8 @@ import 'package:howth_golf_live/static/routes.dart';
 import 'package:howth_golf_live/static/themes.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 
+import 'constants/strings.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -10,8 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
       builder: Toolkit.appBuilder,
-      title: Toolkit.appName,
-      initialRoute: Toolkit.home,
+      title: Strings.appName,
+      initialRoute: Routes.home,
       routes: Routes.map,
       theme: Themes.appTheme);
 }

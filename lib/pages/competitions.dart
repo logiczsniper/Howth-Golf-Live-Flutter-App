@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/database_interation.dart';
 import 'package:howth_golf_live/static/palette.dart';
@@ -65,13 +66,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return parsedElements;
   }
 
-  /// Transform the strings found in the database into
-  /// a [DateTime] object.
-  ///
-  /// The format provided by field: 'YYYY-DD-MM HH:MM'
-  static DateTime _parseDate(String date, String time) =>
-      DateTime.parse("$date $time");
-
   /// Sorts elements into either current or archived lists.
   static List<List<DataBaseEntry>> _sortElements(
       List<DataBaseEntry> filteredElements) {
@@ -82,8 +76,9 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     List<DataBaseEntry> archivedElements = [];
     for (DataBaseEntry filteredElement in filteredElements) {
       DateTime competitionDate =
-          _parseDate(filteredElement.date, filteredElement.time);
+          DateTime.parse("${filteredElement.date} ${filteredElement.time}");
       int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
+
       bool inPast = competitionDate.isBefore(DateTime.now());
       if (daysFromNow >= 8 && inPast) {
         archivedElements.add(filteredElement);
@@ -224,7 +219,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                           return ListTile(
                               title: Center(
                                   child: Text(
-                                      "No ${Toolkit.competitionsText.toLowerCase()} found!",
+                                      "No ${Strings.competitionsText.toLowerCase()} found!",
                                       style: Toolkit.noDataTextStyle)));
                         }
 
@@ -309,7 +304,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       body: DefaultTabController(
           length: 2,
           child: CompetitionsPageAppBar(_buildElementsList,
-              title: Toolkit.competitionsText)),
+              title: Strings.competitionsText)),
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

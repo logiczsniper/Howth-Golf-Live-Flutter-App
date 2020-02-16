@@ -1,5 +1,6 @@
 import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/palette.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
@@ -95,7 +96,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     icon: Icon(Icons.help_outline),
                     tooltip: 'Tap for help!',
                     onPressed: () =>
-                        Toolkit.navigateTo(context, Toolkit.helpText)),
+                        Toolkit.navigateTo(context, Strings.helpText)),
                 actions: <Widget>[
                   IconButton(
                     icon: _iconData,
@@ -109,8 +110,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     tabs: <Widget>[
                       Tab(
                           icon: Icon(Icons.whatshot),
-                          text: Toolkit.currentText),
-                      Tab(text: Toolkit.archivedText, icon: Icon(Icons.cached))
+                          text: Strings.currentText),
+                      Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
                     ])),
           ];
         },

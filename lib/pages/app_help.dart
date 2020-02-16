@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/help_data.dart';
 import 'package:howth_golf_live/static/palette.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -19,7 +18,7 @@ class HelpPage extends StatefulWidget {
 }
 
 class HelpPageState extends State<HelpPage> {
-  bool isVerified;
+  bool hasAccess;
 
   static Text _getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
@@ -42,30 +41,6 @@ class HelpPageState extends State<HelpPage> {
                     builder: (context) => SpecificHelpPage(currentHelpEntry)));
           });
 
-  Future<bool> _applyPrivileges(String codeAttempt) {
-    /// Fetch the admin code from the database.
-    return Future<bool>.value(
-        Toolkit.stream.first.then((QuerySnapshot snapshot) {
-      DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
-      int adminCode = documentSnapshot.data['admin_code'];
-
-      if (codeAttempt == adminCode.toString()) {
-        final preferences = SharedPreferences.getInstance();
-        preferences.then((SharedPreferences preferences) {
-          preferences.setBool(Toolkit.activeAdminText, true);
-        });
-        setState(() {
-          isVerified = true;
-        });
-        return true;
-      }
-      setState(() {
-        isVerified = false;
-      });
-      return false;
-    }));
-  }
-
   /// If they have special privileges, display extra entries depending on
   /// their access level.
   int _bonusEntries(List<String> competitionAccess, bool isAdmin) {
@@ -77,6 +52,12 @@ class HelpPageState extends State<HelpPage> {
       return 0;
   }
 
+  void _onComplete(Future<bool> isVerified) => setState(() {
+        isVerified.then((bool result) {
+          hasAccess = result;
+        });
+      });
+
   @override
   void initState() {
     super.initState();
@@ -85,13 +66,15 @@ class HelpPageState extends State<HelpPage> {
   @override
   Widget build(BuildContext context) {
     Privileges arguments = ModalRoute.of(context).settings.arguments;
+
     List<String> competitionAccess = arguments.competitionAccess ?? [];
-    if (isVerified == null) {
-      isVerified = arguments.isAdmin ?? false;
+    if (hasAccess == null) {
+      hasAccess = arguments.isAdmin ?? false;
     }
 
     return Scaffold(
-      appBar: CodeFieldBar(Toolkit.helpText, _applyPrivileges, isVerified),
+      appBar: CodeFieldBar(
+          Strings.helpText, Privileges.adminAttempt, _onComplete, hasAccess),
       body: OpacityChangeWidget(
         target: ListView.builder(
             itemBuilder: (BuildContext context, int index) {
@@ -114,7 +97,7 @@ class HelpPageState extends State<HelpPage> {
             /// must be subtracted before the bonus entries are added.
             itemCount: HelpData.entries.length -
                 1 +
-                _bonusEntries(competitionAccess, isVerified)),
+                _bonusEntries(competitionAccess, hasAccess)),
       ),
       backgroundColor: Palette.light,
     );

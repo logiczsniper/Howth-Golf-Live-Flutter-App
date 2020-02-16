@@ -4,6 +4,7 @@ import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
 import 'package:howth_golf_live/static/palette.dart';
+import 'package:howth_golf_live/static/privileges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -35,32 +36,12 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   ///
   /// [setState] is also called to rebuild the page with the potentially newly aquired
   /// privileges.
-  Future<bool> _applyPrivileges(String codeAttempt) {
-    if (codeAttempt == currentData.id.toString()) {
-      final preferences = SharedPreferences.getInstance();
-      preferences.then((SharedPreferences preferences) {
-        /// Get current competitions that the user has access to.
-        List<String> competitionsAccessed =
-            preferences.getStringList(Toolkit.activeCompetitionsText) ?? [];
 
-        /// Append this competition.
-        competitionsAccessed.add(currentData.id.toString());
-
-        /// Write this to [SharedPreferences].
-        preferences.setStringList(
-            Toolkit.activeCompetitionsText, competitionsAccessed);
+  void _onComplete(Future<bool> isVerified) => setState(() {
+        isVerified.then((bool result) {
+          hasAccess = result;
+        });
       });
-      setState(() {
-        hasAccess = true;
-      });
-      return Future.value(true);
-    }
-
-    setState(() {
-      hasAccess = false;
-    });
-    return Future.value(false);
-  }
 
   /// Push to the [CreateHole] page.
   void _addHole() {
@@ -190,7 +171,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         ? MyFloatingActionButton(onPressed: _addHole, text: 'Add a Hole')
         : null;
     return Scaffold(
-      appBar: CodeFieldBar(currentData.title, _applyPrivileges, hasAccess),
+      appBar: CodeFieldBar(
+          currentData.title, Privileges.managerAttempt, _onComplete, hasAccess,
+          id: currentData.id),
       body: OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
           stream: Toolkit.stream,

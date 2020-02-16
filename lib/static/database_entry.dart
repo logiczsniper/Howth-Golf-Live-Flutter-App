@@ -1,4 +1,4 @@
-import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/constants/fields.dart';
 
 class DataBaseEntry {
   final String date;

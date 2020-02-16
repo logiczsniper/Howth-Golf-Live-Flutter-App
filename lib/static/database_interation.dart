@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/static/database_entry.dart';
-import 'package:howth_golf_live/static/fields.dart';
+import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/static/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -66,7 +67,7 @@ class DataBaseInteraction {
       Map<String, dynamic> newData = {'data': dataBaseEntries};
       documentSnapshot.reference.updateData(newData);
 
-      Toolkit.navigateTo(context, Toolkit.competitionsText);
+      Toolkit.navigateTo(context, Strings.competitionsText);
     }
   }
 

@@ -12,7 +12,7 @@ class DataBaseInteraction {
   DataBaseInteraction();
 
   /// Remove [currentEntry] from the entries in the database.
-  static void deleteCompetition(
+  static void deleteCompetition(BuildContext context,
       DataBaseEntry currentEntry, AsyncSnapshot<QuerySnapshot> snapshot) {
     DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
     List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
@@ -21,7 +21,10 @@ class DataBaseInteraction {
         .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));
 
     Map<String, dynamic> newData = {'data': dataBaseEntries};
-    documentSnapshot.reference.updateData(newData);
+    documentSnapshot.reference
+        .updateData(newData)
+        .catchError(onError)
+        .whenComplete(Navigator.of(context).pop);
   }
 
   /// Assert whether or not [rawEntry] is the entry to be deleted, [currentEntry].
@@ -117,7 +120,9 @@ class DataBaseInteraction {
     }
 
     Map<String, dynamic> newData = {'data': dataBaseEntries};
-    documentSnapshot.reference.updateData(newData);
+    documentSnapshot.reference
+        .updateData(newData)
+        .whenComplete(Navigator.of(context).pop);
   }
 
   /// Using the form fields, create a [Hole] and add it to the
@@ -188,9 +193,10 @@ class DataBaseInteraction {
       }
 
       Map<String, List> newData = {'data': dataBaseEntries};
-      documentSnapshot.reference.updateData(newData).catchError(onError);
-
-      Navigator.of(context).pop();
+      documentSnapshot.reference
+          .updateData(newData)
+          .catchError(onError)
+          .whenComplete(Navigator.of(context).pop);
     }
   }
 

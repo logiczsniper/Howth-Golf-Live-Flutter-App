@@ -118,8 +118,12 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
           children: <Widget>[
             /// The second parameter indicates whether or not this
             /// list builder is for current events or archived.
-            widget._listBuilder(inputText, true),
-            widget._listBuilder(inputText, false)
+            AnimatedSwitcher(
+                child: widget._listBuilder(inputText, true),
+                duration: Duration(seconds: 1)),
+            AnimatedSwitcher(
+                child: widget._listBuilder(inputText, false),
+                duration: Duration(seconds: 1))
           ],
         ),
       ),

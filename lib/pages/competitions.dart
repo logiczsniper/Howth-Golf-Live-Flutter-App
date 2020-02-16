@@ -181,82 +181,88 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   Widget _buildElementsList(String _searchText, bool isCurrentTab) =>
       OpacityChangeWidget(
-          target: StreamBuilder<QuerySnapshot>(
-              stream: Toolkit.stream,
-              builder: (context, snapshot) {
-                if (Toolkit.checkSnapshot(snapshot) != null)
-                  return Toolkit.checkSnapshot(snapshot);
+          key: ValueKey(DateTime.now()),
+          target: AnimatedSwitcher(
+              duration: Duration(seconds: 1),
+              child: StreamBuilder<QuerySnapshot>(
+                  key: ValueKey(DateTime.now()),
+                  stream: Toolkit.stream,
+                  builder: (context, snapshot) {
+                    if (Toolkit.checkSnapshot(snapshot) != null)
+                      return Toolkit.checkSnapshot(snapshot);
 
-                _snapshot = snapshot;
+                    _snapshot = snapshot;
 
-                DocumentSnapshot document = snapshot.data.documents[0];
+                    DocumentSnapshot document = snapshot.data.documents[0];
 
-                List<DataBaseEntry> parsedElements =
-                    Toolkit.getDataBaseEntries(document);
+                    List<DataBaseEntry> parsedElements =
+                        Toolkit.getDataBaseEntries(document);
 
-                List<DataBaseEntry> filteredElements =
-                    _filterElements(parsedElements, _searchText);
+                    List<DataBaseEntry> filteredElements =
+                        _filterElements(parsedElements, _searchText);
 
-                if (_checkFilteredElements(filteredElements) != null)
-                  return _checkFilteredElements(filteredElements);
+                    if (_checkFilteredElements(filteredElements) != null)
+                      return _checkFilteredElements(filteredElements);
 
-                /// At the 0th index of [sortedElements] will be the currentElements,
-                /// and at the 1st index will be the archivedElements.
-                List<List<DataBaseEntry>> sortedElements =
-                    _sortElements(filteredElements);
+                    /// At the 0th index of [sortedElements] will be the currentElements,
+                    /// and at the 1st index will be the archivedElements.
+                    List<List<DataBaseEntry>> sortedElements =
+                        _sortElements(filteredElements);
 
-                List<DataBaseEntry> activeElements =
-                    isCurrentTab ? sortedElements[0] : sortedElements[1];
+                    List<DataBaseEntry> activeElements =
+                        isCurrentTab ? sortedElements[0] : sortedElements[1];
 
-                return ListView.builder(
-                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 100.0),
-                  itemCount:
-                      activeElements.length == 0 ? 1 : activeElements.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    /// In the case where the user searched for something with no results,
-                    /// return a [Text] widget to notify the user of that.
-                    if (activeElements.length == 0) {
-                      return ListTile(
-                          title: Center(
-                              child: Text(
-                                  "No ${Toolkit.competitionsText.toLowerCase()} found!",
-                                  style: Toolkit.noDataTextStyle)));
-                    }
+                    return ListView.builder(
+                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 100.0),
+                      itemCount: activeElements.length == 0
+                          ? 1
+                          : activeElements.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        /// In the case where the user searched for something with no results,
+                        /// return a [Text] widget to notify the user of that.
+                        if (activeElements.length == 0) {
+                          return ListTile(
+                              title: Center(
+                                  child: Text(
+                                      "No ${Toolkit.competitionsText.toLowerCase()} found!",
+                                      style: Toolkit.noDataTextStyle)));
+                        }
 
-                    DataBaseEntry currentEntry = activeElements[index];
+                        DataBaseEntry currentEntry = activeElements[index];
 
-                    /// Fetches [SharedPreferences] to pass as initial values into
-                    /// the [SpecificCompetitionPage].
-                    Function toCompetition = () {
-                      final preferences = SharedPreferences.getInstance();
-                      preferences.then((SharedPreferences preferences) {
-                        final bool hasAccess = _isAdmin(context) ||
-                            _isManager(context, currentEntry);
+                        /// Fetches [SharedPreferences] to pass as initial values into
+                        /// the [SpecificCompetitionPage].
+                        Function toCompetition = () {
+                          final preferences = SharedPreferences.getInstance();
+                          preferences.then((SharedPreferences preferences) {
+                            final bool hasAccess = _isAdmin(context) ||
+                                _isManager(context, currentEntry);
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SpecificCompetitionPage(
-                                    currentEntry, hasAccess)));
-                      });
-                    };
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SpecificCompetitionPage(
+                                            currentEntry, hasAccess)));
+                          });
+                        };
 
-                    return ComplexCard(
-                        child: _tileBuilder(context, currentEntry),
-                        onTap: toCompetition,
-                        iconButton: _isAdmin(context)
-                            ? IconButton(
-                                icon: Icon(Icons.remove_circle_outline,
-                                    color: Palette.dark, size: 22.0),
-                                onPressed: () {
-                                  _showAlertDialog(
-                                      context, activeElements[index], snapshot);
-                                },
-                              )
-                            : null);
-                  },
-                );
-              }));
+                        return ComplexCard(
+                            child: _tileBuilder(context, currentEntry),
+                            onTap: toCompetition,
+                            iconButton: _isAdmin(context)
+                                ? IconButton(
+                                    icon: Icon(Icons.remove_circle_outline,
+                                        color: Palette.dark, size: 22.0),
+                                    onPressed: () {
+                                      _showAlertDialog(context,
+                                          activeElements[index], snapshot);
+                                    },
+                                  )
+                                : null);
+                      },
+                    );
+                  })));
 
   /// When deleting a [DataBaseEntry], prompts the user to double check their intent
   /// is to do so as this can have major consquences if an accident.
@@ -275,8 +281,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
         FlatButton(
           child: Text("Continue", style: Toolkit.dialogTextStyle),
           onPressed: () {
-            Navigator.of(context).pop();
-            DataBaseInteraction.deleteCompetition(currentEntry, snapshot);
+            DataBaseInteraction.deleteCompetition(
+                context, currentEntry, snapshot);
           },
         )
       ],

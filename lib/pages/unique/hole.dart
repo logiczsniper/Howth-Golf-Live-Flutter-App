@@ -34,8 +34,6 @@ class HolePageState extends State<HolePage> {
       DataBaseInteraction.deleteHole(
           context, snapshot, widget.index, currentId);
     });
-
-    Navigator.of(context).pop();
   }
 
   /// Update the [currentHole].

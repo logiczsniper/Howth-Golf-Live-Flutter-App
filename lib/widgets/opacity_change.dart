@@ -4,7 +4,8 @@ class OpacityChangeWidget extends StatefulWidget {
   final Widget target;
   final bool flashing;
 
-  OpacityChangeWidget({@required this.target, this.flashing = false});
+  OpacityChangeWidget({@required this.target, this.flashing = false, Key key})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _OpacityChangeWidgetState();
 }

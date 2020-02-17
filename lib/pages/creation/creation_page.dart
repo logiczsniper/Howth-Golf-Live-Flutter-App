@@ -11,13 +11,13 @@ class CreationPage {
                 Padding(
                     child: Text(
                       text,
-                      style: Toolkit.formTextStyle,
+                      style: UIToolkit.formTextStyle,
                     ),
                     padding: EdgeInsets.only(left: 16.0)),
                 dropdownButton
               ],
             ),
-            decoration: Toolkit.bottomSideBoxDecoration,
+            decoration: UIToolkit.bottomSideBoxDecoration,
             padding: EdgeInsets.only(bottom: 2.0),
           ),
           padding: EdgeInsets.only(bottom: 16.0));
@@ -31,18 +31,13 @@ class CreationPage {
         title: Text(title,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: Toolkit.titleTextStyle),
-        backgroundColor: Palette.light,
-        iconTheme: IconThemeData(color: Palette.dark),
+            style: UIToolkit.titleTextStyle),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.check),
-            tooltip: 'Tap to submit!',
-            onPressed: onPressed,
-            color: Palette.dark,
-          )
+              icon: Icon(Icons.check),
+              tooltip: 'Tap to submit!',
+              onPressed: onPressed)
         ],
-        elevation: 0.0,
       ),
       body: Padding(child: form, padding: EdgeInsets.all(5.0)),
       backgroundColor: Palette.light,

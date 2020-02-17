@@ -34,14 +34,14 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
           Padding(
               child: Text(
                 currentStep.title,
-                style: Toolkit.cardTitleTextStyle,
+                style: UIToolkit.cardTitleTextStyle,
                 textAlign: TextAlign.center,
               ),
               padding: EdgeInsets.only(bottom: 3.0)),
           Padding(
               child: Text(
                 currentStep.data,
-                style: Toolkit.cardSubTitleTextStyle,
+                style: UIToolkit.cardSubTitleTextStyle,
                 textAlign: TextAlign.center,
               ),
               padding: EdgeInsets.only(left: 4.5))
@@ -51,7 +51,9 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   }
 
   Text get _title => Text(widget.entry.title,
-      textAlign: TextAlign.center, maxLines: 2, style: Toolkit.titleTextStyle);
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      style: UIToolkit.titleTextStyle);
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +61,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
         appBar: AppBar(
           centerTitle: true,
           title: _title,
-          backgroundColor: Palette.light,
-          iconTheme: IconThemeData(color: Palette.dark),
-          elevation: 0.0,
-          actions: <Widget>[Toolkit.getHomeButton(context)],
+          actions: <Widget>[UIToolkit.getHomeButton(context)],
         ),
         body: ListView.separated(
             itemBuilder: _tileBuilder,

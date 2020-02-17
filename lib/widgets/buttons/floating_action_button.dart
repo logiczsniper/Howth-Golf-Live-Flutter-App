@@ -15,7 +15,6 @@ class MyFloatingActionButton extends StatelessWidget {
           Icons.add,
           color: Palette.buttonText,
         ),
-        backgroundColor: Palette.maroon,
         label: Text(
           text,
           style: TextStyle(fontSize: 14, color: Palette.buttonText),

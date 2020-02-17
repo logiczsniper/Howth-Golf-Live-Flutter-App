@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class StatefulAppBar {
@@ -22,12 +23,11 @@ class StatefulAppBar {
   /// Get a custom instantiated [InputDecoration].
   static InputDecoration _getInputDecoration(String hintText) =>
       InputDecoration(
-          contentPadding: EdgeInsets.all(1.5),
-          enabledBorder: Toolkit.outlineInputBorder,
-          focusedBorder: Toolkit.outlineInputBorder,
-          prefixIcon: Icon(Icons.keyboard_arrow_right, color: Palette.dark),
-          hintText: hintText,
-          hintStyle: Toolkit.hintTextStyle);
+              enabledBorder: UIToolkit.outlineInputBorder,
+              focusedBorder: UIToolkit.outlineInputBorder,
+              prefixIcon: Icon(Icons.keyboard_arrow_right),
+              hintText: hintText)
+          .applyDefaults(Themes.inputDecorationTheme);
 
   /// The title must be an [AnimatedSwitcher].
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
@@ -39,7 +39,7 @@ class StatefulAppBar {
           softWrap: true,
           textAlign: TextAlign.center,
           maxLines: 2,
-          style: Toolkit.titleTextStyle));
+          style: Themes.titleStyle));
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.
@@ -58,8 +58,6 @@ class StatefulAppBar {
         controller: _filter,
         style: TextStyle(color: Palette.dark),
         decoration: _getInputDecoration(hintText),
-        onSubmitted: (String input) {
-          _codePressed();
-        },
+        onSubmitted: (String _) => _codePressed(),
       );
 }

@@ -33,7 +33,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// made must be equal to the [currentData.id].
   ///
   /// Upon success, adds the [currentData.id] to the list of strings
-  /// stored in [SharedPreferences], with a key value equal to [Toolkit.activeCompetitionsText],
+  /// stored in [SharedPreferences], with a key value equal to [UIToolkit.activeCompetitionsText],
   /// signifying that this user has access to this competition.
   ///
   /// [setState] is also called to rebuild the page with the potentially newly aquired
@@ -74,11 +74,11 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                       borderRadius: BorderRadius.circular(6.0)),
                   child: Text(text,
                       textAlign: away ? TextAlign.right : TextAlign.left,
-                      style: Toolkit.cardSubTitleTextStyle))));
+                      style: UIToolkit.cardSubTitleTextStyle))));
 
   /// Gets the properly padded and styled score widget.
   Container _getScore(String text, {bool away = false}) => Container(
-      child: Text(text, style: Toolkit.leadingChildTextStyle),
+      child: Text(text, style: UIToolkit.leadingChildTextStyle),
       padding: EdgeInsets.fromLTRB(
           away ? 12.0 : 16.0, 3.0, !away ? 12.0 : 16.0, 3.0));
 
@@ -121,7 +121,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
 
                   /// Hole Number
 
-                  Toolkit.getHoleNumberDecorated(hole.holeNumber),
+                  UIToolkit.getHoleNumberDecorated(hole.holeNumber),
 
                   /// Away team section.
                   Expanded(
@@ -180,8 +180,8 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         target: StreamBuilder<QuerySnapshot>(
           stream: DataBaseInteraction.stream,
           builder: (context, snapshot) {
-            if (Toolkit.checkSnapshot(snapshot) != null)
-              return Toolkit.checkSnapshot(snapshot);
+            if (UIToolkit.checkSnapshot(snapshot) != null)
+              return UIToolkit.checkSnapshot(snapshot);
 
             DocumentSnapshot document = snapshot.data.documents[0];
 
@@ -215,13 +215,13 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                 if (index == 0)
                   return CompetitionDetails(currentData, hasAccess);
                 else if (index == 1)
-                  return Toolkit.getVersus(currentData, "Howth Golf Club");
+                  return UIToolkit.getVersus(currentData, "Howth Golf Club");
                 else if (currentData.holes.length == 0)
                   return Center(
                       child: Padding(
                           child: Text(
                             "No hole data found for the ${currentData.title}!",
-                            style: Toolkit.noDataTextStyle,
+                            style: UIToolkit.noDataTextStyle,
                           ),
                           padding: EdgeInsets.only(top: 25.0)));
                 else

@@ -15,8 +15,7 @@ class CompetitionDetails extends StatelessWidget {
   /// Displays an icon followed by text ([data]).
   Widget _getMiddleRow(String data, IconData iconData, double size) {
     return Padding(
-      child: MiddleRow(
-          data.trim(), Icon(iconData, size: size, color: Palette.dark)),
+      child: MiddleRow(data.trim(), Icon(iconData, size: size)),
       padding: EdgeInsets.symmetric(vertical: 1.0),
     );
   }

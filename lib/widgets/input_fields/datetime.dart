@@ -27,7 +27,7 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
           cursorColor: Palette.maroon,
           controller: controller,
           style: TextStyle(color: Palette.dark),
-          decoration: getDecoration(hintText),
+          decoration: getDecoration(context, hintText),
           format: format,
           validator: _validator,
           onShowPicker: (context, currentValue) async {

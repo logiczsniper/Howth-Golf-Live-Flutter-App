@@ -24,7 +24,7 @@ class HelpPageState extends State<HelpPage> {
   static Text _getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
-      style: Toolkit.leadingChildTextStyle);
+      style: UIToolkit.leadingChildTextStyle);
 
   static Widget _tileBuilder(
           BuildContext context, AppHelpEntry currentHelpEntry, int index) =>

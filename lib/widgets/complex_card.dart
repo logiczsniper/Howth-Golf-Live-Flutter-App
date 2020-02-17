@@ -26,7 +26,7 @@ class ComplexCard extends StatelessWidget {
     /// where a standard ending icon would be.
     final Widget topWidget = iconButton ?? Container();
     return Stack(children: <Widget>[
-      Toolkit.getCard(child),
+      UIToolkit.getCard(child),
       Positioned.fill(
           child: Material(
               color: Colors.transparent,

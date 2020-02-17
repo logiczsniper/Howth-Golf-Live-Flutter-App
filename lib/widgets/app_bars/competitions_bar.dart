@@ -90,8 +90,6 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                 floating: true,
                 pinned: false,
                 snap: true,
-                backgroundColor: Palette.light,
-                iconTheme: IconThemeData(color: Palette.dark),
                 leading: IconButton(
                     icon: Icon(Icons.help_outline),
                     tooltip: 'Tap for help!',

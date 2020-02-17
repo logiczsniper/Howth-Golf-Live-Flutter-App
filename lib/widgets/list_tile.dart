@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class BaseListTile extends StatelessWidget {
@@ -28,17 +27,16 @@ class BaseListTile extends StatelessWidget {
           padding: EdgeInsets.only(top: 4),
           child: Container(
               padding: EdgeInsets.only(right: 15.0),
-              decoration: Toolkit.rightSideBoxDecoration,
+              decoration: UIToolkit.rightSideBoxDecoration,
               child: leadingChild)),
       title: Text(
         titleText,
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
-        style: Toolkit.cardTitleTextStyle,
       ),
       subtitle: Text(subtitleText,
           overflow: TextOverflow.fade,
           maxLines: subtitleMaxLines,
-          style: Toolkit.cardSubTitleTextStyle),
-      trailing: Icon(trailingIconData, color: Palette.dark));
+          style: UIToolkit.cardSubTitleTextStyle),
+      trailing: Icon(trailingIconData));
 }

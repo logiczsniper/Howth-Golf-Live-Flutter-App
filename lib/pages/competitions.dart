@@ -90,7 +90,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   /// Get whether or not the user [isAdmin].
-  ///
+  /// TODO: move these into privileges if possible.
   /// If they are, they are granted access to modify any
   /// competition, create and delete competitions.
   static bool _isAdmin(BuildContext context) {
@@ -136,7 +136,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 text: _getTextSpanText(currentEntry.location.isHome
                     ? currentEntry.score.howth
                     : currentEntry.score.opposition),
-                style: Toolkit.leadingChildTextStyle,
+                style: UIToolkit.leadingChildTextStyle,
                 children: <TextSpan>[
                   TextSpan(
 
@@ -183,8 +183,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   key: ValueKey(DateTime.now()),
                   stream: DataBaseInteraction.stream,
                   builder: (context, snapshot) {
-                    if (Toolkit.checkSnapshot(snapshot) != null)
-                      return Toolkit.checkSnapshot(snapshot);
+                    if (UIToolkit.checkSnapshot(snapshot) != null)
+                      return UIToolkit.checkSnapshot(snapshot);
 
                     _snapshot = snapshot;
 
@@ -220,7 +220,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                               title: Center(
                                   child: Text(
                                       "No ${Strings.competitionsText.toLowerCase()} found!",
-                                      style: Toolkit.noDataTextStyle)));
+                                      style: UIToolkit.noDataTextStyle)));
                         }
 
                         DataBaseEntry currentEntry = activeElements[index];
@@ -247,8 +247,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                             onTap: toCompetition,
                             iconButton: _isAdmin(context)
                                 ? IconButton(
-                                    icon: Icon(Icons.remove_circle_outline,
-                                        color: Palette.dark, size: 22.0),
+                                    icon: Icon(Icons.remove_circle_outline),
                                     onPressed: () {
                                       _showAlertDialog(context,
                                           activeElements[index], snapshot);
@@ -264,17 +263,17 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
-      title: Text("Are you sure?", style: Toolkit.cardTitleTextStyle),
+      title: Text("Are you sure?", style: UIToolkit.cardTitleTextStyle),
       content: Text("This action is irreversible.",
-          style: Toolkit.cardSubTitleTextStyle),
+          style: UIToolkit.cardSubTitleTextStyle),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       actions: <Widget>[
         FlatButton(
-          child: Text("Cancel", style: Toolkit.dialogTextStyle),
+          child: Text("Cancel", style: UIToolkit.dialogTextStyle),
           onPressed: Navigator.of(context).pop,
         ),
         FlatButton(
-          child: Text("Continue", style: Toolkit.dialogTextStyle),
+          child: Text("Continue", style: UIToolkit.dialogTextStyle),
           onPressed: () {
             DataBaseInteraction.deleteCompetition(
                 context, currentEntry, snapshot);

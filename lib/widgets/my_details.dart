@@ -12,7 +12,7 @@ class MyDetails extends StatelessWidget {
   /// My (contextual) contact details, styled.
   static Text get _text => Text(
         'Contact the developer:\nhowth.lczernel@gmail.com',
-        style: Toolkit.cardSubTitleTextStyle,
+        style: UIToolkit.cardSubTitleTextStyle,
         textAlign: TextAlign.center,
       );
 
@@ -23,10 +23,7 @@ class MyDetails extends StatelessWidget {
         padding: EdgeInsets.all(7.0),
         decoration: _border,
         child: Column(
-          children: <Widget>[
-            Icon(Icons.contact_mail, color: Palette.dark),
-            _text
-          ],
+          children: <Widget>[Icon(Icons.contact_mail), _text],
         ));
   }
 }

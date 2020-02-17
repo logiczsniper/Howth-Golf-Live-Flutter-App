@@ -11,7 +11,7 @@ import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
-class Toolkit {
+class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
   ///
   /// Uses [CustomScrollBehavior] to improve app aesthetic.
@@ -46,7 +46,7 @@ class Toolkit {
       margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          decoration: Toolkit.roundedRectBoxDecoration,
+          decoration: UIToolkit.roundedRectBoxDecoration,
           child: child));
 
   /// The maroon decoration around the [text].
@@ -93,7 +93,7 @@ class Toolkit {
               holeNumber.toString().length == 1
                   ? "0$holeNumber"
                   : holeNumber.toString(),
-              style: Toolkit.cardSubTitleTextStyle),
+              style: UIToolkit.cardSubTitleTextStyle),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
           color: Palette.light,
@@ -103,14 +103,14 @@ class Toolkit {
   static Text getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
-      style: Toolkit.leadingChildTextStyle);
+      style: UIToolkit.leadingChildTextStyle);
 
   /// The text that appears in a form.
   static Widget getFormText(String text) => Center(
           child: Text(
         Strings.note + text,
         textAlign: TextAlign.center,
-        style: Toolkit.formTextStyle,
+        style: UIToolkit.formTextStyle,
       ));
 
   /// A simple button to navigate back to [Competitions] page.
@@ -118,7 +118,6 @@ class Toolkit {
         icon: Icon(Icons.home),
         tooltip: Strings.returnHome,
         onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
-        color: Palette.dark,
       );
 
   /// Handles special situations with [snapshot].
@@ -132,10 +131,10 @@ class Toolkit {
       return Center(
           child: Column(
         children: <Widget>[
-          Icon(Icons.error, color: Palette.dark),
+          Icon(Icons.error),
           Text(
             Strings.error,
-            style: Toolkit.cardSubTitleTextStyle,
+            style: UIToolkit.cardSubTitleTextStyle,
           )
         ],
       ));
@@ -155,7 +154,7 @@ class Toolkit {
       Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         Text(
           smallText,
-          style: Toolkit.cardSubTitleTextStyle.apply(fontSizeDelta: -1.5),
+          style: UIToolkit.cardSubTitleTextStyle.apply(fontSizeDelta: -1.5),
         ),
         Text(relevantNumber,
             style: TextStyle(
@@ -177,12 +176,11 @@ class Toolkit {
                     ? howthText
                     : currentData.opposition,
                 textAlign: TextAlign.right,
-                style: Toolkit.formTextStyle,
+                style: UIToolkit.formTextStyle,
               )),
               Padding(
                   child: Icon(
                     FontAwesomeIcons.fistRaised,
-                    color: Palette.dark,
                     size: 16.7,
                   ),
                   padding: EdgeInsets.all(3.0)),
@@ -192,7 +190,7 @@ class Toolkit {
                     ? howthText
                     : currentData.opposition,
                 textAlign: TextAlign.left,
-                style: Toolkit.formTextStyle,
+                style: UIToolkit.formTextStyle,
               ))
             ],
           ),

@@ -63,7 +63,7 @@ class CreateHoleState extends State<CreateHole> {
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
       key: _formKey,
-      child: Toolkit.getCard(
+      child: UIToolkit.getCard(
         Padding(
           child: ListView(
             padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
@@ -74,9 +74,9 @@ class CreateHoleState extends State<CreateHole> {
               scoreStatus == "A\\S" ? Container() : howthScoreField,
               scoreStatus == "A\\S" ? Container() : oppositionScoreField,
               playersField,
-              Toolkit.getFormText("Names separated by commas."),
+              UIToolkit.getFormText("Names separated by commas."),
               commentField,
-              Toolkit.getFormText("This is completely optional.")
+              UIToolkit.getFormText("This is completely optional.")
             ],
           ),
           padding: EdgeInsets.all(5.0),

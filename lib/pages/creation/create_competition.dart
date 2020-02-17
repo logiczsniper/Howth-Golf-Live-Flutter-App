@@ -29,6 +29,20 @@ class CreateCompetitionState extends State<CreateCompetition> {
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
 
+  /// TODO: finish implementing this method for use in both create_competition and create_hole
+  DropdownButton<T> dropdownButton<T>(
+          T _value, Function(T) _onChanged, List<DropdownMenuItem<T>> _items) =>
+      DropdownButton<T>(
+          value: _value,
+          iconEnabledColor: Palette.dark,
+          iconSize: 30.0,
+          style: TextStyle(color: Palette.dark, fontSize: 15.5),
+          underline: Container(
+            height: 0.0,
+          ),
+          onChanged: _onChanged,
+          items: _items);
+
   DropdownButton get _home => DropdownButton<bool>(
       value: isHome,
       iconEnabledColor: Palette.dark,
@@ -54,13 +68,14 @@ class CreateCompetitionState extends State<CreateCompetition> {
   /// screens of smaller sizes.
   Form get _form => Form(
       key: _formKey,
-      child: Toolkit.getCard(Padding(
+      child: UIToolkit.getCard(Padding(
           child: ListView(
             padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
             shrinkWrap: true,
             children: <Widget>[
               titleField,
-              Toolkit.getFormText("Try to keep title length < ~30 characters."),
+              UIToolkit.getFormText(
+                  "Try to keep title length < ~30 characters."),
               CreationPage.getSpecialInput("At home: ", _home),
               isHome ? Container() : locationField,
               oppositionField,

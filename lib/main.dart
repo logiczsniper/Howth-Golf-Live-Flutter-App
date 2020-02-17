@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   /// The root of the app.
   @override
   Widget build(BuildContext context) => MaterialApp(
-      builder: Toolkit.appBuilder,
+      builder: UIToolkit.appBuilder,
       title: Strings.appName,
       initialRoute: Routes.home,
       routes: Routes.map,

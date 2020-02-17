@@ -127,9 +127,6 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       centerTitle: true,
       leading: ParameterBackButton(Strings.competitionsText),
       actions: <Widget>[_iconButton],
-      backgroundColor: Palette.light,
-      elevation: 0.0,
-      iconTheme: IconThemeData(color: Palette.dark),
     );
   }
 }

@@ -13,8 +13,9 @@ class Strings {
   /// Paths to graphics used in the app.
   static const String iconPath = "lib/assets/icon.png";
 
-  /// Path to the JSON file storing help data.
-  static const String helpDataPath = "lib/assets/help_data.json";
+  /// Font names.
+  static const String firaSans = "FiraSans";
+  static const String cormorantGaramond = "CormorantGaramond";
 
   static const String error =
       "Oof, please email the address in App Help to report this error.";
@@ -39,5 +40,42 @@ class Strings {
       }
     }
     return output;
+  }
+
+  /// Modifies the field to a nicer looking string.
+  ///
+  /// Does this by capitalising each term and replaces "_" with " ".
+  static String formatHintText(String input) {
+    input = input.replaceAll("_", " ");
+
+    String caps = "";
+
+    for (String word in input.split(" ")) {
+      caps += word[0].toUpperCase() + word.substring(1) + " ";
+    }
+
+    return caps.trim();
+  }
+
+  /// Convert [lastUpdated] to a pretty string.
+  static String parseLastUpdated(DateTime lastUpdated) {
+    Duration difference = DateTime.now().difference(lastUpdated);
+
+    if (difference.inHours < 1)
+
+      /// Less than an hour; return in minutes.
+      return "${difference.inMinutes} minute(s) ago";
+    else if (difference.inDays < 1)
+
+      /// Less than a day; return in hours.
+      return "${difference.inHours} hour(s) ago";
+    else if (difference.inDays < 365)
+
+      /// Less than a year; return in days.
+      return "${difference.inDays} day(s) ago";
+    else
+
+      /// Greater than a year; return in years.
+      return "${(difference.inDays ~/ 365)} year(s) ago";
   }
 }

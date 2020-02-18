@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
@@ -18,7 +17,7 @@ class CreateHole extends StatefulWidget {
   CreateHoleState createState() => CreateHoleState();
 }
 
-class CreateHoleState extends State<CreateHole> {
+class CreateHoleState extends State<CreateHole> with CreationPage {
   final _formKey = GlobalKey<FormState>();
   String scoreStatus = "A\\S";
 
@@ -39,7 +38,20 @@ class CreateHoleState extends State<CreateHole> {
   );
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
 
-  DropdownButton get _score => DropdownButton<String>(
+  DropdownButton<String> get _score => dropdownButton(
+      scoreStatus,
+      (String newValue) => setState(() {
+            scoreStatus = newValue;
+            howthScoreField.controller.text = scoreStatus == "A\\S" ? "-" : "";
+            oppositionScoreField.controller.text =
+                scoreStatus == "A\\S" ? "-" : "";
+          }),
+      <String>["Up", "Under", "A\\S"]
+          .map<DropdownMenuItem<String>>((String value) =>
+              DropdownMenuItem<String>(value: value, child: Text(value)))
+          .toList());
+
+  /* DropdownButton get _score => DropdownButton<String>(
       value: scoreStatus,
       iconEnabledColor: Palette.dark,
       iconSize: 30.0,
@@ -58,7 +70,7 @@ class CreateHoleState extends State<CreateHole> {
       items: <String>["Up", "Under", "A\\S"]
           .map<DropdownMenuItem<String>>((String value) =>
               DropdownMenuItem<String>(value: value, child: Text(value)))
-          .toList());
+          .toList()); */
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
@@ -99,6 +111,6 @@ class CreateHoleState extends State<CreateHole> {
 
   @override
   Widget build(BuildContext context) {
-    return CreationPage.construct('New Hole', _onPressed, _form);
+    return construct('New Hole', _onPressed, _form);
   }
 }

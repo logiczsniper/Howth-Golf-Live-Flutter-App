@@ -9,6 +9,7 @@ import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 class UIToolkit {
@@ -110,7 +111,7 @@ class UIToolkit {
           child: Text(
         Strings.note + text,
         textAlign: TextAlign.center,
-        style: UIToolkit.formTextStyle,
+        style: Themes.formStyle,
       ));
 
   /// A simple button to navigate back to [Competitions] page.
@@ -176,7 +177,7 @@ class UIToolkit {
                     ? howthText
                     : currentData.opposition,
                 textAlign: TextAlign.right,
-                style: UIToolkit.formTextStyle,
+                style: Themes.formStyle,
               )),
               Padding(
                   child: Icon(
@@ -190,13 +191,13 @@ class UIToolkit {
                     ? howthText
                     : currentData.opposition,
                 textAlign: TextAlign.left,
-                style: UIToolkit.formTextStyle,
+                style: Themes.formStyle,
               ))
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0));
 
-  /// Text Styles.
+  /// Text Styles. TODO: remove these eventually
   static const TextStyle cardTitleTextStyle =
       TextStyle(fontSize: 16, color: Palette.dark, fontWeight: FontWeight.w300);
   static const TextStyle cardSubTitleTextStyle =
@@ -207,13 +208,6 @@ class UIToolkit {
       TextStyle(fontSize: 16, color: Palette.maroon);
   static const TextStyle leadingChildTextStyle =
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
-  static const TextStyle formTextStyle =
-      TextStyle(fontSize: 14, color: Palette.dark);
   static const TextStyle noDataTextStyle =
       TextStyle(fontSize: 18, color: Palette.dark, fontWeight: FontWeight.w300);
-  static const TextStyle titleTextStyle = TextStyle(
-      color: Palette.dark,
-      fontFamily: "CormorantGaramond",
-      fontSize: 27.0,
-      height: 0.95);
 }

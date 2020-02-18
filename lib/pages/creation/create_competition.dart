@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -18,7 +17,8 @@ class CreateCompetition extends StatefulWidget {
   CreateCompetitionState createState() => CreateCompetitionState();
 }
 
-class CreateCompetitionState extends State<CreateCompetition> {
+class CreateCompetitionState extends State<CreateCompetition>
+    with CreationPage {
   final _formKey = GlobalKey<FormState>();
   bool isHome = false;
 
@@ -30,20 +30,19 @@ class CreateCompetitionState extends State<CreateCompetition> {
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
 
   /// TODO: finish implementing this method for use in both create_competition and create_hole
-  DropdownButton<T> dropdownButton<T>(
-          T _value, Function(T) _onChanged, List<DropdownMenuItem<T>> _items) =>
-      DropdownButton<T>(
-          value: _value,
-          iconEnabledColor: Palette.dark,
-          iconSize: 30.0,
-          style: TextStyle(color: Palette.dark, fontSize: 15.5),
-          underline: Container(
-            height: 0.0,
-          ),
-          onChanged: _onChanged,
-          items: _items);
 
-  DropdownButton get _home => DropdownButton<bool>(
+  DropdownButton<bool> get _home => dropdownButton(
+      isHome,
+      (bool newValue) => setState(() {
+            isHome = newValue;
+            locationField.controller.text = isHome ? "Howth Golf Club" : "";
+          }),
+      <bool>[true, false]
+          .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
+              value: value, child: Text(value.toString())))
+          .toList());
+
+/*   DropdownButton get _home => DropdownButton<bool>(
       value: isHome,
       iconEnabledColor: Palette.dark,
       iconSize: 30.0,
@@ -60,7 +59,7 @@ class CreateCompetitionState extends State<CreateCompetition> {
       items: <bool>[true, false]
           .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
               value: value, child: Text(value.toString())))
-          .toList());
+          .toList()); */
 
   /// Gets a padded [Form] with [Spacer] widgets
   ///
@@ -91,6 +90,6 @@ class CreateCompetitionState extends State<CreateCompetition> {
 
   @override
   Widget build(BuildContext context) {
-    return CreationPage.construct('New Competition', _onPressed, _form);
+    return construct('New Competition', _onPressed, _form);
   }
 }

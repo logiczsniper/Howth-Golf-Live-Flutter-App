@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CreationPage {
@@ -11,7 +12,7 @@ class CreationPage {
                 Padding(
                     child: Text(
                       text,
-                      style: UIToolkit.formTextStyle,
+                      style: Themes.formStyle,
                     ),
                     padding: EdgeInsets.only(left: 16.0)),
                 dropdownButton
@@ -22,16 +23,31 @@ class CreationPage {
           ),
           padding: EdgeInsets.only(bottom: 16.0));
 
+  /// Constructs a styled [DropDownButton].
+  ///
+  /// The [_onChanged] parameter must be a function which takes an
+  /// object of type [T].
+  DropdownButton<T> dropdownButton<T>(
+          T _value, Function(T) _onChanged, List<DropdownMenuItem<T>> _items) =>
+      DropdownButton<T>(
+          elevation: 1,
+          value: _value,
+          iconEnabledColor: Palette.dark,
+          iconSize: 30.0,
+          style: Themes.formStyle,
+          underline: Container(
+            height: 0.0,
+          ),
+          onChanged: _onChanged,
+          items: _items);
+
   /// Builds a page with a suitable [AppBar] and style.
-  static Scaffold construct(
-      String title, void Function() onPressed, Form form) {
+  Scaffold construct(String title, void Function() onPressed, Form form) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(title,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: UIToolkit.titleTextStyle),
+            textAlign: TextAlign.center, maxLines: 2, style: Themes.titleStyle),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.check),

@@ -102,15 +102,10 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                     onPressed: _searchPressed,
                   )
                 ],
-                bottom: TabBar(
-                    labelColor: Palette.buttonText,
-                    indicator: _tabIndicator,
-                    tabs: <Widget>[
-                      Tab(
-                          icon: Icon(Icons.whatshot),
-                          text: Strings.currentText),
-                      Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
-                    ])),
+                bottom: TabBar(indicator: _tabIndicator, tabs: <Widget>[
+                  Tab(icon: Icon(Icons.whatshot), text: Strings.currentText),
+                  Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
+                ])),
           ];
         },
         body: TabBarView(

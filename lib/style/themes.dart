@@ -14,7 +14,20 @@ class Themes {
       iconTheme: iconTheme,
       inputDecorationTheme: inputDecorationTheme,
       appBarTheme: appBarTheme,
-      floatingActionButtonTheme: floatingActionButtonTheme);
+      floatingActionButtonTheme: floatingActionButtonTheme,
+      tabBarTheme: tabBarTheme,
+      tooltipTheme: tooltipTheme);
+
+  static TooltipThemeData tooltipTheme = TooltipThemeData(
+      showDuration: Duration(seconds: 5),
+      textStyle: TextStyle(color: Palette.dark),
+      decoration: BoxDecoration(
+          color: Palette.card.withAlpha(254),
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(5.0)));
+
+  static TabBarTheme tabBarTheme = TabBarTheme(
+      labelColor: Palette.textInMaroon, unselectedLabelColor: Palette.dark);
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =
       FloatingActionButtonThemeData(backgroundColor: Palette.maroon);
@@ -35,6 +48,9 @@ class Themes {
           /// Used for list tile titles.
           subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
       .apply(bodyColor: Palette.dark, displayColor: Palette.dark);
+
+  static TextStyle get formStyle =>
+      TextStyle(fontSize: 14.0, color: Palette.dark);
 
   static TextStyle get titleStyle => TextStyle(
       fontFamily: Strings.cormorantGaramond,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class SpecificHelpPage extends StatefulWidget {
@@ -51,9 +52,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   }
 
   Text get _title => Text(widget.entry.title,
-      textAlign: TextAlign.center,
-      maxLines: 2,
-      style: UIToolkit.titleTextStyle);
+      textAlign: TextAlign.center, maxLines: 2, style: Themes.titleStyle);
 
   @override
   Widget build(BuildContext context) {

@@ -46,30 +46,6 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
           }
         });
       });
-      /* widget.onComplete(inputText.toString()).then((bool isCodeCorrect) {
-        if (!isCodeCorrect && inputText.isNotEmpty) {
-          /// Incorrect [codeAttempt]!
-          final SnackBar snackBar = SnackBar(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-              top: Radius.circular(20),
-            )),
-            backgroundColor: Palette.divider.withAlpha(215),
-            content: Text(
-              "Incorrect code entered!",
-              style: TextStyle(color: Palette.maroon),
-              textAlign: TextAlign.center,
-            ),
-          );
-          Scaffold.of(context).showSnackBar(snackBar);
-        }
-        setState(() {
-          appBarTitle = actionPressed(appBarTitle, context, _filter);
-          if (!isVerified && isCodeCorrect) {
-            isVerified = isCodeCorrect;
-          }
-        });
-      }); */
     }
   }
 

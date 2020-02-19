@@ -16,6 +16,17 @@ class DataBaseInteraction {
       .collection(Strings.competitionsText.toLowerCase())
       .snapshots();
 
+  static Future<int> get adminCode {
+    Future<int> adminCode =
+        Future<int>.value(stream.first.then((QuerySnapshot snapshot) {
+      DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
+      int adminCode = documentSnapshot.data['admin_code'];
+      return adminCode;
+    }));
+
+    return adminCode;
+  }
+
   /// Fetch and parse (to [DataBaseEntry] objects) all of the competitions
   /// from [Firestore]. The [document] contains the data which, in turn,
   /// contains the [rawElements] in the database.

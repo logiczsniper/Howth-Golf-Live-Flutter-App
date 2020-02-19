@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:intl/intl.dart';
 
 class DecoratedField {
@@ -9,7 +10,10 @@ class DecoratedField {
   /// [hintText].
   InputDecoration getDecoration(BuildContext context, String hintText) =>
       InputDecoration(
-              prefixIcon: Icon(Icons.keyboard_arrow_right),
+              prefixIcon: Icon(
+                Icons.keyboard_arrow_right,
+                color: Palette.dark,
+              ),
               hintText: Strings.formatHintText(hintText))
           .applyDefaults(Theme.of(context).inputDecorationTheme);
 

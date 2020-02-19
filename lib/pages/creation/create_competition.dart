@@ -29,8 +29,6 @@ class CreateCompetitionState extends State<CreateCompetition>
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
 
-  /// TODO: finish implementing this method for use in both create_competition and create_hole
-
   DropdownButton<bool> get _home => dropdownButton(
       isHome,
       (bool newValue) => setState(() {
@@ -41,25 +39,6 @@ class CreateCompetitionState extends State<CreateCompetition>
           .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
               value: value, child: Text(value.toString())))
           .toList());
-
-/*   DropdownButton get _home => DropdownButton<bool>(
-      value: isHome,
-      iconEnabledColor: Palette.dark,
-      iconSize: 30.0,
-      style: TextStyle(color: Palette.dark, fontSize: 15.5),
-      underline: Container(
-        height: 0.0,
-      ),
-      onChanged: (bool newValue) {
-        setState(() {
-          isHome = newValue;
-          locationField.controller.text = isHome ? "Howth Golf Club" : "";
-        });
-      },
-      items: <bool>[true, false]
-          .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
-              value: value, child: Text(value.toString())))
-          .toList()); */
 
   /// Gets a padded [Form] with [Spacer] widgets
   ///

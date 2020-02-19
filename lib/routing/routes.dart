@@ -28,6 +28,10 @@ class Routes {
     });
   }
 
+  /// Get the arguments passed through the route.
+  static Privileges arguments(BuildContext context) =>
+      ModalRoute.of(context).settings.arguments;
+
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
         home: (context) => homePage,

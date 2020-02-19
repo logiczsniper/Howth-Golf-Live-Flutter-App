@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,8 +9,20 @@ const String _activeAdminText = "activeAdmin";
 const String _activeCompetitionsText = "activeCompetitions";
 
 class Privileges {
+  /// Whether or not the user is an admin.
   final bool isAdmin;
+
+  /// The [DatabaseEntry.id] values which the user is a
+  /// manager of and thus has access to modify those [DatabaseEntry]
+  /// values.
   final List<String> competitionAccess;
+
+  /// Converting preferences into [Privileges] object.
+  Privileges.fromPreferences(SharedPreferences preferences)
+      : isAdmin = preferences.getBool(_activeAdminText),
+        competitionAccess = preferences.getStringList(_activeCompetitionsText);
+
+  Privileges({@required this.isAdmin, @required this.competitionAccess});
 
   /// Removes all locally stored data, resetting the users privileges.
   static void clearPreferences() async {
@@ -21,21 +34,51 @@ class Privileges {
   static Future<SharedPreferences> get _preferences =>
       SharedPreferences.getInstance();
 
+  /// Get whether or not the user [isAdmin].
+  ///
+  /// If they are, they are granted access to modify any
+  /// competition, create and delete competitions.
+  static bool adminStatus({dynamic context}) {
+    assert(context != null);
+
+    final Privileges arguments = Routes.arguments(context);
+
+    /// If the value of [isAdmin] is null, default to [false].
+    final bool isAdmin = arguments.isAdmin ?? false;
+    return isAdmin;
+  }
+
+  /// Get whether or not the user [isManager].
+  ///
+  /// This would grant them admin privileges however only to
+  /// the competition which they are admin of. In this case,
+  /// tests if they are an given these rights for [currentEntry].
+  static bool managerStatus(DataBaseEntry currentEntry, {dynamic context}) {
+    assert(context != null);
+
+    final Privileges arguments = Routes.arguments(context);
+
+    /// If the list of competitions which the user has access to
+    /// is null, default to [false].
+    if (arguments.competitionAccess == null) return false;
+
+    final bool isManager =
+        arguments.competitionAccess.contains(currentEntry.id.toString());
+
+    return isManager;
+  }
+
   /// Make an attempt to become an admin.
   ///
   /// The test attempt is the [codeAttempt], which will be compared to
-  /// the [adminCode] that is stored in the database. TODO: fetch admin code
-  /// elsewhere, pass it in as [id]. [_onComplete] will set the state of the
+  /// the [adminCode] that is stored in the database. [_onComplete] will set the state of the
   /// parent widget with the value of the result; either true (user is now
   /// an admin) or false (user failed to become admin).
   static Future<bool> adminAttempt(
       String codeAttempt, int id, Function(Future<bool>) _onComplete) {
     /// Fetch the admin code from the database.
-    Future<bool> result = Future<bool>.value(
-        DataBaseInteraction.stream.first.then((QuerySnapshot snapshot) {
-      DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
-      int adminCode = documentSnapshot.data['admin_code'];
-
+    Future<bool> result =
+        Future<bool>.value(DataBaseInteraction.adminCode.then((int adminCode) {
       if (codeAttempt == adminCode.toString()) {
         /// Write the result to [SharedPreferences].
         _preferences.then((SharedPreferences preferences) {
@@ -84,11 +127,4 @@ class Privileges {
     _onComplete(result);
     return result;
   }
-
-  /// Converting preferences into [Privileges] object.
-  Privileges.fromPreferences(SharedPreferences preferences)
-      : isAdmin = preferences.getBool(_activeAdminText),
-        competitionAccess = preferences.getStringList(_activeCompetitionsText);
-
-  Privileges({@required this.isAdmin, @required this.competitionAccess});
 }

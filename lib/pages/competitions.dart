@@ -89,29 +89,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return [currentElements, archivedElements];
   }
 
-  /// Get whether or not the user [isAdmin].
-  /// TODO: move these into privileges if possible.
-  /// If they are, they are granted access to modify any
-  /// competition, create and delete competitions.
-  static bool _isAdmin(BuildContext context) {
-    final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    final bool isAdmin = arguments.isAdmin ?? false;
-    return isAdmin;
-  }
-
-  /// Get whether or not the user [isManager].
-  ///
-  /// This would grant them admin privileges however only to
-  /// the competition which they are admin of. In this case,
-  /// tests if they are an given these rights for [currentEntry].
-  static bool _isManager(BuildContext context, DataBaseEntry currentEntry) {
-    final Privileges arguments = ModalRoute.of(context).settings.arguments;
-    if (arguments.competitionAccess == null) return false;
-    final bool isManager =
-        arguments.competitionAccess.contains(currentEntry.id.toString());
-    return isManager;
-  }
-
   /// Returns the main number as a string from the [score].
   ///
   /// If the main number is 0, this will display just 1 / 2 rather than
@@ -165,11 +142,12 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                 ]),
           ),
 
-          /// If [_isAdmin], the remove competition button will rest in place of this
+          /// If [Privileges.adminStatus], the remove competition button will rest in place of this
           /// [trailingIconData] above this [BaseListTile] in the [Stack]. Hence, no [IconData]
           /// is provided in this case.
-          trailingIconData:
-              _isAdmin(context) ? null : Icons.keyboard_arrow_right,
+          trailingIconData: Privileges.adminStatus(context: context)
+              ? null
+              : Icons.keyboard_arrow_right,
           subtitleMaxLines: 1,
           subtitleText: currentEntry.date,
           titleText: currentEntry.title);
@@ -230,8 +208,10 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         Function toCompetition = () {
                           final preferences = SharedPreferences.getInstance();
                           preferences.then((SharedPreferences preferences) {
-                            final bool hasAccess = _isAdmin(context) ||
-                                _isManager(context, currentEntry);
+                            final bool hasAccess =
+                                Privileges.adminStatus(context: context) ||
+                                    Privileges.managerStatus(currentEntry,
+                                        context: context);
 
                             Navigator.push(
                                 context,
@@ -245,7 +225,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         return ComplexCard(
                             child: _tileBuilder(context, currentEntry),
                             onTap: toCompetition,
-                            iconButton: _isAdmin(context)
+                            iconButton: Privileges.adminStatus(context: context)
                                 ? IconButton(
                                     icon: Icon(Icons.remove_circle_outline),
                                     onPressed: () {
@@ -295,10 +275,11 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    MyFloatingActionButton floatingActionButton = _isAdmin(context)
-        ? MyFloatingActionButton(
-            onPressed: _addCompetition, text: 'Add a Competition')
-        : null;
+    MyFloatingActionButton floatingActionButton =
+        Privileges.adminStatus(context: context)
+            ? MyFloatingActionButton(
+                onPressed: _addCompetition, text: 'Add a Competition')
+            : null;
     return Scaffold(
       body: DefaultTabController(
           length: 2,

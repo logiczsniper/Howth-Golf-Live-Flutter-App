@@ -25,7 +25,10 @@ class StatefulAppBar {
       InputDecoration(
               enabledBorder: UIToolkit.outlineInputBorder,
               focusedBorder: UIToolkit.outlineInputBorder,
-              prefixIcon: Icon(Icons.keyboard_arrow_right),
+              prefixIcon: Icon(
+                Icons.keyboard_arrow_right,
+                color: Palette.dark,
+              ),
               hintText: hintText)
           .applyDefaults(Themes.inputDecorationTheme);
 

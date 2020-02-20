@@ -1,6 +1,6 @@
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
+import 'package:howth_golf_live/domain/models.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,7 +38,7 @@ class Privileges {
   ///
   /// If they are, they are granted access to modify any
   /// competition, create and delete competitions.
-  static bool adminStatus({dynamic context}) {
+  static bool adminStatus({@required dynamic context}) {
     assert(context != null);
 
     final Privileges arguments = Routes.arguments(context);
@@ -53,7 +53,8 @@ class Privileges {
   /// This would grant them admin privileges however only to
   /// the competition which they are admin of. In this case,
   /// tests if they are an given these rights for [currentEntry].
-  static bool managerStatus(DataBaseEntry currentEntry, {dynamic context}) {
+  static bool managerStatus(DataBaseEntry currentEntry,
+      {@required dynamic context}) {
     assert(context != null);
 
     final Privileges arguments = Routes.arguments(context);
@@ -74,8 +75,11 @@ class Privileges {
   /// the [adminCode] that is stored in the database. [_onComplete] will set the state of the
   /// parent widget with the value of the result; either true (user is now
   /// an admin) or false (user failed to become admin).
+  ///
+  /// It is crucial that [adminAttempt] and [managerAttempt] have the same
+  /// prototype.
   static Future<bool> adminAttempt(
-      String codeAttempt, int id, Function(Future<bool>) _onComplete) {
+      String codeAttempt, int _, void Function(Future<bool>) _onComplete) {
     /// Fetch the admin code from the database.
     Future<bool> result =
         Future<bool>.value(DataBaseInteraction.adminCode.then((int adminCode) {
@@ -101,7 +105,7 @@ class Privileges {
   /// user is trying to gain access to. [_onComplete] is called to set the state
   /// of the parent widget with the result.
   static Future<bool> managerAttempt(
-      String codeAttempt, int id, Function(Future<bool>) _onComplete) {
+      String codeAttempt, int id, void Function(Future<bool>) _onComplete) {
     String correctCode = id.toString();
     Future<bool> result;
 

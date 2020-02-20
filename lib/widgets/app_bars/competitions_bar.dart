@@ -11,7 +11,7 @@ class CompetitionsPageAppBar extends StatefulWidget
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
   /// lists- one from current and the other from archived.
-  final Function _listBuilder;
+  final Widget Function(String, bool) _listBuilder;
 
   CompetitionsPageAppBar(this._listBuilder, {this.title})
       : preferredSize = Size.fromHeight(56.0);

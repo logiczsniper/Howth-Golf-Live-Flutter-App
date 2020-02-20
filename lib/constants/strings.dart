@@ -21,6 +21,8 @@ class Strings {
       "Oof, please email the address in App Help to report this error.";
   static const String note = "NOTE: ";
 
+  /// TODO: all of the following string methods : PR&L
+
   /// Determines whether [score] is a string containing a fraction or whole
   /// number.
   static bool isFraction(String score) =>
@@ -78,4 +80,13 @@ class Strings {
       /// Greater than a year; return in years.
       return "${(difference.inDays ~/ 365)} year(s) ago";
   }
+
+  /// Returns the main number as a string from the [score].
+  ///
+  /// If the main number is 0, this will display just 1 / 2 rather than
+  /// 0 and 1 / 2.
+  static String getTextSpanText(String score) =>
+      double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
+          ? ""
+          : double.tryParse(score).toInt().toString();
 }

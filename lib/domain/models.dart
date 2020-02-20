@@ -1,4 +1,13 @@
 import 'package:howth_golf_live/constants/fields.dart';
+import 'package:meta/meta.dart';
+
+abstract class Model {
+  Map<String, dynamic> get toJson;
+  fromJson(Map<String, dynamic> json);
+
+  List<T> generateList<T extends Model>(List<Map<String, dynamic>> source) =>
+      List<T>.generate(source.length, (int i) => fromJson(source[i]));
+}
 
 class DataBaseEntry {
   final String date;
@@ -12,13 +21,14 @@ class DataBaseEntry {
 
   /// Get a single string which contains all the data specific to this event, making
   /// it easily searchable.
-  String get values => "$date $location $time $opposition $title $holes $score";
+  @override
+  String toString() => "$date $location $time $opposition $title $holes $score";
 
   /// Construct a [DataBaseEntry] from a JSON object.
   ///
   /// The [Firestore] instance will output [_InternalLinkedHashMap]
   /// which must be converted into objects here.
-  DataBaseEntry.fromJson(Map map)
+  DataBaseEntry.fromMap(Map map)
       : date = map[Fields.date],
         id = map[Fields.id],
         location = Location.fromMap(map[Fields.location]),
@@ -30,7 +40,7 @@ class DataBaseEntry {
         score = Score.fromMap(map[Fields.score]);
 
   /// Converts a database entry into a map so it can be put into the database.
-  Map get toJson => {
+  Map<String, dynamic> get toJson => {
         Fields.date: date,
         Fields.id: id,
         Fields.location: location.toJson,
@@ -42,15 +52,21 @@ class DataBaseEntry {
         Fields.score: score.toJson
       };
 
+  /// Assert whether or not [rawEntry] is the entry to be deleted, [currentEntry].
+  bool isDeletionTarget(Map rawEntry) {
+    DataBaseEntry parsedEntry = DataBaseEntry.fromMap(rawEntry);
+    return this.toString() == parsedEntry.toString();
+  }
+
   DataBaseEntry(
-      {this.date,
-      this.id,
-      this.location,
-      this.time,
-      this.opposition,
-      this.title,
-      this.holes,
-      this.score});
+      {@required this.date,
+      @required this.id,
+      @required this.location,
+      @required this.time,
+      @required this.opposition,
+      @required this.title,
+      @required this.holes,
+      @required this.score});
 }
 
 class Score {
@@ -62,9 +78,49 @@ class Score {
       : howth = map[Fields.howth],
         opposition = map[Fields.opposition];
 
+  /// Convert a list of [Hole] data to a [Score] object.
+  ///
+  /// Get the updated competition score with the new hole scores,
+  /// [parsedHoles], and format the score based on whether
+  /// or not the scores are floats.
+  Score.fromParsedHoles(List<Hole> parsedHoles)
+      : assert(_calculateScore(parsedHoles).length == 2),
+        howth = _calculateScore(parsedHoles)[0],
+        opposition = _calculateScore(parsedHoles)[1];
+
   static Score get fresh => Score(howth: "0", opposition: "0");
 
-  String get leader {
+  /// Calculates the overall score of the [parsedHoles].
+  ///
+  /// Returns [howth] score at the 0th index, and
+  /// [opposition] score at the 1st index.
+  static List<String> _calculateScore(List<Hole> parsedHoles) {
+    double parsedHowth = 0;
+    double parsedOpposition = 0;
+    for (Hole hole in parsedHoles) {
+      if (hole.holeScore.howth == hole.holeScore.opposition &&
+          hole.holeScore.howth == "0") {
+        /// The match is all square: do nothing with score!
+      } else if (hole.holeScore._leader == Fields.howth) {
+        parsedHowth++;
+      } else if (hole.holeScore._leader == Fields.opposition) {
+        parsedOpposition++;
+      } else {
+        /// Its a draw- both go up by 0.5!
+        parsedHowth += 0.5;
+        parsedOpposition += 0.5;
+      }
+    }
+
+    /// If the scores are whole numbers, parse to int before making the output.
+    List<String> calculatedScore = parsedHowth - parsedHowth.toInt() != 0
+        ? [parsedHowth.toString(), parsedOpposition.toString()]
+        : [parsedHowth.toInt().toString(), parsedOpposition.toInt().toString()];
+
+    return calculatedScore;
+  }
+
+  String get _leader {
     double howth = double.tryParse(this.howth);
     double opposition = double.tryParse(this.opposition);
 
@@ -81,6 +137,7 @@ class Score {
   /// Returns the equivalent hole with the updated value.
   /// [value] will be either 1 or -1 to increment or decrement the home team.
   Score updateScore(bool isHome, int value) {
+    assert(value == 1 || value == -1);
     int parsedHowth = int.tryParse(howth);
     int parsedOpposition = int.tryParse(opposition);
 
@@ -94,7 +151,7 @@ class Score {
 
   Map get toJson => {Fields.howth: howth, Fields.opposition: opposition};
 
-  Score({this.howth, this.opposition});
+  Score({@required this.howth, @required this.opposition});
 }
 
 class Hole {
@@ -130,19 +187,22 @@ class Hole {
   ///
   /// [value] will be -1 or 1, to increment or decrement this [holeNumber].
   /// Furthermore, [lastUpdated] is updated to [DateTime.now]
-  Hole updateNumber(int value) => Hole(
-      holeNumber: holeNumber + value,
-      holeScore: holeScore,
-      players: players,
-      comment: comment,
-      lastUpdated: DateTime.now());
+  Hole updateNumber(int value) {
+    assert(value == 1 || value == -1);
+    return Hole(
+        holeNumber: holeNumber + value,
+        holeScore: holeScore,
+        players: players,
+        comment: comment,
+        lastUpdated: DateTime.now());
+  }
 
   Hole(
-      {this.holeNumber,
-      this.holeScore,
-      this.players,
+      {@required this.holeNumber,
+      @required this.holeScore,
+      @required this.players,
       this.comment,
-      this.lastUpdated});
+      @required this.lastUpdated});
 }
 
 class Location {
@@ -159,7 +219,7 @@ class Location {
 
   Map get toJson => {Fields.address: address, Fields.isHome: isHome};
 
-  Location({this.address, this.isHome});
+  Location({@required this.address, @required this.isHome});
 }
 
 class AppHelpEntry {
@@ -171,12 +231,13 @@ class AppHelpEntry {
   ///
   /// This is used to convert the underlying _appHelpData in [Toolkit] into entries.
   AppHelpEntry.fromMap(Map map)
-      : title = map['title'],
-        subtitle = map['subtitle'],
-        steps = List<HelpStep>.generate(map['steps'].length,
-            (int index) => HelpStep.fromMap(map['steps'][index]));
+      : title = map[Fields.title],
+        subtitle = map[Fields.subtitle],
+        steps = List<HelpStep>.generate(map[Fields.steps].length,
+            (int index) => HelpStep.fromMap(map[Fields.steps][index]));
 
-  AppHelpEntry({this.title, this.subtitle, this.steps});
+  AppHelpEntry(
+      {@required this.title, @required this.subtitle, @required this.steps});
 }
 
 class HelpStep {
@@ -185,8 +246,8 @@ class HelpStep {
 
   /// Convert a map into a single [HelpStep] instance.
   HelpStep.fromMap(Map map)
-      : title = map['title'],
-        data = map['data'];
+      : title = map[Fields.title],
+        data = map[Fields.data];
 
-  HelpStep({this.title, this.data});
+  HelpStep({@required this.title, @required this.data});
 }

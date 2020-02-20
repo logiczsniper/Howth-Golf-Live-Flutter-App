@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -35,9 +35,9 @@ class DataBaseInteraction {
     List<dynamic> rawElements = document.data.entries.toList()[1].value;
 
     /// Those same [entries] but in a structured format- [DataBaseEntry].
-    List<DataBaseEntry> parsedElements = List<DataBaseEntry>.generate(
-        rawElements.length,
-        (int index) => DataBaseEntry.fromJson(rawElements[index]));
+    List<DataBaseEntry> parsedElements = rawElements
+        .map((dynamic element) => DataBaseEntry.fromMap(element))
+        .toList();
 
     return parsedElements;
   }
@@ -49,19 +49,13 @@ class DataBaseInteraction {
     List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
 
     dataBaseEntries
-        .removeWhere((rawEntry) => _isDeletionTarget(rawEntry, currentEntry));
+        .removeWhere((rawEntry) => currentEntry.isDeletionTarget(rawEntry));
 
     Map<String, dynamic> newData = {'data': dataBaseEntries};
     documentSnapshot.reference
         .updateData(newData)
         .catchError(onError)
         .whenComplete(Navigator.of(context).pop);
-  }
-
-  /// Assert whether or not [rawEntry] is the entry to be deleted, [currentEntry].
-  static bool _isDeletionTarget(Map rawEntry, DataBaseEntry currentEntry) {
-    DataBaseEntry parsedEntry = DataBaseEntry.fromJson(rawEntry);
-    return currentEntry.values == parsedEntry.values;
   }
 
   /// With the form fields, create a database entry, convert to json form and add to
@@ -101,7 +95,7 @@ class DataBaseInteraction {
     }
   }
 
-  /// Generate the next 6-digit ID.
+  /// Generate the next 6-digit ID. TODO: PR&L
   static int get _id {
     String code = '';
     final Random randomIntGenerator = Random();
@@ -143,7 +137,7 @@ class DataBaseInteraction {
         entry[Fields.holes] = newHoles;
 
         /// Updating the score.
-        Score newScore = _getScore(parsedHoles);
+        Score newScore = Score.fromParsedHoles(parsedHoles);
 
         entry[Fields.score] = newScore.toJson;
         break;
@@ -216,7 +210,7 @@ class DataBaseInteraction {
           entry[Fields.holes] = newHoles;
 
           /// Updating the score.
-          Score newScore = _getScore(parsedHoles);
+          Score newScore = Score.fromParsedHoles(parsedHoles);
 
           entry[Fields.score] = newScore.toJson;
           break;
@@ -264,7 +258,7 @@ class DataBaseInteraction {
         entry[Fields.holes] = newHoles;
 
         /// Updating the score.
-        Score newScore = _getScore(parsedHoles);
+        Score newScore = Score.fromParsedHoles(parsedHoles);
 
         entry[Fields.score] = newScore.toJson;
         break;
@@ -273,39 +267,5 @@ class DataBaseInteraction {
 
     Map<String, dynamic> newData = {'data': dataBaseEntries};
     documentSnapshot.reference.updateData(newData);
-  }
-
-  /// Generate the score that corresponds to a competition with [parsedHoles].
-  ///
-  /// Get the updated competition score with the new hole scores,
-  /// [parsedHoles], and format the score based on whether
-  /// or not the scores are floats.
-  static Score _getScore(List<Hole> parsedHoles) {
-    /// Must also update the competition score!
-    double howth = 0;
-    double opposition = 0;
-    for (Hole hole in parsedHoles) {
-      if (hole.holeScore.howth == hole.holeScore.opposition &&
-          hole.holeScore.howth == "0") {
-        /// The match is all square: do nothing with score!
-      } else if (hole.holeScore.leader == Fields.howth) {
-        howth++;
-      } else if (hole.holeScore.leader == Fields.opposition) {
-        opposition++;
-      } else {
-        /// Its a draw- both go up by 0.5!
-        howth += 0.5;
-        opposition += 0.5;
-      }
-    }
-
-    /// If the scores are whole numbers, parse to int before making [Score].
-    Score newScore = howth - howth.toInt() != 0
-        ? Score(howth: howth.toString(), opposition: opposition.toString())
-        : Score(
-            howth: howth.toInt().toString(),
-            opposition: opposition.toInt().toString());
-
-    return newScore;
   }
 }

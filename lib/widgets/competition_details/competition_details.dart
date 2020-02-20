@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/models.dart';
 
 import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';

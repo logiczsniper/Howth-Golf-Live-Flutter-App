@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
@@ -54,7 +54,7 @@ class CreateCompetitionState extends State<CreateCompetition>
               titleField,
               UIToolkit.getFormText(
                   "Try to keep title length < ~30 characters."),
-              CreationPage.getSpecialInput("At home: ", _home),
+              getSpecialInput("At home: ", _home),
               isHome ? Container() : locationField,
               oppositionField,
               dateTimeField

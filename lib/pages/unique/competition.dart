@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
+import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/services/privileges.dart';
+import 'package:howth_golf_live/domain/privileges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';

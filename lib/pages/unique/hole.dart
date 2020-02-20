@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
@@ -27,6 +27,7 @@ class HolePageState extends State<HolePage> {
 
   /// Deletes the holes at the given [index] within the list of holes
   /// for this competition.
+  /// TODO: put in presentation & logic layer? interact with services, no flutter UI?
   void _deleteHole() {
     final int currentId = widget.entry.id;
     Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
@@ -41,6 +42,7 @@ class HolePageState extends State<HolePage> {
   ///
   /// Can update the [holeScore], [holeNumber] or both. Also will
   /// update [lastUpdated] to now.
+  /// TODO: PR&L first part
   void _updateHole(Hole currentHole, {Score newScore, int newHoleNumber}) {
     Hole updatedHole = Hole(
         holeNumber: newHoleNumber ?? currentHole.holeNumber,

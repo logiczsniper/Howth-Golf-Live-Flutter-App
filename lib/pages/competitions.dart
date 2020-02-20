@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +19,7 @@ import 'package:howth_golf_live/pages/creation/create_competition.dart';
 import 'package:howth_golf_live/pages/unique/competition.dart';
 
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:howth_golf_live/services/privileges.dart';
+import 'package:howth_golf_live/domain/privileges.dart';
 
 class CompetitionsPage extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   ///
   /// In the case where the data is still being fetched, return a
   /// loading widget [SpinKitPulse].
-  static ListTile _checkFilteredElements(List<DataBaseEntry> filteredElements) {
+  static ListTile _checkFilteredElements(List filteredElements) {
     if (filteredElements == null)
       return ListTile(
           title: Center(
@@ -48,14 +48,15 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   /// Based on the user's [_searchText], filters the competitions.
   ///
-  /// Utilizes the [DataBaseEntry.values] function to get all of the
+  /// Utilizes the [DataBaseEntry.toString] function to get all of the
   /// data for the entry in one string.
+  /// TODO: PR&L
   static List<DataBaseEntry> _filterElements(
       List<DataBaseEntry> parsedElements, String _searchText) {
     List<DataBaseEntry> filteredElements = List();
     if (_searchText.isNotEmpty) {
       parsedElements.forEach((DataBaseEntry currentEntry) {
-        String entryString = currentEntry.values.toLowerCase();
+        String entryString = currentEntry.toString().toLowerCase();
         String query = _searchText.toLowerCase();
         if (entryString.contains(query)) {
           filteredElements.add(currentEntry);
@@ -67,6 +68,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   /// Sorts elements into either current or archived lists.
+  /// TODO: PR&L
   static List<List<DataBaseEntry>> _sortElements(
       List<DataBaseEntry> filteredElements) {
     /// All entries are classified as current or archived.
@@ -89,15 +91,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     return [currentElements, archivedElements];
   }
 
-  /// Returns the main number as a string from the [score].
-  ///
-  /// If the main number is 0, this will display just 1 / 2 rather than
-  /// 0 and 1 / 2.
-  static String _getTextSpanText(String score) =>
-      double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
-          ? ""
-          : double.tryParse(score).toInt().toString();
-
   static Widget _tileBuilder(
           BuildContext context, DataBaseEntry currentEntry) =>
       BaseListTile(
@@ -105,12 +98,13 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
           /// The score of the competition.
           ///
           /// Uses [RichText] to display fractions when needed.
+          /// TODO: make ComplexScore widget, change also UIToolkit.scoreText also side_flexible
           leadingChild: RichText(
             /// Conditions similar to the ternary operator below are
             /// ensuring that whichever team is home has their information
             /// on the left, and whoever is away on the right.
             text: TextSpan(
-                text: _getTextSpanText(currentEntry.location.isHome
+                text: Strings.getTextSpanText(currentEntry.location.isHome
                     ? currentEntry.score.howth
                     : currentEntry.score.opposition),
                 style: UIToolkit.leadingChildTextStyle,
@@ -128,7 +122,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                           fontFeatures: [FontFeature.enable('frac')])),
                   TextSpan(text: " - "),
                   TextSpan(
-                      text: _getTextSpanText(currentEntry.location.isHome
+                      text: Strings.getTextSpanText(currentEntry.location.isHome
                           ? currentEntry.score.opposition
                           : currentEntry.score.howth)),
                   TextSpan(
@@ -205,7 +199,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
                         /// Fetches [SharedPreferences] to pass as initial values into
                         /// the [SpecificCompetitionPage].
-                        Function toCompetition = () {
+                        void Function() toCompetition = () {
                           final preferences = SharedPreferences.getInstance();
                           preferences.then((SharedPreferences preferences) {
                             final bool hasAccess =

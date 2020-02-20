@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/help_data.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/models.dart';
 
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -10,7 +10,7 @@ import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/my_details.dart';
 import 'package:howth_golf_live/pages/unique/help.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:howth_golf_live/services/privileges.dart';
+import 'package:howth_golf_live/domain/privileges.dart';
 
 class HelpPage extends StatefulWidget {
   @override
@@ -45,6 +45,7 @@ class HelpPageState extends State<HelpPage> {
   ///
   /// A default user sees entries 1-3. Team managers will
   /// see entries 1-4 and admins will see all 5 app help entries.
+  /// TODO: PR&L
   int _bonusEntries(List<String> competitionAccess, bool isAdmin) {
     if (isAdmin)
       return 2;
@@ -70,6 +71,7 @@ class HelpPageState extends State<HelpPage> {
     Privileges arguments = ModalRoute.of(context).settings.arguments;
 
     List<String> competitionAccess = arguments.competitionAccess ?? [];
+
     if (hasAccess == null) {
       hasAccess = arguments.isAdmin ?? false;
     }

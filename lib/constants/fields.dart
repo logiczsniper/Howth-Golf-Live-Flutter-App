@@ -16,4 +16,7 @@ class Fields {
   static final String isHome = 'is_home';
   static final String comment = 'comment';
   static final String lastUpdated = 'last_updated';
+  static final String data = 'data';
+  static final String subtitle = 'subtitle';
+  static final String steps = 'steps';
 }

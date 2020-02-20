@@ -3,7 +3,7 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/pages/competitions.dart';
 import 'package:howth_golf_live/pages/app_help.dart';
 import 'package:howth_golf_live/pages/home.dart';
-import 'package:howth_golf_live/services/privileges.dart';
+import 'package:howth_golf_live/domain/privileges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Widget get homePage => HomePage();

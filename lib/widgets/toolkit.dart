@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/domain/models.dart';
 
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';

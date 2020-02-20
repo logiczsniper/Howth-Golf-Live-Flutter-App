@@ -4,7 +4,7 @@ import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CreationPage {
-  static Padding getSpecialInput(String text, DropdownButton dropdownButton) =>
+  Padding getSpecialInput(String text, DropdownButton dropdownButton) =>
       Padding(
           child: Container(
             child: Row(
@@ -27,8 +27,8 @@ class CreationPage {
   ///
   /// The [_onChanged] parameter must be a function which takes an
   /// object of type [T].
-  DropdownButton<T> dropdownButton<T>(
-          T _value, Function(T) _onChanged, List<DropdownMenuItem<T>> _items) =>
+  DropdownButton<T> dropdownButton<T>(T _value, void Function(T) _onChanged,
+          List<DropdownMenuItem<T>> _items) =>
       DropdownButton<T>(
           elevation: 0,
           value: _value,

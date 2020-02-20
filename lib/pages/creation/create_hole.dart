@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/pages/creation/creation_page.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -51,27 +51,6 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
               DropdownMenuItem<String>(value: value, child: Text(value)))
           .toList());
 
-  /* DropdownButton get _score => DropdownButton<String>(
-      value: scoreStatus,
-      iconEnabledColor: Palette.dark,
-      iconSize: 30.0,
-      style: TextStyle(color: Palette.dark, fontSize: 15.5),
-      underline: Container(
-        height: 0.0,
-      ),
-      onChanged: (String newValue) {
-        setState(() {
-          scoreStatus = newValue;
-          howthScoreField.controller.text = scoreStatus == "A\\S" ? "-" : "";
-          oppositionScoreField.controller.text =
-              scoreStatus == "A\\S" ? "-" : "";
-        });
-      },
-      items: <String>["Up", "Under", "A\\S"]
-          .map<DropdownMenuItem<String>>((String value) =>
-              DropdownMenuItem<String>(value: value, child: Text(value)))
-          .toList()); */
-
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
       key: _formKey,
@@ -82,7 +61,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
             shrinkWrap: true,
             children: <Widget>[
               numberField,
-              CreationPage.getSpecialInput("Howth is: ", _score),
+              getSpecialInput("Howth is: ", _score),
               scoreStatus == "A\\S" ? Container() : howthScoreField,
               scoreStatus == "A\\S" ? Container() : oppositionScoreField,
               playersField,

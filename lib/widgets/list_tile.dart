@@ -23,12 +23,10 @@ class BaseListTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
       isThreeLine: threeLine,
       contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-      leading: Padding(
-          padding: EdgeInsets.only(top: 4),
-          child: Container(
-              padding: EdgeInsets.only(right: 15.0),
-              decoration: UIToolkit.rightSideBoxDecoration,
-              child: leadingChild)),
+      leading: Container(
+          padding: EdgeInsets.only(right: 15.0),
+          decoration: UIToolkit.rightSideBoxDecoration,
+          child: leadingChild),
       title: Text(
         titleText,
         overflow: TextOverflow.ellipsis,

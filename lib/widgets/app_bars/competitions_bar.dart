@@ -70,7 +70,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       indicatorColor: Palette.maroon,
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
       indicatorHeight: 70.0,
-      indicatorRadius: 15.0,
+      indicatorRadius: 10.0,
       insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 40.0));
 
   @override

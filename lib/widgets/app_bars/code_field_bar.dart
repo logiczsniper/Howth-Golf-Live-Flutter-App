@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/widgets/buttons/back_button.dart';
 
@@ -50,14 +49,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   }
 
   SnackBar get _snackBar => SnackBar(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        )),
-        backgroundColor: Palette.divider.withAlpha(215),
         content: Text(
           "Incorrect code entered!",
-          style: TextStyle(color: Palette.maroon),
           textAlign: TextAlign.center,
         ),
       );

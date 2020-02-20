@@ -186,7 +186,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         isCurrentTab ? sortedElements[0] : sortedElements[1];
 
                     return ListView.builder(
-                      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 100.0),
+                      padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 100.0),
                       itemCount: activeElements.length == 0
                           ? 1
                           : activeElements.length,
@@ -244,16 +244,22 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
       title: Text("Are you sure?", style: UIToolkit.cardTitleTextStyle),
-      content: Text("This action is irreversible.",
-          style: UIToolkit.cardSubTitleTextStyle),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      content: Text(
+        "This action is irreversible.",
+      ),
       actions: <Widget>[
         FlatButton(
-          child: Text("Cancel", style: UIToolkit.dialogTextStyle),
+          child: Text(
+            "CANCEL",
+            style: TextStyle(color: Palette.maroon),
+          ),
           onPressed: Navigator.of(context).pop,
         ),
         FlatButton(
-          child: Text("Continue", style: UIToolkit.dialogTextStyle),
+          child: Text(
+            "OK",
+            style: TextStyle(color: Palette.maroon),
+          ),
           onPressed: () {
             DataBaseInteraction.deleteCompetition(
                 context, currentEntry, snapshot);
@@ -288,7 +294,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Palette.light,
     );
   }
 }

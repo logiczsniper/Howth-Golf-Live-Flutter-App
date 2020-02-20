@@ -30,7 +30,7 @@ class CreationPage {
   DropdownButton<T> dropdownButton<T>(
           T _value, Function(T) _onChanged, List<DropdownMenuItem<T>> _items) =>
       DropdownButton<T>(
-          elevation: 1,
+          elevation: 0,
           value: _value,
           iconEnabledColor: Palette.dark,
           iconSize: 30.0,
@@ -46,8 +46,7 @@ class CreationPage {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(title,
-            textAlign: TextAlign.center, maxLines: 2, style: Themes.titleStyle),
+        title: Text(title, textAlign: TextAlign.center, maxLines: 2),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.check),
@@ -56,7 +55,6 @@ class CreationPage {
         ],
       ),
       body: Padding(child: form, padding: EdgeInsets.all(5.0)),
-      backgroundColor: Palette.light,
     );
   }
 }

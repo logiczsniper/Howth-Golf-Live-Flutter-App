@@ -31,10 +31,8 @@ class UIToolkit {
           bottom: BorderSide(width: 1.5, color: Palette.maroon),
           top: BorderSide(width: 1.5, color: Palette.maroon)));
 
-  static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
-      color: Palette.card,
-      shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.circular(10.0));
+  static BoxDecoration _roundedRectBoxDecoration = BoxDecoration(
+      shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10.0));
 
   static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide(color: Palette.maroon, width: 1.8),
@@ -42,12 +40,9 @@ class UIToolkit {
 
   /// Some common methods used in various pages and widgets.
   static Card getCard(Widget child) => Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      elevation: 1.85,
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          decoration: UIToolkit.roundedRectBoxDecoration,
+          decoration: _roundedRectBoxDecoration,
           child: child));
 
   /// The maroon decoration around the [text].
@@ -72,7 +67,7 @@ class UIToolkit {
               : double.tryParse(score).toInt().toString(),
           style: TextStyle(
               fontSize: 21,
-              color: Palette.buttonText,
+              color: Palette.inMaroon,
               fontWeight: FontWeight.w400),
           children: <TextSpan>[
             /// Secondary text value (fractional).
@@ -80,7 +75,7 @@ class UIToolkit {
                 text: Strings.isFraction(score) ? "1/2" : "",
                 style: TextStyle(
                     fontSize: 21,
-                    color: Palette.buttonText,
+                    color: Palette.inMaroon,
                     fontFeatures: [FontFeature.enable('frac')]))
           ]));
 

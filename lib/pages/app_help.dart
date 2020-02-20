@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/help_data.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/style/palette.dart';
 
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
@@ -42,8 +41,10 @@ class HelpPageState extends State<HelpPage> {
                     builder: (context) => SpecificHelpPage(currentHelpEntry)));
           });
 
-  /// If they have special privileges, display extra entries depending on
-  /// their access level.
+  /// Display extra entries depending on their access level.
+  ///
+  /// A default user sees entries 1-3. Team managers will
+  /// see entries 1-4 and admins will see all 5 app help entries.
   int _bonusEntries(List<String> competitionAccess, bool isAdmin) {
     if (isAdmin)
       return 2;
@@ -78,6 +79,7 @@ class HelpPageState extends State<HelpPage> {
           Strings.helpText, Privileges.adminAttempt, _onComplete, hasAccess),
       body: OpacityChangeWidget(
         target: ListView.builder(
+            padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
             itemBuilder: (BuildContext context, int index) {
               /// At the top of the list, [MyDetails] are displayed.
               if (index == 0) return MyDetails();
@@ -100,7 +102,6 @@ class HelpPageState extends State<HelpPage> {
                 1 +
                 _bonusEntries(competitionAccess, hasAccess)),
       ),
-      backgroundColor: Palette.light,
     );
   }
 }

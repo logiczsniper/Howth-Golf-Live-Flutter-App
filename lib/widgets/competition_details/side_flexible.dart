@@ -24,7 +24,7 @@ class SideFlexible extends StatelessWidget {
                   : double.tryParse(score).toInt().toString(),
               style: TextStyle(
                   fontSize: 21,
-                  color: Palette.buttonText,
+                  color: Palette.inMaroon,
                   fontWeight: FontWeight.w400),
               children: <TextSpan>[
             /// Secondary text value (fractional).
@@ -32,7 +32,7 @@ class SideFlexible extends StatelessWidget {
                 text: Strings.isFraction(score) ? "1/2" : "",
                 style: TextStyle(
                     fontSize: 21,
-                    color: Palette.buttonText,
+                    color: Palette.inMaroon,
                     fontFeatures: [FontFeature.enable('frac')]))
           ]));
 

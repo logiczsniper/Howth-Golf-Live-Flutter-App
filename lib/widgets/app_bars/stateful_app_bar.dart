@@ -38,11 +38,12 @@ class StatefulAppBar {
 
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title) => Center(
-      child: Text(title,
-          softWrap: true,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          style: Themes.titleStyle));
+          child: Text(
+        title,
+        softWrap: true,
+        textAlign: TextAlign.center,
+        maxLines: 2,
+      ));
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.

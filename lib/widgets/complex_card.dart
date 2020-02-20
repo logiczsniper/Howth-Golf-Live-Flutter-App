@@ -16,7 +16,7 @@ class ComplexCard extends StatelessWidget {
         highlightColor: Colors.transparent,
         radius: 500.0,
         borderRadius: BorderRadius.circular(10.0),
-        splashColor: Palette.maroon.withAlpha(50),
+        splashColor: Palette.maroon.withAlpha(60),
         onTap: onTap,
       );
 

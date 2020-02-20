@@ -69,8 +69,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               child: Container(
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                      color:
-                          index % 2 != 0 ? Palette.light : Palette.tableLight,
+                      color: index % 2 != 0
+                          ? Palette.light
+                          : Palette.card.withAlpha(240),
                       borderRadius: BorderRadius.circular(6.0)),
                   child: Text(text,
                       textAlign: away ? TextAlign.right : TextAlign.left,
@@ -201,13 +202,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
               padding: EdgeInsets.only(bottom: 100.0),
               separatorBuilder: (BuildContext context, int index) {
                 if (index != 0 && index != 1)
-                  return Divider(
-                    height: 30.0,
-                    indent: 50.0,
-                    endIndent: 50.0,
-                    thickness: 1.5,
-                    color: Palette.divider,
-                  );
+                  return Divider();
                 else
                   return Container();
               },
@@ -240,7 +235,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      backgroundColor: Palette.light,
     );
   }
 }

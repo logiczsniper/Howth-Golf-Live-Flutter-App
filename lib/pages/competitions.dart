@@ -7,13 +7,13 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
-import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 
 import 'package:howth_golf_live/pages/creation/create_competition.dart';
 import 'package:howth_golf_live/pages/unique/competition.dart';
@@ -92,59 +92,25 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
   }
 
   static Widget _tileBuilder(
-          BuildContext context, DataBaseEntry currentEntry) =>
+          BuildContext context, DataBaseEntry currentEntry, int index) =>
       BaseListTile(
+        /// The score of the competition.
+        ///
+        /// Uses [RichText] to display fractions when needed.
+        leadingChild:
+            ComplexScore(currentEntry.location.isHome, currentEntry.score),
 
-          /// The score of the competition.
-          ///
-          /// Uses [RichText] to display fractions when needed.
-          /// TODO: make ComplexScore widget, change also UIToolkit.scoreText also side_flexible
-          leadingChild: RichText(
-            /// Conditions similar to the ternary operator below are
-            /// ensuring that whichever team is home has their information
-            /// on the left, and whoever is away on the right.
-            text: TextSpan(
-                text: Strings.getTextSpanText(currentEntry.location.isHome
-                    ? currentEntry.score.howth
-                    : currentEntry.score.opposition),
-                style: UIToolkit.leadingChildTextStyle,
-                children: <TextSpan>[
-                  TextSpan(
-
-                      /// The ternary operator (and others like it) below ensure that
-                      /// no fraction is displayed if the [currentEntry.score] is whole.
-                      text: Strings.isFraction(currentEntry.location.isHome
-                              ? currentEntry.score.howth
-                              : currentEntry.score.opposition)
-                          ? "1/2"
-                          : "",
-                      style: TextStyle(
-                          fontFeatures: [FontFeature.enable('frac')])),
-                  TextSpan(text: " - "),
-                  TextSpan(
-                      text: Strings.getTextSpanText(currentEntry.location.isHome
-                          ? currentEntry.score.opposition
-                          : currentEntry.score.howth)),
-                  TextSpan(
-                      text: Strings.isFraction(currentEntry.location.isHome
-                              ? currentEntry.score.opposition
-                              : currentEntry.score.howth)
-                          ? "1/2"
-                          : "",
-                      style: TextStyle(
-                          fontFeatures: [FontFeature.enable('frac')])),
-                ]),
-          ),
-
-          /// If [Privileges.adminStatus], the remove competition button will rest in place of this
-          /// [trailingIconData] above this [BaseListTile] in the [Stack]. Hence, no [IconData]
-          /// is provided in this case.
-          trailingIconData: Privileges.adminStatus(context: context)
-              ? null
-              : Icons.keyboard_arrow_right,
-          subtitleMaxLines: 1,
-          subtitleText: currentEntry.date,
-          titleText: currentEntry.title);
+        /// If [Privileges.adminStatus], the remove competition button will rest in place of this
+        /// [trailingIconData] above this [BaseListTile] in the [Stack]. Hence, no [IconData]
+        /// is provided in this case.
+        trailingIconData: Privileges.adminStatus(context: context)
+            ? null
+            : Icons.keyboard_arrow_right,
+        subtitleMaxLines: 1,
+        subtitleText: currentEntry.date,
+        titleText: currentEntry.title,
+        index: index,
+      );
 
   Widget _buildElementsList(String _searchText, bool isCurrentTab) =>
       OpacityChangeWidget(
@@ -200,24 +166,24 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         /// Fetches [SharedPreferences] to pass as initial values into
                         /// the [SpecificCompetitionPage].
                         void Function() toCompetition = () {
-                          final preferences = SharedPreferences.getInstance();
-                          preferences.then((SharedPreferences preferences) {
-                            final bool hasAccess =
-                                Privileges.adminStatus(context: context) ||
-                                    Privileges.managerStatus(currentEntry,
-                                        context: context);
+                          final Future<SharedPreferences> preferences =
+                              SharedPreferences.getInstance();
+                          final bool hasAccess =
+                              Privileges.adminStatus(context: context) ||
+                                  Privileges.managerStatus(currentEntry,
+                                      context: context);
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SpecificCompetitionPage(
-                                            currentEntry, hasAccess)));
-                          });
+                          preferences.then((SharedPreferences preferences) =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SpecificCompetitionPage(currentEntry,
+                                              hasAccess, index))));
                         };
 
                         return ComplexCard(
-                            child: _tileBuilder(context, currentEntry),
+                            child: _tileBuilder(context, currentEntry, index),
                             onTap: toCompetition,
                             iconButton: Privileges.adminStatus(context: context)
                                 ? IconButton(
@@ -234,6 +200,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   /// When deleting a [DataBaseEntry], prompts the user to double check their intent
   /// is to do so as this can have major consquences if an accident.
+  /// TODO: remove alert dialog, abstraction
   _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
       AsyncSnapshot<QuerySnapshot> snapshot) {
     AlertDialog alertDialog = AlertDialog(
@@ -267,7 +234,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
     );
   }
 
-  /// Push to [CreateCompetition] page.
+  /// Push to [CreateCompetition] page. TODO: refactor this name as well as _addHole
   void _addCompetition() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
@@ -275,11 +242,10 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    MyFloatingActionButton floatingActionButton =
-        Privileges.adminStatus(context: context)
-            ? MyFloatingActionButton(
-                onPressed: _addCompetition, text: 'Add a Competition')
-            : null;
+    Widget floatingActionButton = Privileges.adminStatus(context: context)
+        ? UIToolkit.createButton(
+            onPressed: _addCompetition, text: 'Add a Competition')
+        : null;
     return Scaffold(
       body: DefaultTabController(
           length: 2,

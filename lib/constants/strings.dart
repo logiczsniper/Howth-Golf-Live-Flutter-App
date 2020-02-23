@@ -3,12 +3,16 @@ class Strings {
 
   static const String tapMe = "Tap anywhere to begin!";
   static const String returnHome = "Tap to return to home!";
+  static const String deleteHole = "Tap to delete this hole!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
   static const String archivedText = "Archived";
   static const String competitionsText = "Competitions";
   static const String helpText = "App Help";
+  static const String specificHole = "Specific Hole";
+  static const String newHole = "New Hole";
+  static const String newCompetition = "New Competition";
 
   /// Paths to graphics used in the app.
   static const String iconPath = "lib/assets/icon.png";
@@ -81,10 +85,6 @@ class Strings {
       return "${(difference.inDays ~/ 365)} year(s) ago";
   }
 
-  /// Returns the main number as a string from the [score].
-  ///
-  /// If the main number is 0, this will display just 1 / 2 rather than
-  /// 0 and 1 / 2.
   static String getTextSpanText(String score) =>
       double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
           ? ""

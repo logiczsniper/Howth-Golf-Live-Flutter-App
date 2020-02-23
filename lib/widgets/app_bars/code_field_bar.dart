@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
-import 'package:howth_golf_live/widgets/buttons/back_button.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -82,11 +82,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
 
-    _filter.addListener(() {
-      setState(() {
-        inputText = _filter.text.isEmpty ? "" : _filter.text;
-      });
-    });
+    _filter.addListener(() =>
+        setState(() => inputText = _filter.text.isEmpty ? "" : _filter.text));
   }
 
   @override
@@ -94,7 +91,10 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     return AppBar(
       title: getTitle(appBarTitle),
       centerTitle: true,
-      leading: ParameterBackButton(Strings.competitionsText),
+      leading: IconButton(
+        icon: BackButtonIcon(),
+        onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
+      ),
       actions: <Widget>[_iconButton],
     );
   }

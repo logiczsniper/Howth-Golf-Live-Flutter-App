@@ -33,7 +33,8 @@ class HelpPageState extends State<HelpPage> {
               trailingIconData: Icons.keyboard_arrow_right,
               subtitleMaxLines: 2,
               subtitleText: currentHelpEntry.subtitle,
-              titleText: currentHelpEntry.title),
+              titleText: currentHelpEntry.title,
+              index: index),
           onTap: () {
             Navigator.push(
                 context,
@@ -55,11 +56,8 @@ class HelpPageState extends State<HelpPage> {
       return 0;
   }
 
-  void _onComplete(Future<bool> isVerified) => setState(() {
-        isVerified.then((bool result) {
-          hasAccess = result;
-        });
-      });
+  void _onComplete(Future<bool> isVerified) =>
+      setState(() => isVerified.then((bool result) => hasAccess = result));
 
   @override
   void initState() {

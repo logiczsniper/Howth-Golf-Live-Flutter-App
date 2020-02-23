@@ -48,15 +48,14 @@ class CompetitionDetails extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SideFlexible(data.location.isHome
-                  ? data.score.howth
-                  : data.score.opposition),
+              /// Home team score.
+              SideFlexible(data.score, data.location.isHome),
+
+              /// Details of competition.
               _centralFlexible,
-              SideFlexible(
-                !data.location.isHome
-                    ? data.score.howth
-                    : data.score.opposition,
-              )
+
+              /// Away team score.
+              SideFlexible(data.score, !data.location.isHome)
             ],
           ),
         ],

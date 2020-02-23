@@ -23,6 +23,12 @@ class UIToolkit {
   static BoxDecoration rightSideBoxDecoration = BoxDecoration(
       border: Border(right: BorderSide(width: 1.5, color: Palette.maroon)));
 
+  static BoxDecoration leftSideBoxDecoration = BoxDecoration(
+      border: Border(left: BorderSide(width: 1.5, color: Palette.maroon)));
+
+  static BoxDecoration topSideBoxDecoration = BoxDecoration(
+      border: Border(top: BorderSide(width: 1.5, color: Palette.maroon)));
+
   static BoxDecoration bottomSideBoxDecoration = BoxDecoration(
       border: Border(bottom: BorderSide(width: 1.5, color: Palette.maroon)));
 
@@ -32,7 +38,22 @@ class UIToolkit {
           top: BorderSide(width: 1.5, color: Palette.maroon)));
 
   static BoxDecoration _roundedRectBoxDecoration = BoxDecoration(
-      shape: BoxShape.rectangle, borderRadius: BorderRadius.circular(10.0));
+/*       boxShadow: [
+        BoxShadow(
+            color: Palette.dark,
+            spreadRadius: 0.5,
+            blurRadius: 4.5,
+            offset: Offset(5, 5)),
+        BoxShadow(
+            color: Palette.light,
+            spreadRadius: 0.5,
+            blurRadius: 3.5,
+            offset: Offset(-5, -5))
+      ],*/
+      gradient: LinearGradient(
+          colors: [Palette.card, Color.fromARGB(255, 236, 236, 236)]),
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(10.0));
 
   static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
       borderSide: BorderSide(color: Palette.maroon, width: 1.8),
@@ -59,17 +80,15 @@ class UIToolkit {
       /// Uses a [Key] to distinguish between the children widgets of the
       /// [AnimatedSwitcher], forcing the fade transition to occur.
       key: score == oldScore ? null : ValueKey(DateTime.now()),
-
-      /// Primary text value.
       text: TextSpan(
-          text: double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
-              ? ""
-              : double.tryParse(score).toInt().toString(),
           style: TextStyle(
               fontSize: 21,
               color: Palette.inMaroon,
               fontWeight: FontWeight.w400),
           children: <TextSpan>[
+            /// Main number.
+            TextSpan(text: Strings.getTextSpanText(score)),
+
             /// Secondary text value (fractional).
             TextSpan(
                 text: Strings.isFraction(score) ? "1/2" : "",
@@ -82,6 +101,7 @@ class UIToolkit {
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
   static Container getHoleNumberDecorated(int holeNumber) => Container(
+      key: ValueKey(DateTime.now()),
       margin: EdgeInsets.symmetric(vertical: 2.0),
       padding: EdgeInsets.all(2.5),
       child: Padding(
@@ -159,6 +179,20 @@ class UIToolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
+  static FloatingActionButton createButton(
+          {void Function() onPressed, String text}) =>
+      FloatingActionButton.extended(
+        icon: Icon(
+          Icons.add,
+          color: Palette.inMaroon,
+        ),
+        label: Text(
+          text,
+          style: TextStyle(fontSize: 14, color: Palette.inMaroon),
+        ),
+        onPressed: onPressed,
+      );
+
   /// Returns the centered and padded [Row] containing the [howthText] and the
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
@@ -205,4 +239,8 @@ class UIToolkit {
       TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
   static const TextStyle noDataTextStyle =
       TextStyle(fontSize: 18, color: Palette.dark, fontWeight: FontWeight.w300);
+  static const TextStyle scoreCardTextStyle = TextStyle(
+    fontSize: 13,
+    color: Palette.dark,
+  );
 }

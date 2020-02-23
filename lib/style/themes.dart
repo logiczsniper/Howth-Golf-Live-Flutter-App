@@ -122,7 +122,7 @@ class Themes {
 
   static CardTheme get cardTheme => CardTheme(
         color: Palette.card,
-        elevation: 0.15,
+        elevation: 0.25,
         margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

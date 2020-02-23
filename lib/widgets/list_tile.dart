@@ -8,33 +8,41 @@ class BaseListTile extends StatelessWidget {
   final String titleText;
   final int subtitleMaxLines;
   final String subtitleText;
+  final int index;
 
   /// A special [ListTile] with padding and decoration,
   /// and formated text.
   BaseListTile(
-      {this.leadingChild,
-      this.titleText,
+      {@required this.leadingChild,
+      @required this.titleText,
       this.threeLine = false,
-      this.subtitleMaxLines,
-      this.subtitleText,
-      this.trailingIconData});
+      @required this.subtitleMaxLines,
+      @required this.subtitleText,
+      @required this.trailingIconData,
+      @required this.index});
 
+  /// TODO: remove this widget, only used for competitions,
+  /// use old base list tile for app help!
   @override
   Widget build(BuildContext context) => ListTile(
-      isThreeLine: threeLine,
       contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-      leading: Container(
-          padding: EdgeInsets.only(right: 15.0),
-          decoration: UIToolkit.rightSideBoxDecoration,
-          child: leadingChild),
       title: Text(
         titleText,
         overflow: TextOverflow.ellipsis,
         maxLines: 2,
       ),
-      subtitle: Text(subtitleText,
-          overflow: TextOverflow.fade,
-          maxLines: subtitleMaxLines,
-          style: UIToolkit.cardSubTitleTextStyle),
+      subtitle: Row(children: <Widget>[
+        Container(
+            padding: EdgeInsets.only(right: 15.0),
+            decoration: UIToolkit.rightSideBoxDecoration,
+            child: Text(subtitleText,
+                overflow: TextOverflow.fade,
+                maxLines: subtitleMaxLines,
+                style: UIToolkit.cardSubTitleTextStyle)),
+        Padding(
+          child: leadingChild,
+          padding: EdgeInsets.only(left: 15.0),
+        )
+      ]),
       trailing: Icon(trailingIconData));
 }

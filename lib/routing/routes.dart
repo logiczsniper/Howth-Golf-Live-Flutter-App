@@ -21,11 +21,12 @@ class Routes {
   /// not the user is an admin and if so, adjust how it displays certain
   /// elements.
   static void navigateTo(BuildContext context, String destination) {
-    final preferences = SharedPreferences.getInstance();
-    preferences.then((SharedPreferences preferences) {
-      Navigator.pushNamed(context, home + destination,
-          arguments: Privileges.fromPreferences(preferences));
-    });
+    final Future<SharedPreferences> preferences =
+        SharedPreferences.getInstance();
+
+    preferences.then((SharedPreferences preferences) => Navigator.pushNamed(
+        context, home + destination,
+        arguments: Privileges.fromPreferences(preferences)));
   }
 
   /// Get the arguments passed through the route.

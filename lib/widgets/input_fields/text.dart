@@ -15,6 +15,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
       {this.withPadding = true, this.number = false, this.isRequired = true});
 
   /// A basic test to see if the user has inserted text.
+  /// TODO: PR&L
   String _validator(String input) {
     if (input.isEmpty && isRequired)
       return 'This field is required.';

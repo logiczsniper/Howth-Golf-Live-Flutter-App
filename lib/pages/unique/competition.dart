@@ -12,14 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/competition_details/competition_details.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
-import 'package:howth_golf_live/widgets/buttons/floating_action_button.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class SpecificCompetitionPage extends StatefulWidget {
   final DataBaseEntry competition;
   final bool hasAccess;
+  final int index;
 
-  SpecificCompetitionPage(this.competition, this.hasAccess);
+  SpecificCompetitionPage(this.competition, this.hasAccess, this.index);
 
   @override
   SpecificCompetitionPageState createState() => SpecificCompetitionPageState();
@@ -38,26 +38,20 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   ///
   /// [setState] is also called to rebuild the page with the potentially newly aquired
   /// privileges.
-
-  void _onComplete(Future<bool> isVerified) => setState(() {
-        isVerified.then((bool result) {
-          hasAccess = result;
-        });
-      });
+  void _onComplete(Future<bool> isVerified) =>
+      setState(() => isVerified.then((bool result) => hasAccess = result));
 
   /// Push to the [CreateHole] page.
+  /// TODO: just like competitions, save _snapshot within stream builder, use that snapshot,
+  /// rename method
   void _addHole() {
     final int currentId = currentData.id;
     Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
-    setState(() {
-      newData.then((QuerySnapshot snapshot) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CreateHole(snapshot, currentId)));
-      });
-    });
+    setState(() => newData.then((QuerySnapshot snapshot) => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CreateHole(snapshot, currentId)))));
   }
 
   /// Get the styled and positioned widget to display the name of the player(s)
@@ -170,13 +164,17 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     /// If the user is an admin or manager, they are able to both
     /// see and press the [MyFloatingActionButton] in order to create
     /// a hole.
-    MyFloatingActionButton floatingActionButton = hasAccess
-        ? MyFloatingActionButton(onPressed: _addHole, text: 'Add a Hole')
+    Widget floatingActionButton = hasAccess
+        ? UIToolkit.createButton(onPressed: _addHole, text: 'Add a Hole')
         : null;
     return Scaffold(
       appBar: CodeFieldBar(
-          currentData.title, Privileges.managerAttempt, _onComplete, hasAccess,
-          id: currentData.id),
+        currentData.title,
+        Privileges.managerAttempt,
+        _onComplete,
+        hasAccess,
+        id: currentData.id,
+      ),
       body: OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
           stream: DataBaseInteraction.stream,

@@ -26,7 +26,7 @@ class Privileges {
 
   /// Removes all locally stored data, resetting the users privileges.
   static void clearPreferences() async {
-    final preferences = await SharedPreferences.getInstance();
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
   }
 
@@ -85,9 +85,8 @@ class Privileges {
         Future<bool>.value(DataBaseInteraction.adminCode.then((int adminCode) {
       if (codeAttempt == adminCode.toString()) {
         /// Write the result to [SharedPreferences].
-        _preferences.then((SharedPreferences preferences) {
-          preferences.setBool(_activeAdminText, true);
-        });
+        _preferences.then((SharedPreferences preferences) =>
+            preferences.setBool(_activeAdminText, true));
 
         return true;
       }

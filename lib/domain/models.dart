@@ -151,6 +151,9 @@ class Score {
 
   Map get toJson => {Fields.howth: howth, Fields.opposition: opposition};
 
+  @override
+  String toString() => "Howth: $howth, Opposition: $opposition";
+
   Score({@required this.howth, @required this.opposition});
 }
 

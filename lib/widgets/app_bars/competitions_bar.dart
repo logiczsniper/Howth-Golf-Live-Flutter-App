@@ -28,11 +28,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   final TextEditingController _filter = TextEditingController();
 
   /// Update the [appBarTitle] to the opposite title.
-  void _searchPressed() {
-    setState(() {
-      appBarTitle = actionPressed(appBarTitle, context, _filter);
-    });
-  }
+  void _searchPressed() => setState(
+      () => appBarTitle = actionPressed(appBarTitle, context, _filter));
 
   @override
   void initState() {
@@ -47,11 +44,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
     /// [appBarTitle] defaults to the title bar.
     appBarTitle = titleBar;
-    _filter.addListener(() {
-      setState(() {
-        inputText = _filter.text.isEmpty ? "" : _filter.text;
-      });
-    });
+    _filter.addListener(() =>
+        setState(() => inputText = _filter.text.isEmpty ? "" : _filter.text));
   }
 
   /// The [IconData] switches between a search icon (if [titleBar]) and

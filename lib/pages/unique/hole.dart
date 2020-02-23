@@ -22,7 +22,6 @@ class HolePageState extends State<HolePage> {
 
   Widget _homeScore;
   Widget _awayScore;
-  Widget _holeNumber;
   Widget _lastUpdated;
 
   /// Deletes the holes at the given [index] within the list of holes
@@ -32,10 +31,8 @@ class HolePageState extends State<HolePage> {
     final int currentId = widget.entry.id;
     Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
-    newData.then((QuerySnapshot snapshot) {
-      DataBaseInteraction.deleteHole(
-          context, snapshot, widget.index, currentId);
-    });
+    newData.then((QuerySnapshot snapshot) => DataBaseInteraction.deleteHole(
+        context, snapshot, widget.index, currentId));
   }
 
   /// Update the [currentHole].
@@ -54,26 +51,18 @@ class HolePageState extends State<HolePage> {
     final int currentId = widget.entry.id;
     Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
 
-    newData.then((QuerySnapshot snapshot) {
-      DataBaseInteraction.updateHole(
-          context, snapshot, widget.index, currentId, updatedHole);
-    });
+    newData.then((QuerySnapshot snapshot) => DataBaseInteraction.updateHole(
+        context, snapshot, widget.index, currentId, updatedHole));
 
     setState(() {
       /// Rebuild with new data.
-      String howthOldScore = hole.holeScore.howth;
-      String oppositionOldScore = hole.holeScore.opposition;
-
+      Score oldScores = hole.holeScore;
       bool isHome = widget.entry.location.isHome;
 
       hole = updatedHole;
-      _homeScore = UIToolkit.scoreText(
-          isHome ? hole.holeScore.howth : hole.holeScore.opposition,
-          isHome ? howthOldScore : oppositionOldScore);
-      _awayScore = UIToolkit.scoreText(
-          !isHome ? hole.holeScore.howth : hole.holeScore.opposition,
-          !isHome ? howthOldScore : oppositionOldScore);
-      _holeNumber = _getHoleNumber(hole.holeNumber);
+
+      _homeScore = _getScoreText(isHome, hole.holeScore, oldScores);
+      _awayScore = _getScoreText(!isHome, hole.holeScore, oldScores);
       _lastUpdated = _getLastUpdated(hole.lastUpdated);
     });
   }
@@ -85,12 +74,14 @@ class HolePageState extends State<HolePage> {
               child: _teamScore, duration: Duration(milliseconds: 350)),
           decoration: UIToolkit.scoreDecoration));
 
-  Text _getHoleNumber(int holeNumber) => Text(
-      holeNumber.toString().length == 1
-          ? "0$holeNumber"
-          : holeNumber.toString(),
-      style: UIToolkit.cardSubTitleTextStyle,
-      key: ValueKey(DateTime.now()));
+  Text _getScoreText(bool condition, Score scores, Score oldScores) => Text(
+        condition ? hole.holeScore.howth : hole.holeScore.opposition,
+        key: scores.toString() == oldScores.toString()
+            ? null
+            : ValueKey(DateTime.now()),
+        style: TextStyle(
+            fontSize: 21, color: Palette.inMaroon, fontWeight: FontWeight.w400),
+      );
 
   Widget _getLastUpdated(DateTime lastUpdated) =>
       Text("Last updated: ${Strings.parseLastUpdated(lastUpdated)}",
@@ -98,23 +89,46 @@ class HolePageState extends State<HolePage> {
           style: UIToolkit.cardTitleTextStyle,
           key: ValueKey(DateTime.now()));
 
+  Widget _getScoreButtons(Score incrementedScore, Score decrementedScore) =>
+      widget.hasAccess
+          ? Column(
+              children: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () =>
+                        _updateHole(hole, newScore: incrementedScore)),
+                IconButton(
+                    icon: Icon(Icons.remove),
+                    onPressed: () =>
+                        _updateHole(hole, newScore: decrementedScore)),
+              ],
+            )
+          : Container();
+
+  Widget _getHoleButtons(IconData iconData, int value) {
+    assert(value == 1 || value == -1);
+    return widget.hasAccess
+        ? IconButton(
+            icon: Icon(iconData),
+            onPressed: () {
+              /// Apply value of one or minus one to the [holeNumber].
+              _updateHole(hole, newHoleNumber: hole.holeNumber + value);
+            },
+          )
+        : Padding(
+            padding: EdgeInsets.only(top: 50.0),
+          );
+  }
+
   @override
   void initState() {
     super.initState();
 
     hole = widget.entry.holes[widget.index];
+    bool isHome = widget.entry.location.isHome;
 
-    String homeScore = widget.entry.location.isHome
-        ? hole.holeScore.howth
-        : hole.holeScore.opposition;
-
-    String awayScore = !widget.entry.location.isHome
-        ? hole.holeScore.howth
-        : hole.holeScore.opposition;
-
-    _homeScore = UIToolkit.scoreText(homeScore, homeScore);
-    _awayScore = UIToolkit.scoreText(awayScore, awayScore);
-    _holeNumber = _getHoleNumber(hole.holeNumber);
+    _homeScore = _getScoreText(isHome, hole.holeScore, hole.holeScore);
+    _awayScore = _getScoreText(!isHome, hole.holeScore, hole.holeScore);
     _lastUpdated = _getLastUpdated(hole.lastUpdated);
   }
 
@@ -126,7 +140,7 @@ class HolePageState extends State<HolePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Specific Hole",
+          Strings.specificHole,
           textAlign: TextAlign.center,
           maxLines: 2,
         ),
@@ -134,12 +148,12 @@ class HolePageState extends State<HolePage> {
           widget.hasAccess
               ? IconButton(
                   icon: Icon(Icons.remove_circle_outline),
-                  tooltip: "Delete this hole!",
+                  tooltip: Strings.deleteHole,
                   onPressed: _deleteHole)
               : UIToolkit.getHomeButton(context),
         ],
       ),
-      body: Container(
+      body: Padding(
           padding: EdgeInsets.all(5.0),
           child:
               UIToolkit.getCard(ListView(shrinkWrap: true, children: <Widget>[
@@ -150,33 +164,13 @@ class HolePageState extends State<HolePage> {
                   ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
               /// Edit the home team score.
-              widget.hasAccess
-                  ? Column(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            /// If howth [isHome], then add one to howth score as howth
-                            /// is the home team!
-                            Score updatedScore =
-                                hole.holeScore.updateScore(isHome, 1);
 
-                            _updateHole(hole, newScore: updatedScore);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () {
-                            /// Remove one from the home team score.
-                            Score updatedScore =
-                                hole.holeScore.updateScore(isHome, -1);
-
-                            _updateHole(hole, newScore: updatedScore);
-                          },
-                        ),
-                      ],
-                    )
-                  : Container(),
+              /// If howth [isHome], then add one to howth score as howth
+              /// is the home team!
+              ///
+              /// Otherwise, remove one from the home team!
+              _getScoreButtons(hole.holeScore.updateScore(isHome, 1),
+                  hole.holeScore.updateScore(isHome, -1)),
 
               _getScore(_homeScore),
 
@@ -188,32 +182,10 @@ class HolePageState extends State<HolePage> {
               _getScore(_awayScore),
 
               /// Edit the away team score.
-              widget.hasAccess
-                  ? Column(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            /// Add one to the away team score.
-                            Score updatedScore =
-                                hole.holeScore.updateScore(!isHome, 1);
 
-                            _updateHole(hole, newScore: updatedScore);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () {
-                            /// Remove one from the away team score.
-                            Score updatedScore =
-                                hole.holeScore.updateScore(!isHome, -1);
-
-                            _updateHole(hole, newScore: updatedScore);
-                          },
-                        ),
-                      ],
-                    )
-                  : Container(),
+              /// If add one or remove one from the away team score!
+              _getScoreButtons(hole.holeScore.updateScore(!isHome, 1),
+                  hole.holeScore.updateScore(!isHome, -1)),
             ]),
             UIToolkit.getVersus(
                 widget.entry, Strings.formatPlayers(hole.players)),
@@ -222,44 +194,15 @@ class HolePageState extends State<HolePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                /// TODO: extract away AddButton and RemoveButton with onPressed parameter
-                /// addButton(() => updateHole(sdfsd))
-                widget.hasAccess
-                    ? IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          /// Add one to the [holeNumber].
-                          _updateHole(hole, newHoleNumber: hole.holeNumber + 1);
-                        },
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(top: 50.0),
-                      ),
+                _getHoleButtons(Icons.add, 1),
 
                 /// Hole Number
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 2.0),
-                    padding: EdgeInsets.all(2.5),
-                    child: Padding(
-                        child: AnimatedSwitcher(
-                          child: _holeNumber,
-                          duration: Duration(milliseconds: 350),
-                        ),
-                        padding: EdgeInsets.all(4.0)),
-                    decoration: BoxDecoration(
-                        color: Palette.light,
-                        border: Border.all(color: Palette.maroon, width: 1.5),
-                        borderRadius: BorderRadius.circular(9.0))),
+                AnimatedSwitcher(
+                  child: UIToolkit.getHoleNumberDecorated(hole.holeNumber),
+                  duration: Duration(milliseconds: 300),
+                ),
 
-                widget.hasAccess
-                    ? IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          /// Remove one from the [holeNumber].
-                          _updateHole(hole, newHoleNumber: hole.holeNumber - 1);
-                        },
-                      )
-                    : Container(),
+                _getHoleButtons(Icons.remove, -1),
               ],
             ),
 

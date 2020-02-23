@@ -3,7 +3,6 @@ import 'package:howth_golf_live/constants/help_data.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/domain/models.dart';
 
-import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
@@ -28,13 +27,25 @@ class HelpPageState extends State<HelpPage> {
   static Widget _tileBuilder(
           BuildContext context, AppHelpEntry currentHelpEntry, int index) =>
       ComplexCard(
-          child: BaseListTile(
-              leadingChild: _getLeadingText(index.toString()),
-              trailingIconData: Icons.keyboard_arrow_right,
-              subtitleMaxLines: 2,
-              subtitleText: currentHelpEntry.subtitle,
-              titleText: currentHelpEntry.title,
-              index: index),
+          child: ListTile(
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+              leading: Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Container(
+                      padding: EdgeInsets.only(right: 15.0),
+                      decoration: UIToolkit.rightSideBoxDecoration,
+                      child: _getLeadingText(index.toString()))),
+              title: Text(
+                currentHelpEntry.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+              subtitle: Text(currentHelpEntry.subtitle,
+                  overflow: TextOverflow.fade,
+                  maxLines: 2,
+                  style: UIToolkit.cardSubTitleTextStyle),
+              trailing: Icon(Icons.keyboard_arrow_right)),
           onTap: () {
             Navigator.push(
                 context,

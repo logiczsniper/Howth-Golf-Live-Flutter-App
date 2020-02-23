@@ -8,7 +8,6 @@ import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
-import 'package:howth_golf_live/widgets/list_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
@@ -93,24 +92,32 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
 
   static Widget _tileBuilder(
           BuildContext context, DataBaseEntry currentEntry, int index) =>
-      BaseListTile(
-        /// The score of the competition.
-        ///
-        /// Uses [RichText] to display fractions when needed.
-        leadingChild:
-            ComplexScore(currentEntry.location.isHome, currentEntry.score),
-
-        /// If [Privileges.adminStatus], the remove competition button will rest in place of this
-        /// [trailingIconData] above this [BaseListTile] in the [Stack]. Hence, no [IconData]
-        /// is provided in this case.
-        trailingIconData: Privileges.adminStatus(context: context)
-            ? null
-            : Icons.keyboard_arrow_right,
-        subtitleMaxLines: 1,
-        subtitleText: currentEntry.date,
-        titleText: currentEntry.title,
-        index: index,
-      );
+      ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+          title: Text(
+            currentEntry.title,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+          subtitle: Row(children: <Widget>[
+            Container(
+                padding: EdgeInsets.only(right: 15.0),
+                decoration: UIToolkit.rightSideBoxDecoration,
+                child: Text(currentEntry.date,
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: UIToolkit.cardSubTitleTextStyle)),
+            Padding(
+              child: ComplexScore(
+                  currentEntry.location.isHome, currentEntry.score),
+              padding: EdgeInsets.only(left: 15.0),
+            )
+          ]),
+          trailing: Icon(
+            Privileges.adminStatus(context: context)
+                ? null
+                : Icons.keyboard_arrow_right,
+          ));
 
   Widget _buildElementsList(String _searchText, bool isCurrentTab) =>
       OpacityChangeWidget(

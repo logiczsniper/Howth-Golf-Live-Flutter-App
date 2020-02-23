@@ -35,14 +35,13 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
               child: Text(
                 currentStep.title,
                 style: UIToolkit.cardTitleTextStyle,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
               ),
-              padding: EdgeInsets.only(bottom: 3.0)),
+              padding: EdgeInsets.only(bottom: 5.0)),
           Padding(
               child: Text(
                 currentStep.data,
                 style: UIToolkit.cardSubTitleTextStyle,
-                textAlign: TextAlign.center,
               ),
               padding: EdgeInsets.only(left: 4.5))
         ],

@@ -35,8 +35,9 @@ class Routes {
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
-        home: (context) => homePage,
-        home + Strings.competitionsText: (context) => competitionsPage,
-        home + Strings.helpText: (context) => helpPage,
+        home: (BuildContext context) => homePage,
+        home + Strings.competitionsText: (BuildContext context) =>
+            competitionsPage,
+        home + Strings.helpText: (BuildContext context) => helpPage,
       };
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
@@ -84,7 +85,7 @@ class HolePageState extends State<HolePage> {
       );
 
   Widget _getLastUpdated(DateTime lastUpdated) =>
-      Text("Last updated: ${Strings.parseLastUpdated(lastUpdated)}",
+      Text("Last updated: ${Utils.parseLastUpdated(lastUpdated)}",
           textAlign: TextAlign.center,
           style: UIToolkit.cardTitleTextStyle,
           key: ValueKey(DateTime.now()));
@@ -188,7 +189,7 @@ class HolePageState extends State<HolePage> {
                   hole.holeScore.updateScore(!isHome, -1)),
             ]),
             UIToolkit.getVersus(
-                widget.entry, Strings.formatPlayers(hole.players)),
+                widget.entry, Utils.formatPlayers(hole.players)),
 
             /// Edit the hole number.
             Row(

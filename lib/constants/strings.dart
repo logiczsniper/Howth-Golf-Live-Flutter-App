@@ -23,70 +23,11 @@ class Strings {
 
   static const String error =
       "Oof, please email the address in App Help to report this error.";
+  static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";
 
-  /// TODO: all of the following string methods : PR&L
-
-  /// Determines whether [score] is a string containing a fraction or whole
-  /// number.
-  static bool isFraction(String score) =>
-      double.tryParse(score) - double.tryParse(score).toInt() != 0;
-
-  /// Turn a list of players, [playerList], into one string with
-  /// those individual player names separated by commas, apart from the last
-  /// player in the list.
-  static String formatPlayers(List<String> playerList) {
-    String output = "";
-    bool isLastPlayer = false;
-    for (String player in playerList) {
-      output += player.toString();
-      isLastPlayer = playerList.indexOf(player) == playerList.length - 1;
-      if (!isLastPlayer) {
-        output += ", ";
-      }
-    }
-    return output;
-  }
-
-  /// Modifies the field to a nicer looking string.
-  ///
-  /// Does this by capitalising each term and replaces "_" with " ".
-  static String formatHintText(String input) {
-    input = input.replaceAll("_", " ");
-
-    String caps = "";
-
-    for (String word in input.split(" ")) {
-      caps += word[0].toUpperCase() + word.substring(1) + " ";
-    }
-
-    return caps.trim();
-  }
-
-  /// Convert [lastUpdated] to a pretty string.
-  static String parseLastUpdated(DateTime lastUpdated) {
-    Duration difference = DateTime.now().difference(lastUpdated);
-
-    if (difference.inHours < 1)
-
-      /// Less than an hour; return in minutes.
-      return "${difference.inMinutes} minute(s) ago";
-    else if (difference.inDays < 1)
-
-      /// Less than a day; return in hours.
-      return "${difference.inHours} hour(s) ago";
-    else if (difference.inDays < 365)
-
-      /// Less than a year; return in days.
-      return "${difference.inDays} day(s) ago";
-    else
-
-      /// Greater than a year; return in years.
-      return "${(difference.inDays ~/ 365)} year(s) ago";
-  }
-
-  static String getTextSpanText(String score) =>
-      double.tryParse(score).toInt() == 0 && Strings.isFraction(score)
-          ? ""
-          : double.tryParse(score).toInt().toString();
+  static const String ok = "OK";
+  static const String cancel = "CANCEL";
+  static const String irreversibleAction = "This action is irreversible.";
+  static const String doubleCheck = "Are you sure?";
 }

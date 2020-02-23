@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:intl/intl.dart';
 
@@ -14,7 +14,7 @@ class DecoratedField {
                 Icons.keyboard_arrow_right,
                 color: Palette.dark,
               ),
-              hintText: Strings.formatHintText(hintText))
+              hintText: Utils.formatHintText(hintText))
           .applyDefaults(Theme.of(context).inputDecorationTheme);
 
   EdgeInsets getPadding(bool withPadding) =>

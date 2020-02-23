@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
 import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/domain/privileges.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +27,7 @@ class SpecificCompetitionPage extends StatefulWidget {
 
 class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   DataBaseEntry currentData;
+  AsyncSnapshot<QuerySnapshot> _snapshot;
   bool hasAccess;
 
   /// In order to get access to a competition, the [codeAttempt]
@@ -44,15 +45,11 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   /// Push to the [CreateHole] page.
   /// TODO: just like competitions, save _snapshot within stream builder, use that snapshot,
   /// rename method
-  void _addHole() {
-    final int currentId = currentData.id;
-    Future<QuerySnapshot> newData = DataBaseInteraction.stream.first;
-
-    setState(() => newData.then((QuerySnapshot snapshot) => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CreateHole(snapshot, currentId)))));
-  }
+  void _toHoleCreation() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) =>
+              CreateHole(_snapshot, currentData.id)));
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
@@ -104,7 +101,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                         _getPlayer(
                             hole,
                             isHome
-                                ? Strings.formatPlayers(hole.players)
+                                ? Utils.formatPlayers(hole.players)
                                 : opposition,
                             index),
 
@@ -134,7 +131,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
                       _getPlayer(
                           hole,
                           !isHome
-                              ? Strings.formatPlayers(hole.players)
+                              ? Utils.formatPlayers(hole.players)
                               : opposition,
                           index,
                           away: true),
@@ -148,7 +145,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
+                    builder: (BuildContext context) =>
                         HolePage(currentData, index - 2, hasAccess)));
           });
 
@@ -165,7 +162,7 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
     /// see and press the [MyFloatingActionButton] in order to create
     /// a hole.
     Widget floatingActionButton = hasAccess
-        ? UIToolkit.createButton(onPressed: _addHole, text: 'Add a Hole')
+        ? UIToolkit.createButton(onPressed: _toHoleCreation, text: 'Add a Hole')
         : null;
     return Scaffold(
       appBar: CodeFieldBar(
@@ -178,9 +175,12 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       body: OpacityChangeWidget(
         target: StreamBuilder<QuerySnapshot>(
           stream: DataBaseInteraction.stream,
-          builder: (context, snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (UIToolkit.checkSnapshot(snapshot) != null)
               return UIToolkit.checkSnapshot(snapshot);
+
+            _snapshot = snapshot;
 
             DocumentSnapshot document = snapshot.data.documents[0];
 

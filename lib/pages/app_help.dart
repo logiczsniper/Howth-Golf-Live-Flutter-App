@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/help_data.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
@@ -50,22 +51,9 @@ class HelpPageState extends State<HelpPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SpecificHelpPage(currentHelpEntry)));
+                    builder: (BuildContext context) =>
+                        SpecificHelpPage(currentHelpEntry)));
           });
-
-  /// Display extra entries depending on their access level.
-  ///
-  /// A default user sees entries 1-3. Team managers will
-  /// see entries 1-4 and admins will see all 5 app help entries.
-  /// TODO: PR&L
-  int _bonusEntries(List<String> competitionAccess, bool isAdmin) {
-    if (isAdmin)
-      return 2;
-    else if (competitionAccess.isNotEmpty)
-      return 1;
-    else
-      return 0;
-  }
 
   void _onComplete(Future<bool> isVerified) =>
       setState(() => isVerified.then((bool result) => hasAccess = result));
@@ -111,7 +99,7 @@ class HelpPageState extends State<HelpPage> {
             /// must be subtracted before the bonus entries are added.
             itemCount: HelpData.entries.length -
                 1 +
-                _bonusEntries(competitionAccess, hasAccess)),
+                Utils.bonusEntries(competitionAccess, hasAccess)),
       ),
     );
   }

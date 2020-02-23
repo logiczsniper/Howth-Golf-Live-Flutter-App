@@ -1,5 +1,6 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
 
@@ -11,15 +12,6 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedDateTimeField(this.hintText, {this.withPadding = true});
 
-  /// Require some form of input.
-  /// TODO: PR&L
-  String _validator(DateTime input) {
-    if (input == null)
-      return 'This field is required.';
-    else
-      return null;
-  }
-
   @override
   Widget build(BuildContext context) => Padding(
         padding: getPadding(withPadding),
@@ -30,8 +22,8 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
           style: TextStyle(color: Palette.dark),
           decoration: getDecoration(context, hintText),
           format: format,
-          validator: _validator,
-          onShowPicker: (context, currentValue) async {
+          validator: (DateTime input) => Utils.validator(input, true),
+          onShowPicker: (BuildContext context, DateTime currentValue) async {
             final date = await showDatePicker(
                 context: context,
                 firstDate: DateTime(1900),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
@@ -14,15 +15,6 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
   DecoratedTextField(this.hintText,
       {this.withPadding = true, this.number = false, this.isRequired = true});
 
-  /// A basic test to see if the user has inserted text.
-  /// TODO: PR&L
-  String _validator(String input) {
-    if (input.isEmpty && isRequired)
-      return 'This field is required.';
-    else
-      return null;
-  }
-
   @override
   Widget build(BuildContext context) => Padding(
       padding: getPadding(withPadding),
@@ -34,5 +26,5 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
           controller: controller,
           style: Themes.formStyle,
           decoration: getDecoration(context, hintText),
-          validator: _validator));
+          validator: (String input) => Utils.validator(input, isRequired)));
 }

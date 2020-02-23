@@ -1,12 +1,12 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,51 +43,6 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       )));
 
     return null;
-  }
-
-  /// Based on the user's [_searchText], filters the competitions.
-  ///
-  /// Utilizes the [DataBaseEntry.toString] function to get all of the
-  /// data for the entry in one string.
-  /// TODO: PR&L
-  static List<DataBaseEntry> _filterElements(
-      List<DataBaseEntry> parsedElements, String _searchText) {
-    List<DataBaseEntry> filteredElements = List();
-    if (_searchText.isNotEmpty) {
-      parsedElements.forEach((DataBaseEntry currentEntry) {
-        String entryString = currentEntry.toString().toLowerCase();
-        String query = _searchText.toLowerCase();
-        if (entryString.contains(query)) {
-          filteredElements.add(currentEntry);
-        }
-      });
-      return filteredElements;
-    }
-    return parsedElements;
-  }
-
-  /// Sorts elements into either current or archived lists.
-  /// TODO: PR&L
-  static List<List<DataBaseEntry>> _sortElements(
-      List<DataBaseEntry> filteredElements) {
-    /// All entries are classified as current or archived.
-    /// If the [competitionDate] is greater than 9 days in the past,
-    /// it is archived. Otherwise, it is current.
-    List<DataBaseEntry> currentElements = [];
-    List<DataBaseEntry> archivedElements = [];
-    for (DataBaseEntry filteredElement in filteredElements) {
-      DateTime competitionDate =
-          DateTime.parse("${filteredElement.date} ${filteredElement.time}");
-      int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
-
-      bool inPast = competitionDate.isBefore(DateTime.now());
-      if (daysFromNow >= 8 && inPast) {
-        archivedElements.add(filteredElement);
-      } else {
-        currentElements.add(filteredElement);
-      }
-    }
-    return [currentElements, archivedElements];
   }
 
   static Widget _tileBuilder(
@@ -127,7 +82,8 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               child: StreamBuilder<QuerySnapshot>(
                   key: ValueKey(DateTime.now()),
                   stream: DataBaseInteraction.stream,
-                  builder: (context, snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (UIToolkit.checkSnapshot(snapshot) != null)
                       return UIToolkit.checkSnapshot(snapshot);
 
@@ -139,7 +95,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                         DataBaseInteraction.getDataBaseEntries(document);
 
                     List<DataBaseEntry> filteredElements =
-                        _filterElements(parsedElements, _searchText);
+                        Utils.filterElements(parsedElements, _searchText);
 
                     if (_checkFilteredElements(filteredElements) != null)
                       return _checkFilteredElements(filteredElements);
@@ -147,7 +103,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                     /// At the 0th index of [sortedElements] will be the currentElements,
                     /// and at the 1st index will be the archivedElements.
                     List<List<DataBaseEntry>> sortedElements =
-                        _sortElements(filteredElements);
+                        Utils.sortElements(filteredElements);
 
                     List<DataBaseEntry> activeElements =
                         isCurrentTab ? sortedElements[0] : sortedElements[1];
@@ -184,7 +140,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
+                                      builder: (BuildContext context) =>
                                           SpecificCompetitionPage(currentEntry,
                                               hasAccess, index))));
                         };
@@ -195,63 +151,34 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                             iconButton: Privileges.adminStatus(context: context)
                                 ? IconButton(
                                     icon: Icon(Icons.remove_circle_outline),
-                                    onPressed: () {
-                                      _showAlertDialog(context,
-                                          activeElements[index], snapshot);
-                                    },
+
+                                    /// When deleting a [DataBaseEntry], prompts the user to double check their intent
+                                    /// is to do so as this can have major consquences if an accident.
+                                    onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            CustomAlertDialog(
+                                              currentEntry:
+                                                  activeElements[index],
+                                              snapshot: snapshot,
+                                            )),
                                   )
                                 : null);
                       },
                     );
                   })));
 
-  /// When deleting a [DataBaseEntry], prompts the user to double check their intent
-  /// is to do so as this can have major consquences if an accident.
-  /// TODO: remove alert dialog, abstraction
-  _showAlertDialog(BuildContext context, DataBaseEntry currentEntry,
-      AsyncSnapshot<QuerySnapshot> snapshot) {
-    AlertDialog alertDialog = AlertDialog(
-      title: Text("Are you sure?", style: UIToolkit.cardTitleTextStyle),
-      content: Text(
-        "This action is irreversible.",
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text(
-            "CANCEL",
-            style: TextStyle(color: Palette.maroon),
-          ),
-          onPressed: Navigator.of(context).pop,
-        ),
-        FlatButton(
-          child: Text(
-            "OK",
-            style: TextStyle(color: Palette.maroon),
-          ),
-          onPressed: () {
-            DataBaseInteraction.deleteCompetition(
-                context, currentEntry, snapshot);
-          },
-        )
-      ],
-    );
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => alertDialog,
-    );
-  }
-
-  /// Push to [CreateCompetition] page. TODO: refactor this name as well as _addHole
-  void _addCompetition() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
-  }
+  /// Push to [CreateCompetition] page.
+  void _toCompetitionCreation() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => CreateCompetition(_snapshot)));
 
   @override
   Widget build(BuildContext context) {
     Widget floatingActionButton = Privileges.adminStatus(context: context)
         ? UIToolkit.createButton(
-            onPressed: _addCompetition, text: 'Add a Competition')
+            onPressed: _toCompetitionCreation, text: 'Add a Competition')
         : null;
     return Scaffold(
       body: DefaultTabController(

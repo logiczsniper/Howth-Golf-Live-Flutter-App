@@ -71,33 +71,6 @@ class UIToolkit {
       color: Palette.maroon,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
 
-  /// Displays the text of the score.
-  ///
-  /// If the value is not whole and not equal to 0, it
-  /// will display a fraction. Else, will display the whole number.
-  static Widget scoreText(String score, String oldScore) => RichText(
-
-      /// Uses a [Key] to distinguish between the children widgets of the
-      /// [AnimatedSwitcher], forcing the fade transition to occur.
-      key: score == oldScore ? null : ValueKey(DateTime.now()),
-      text: TextSpan(
-          style: TextStyle(
-              fontSize: 21,
-              color: Palette.inMaroon,
-              fontWeight: FontWeight.w400),
-          children: <TextSpan>[
-            /// Main number.
-            TextSpan(text: Strings.getTextSpanText(score)),
-
-            /// Secondary text value (fractional).
-            TextSpan(
-                text: Strings.isFraction(score) ? "1/2" : "",
-                style: TextStyle(
-                    fontSize: 21,
-                    color: Palette.inMaroon,
-                    fontFeatures: [FontFeature.enable('frac')]))
-          ]));
-
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
   static Container getHoleNumberDecorated(int holeNumber) => Container(

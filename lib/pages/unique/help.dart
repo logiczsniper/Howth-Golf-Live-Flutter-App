@@ -63,7 +63,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
       body: ListView.separated(
           itemBuilder: _tileBuilder,
           itemCount: widget.entry.steps.length + 1,
-          separatorBuilder: (context, index) {
+          separatorBuilder: (BuildContext context, int index) {
             return index != widget.entry.steps.length - 1
                 ? Divider()
                 : Container();

@@ -8,7 +8,7 @@ import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
 class CreateHole extends StatefulWidget {
   /// A page for the form to reside when an admin is creating a hole.
-  final QuerySnapshot snapshot;
+  final AsyncSnapshot<QuerySnapshot> snapshot;
   final int currentId;
 
   CreateHole(this.snapshot, this.currentId);

@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/presentation/utils.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/domain/models.dart';
 import 'package:howth_golf_live/constants/fields.dart';
@@ -72,7 +71,7 @@ class DataBaseInteraction {
     /// If the form inputs have been validated, add to competitions.
     if (_formKey.currentState.validate()) {
       DataBaseEntry newEntry = DataBaseEntry(
-          id: _id,
+          id: Utils.id,
           title: titleField.controller.value.text,
           location: Location(
               address: isHome
@@ -93,22 +92,6 @@ class DataBaseInteraction {
 
       Routes.navigateTo(context, Strings.competitionsText);
     }
-  }
-
-  /// Generate the next 6-digit ID. TODO: PR&L
-  static int get _id {
-    String code = '';
-    final Random randomIntGenerator = Random();
-
-    for (int i = 0; i < 6; i++) {
-      int nextInt = randomIntGenerator.nextInt(10);
-      if (nextInt == 0 && code == '') {
-        i -= 1;
-        continue;
-      }
-      code += nextInt.toString();
-    }
-    return int.parse(code);
   }
 
   /// Remove the hole at the [index] within [DataBaseEntry.holes] at the
@@ -164,7 +147,7 @@ class DataBaseInteraction {
     DecoratedTextField oppositionScoreField,
     String scoreStatus,
     DecoratedTextField playersField,
-    QuerySnapshot snapshot,
+    AsyncSnapshot<QuerySnapshot> snapshot,
     int currentId,
   ) {
     /// If the form inputs have been validated, add to holes.
@@ -184,7 +167,7 @@ class DataBaseInteraction {
         players: playersField.controller.value.text.split(", "),
       );
 
-      DocumentSnapshot documentSnapshot = snapshot.documents.elementAt(0);
+      DocumentSnapshot documentSnapshot = snapshot.data.documents.elementAt(0);
 
       List dataBaseEntries = List<dynamic>.from(documentSnapshot.data['data']);
 

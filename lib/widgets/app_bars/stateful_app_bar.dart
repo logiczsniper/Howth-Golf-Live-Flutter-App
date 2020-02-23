@@ -34,7 +34,7 @@ class StatefulAppBar {
 
   /// The title must be an [AnimatedSwitcher].
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
-      duration: Duration(milliseconds: 500), child: appBarTitle);
+      duration: Duration(milliseconds: 350), child: appBarTitle);
 
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title) => Center(

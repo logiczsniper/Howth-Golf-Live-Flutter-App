@@ -40,7 +40,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
               child: SpinKitPulse(
         color: Palette.dark,
         size: 45,
-        duration: Duration(milliseconds: 850),
+        duration: Duration(milliseconds: 350),
       )));
 
     return null;
@@ -116,7 +116,7 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
       OpacityChangeWidget(
           key: ValueKey(DateTime.now()),
           target: AnimatedSwitcher(
-              duration: Duration(seconds: 1),
+              duration: Duration(milliseconds: 350),
               child: StreamBuilder<QuerySnapshot>(
                   key: ValueKey(DateTime.now()),
                   stream: DataBaseInteraction.stream,

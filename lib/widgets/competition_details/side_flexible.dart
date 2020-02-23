@@ -23,7 +23,7 @@ class SideFlexible extends StatelessWidget {
             padding: EdgeInsets.all(12.0),
             child: AnimatedSwitcher(
                 child: ComplexScore.getMixedFraction(condition, scores, scores),
-                duration: Duration(seconds: 2)),
+                duration: Duration(milliseconds: 450)),
             decoration: _decoration)
       ]));
 }

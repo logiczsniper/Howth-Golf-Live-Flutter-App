@@ -212,7 +212,7 @@ class HolePageState extends State<HolePage> {
                     hole.comment.isEmpty ? EdgeInsets.only(bottom: 8.0) : null,
                 child: AnimatedSwitcher(
                   child: _lastUpdated,
-                  duration: Duration(milliseconds: 500),
+                  duration: Duration(milliseconds: 350),
                 )),
 
             /// If there is a [comment], display it.

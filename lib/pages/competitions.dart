@@ -155,24 +155,22 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                                     /// When deleting a [DataBaseEntry], prompts the user to double check their intent
                                     /// is to do so as this can have major consquences if an accident.
                                     onPressed: () => showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            CustomAlertDialog(
-                                              currentEntry:
-                                                  activeElements[index],
-                                              snapshot: snapshot,
-                                            )),
-                                  )
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              CustomAlertDialog(
+                                                  snapshot: _snapshot,
+                                                  currentEntry: currentEntry),
+                                        ))
                                 : null);
                       },
                     );
                   })));
 
   /// Push to [CreateCompetition] page.
-  void _toCompetitionCreation() => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => CreateCompetition(_snapshot)));
+  void _toCompetitionCreation() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
+  }
 
   @override
   Widget build(BuildContext context) {

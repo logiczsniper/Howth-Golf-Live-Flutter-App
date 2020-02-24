@@ -43,8 +43,6 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
       setState(() => isVerified.then((bool result) => hasAccess = result));
 
   /// Push to the [CreateHole] page.
-  /// TODO: just like competitions, save _snapshot within stream builder, use that snapshot,
-  /// rename method
   void _toHoleCreation() => Navigator.push(
       context,
       MaterialPageRoute(

@@ -136,7 +136,7 @@ class Utils {
 
   /// Require some form of input.
   static String validator(dynamic input, bool isRequired) {
-    if (input == null && isRequired)
+    if (input == null || input == "" && isRequired)
       return Strings.requiredField;
     else
       return null;

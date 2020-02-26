@@ -55,8 +55,9 @@ class HelpPageState extends State<HelpPage> {
                         SpecificHelpPage(currentHelpEntry)));
           });
 
-  void _onComplete(Future<bool> isVerified) =>
-      setState(() => isVerified.then((bool result) => hasAccess = result));
+  void _onComplete(Future<bool> isVerified) => setState(() {
+        isVerified.then((bool result) => hasAccess = result);
+      });
 
   @override
   void initState() {

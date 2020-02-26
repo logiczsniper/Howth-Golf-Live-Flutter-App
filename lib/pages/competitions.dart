@@ -167,16 +167,14 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   })));
 
   /// Push to [CreateCompetition] page.
-  void _toCompetitionCreation() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
-  }
+  void _toCompetitionCreation() => Navigator.push(context,
+      MaterialPageRoute(builder: (context) => CreateCompetition(_snapshot)));
 
   @override
   Widget build(BuildContext context) {
     Widget floatingActionButton = Privileges.adminStatus(context: context)
         ? UIToolkit.createButton(
-            onPressed: _toCompetitionCreation, text: 'Add a Competition')
+            onPressed: _toCompetitionCreation, text: Strings.newCompetition)
         : null;
     return Scaffold(
       body: DefaultTabController(

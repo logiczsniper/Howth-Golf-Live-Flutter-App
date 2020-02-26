@@ -39,8 +39,9 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
   ///
   /// [setState] is also called to rebuild the page with the potentially newly aquired
   /// privileges.
-  void _onComplete(Future<bool> isVerified) =>
-      setState(() => isVerified.then((bool result) => hasAccess = result));
+  void _onComplete(Future<bool> isVerified) => setState(() {
+        isVerified.then((bool result) => hasAccess = result);
+      });
 
   /// Push to the [CreateHole] page.
   void _toHoleCreation() => Navigator.push(

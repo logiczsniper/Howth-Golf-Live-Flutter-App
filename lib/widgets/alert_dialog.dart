@@ -13,6 +13,13 @@ class CustomAlertDialog extends StatelessWidget {
   CustomAlertDialog({@required this.currentEntry, @required this.snapshot})
       : assert(currentEntry != null, snapshot != null);
 
+  SnackBar get _snackBar => SnackBar(
+        content: Text(
+          "No connection to Firebase!",
+          textAlign: TextAlign.center,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -34,8 +41,13 @@ class CustomAlertDialog extends StatelessWidget {
             style: TextStyle(color: Palette.maroon),
           ),
           onPressed: () {
-            DataBaseInteraction.deleteCompetition(
-                context, currentEntry, snapshot);
+            /// TODO: test connectionState in every databaseInteratioN"!!
+            if (snapshot.connectionState == ConnectionState.none) {
+              Scaffold.of(context).showSnackBar(_snackBar);
+            } else {
+              DataBaseInteraction.deleteCompetition(
+                  context, currentEntry, snapshot);
+            }
           },
         )
       ],

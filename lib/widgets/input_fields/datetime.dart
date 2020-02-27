@@ -27,6 +27,7 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
           onShowPicker: (BuildContext context, DateTime currentValue) async {
             final date = await showRoundedDatePicker(
                 context: context,
+                borderRadius: 10.0,
                 theme: Theme.of(context),
                 initialDate: DateTime.now(),
                 initialDatePickerMode: DatePickerMode.day);

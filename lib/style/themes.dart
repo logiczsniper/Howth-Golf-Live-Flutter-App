@@ -71,7 +71,8 @@ class Themes {
       labelColor: Palette.inMaroon, unselectedLabelColor: Palette.dark);
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =
-      FloatingActionButtonThemeData(backgroundColor: Palette.maroon);
+      FloatingActionButtonThemeData(
+          backgroundColor: Palette.maroon, elevation: 0.25);
 
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
       contentPadding: EdgeInsets.all(16.0),

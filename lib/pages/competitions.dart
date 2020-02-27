@@ -84,8 +84,29 @@ class _CompetitionsPageState extends State<CompetitionsPage> {
                   stream: DataBaseInteraction.stream,
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (UIToolkit.checkSnapshot(snapshot) != null)
-                      return UIToolkit.checkSnapshot(snapshot);
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return Center(
+                          child: SpinKitPulse(
+                        color: Palette.dark,
+                      ));
+                    else if (snapshot.connectionState == ConnectionState.none)
+                      return Center(
+                        child: Text(
+                          "Not connected to Firebase!",
+                          style: UIToolkit.noDataTextStyle,
+                        ),
+                      );
+                    else if (snapshot.hasError)
+                      return Center(
+                          child: Column(
+                        children: <Widget>[
+                          Icon(Icons.error),
+                          Text(
+                            Strings.error,
+                            style: UIToolkit.cardSubTitleTextStyle,
+                          )
+                        ],
+                      ));
 
                     _snapshot = snapshot;
 

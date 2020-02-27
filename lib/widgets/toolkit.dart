@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,7 +36,7 @@ class UIToolkit {
           bottom: BorderSide(width: 1.5, color: Palette.maroon),
           top: BorderSide(width: 1.5, color: Palette.maroon)));
 
-  static BoxDecoration _roundedRectBoxDecoration = BoxDecoration(
+  static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
 /*       boxShadow: [
         BoxShadow(
             color: Palette.dark,
@@ -63,7 +62,7 @@ class UIToolkit {
   static Card getCard(Widget child) => Card(
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-          decoration: _roundedRectBoxDecoration,
+          decoration: roundedRectBoxDecoration,
           child: child));
 
   /// The maroon decoration around the [text].
@@ -115,27 +114,6 @@ class UIToolkit {
   /// to contact the developer.
   /// If the snapshot is still loading, return a loading widget, the
   /// [SpinKitPulse].
-  static Center checkSnapshot(AsyncSnapshot<QuerySnapshot> snapshot) {
-    if (snapshot.error != null)
-      return Center(
-          child: Column(
-        children: <Widget>[
-          Icon(Icons.error),
-          Text(
-            Strings.error,
-            style: UIToolkit.cardSubTitleTextStyle,
-          )
-        ],
-      ));
-
-    if (!snapshot.hasData)
-      return Center(
-          child: SpinKitPulse(
-        color: Palette.dark,
-      ));
-
-    return null;
-  }
 
   /// Builds a leading child's column, where [smallText] is the shrunken
   /// text that goes above the [relevantNumber].

@@ -65,43 +65,42 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
       indicatorHeight: 70.0,
       indicatorRadius: 10.0,
-      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 40.0));
+      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 45.0));
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),
-        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(40),
-                )),
-                centerTitle: true,
-                title: getTitle(appBarTitle),
-                floating: true,
-                pinned: false,
-                snap: true,
-                leading: IconButton(
-                    icon: Icon(Icons.help_outline),
-                    tooltip: 'Tap for help!',
-                    onPressed: () =>
-                        Routes.navigateTo(context, Strings.helpText)),
-                actions: <Widget>[
-                  IconButton(
-                    icon: _iconData,
-                    tooltip: 'Tap to search!',
-                    onPressed: _searchPressed,
-                  )
-                ],
-                bottom: TabBar(indicator: _tabIndicator, tabs: <Widget>[
-                  Tab(icon: Icon(Icons.whatshot), text: Strings.currentText),
-                  Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
-                ])),
-          ];
-        },
+        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) =>
+            <Widget>[
+          SliverAppBar(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(40),
+              )),
+              centerTitle: true,
+              title: getTitle(appBarTitle),
+              floating: true,
+              pinned: false,
+              snap: true,
+              leading: IconButton(
+                  icon: Icon(Icons.help_outline),
+                  tooltip: 'Tap for help!',
+                  onPressed: () =>
+                      Routes.navigateTo(context, Strings.helpText)),
+              actions: <Widget>[
+                IconButton(
+                  icon: _iconData,
+                  tooltip: 'Tap to search!',
+                  onPressed: _searchPressed,
+                )
+              ],
+              bottom: TabBar(indicator: _tabIndicator, tabs: <Widget>[
+                Tab(icon: Icon(Icons.whatshot), text: Strings.currentText),
+                Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
+              ])),
+        ],
         body: TabBarView(
           children: <Widget>[
             /// The second parameter indicates whether or not this

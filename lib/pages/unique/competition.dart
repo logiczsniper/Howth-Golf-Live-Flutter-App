@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/pages/creation/create_hole.dart';
 import 'package:howth_golf_live/pages/unique/hole.dart';
 import 'package:howth_golf_live/domain/firebase_interation.dart';
@@ -171,62 +173,87 @@ class SpecificCompetitionPageState extends State<SpecificCompetitionPage> {
         hasAccess,
         id: currentData.id,
       ),
-      body: OpacityChangeWidget(
-        target: StreamBuilder<QuerySnapshot>(
-          stream: DataBaseInteraction.stream,
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (UIToolkit.checkSnapshot(snapshot) != null)
-              return UIToolkit.checkSnapshot(snapshot);
+      body: AnimatedSwitcher(
+        duration: Duration(milliseconds: 350),
+        child: OpacityChangeWidget(
+          key: ValueKey(DateTime.now()),
+          target: StreamBuilder<QuerySnapshot>(
+            stream: DataBaseInteraction.stream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(
+                    child: SpinKitPulse(
+                  color: Palette.dark,
+                ));
+              else if (snapshot.connectionState == ConnectionState.none)
+                return Center(
+                  child: Text(
+                    "Not connected to Firebase!",
+                    style: UIToolkit.noDataTextStyle,
+                  ),
+                );
+              else if (snapshot.hasError)
+                return Center(
+                    child: Column(
+                  children: <Widget>[
+                    Icon(Icons.error),
+                    Text(
+                      Strings.error,
+                      style: UIToolkit.cardSubTitleTextStyle,
+                    )
+                  ],
+                ));
 
-            _snapshot = snapshot;
+              _snapshot = snapshot;
 
-            DocumentSnapshot document = snapshot.data.documents[0];
+              DocumentSnapshot document = snapshot.data.documents[0];
 
-            List<DataBaseEntry> parsedElements =
-                DataBaseInteraction.getDataBaseEntries(document);
+              List<DataBaseEntry> parsedElements =
+                  DataBaseInteraction.getDataBaseEntries(document);
 
-            for (DataBaseEntry dataBaseEntry in parsedElements) {
-              if (dataBaseEntry.id == currentData.id) {
-                /// This entry in [parsedElements] is the current competition.
-                currentData = dataBaseEntry;
+              for (DataBaseEntry dataBaseEntry in parsedElements) {
+                if (dataBaseEntry.id == currentData.id) {
+                  /// This entry in [parsedElements] is the current competition.
+                  currentData = dataBaseEntry;
+                }
               }
-            }
 
-            int _countBonus = currentData.holes.length == 0 ? 3 : 2;
+              int _countBonus = currentData.holes.length == 0 ? 3 : 2;
 
-            return ListView.separated(
-              padding: EdgeInsets.only(bottom: 100.0),
-              separatorBuilder: (BuildContext context, int index) {
-                if (index != 0 && index != 1)
-                  return Divider();
-                else
-                  return Container();
-              },
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0)
-                  return CompetitionDetails(currentData, hasAccess);
-                else if (index == 1)
-                  return UIToolkit.getVersus(currentData, "Howth Golf Club");
-                else if (currentData.holes.length == 0)
-                  return Center(
-                      child: Padding(
-                          child: Text(
-                            "No hole data found for the ${currentData.title}!",
-                            style: UIToolkit.noDataTextStyle,
-                          ),
-                          padding: EdgeInsets.only(top: 25.0)));
-                else
-                  return _rowBuilder(
-                    currentData.holes[index - 2],
-                    currentData.location.isHome,
-                    currentData.opposition,
-                    index,
-                  );
-              },
-              itemCount: currentData.holes.length + _countBonus,
-            );
-          },
+              return ListView.separated(
+                padding: EdgeInsets.only(bottom: 100.0),
+                separatorBuilder: (BuildContext context, int index) {
+                  if (index != 0 && index != 1)
+                    return Divider();
+                  else
+                    return Container();
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0)
+                    return CompetitionDetails(currentData, hasAccess);
+                  else if (index == 1)
+                    return UIToolkit.getVersus(currentData, "Howth Golf Club");
+                  else if (currentData.holes.length == 0)
+                    return Center(
+                        child: Padding(
+                            child: Text(
+                              "No hole data found for the ${currentData.title}!",
+                              style: UIToolkit.noDataTextStyle,
+                            ),
+                            padding: EdgeInsets.only(top: 25.0)));
+                  else
+                    return _rowBuilder(
+                      currentData.holes[index - 2],
+                      currentData.location.isHome,
+                      currentData.opposition,
+                      index,
+                    );
+                },
+                itemCount: currentData.holes.length + _countBonus,
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: Container(

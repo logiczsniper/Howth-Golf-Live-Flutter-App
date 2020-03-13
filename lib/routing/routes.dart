@@ -4,6 +4,7 @@ import 'package:howth_golf_live/app/competitions/competitions_page.dart';
 import 'package:howth_golf_live/app/competitions/competition_page.dart';
 import 'package:howth_golf_live/app/creation/create_competition.dart';
 import 'package:howth_golf_live/app/creation/create_hole.dart';
+import 'package:howth_golf_live/app/help/help_page.dart';
 import 'package:howth_golf_live/app/help/helps_page.dart';
 import 'package:howth_golf_live/app/hole/hole_page.dart';
 import 'package:howth_golf_live/app/home/home_page.dart';
@@ -19,25 +20,30 @@ class Routes {
   /// The initial route.
   static String get home => "/";
 
+  /// Push to [destination].
+  static void pushTo(BuildContext context, Widget destination) =>
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => destination));
+
   /// Push to [CreateCompetition] page.
-  static void toCompetitionCreation(BuildContext context) => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => CreateCompetition()));
+  static void toCompetitionCreation(BuildContext context) =>
+      pushTo(context, CreateCompetition());
 
   /// Push to the [CreateHole] page.
-  static void toHoleCreation(BuildContext context, int id) => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => CreateHole(id)));
+  static void toHoleCreation(BuildContext context, int id) =>
+      pushTo(context, CreateHole(id));
+
+  /// Push to the [Help] page.
+  static void toHelp(BuildContext context, AppHelpEntry helpEntry) =>
+      pushTo(context, HelpPage(helpEntry));
 
   /// Push to the [Hole] page.
-  static void toHole(BuildContext context, int id, int index) => Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HolePage(id, index - 2)));
+  static void toHole(BuildContext context, int id, int index) =>
+      pushTo(context, HolePage(id, index - 2));
 
   /// Push to the [Competition] page.
   static void toCompetition(BuildContext context, DatabaseEntry currentEntry) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CompetitionPage(currentEntry)));
+      pushTo(context, CompetitionPage(currentEntry));
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {

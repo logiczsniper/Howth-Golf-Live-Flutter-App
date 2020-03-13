@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
-import 'package:howth_golf_live/app/help/help_page.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
@@ -42,12 +42,7 @@ class HelpsPage extends StatelessWidget {
                   maxLines: 2,
                   style: TextStyles.cardSubTitleTextStyle),
               trailing: Icon(Icons.keyboard_arrow_right)),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HelpPage(currentHelpEntry)));
-          });
+          onTap: () => Routes.toHelp(context, currentHelpEntry));
 
   @override
   Widget build(BuildContext context) {

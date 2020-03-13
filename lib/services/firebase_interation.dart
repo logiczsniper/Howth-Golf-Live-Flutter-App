@@ -12,55 +12,42 @@ import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
-class DataBaseInteraction {
-  DataBaseInteraction();
+class FirebaseInteration {
+  final BuildContext context;
 
-  // static void checkSnapshot<T>(dynamic context, {AsyncSnapshot<T> snapshot}) {
-  //   assert(snapshot != null);
-  //   assert(context != null);
+  var _firebaseModel;
+  List _databaseEntries;
 
-  //   switch (snapshot.connectionState) {
-  //     case ConnectionState.none:
-  //       Scaffold.of(context)
-  //           .showSnackBar(UIToolkit.snackbar(Strings.noConnection));
-  //       break;
-  //     case ConnectionState.waiting:
-  //       Scaffold.of(context).showSnackBar(UIToolkit.snackbar(Strings.loading));
-  //       break;
-  //     case ConnectionState.active:
-  //     case ConnectionState.done:
-  //       break;
-  //   }
-  // }
-
-  /// TODO: optimize & add catch errors (snackbars).
+  FirebaseInteration(this.context) {
+    _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
+    _databaseEntries = List.from(_firebaseModel.rawEntries);
+  }
 
   static Stream<QuerySnapshot> get stream => Firestore.instance
       .collection(Strings.competitionsText.toLowerCase())
       .snapshots();
 
-  /// Remove [currentEntry] from the entries in the database.
-  static void deleteCompetition(
-      BuildContext context, DataBaseEntry currentEntry) {
-    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
-    List databaseEntries = List.from(_firebaseModel.rawEntries);
-    DocumentSnapshot documentSnapshot = _firebaseModel.document;
-
-    databaseEntries.removeWhere(
-        (rawEntry) => currentEntry == DataBaseEntry.fromMap(rawEntry));
-
-    Map<String, dynamic> newData = {'data': databaseEntries};
-    documentSnapshot.reference
+  void _updateDatabase({bool pop = true}) {
+    Map<String, dynamic> newData = {Fields.data: _databaseEntries};
+    DocumentSnapshot _documentSnapshot = _firebaseModel.document;
+    _documentSnapshot.reference
         .updateData(newData)
         .catchError((_) => Scaffold.of(context)
             .showSnackBar(UIToolkit.snackbar(Strings.failure)))
-        .whenComplete(Navigator.of(context).pop);
+        .whenComplete(pop ? Navigator.of(context).pop : null);
+  }
+
+  /// Remove [currentEntry] from the entries in the database.
+  void deleteCompetition(DatabaseEntry currentEntry) {
+    _databaseEntries.removeWhere(
+        (rawEntry) => currentEntry == DatabaseEntry.fromMap(rawEntry));
+
+    _updateDatabase();
   }
 
   /// With the form fields, create a database entry, convert to json form and add to
   /// the database.
-  static void addCompetition(
-      BuildContext context,
+  void addCompetition(
       GlobalKey<FormState> _formKey,
       DecoratedTextField titleField,
       DecoratedTextField locationField,
@@ -68,7 +55,7 @@ class DataBaseInteraction {
       DecoratedDateTimeField dateTimeField) {
     /// If the form inputs have been validated, add to competitions.
     if (_formKey.currentState.validate()) {
-      DataBaseEntry newEntry = DataBaseEntry(
+      DatabaseEntry newEntry = DatabaseEntry(
           id: Utils.id,
           title: titleField.controller.value.text,
           location: Location(address: locationField.controller.value.text),
@@ -78,32 +65,21 @@ class DataBaseInteraction {
           date: dateTimeField.controller.value.text.split(" ")[0],
           time: dateTimeField.controller.value.text.split(" ")[1]);
 
-      var _firebaseModel =
-          Provider.of<FirebaseViewModel>(context, listen: false);
-      List databaseEntries = List.from(_firebaseModel.rawEntries);
-      DocumentSnapshot documentSnapshot = _firebaseModel.document;
+      _databaseEntries.add(newEntry.toJson);
 
-      databaseEntries.add(newEntry.toJson);
-      Map<String, dynamic> newData = {'data': databaseEntries};
-      documentSnapshot.reference
-          .updateData(newData)
-          .whenComplete(Navigator.of(context).pop);
+      _updateDatabase();
     }
   }
 
-  /// Remove the hole at the [index] within [DataBaseEntry.holes] at the
+  /// Remove the hole at the [index] within [DatabaseEntry.holes] at the
   /// competition with the [currentId].
-  static void deleteHole(BuildContext context, int index, int currentId) {
-    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
-    List databaseEntries = List.from(_firebaseModel.rawEntries);
-    DocumentSnapshot documentSnapshot = _firebaseModel.document;
-
+  void deleteHole(int index, int currentId) {
     List newHoles = List();
 
     /// A list of all holes without the deleted one!
     List<Hole> parsedHoles = List();
 
-    for (Map entry in databaseEntries) {
+    for (Map entry in _databaseEntries) {
       if (entry[Fields.id] == currentId) {
         /// This is the competition which contains the hole to be removed.
         for (int i = 0; i < entry[Fields.holes].length; i++) {
@@ -124,10 +100,7 @@ class DataBaseInteraction {
       }
     }
 
-    Map<String, dynamic> newData = {'data': databaseEntries};
-    documentSnapshot.reference
-        .updateData(newData)
-        .whenComplete(Navigator.of(context).pop);
+    _updateDatabase();
   }
 
   /// Using the form fields, create a [Hole] and add it to the
@@ -135,8 +108,7 @@ class DataBaseInteraction {
   ///
   /// Furthermore, this must update the [score] field of the database entry
   /// in accordance with the new hole.
-  static void addHole(
-    BuildContext context,
+  void addHole(
     GlobalKey<FormState> _formKey,
     DecoratedTextField numberField,
     DecoratedTextField commentField,
@@ -163,12 +135,7 @@ class DataBaseInteraction {
         players: playersField.controller.value.text.split(", "),
       );
 
-      var _firebaseModel =
-          Provider.of<FirebaseViewModel>(context, listen: false);
-      DocumentSnapshot documentSnapshot = _firebaseModel.document;
-      List databaseEntries = List.from(_firebaseModel.rawEntries);
-
-      for (Map entry in databaseEntries) {
+      for (Map entry in _databaseEntries) {
         if (entry[Fields.id] == currentId) {
           /// This entry is the competition of which this hole must be added to.
           ///
@@ -197,27 +164,17 @@ class DataBaseInteraction {
         }
       }
 
-      Map<String, List> newData = {'data': databaseEntries};
-      documentSnapshot.reference
-          .updateData(newData)
-          .catchError((_) => Scaffold.of(context)
-              .showSnackBar(UIToolkit.snackbar(Strings.failure)))
-          .whenComplete(Navigator.of(context).pop);
+      _updateDatabase();
     }
   }
 
-  static void updateHole(
-      BuildContext context, int index, int currentId, Hole updatedHole) {
-    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
-    DocumentSnapshot documentSnapshot = _firebaseModel.document;
-    List databaseEntries = List.from(_firebaseModel.rawEntries);
-
+  void updateHole(int index, int currentId, Hole updatedHole) {
     List newHoles = List();
 
     /// A list of all holes with the updated one!
     List<Hole> parsedHoles = List();
 
-    for (Map entry in databaseEntries) {
+    for (Map entry in _databaseEntries) {
       if (entry[Fields.id] == currentId) {
         /// This is the competition which contains the hole to be updated.
         for (int i = 0; i < entry[Fields.holes].length; i++) {
@@ -243,7 +200,6 @@ class DataBaseInteraction {
       }
     }
 
-    Map<String, dynamic> newData = {'data': databaseEntries};
-    documentSnapshot.reference.updateData(newData);
+    _updateDatabase(pop: false);
   }
 }

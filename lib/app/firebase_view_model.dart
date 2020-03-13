@@ -14,32 +14,32 @@ class FirebaseViewModel {
 
   List get rawEntries => _documentEntries?.last?.value ?? [];
 
-  List<DataBaseEntry> get databaseEntries => rawEntries
-      ?.map((dynamic element) => DataBaseEntry.fromMap(element))
+  List<DatabaseEntry> get databaseEntries => rawEntries
+      ?.map((dynamic element) => DatabaseEntry.fromMap(element))
       ?.toList();
 
   int get adminCode => document?.data[Fields.adminCode];
 
-  DataBaseEntry entryFromId(int id) =>
+  DatabaseEntry entryFromId(int id) =>
       databaseEntries?.firstWhere((entry) => entry?.id == id);
-  DataBaseEntry entryFromIndex(int index) => databaseEntries?.elementAt(index);
+  DatabaseEntry entryFromIndex(int index) => databaseEntries?.elementAt(index);
 
-  int bonusEntries(DataBaseEntry currentData) =>
+  int bonusEntries(DatabaseEntry currentData) =>
       currentData.holes.length == 0 ? 3 : 2;
 
   /// Sorts elements into either current or archived lists.
   ///
   /// Will return a list where the element at index 0 is a list of
-  /// current [DataBaseEntry]s and the element at index 1 is a list of
-  /// archived [DataBaseEntry]s.
-  List<List<DataBaseEntry>> sortedElements(
-      List<DataBaseEntry> filteredElements) {
+  /// current [DatabaseEntry]s and the element at index 1 is a list of
+  /// archived [DatabaseEntry]s.
+  List<List<DatabaseEntry>> sortedElements(
+      List<DatabaseEntry> filteredElements) {
     /// All entries are classified as current or archived.
     /// If the [competitionDate] is greater than 9 days in the past,
     /// it is archived. Otherwise, it is current.
-    List<DataBaseEntry> currentElements = [];
-    List<DataBaseEntry> archivedElements = [];
-    for (DataBaseEntry filteredElement in filteredElements) {
+    List<DatabaseEntry> currentElements = [];
+    List<DatabaseEntry> archivedElements = [];
+    for (DatabaseEntry filteredElement in filteredElements) {
       DateTime competitionDate =
           DateTime.parse("${filteredElement.date} ${filteredElement.time}");
       int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
@@ -56,12 +56,12 @@ class FirebaseViewModel {
 
   /// Based on the user's [_searchText], filters the competitions.
   ///
-  /// Utilizes the [DataBaseEntry.toString] function to get all of the
+  /// Utilizes the [DatabaseEntry.toString] function to get all of the
   /// data for the entry in one string.
-  List<DataBaseEntry> filteredElements(String _searchText) {
-    List<DataBaseEntry> filteredElements = List();
+  List<DatabaseEntry> filteredElements(String _searchText) {
+    List<DatabaseEntry> filteredElements = List();
     if (_searchText.isNotEmpty) {
-      databaseEntries.forEach((DataBaseEntry currentEntry) {
+      databaseEntries.forEach((DatabaseEntry currentEntry) {
         String entryString = currentEntry.toString().toLowerCase();
         String query = _searchText.toLowerCase();
         if (entryString.contains(query)) {
@@ -73,6 +73,6 @@ class FirebaseViewModel {
     return databaseEntries;
   }
 
-  static Stream<FirebaseViewModel> get stream => DataBaseInteraction.stream
+  static Stream<FirebaseViewModel> get stream => FirebaseInteration.stream
       .map((querySnapshot) => FirebaseViewModel(querySnapshot));
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
@@ -17,7 +18,7 @@ class HelpsPage extends StatelessWidget {
   static Text _getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
-      style: UIToolkit.leadingChildTextStyle);
+      style: TextStyles.leadingChildTextStyle);
 
   static Widget _tileBuilder(
           BuildContext context, AppHelpEntry currentHelpEntry, int index) =>
@@ -39,7 +40,7 @@ class HelpsPage extends StatelessWidget {
               subtitle: Text(currentHelpEntry.subtitle,
                   overflow: TextOverflow.fade,
                   maxLines: 2,
-                  style: UIToolkit.cardSubTitleTextStyle),
+                  style: TextStyles.cardSubTitleTextStyle),
               trailing: Icon(Icons.keyboard_arrow_right)),
           onTap: () {
             Navigator.push(

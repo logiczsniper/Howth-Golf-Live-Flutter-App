@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 
-import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
-/// TODO: extend functionality for deleting holes
 class CustomAlertDialog extends StatelessWidget {
-  final DataBaseEntry currentEntry;
+  final Function deletionMethod;
 
-  CustomAlertDialog({@required this.currentEntry})
-      : assert(currentEntry != null);
+  final DatabaseEntry currentEntry;
+  final int index;
+  final int id;
+
+  CustomAlertDialog(this.deletionMethod,
+      {this.currentEntry, this.index, this.id})
+      : assert(deletionMethod is void Function(DatabaseEntry) &&
+            currentEntry != null),
+        assert(deletionMethod is void Function(int, int) &&
+            index != null &&
+            id != null);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(Strings.doubleCheck, style: UIToolkit.cardTitleTextStyle),
+      title: Text(Strings.doubleCheck, style: TextStyles.cardTitleTextStyle),
       content: Text(
         Strings.irreversibleAction,
       ),
@@ -34,7 +41,9 @@ class CustomAlertDialog extends StatelessWidget {
             style: TextStyle(color: Palette.maroon),
           ),
           onPressed: () {
-            DataBaseInteraction.deleteCompetition(context, currentEntry);
+            currentEntry != null
+                ? deletionMethod(currentEntry)
+                : deletionMethod(index, id);
           },
         )
       ],

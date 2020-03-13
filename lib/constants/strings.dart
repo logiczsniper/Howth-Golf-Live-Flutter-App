@@ -2,6 +2,8 @@ class Strings {
   static const String appName = "Howth Golf Live";
   static const String appTitle = "Howth Golf\n Live Scoring";
   static final String homeAddress = "Howth Golf Club";
+  static final String contactDeveloper =
+      "Contact the developer:\nhowth.lczernel@gmail.com";
 
   static const String tapMe = "Tap anywhere to begin!";
   static const String returnHome = "Tap to return to home!";

@@ -4,12 +4,13 @@ import 'package:howth_golf_live/services/models.dart';
 class HoleViewModel {
   FirebaseViewModel _firebaseModel;
 
-  DataBaseEntry databaseEntry(int id) => _firebaseModel.entryFromId(id);
+  DatabaseEntry databaseEntry(int id) => _firebaseModel.entryFromId(id);
 
   bool isHome(int id) => databaseEntry(id)?.location?.isHome ?? true;
   String opposition(int id) => databaseEntry(id)?.opposition ?? "";
 
-  Hole hole(int id, int index) => databaseEntry(id)?.holes[index] ?? Hole.fresh;
+  Hole hole(int id, int index) =>
+      databaseEntry(id)?.holes?.elementAt(index) ?? Hole.fresh;
 
   HoleViewModel(this._firebaseModel);
 

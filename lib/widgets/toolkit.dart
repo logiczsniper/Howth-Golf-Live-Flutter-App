@@ -6,10 +6,9 @@ import 'dart:ui';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/widgets/scroll_behavior.dart';
-
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -85,7 +84,7 @@ class UIToolkit {
       padding: EdgeInsets.all(2.5),
       child: Padding(
           child: Text(holeNumber.toString().padLeft(2, "0"),
-              style: UIToolkit.cardSubTitleTextStyle),
+              style: TextStyles.cardSubTitleTextStyle),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
           color: Palette.light,
@@ -95,14 +94,14 @@ class UIToolkit {
   static Text getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade,
       maxLines: 1,
-      style: UIToolkit.leadingChildTextStyle);
+      style: TextStyles.leadingChildTextStyle);
 
   /// The text that appears in a form.
   static Widget getFormText(String text) => Center(
           child: Text(
         Strings.note + text,
         textAlign: TextAlign.center,
-        style: Themes.formStyle,
+        style: TextStyles.formStyle,
       ));
 
   /// A simple button to navigate back to [Competitions] page.
@@ -125,7 +124,7 @@ class UIToolkit {
       Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         Text(
           smallText,
-          style: UIToolkit.cardSubTitleTextStyle.apply(fontSizeDelta: -1.5),
+          style: TextStyles.cardSubTitleTextStyle.apply(fontSizeDelta: -1.5),
         ),
         Text(relevantNumber,
             style: TextStyle(
@@ -180,7 +179,7 @@ class UIToolkit {
                   child: Text(
                 isHome ? howthText : opposition,
                 textAlign: TextAlign.right,
-                style: Themes.formStyle,
+                style: TextStyles.formStyle,
               )),
               Padding(
                   child: Icon(
@@ -192,27 +191,9 @@ class UIToolkit {
                   child: Text(
                 !isHome ? howthText : opposition,
                 textAlign: TextAlign.left,
-                style: Themes.formStyle,
+                style: TextStyles.formStyle,
               ))
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0));
-
-  /// Text Styles. TODO: remove these eventually
-  static const TextStyle cardTitleTextStyle =
-      TextStyle(fontSize: 16, color: Palette.dark, fontWeight: FontWeight.w300);
-  static const TextStyle cardSubTitleTextStyle =
-      TextStyle(fontSize: 13, color: Palette.dark);
-  static const TextStyle hintTextStyle =
-      TextStyle(fontSize: 15, color: Palette.dark);
-  static const TextStyle dialogTextStyle =
-      TextStyle(fontSize: 16, color: Palette.maroon);
-  static const TextStyle leadingChildTextStyle =
-      TextStyle(fontSize: 20, color: Palette.dark, fontWeight: FontWeight.w400);
-  static const TextStyle noDataTextStyle =
-      TextStyle(fontSize: 18, color: Palette.dark, fontWeight: FontWeight.w300);
-  static const TextStyle scoreCardTextStyle = TextStyle(
-    fontSize: 13,
-    color: Palette.dark,
-  );
 }

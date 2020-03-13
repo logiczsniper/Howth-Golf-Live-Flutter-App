@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/home/authentication_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
           flashing: true,
           target: Text(
             text,
-            style: Themes.formStyle,
+            style: TextStyles.formStyle,
           )));
 
   Widget get _howthText => Text(Strings.appTitle,

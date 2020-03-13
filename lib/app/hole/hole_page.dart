@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
+import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/services/models.dart';
@@ -34,7 +36,7 @@ class HolePage extends StatelessWidget {
   Text _getLastUpdated(HoleViewModel holeModel, DateTime lastUpdated) =>
       Text(holeModel.prettyLastUpdated(lastUpdated),
           textAlign: TextAlign.center,
-          style: UIToolkit.cardTitleTextStyle,
+          style: TextStyles.cardTitleTextStyle,
           key: ValueKey(DateTime.now()));
 
   Widget _getScoreButtons(BuildContext context, Hole hole,
@@ -46,16 +48,16 @@ class HolePage extends StatelessWidget {
                   onPressed: () {
                     Hole updatedHole =
                         hole.updateHole(newScore: incrementedScore);
-                    DataBaseInteraction.updateHole(
-                        context, index, id, updatedHole);
+                    FirebaseInteration(context)
+                        .updateHole(index, id, updatedHole);
                   }),
               IconButton(
                   icon: Icon(Icons.remove),
                   onPressed: () {
                     Hole updatedHole =
                         hole.updateHole(newScore: decrementedScore);
-                    DataBaseInteraction.updateHole(
-                        context, index, id, updatedHole);
+                    FirebaseInteration(context)
+                        .updateHole(index, id, updatedHole);
                   })
             ])
           : Container();
@@ -69,7 +71,7 @@ class HolePage extends StatelessWidget {
             onPressed: () {
               /// Apply value of one or minus one to the [holeNumber].
               Hole updatedHole = hole.updateNumber(value);
-              DataBaseInteraction.updateHole(context, index, id, updatedHole);
+              FirebaseInteration(context).updateHole(index, id, updatedHole);
             })
         : Padding(padding: EdgeInsets.only(top: 50.0));
   }
@@ -102,8 +104,12 @@ class HolePage extends StatelessWidget {
                 ? IconButton(
                     icon: Icon(Icons.remove_circle_outline),
                     tooltip: Strings.deleteHole,
-                    onPressed: () =>
-                        DataBaseInteraction.deleteHole(context, index, id))
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => CustomAlertDialog(
+                            FirebaseInteration(context).deleteHole,
+                            index: index,
+                            id: id)))
                 : UIToolkit.getHomeButton(context)
           ]),
       body: Padding(
@@ -133,7 +139,7 @@ class HolePage extends StatelessWidget {
 
               Text(
                 " - ",
-                style: UIToolkit.leadingChildTextStyle,
+                style: TextStyles.leadingChildTextStyle,
               ),
 
               _getScore(awayScoreText),
@@ -184,7 +190,7 @@ class HolePage extends StatelessWidget {
                     child: Text(
                       "Comment: ${hole.comment}",
                       textAlign: TextAlign.center,
-                      style: UIToolkit.cardTitleTextStyle,
+                      style: TextStyles.cardTitleTextStyle,
                     ))
           ]))),
     );

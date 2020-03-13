@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
 class Themes {
   static ThemeData get appTheme => ThemeData(
@@ -78,6 +79,7 @@ class Themes {
       contentPadding: EdgeInsets.all(16.0),
       focusedBorder: _border,
       errorBorder: _border,
+      focusedErrorBorder: _border,
       enabledBorder: _border,
       disabledBorder: _border,
       hintStyle: TextStyle(fontSize: 15, color: Palette.dark),
@@ -102,25 +104,13 @@ class Themes {
       brightness: Brightness.light);
 
   static TextTheme get textTheme => TextTheme(
-          button: dialogStyle,
+          button: TextStyles.dialogStyle,
 
           /// Used for list tile titles.
           subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
       .apply(bodyColor: Palette.dark, displayColor: Palette.dark);
 
-  static TextTheme get titleTheme => TextTheme(title: _titleStyle);
-
-  static TextStyle get formStyle =>
-      TextStyle(fontSize: 14.0, color: Palette.dark);
-
-  static TextStyle get dialogStyle =>
-      TextStyle(fontSize: 16, color: Palette.maroon);
-
-  static TextStyle get _titleStyle => TextStyle(
-      fontFamily: Strings.cormorantGaramond,
-      fontSize: 27.0,
-      height: 0.95,
-      color: Color.fromARGB(255, 105, 105, 105));
+  static TextTheme get titleTheme => TextTheme(title: TextStyles.titleStyle);
 
   static CardTheme get cardTheme => CardTheme(
         color: Palette.card,

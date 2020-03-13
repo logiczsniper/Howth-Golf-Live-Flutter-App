@@ -7,7 +7,7 @@ import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
 class CompetitionDetails extends StatelessWidget {
-  final DataBaseEntry currentEntry;
+  final DatabaseEntry currentEntry;
 
   CompetitionDetails(this.currentEntry);
 

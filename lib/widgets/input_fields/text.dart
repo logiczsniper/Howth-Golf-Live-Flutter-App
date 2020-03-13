@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
 
 class DecoratedTextField extends StatelessWidget with DecoratedField {
@@ -24,7 +24,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
           autocorrect: false,
           keyboardType: number ? TextInputType.number : TextInputType.text,
           controller: controller,
-          style: Themes.formStyle,
+          style: TextStyles.formStyle,
           decoration: getDecoration(context, hintText),
           validator: (input) => validator(input, isRequired)));
 }

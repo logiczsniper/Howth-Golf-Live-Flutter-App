@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
 class MiddleRow extends StatelessWidget {
   final String text;
@@ -18,7 +18,7 @@ class MiddleRow extends StatelessWidget {
             text,
             maxLines: 2,
             overflow: TextOverflow.fade,
-            style: UIToolkit.cardSubTitleTextStyle.apply(fontSizeDelta: -2),
+            style: TextStyles.cardSubTitleTextStyle.apply(fontSizeDelta: -2),
           )),
         ],
       );

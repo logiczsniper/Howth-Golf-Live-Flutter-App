@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
 class ComplexScore extends StatelessWidget {
   final bool isHome;
@@ -47,7 +47,7 @@ class ComplexScore extends StatelessWidget {
       /// Conditions similar to the ternary operator below are
       /// ensuring that whichever team is home has their information
       /// on the left, and whoever is away on the right.
-      text: TextSpan(style: UIToolkit.scoreCardTextStyle, children: <TextSpan>[
+      text: TextSpan(style: TextStyles.scoreCardTextStyle, children: <TextSpan>[
         /// Home team score.
         TextSpan(text: Utils.getMainNumber(isHome, score)),
         getFraction(isHome, score),

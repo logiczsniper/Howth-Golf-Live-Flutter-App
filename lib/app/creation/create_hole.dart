@@ -65,8 +65,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    DataBaseInteraction.addHole(
-        context,
+    FirebaseInteration(context).addHole(
         _formKey,
         numberField,
         commentField,

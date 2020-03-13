@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CreationPage {
@@ -11,7 +12,7 @@ class CreationPage {
                 Padding(
                     child: Text(
                       text,
-                      style: Themes.formStyle,
+                      style: TextStyles.formStyle,
                     ),
                     padding: EdgeInsets.only(left: 16.0)),
                 dropdownButton
@@ -31,7 +32,7 @@ class CreationPage {
           value: _value,
           iconEnabledColor: Palette.dark,
           iconSize: 30.0,
-          style: Themes.formStyle,
+          style: TextStyles.formStyle,
           underline: Container(
             height: 0.0,
           ),

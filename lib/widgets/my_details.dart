@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:howth_golf_live/constants/strings.dart';
+
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 
 class MyDetails extends StatelessWidget {
   /// A red border with rounded corners.
@@ -11,8 +13,8 @@ class MyDetails extends StatelessWidget {
 
   /// My (contextual) contact details, styled.
   static Text get _text => Text(
-        'Contact the developer:\nhowth.lczernel@gmail.com',
-        style: UIToolkit.cardSubTitleTextStyle,
+        Strings.contactDeveloper,
+        style: TextStyles.cardSubTitleTextStyle,
         textAlign: TextAlign.center,
       );
 

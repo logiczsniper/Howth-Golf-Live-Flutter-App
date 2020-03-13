@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
+
 import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
-
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
@@ -17,7 +19,7 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionsPage extends StatelessWidget {
   static Widget _tileBuilder(
-          BuildContext context, DataBaseEntry currentEntry, bool isAdmin) =>
+          BuildContext context, DatabaseEntry currentEntry, bool isAdmin) =>
       ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
           title: Text(currentEntry.title,
@@ -29,7 +31,7 @@ class CompetitionsPage extends StatelessWidget {
                 child: Text(currentEntry.date,
                     overflow: TextOverflow.fade,
                     maxLines: 1,
-                    style: UIToolkit.cardSubTitleTextStyle)),
+                    style: TextStyles.cardSubTitleTextStyle)),
             Padding(
                 child: ComplexScore(
                     currentEntry.location.isHome, currentEntry.score),
@@ -44,15 +46,15 @@ class CompetitionsPage extends StatelessWidget {
 
     if (_firebaseModel.currentSnapshot == null) return UIToolkit.loadingSpinner;
 
-    List<DataBaseEntry> filteredElements =
+    List<DatabaseEntry> filteredElements =
         _firebaseModel.filteredElements(_searchText);
 
     /// At the 0th index of [sortedElements] will be the currentElements,
     /// and at the 1st index will be the archivedElements.
-    List<List<DataBaseEntry>> sortedElements =
+    List<List<DatabaseEntry>> sortedElements =
         _firebaseModel.sortedElements(filteredElements);
 
-    List<DataBaseEntry> activeElements =
+    List<DatabaseEntry> activeElements =
         isCurrentTab ? sortedElements[0] : sortedElements[1];
 
     return OpacityChangeWidget(
@@ -70,16 +72,15 @@ class CompetitionsPage extends StatelessWidget {
                     return ListTile(
                         title: Center(
                             child: Text(Strings.noCompetitions,
-                                style: UIToolkit.noDataTextStyle)));
+                                style: TextStyles.noDataTextStyle)));
                   }
 
-                  DataBaseEntry currentEntry = activeElements[index];
+                  DatabaseEntry currentEntry = activeElements[index];
 
                   return ComplexCard(
                       child: _tileBuilder(
                           context, currentEntry, _userStatus.isAdmin),
-                      onTap: () =>
-                          Routes.toCompetition(context, currentEntry, index),
+                      onTap: () => Routes.toCompetition(context, currentEntry),
                       iconButton: _userStatus.isAdmin
                           ? IconButton(
                               icon: Icon(Icons.remove_circle_outline),
@@ -89,6 +90,8 @@ class CompetitionsPage extends StatelessWidget {
                               onPressed: () => showDialog(
                                   context: context,
                                   builder: (context) => CustomAlertDialog(
+                                      FirebaseInteration(context)
+                                          .deleteCompetition,
                                       currentEntry: currentEntry)))
                           : null);
                 })));

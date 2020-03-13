@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -16,10 +17,9 @@ import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionPage extends StatelessWidget {
-  final DataBaseEntry initialData;
-  final int index;
+  final DatabaseEntry initialData;
 
-  CompetitionPage(this.initialData, this.index);
+  CompetitionPage(this.initialData);
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
@@ -36,11 +36,11 @@ class CompetitionPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6.0)),
                   child: Text(text,
                       textAlign: away ? TextAlign.right : TextAlign.left,
-                      style: UIToolkit.cardSubTitleTextStyle))));
+                      style: TextStyles.cardSubTitleTextStyle))));
 
   /// Gets the properly padded and styled score widget.
   Container _getScore(String text, {bool away = false}) => Container(
-      child: Text(text, style: UIToolkit.leadingChildTextStyle),
+      child: Text(text, style: TextStyles.leadingChildTextStyle),
       padding: EdgeInsets.fromLTRB(
           away ? 12.0 : 16.0, 3.0, !away ? 12.0 : 16.0, 3.0));
 
@@ -114,8 +114,8 @@ class CompetitionPage extends StatelessWidget {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
     var _firebaseModel = Provider.of<FirebaseViewModel>(context);
 
-    DataBaseEntry currentData =
-        _firebaseModel.entryFromIndex(index) ?? initialData;
+    DatabaseEntry currentData =
+        _firebaseModel.entryFromId(initialData.id) ?? initialData;
     bool _hasAccess = _userStatus.isManager(currentData.id);
 
     Widget floatingActionButton = _hasAccess
@@ -149,13 +149,13 @@ class CompetitionPage extends StatelessWidget {
                         return CompetitionDetails(currentData);
                       else if (index == 1)
                         return UIToolkit.getVersus(currentData.location.isHome,
-                            currentData.opposition, "Howth Golf Club");
+                            currentData.opposition, Strings.homeAddress);
                       else if (currentData.holes.length == 0)
                         return Center(
                             child: Padding(
                                 child: Text(
                                     "No hole data found for the ${currentData.title}!",
-                                    style: UIToolkit.noDataTextStyle),
+                                    style: TextStyles.noDataTextStyle),
                                 padding: EdgeInsets.only(top: 25.0)));
                       else
                         return _rowBuilder(

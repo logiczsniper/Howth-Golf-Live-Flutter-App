@@ -33,12 +33,11 @@ class Routes {
       MaterialPageRoute(builder: (context) => HolePage(id, index - 2)));
 
   /// Push to the [Competition] page.
-  static void toCompetition(
-          BuildContext context, DataBaseEntry currentEntry, int index) =>
+  static void toCompetition(BuildContext context, DatabaseEntry currentEntry) =>
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => CompetitionPage(currentEntry, index)));
+              builder: (context) => CompetitionPage(currentEntry)));
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {

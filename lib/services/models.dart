@@ -10,7 +10,7 @@ abstract class Model {
       List<T>.generate(source.length, (int i) => fromJson(source[i]));
 }
 
-class DataBaseEntry {
+class DatabaseEntry {
   final int id;
   final Location location;
   final String date;
@@ -29,13 +29,13 @@ class DataBaseEntry {
   int get hashCode => id;
 
   @override
-  bool operator ==(Object other) => other is DataBaseEntry && other.id == id;
+  bool operator ==(Object other) => other is DatabaseEntry && other.id == id;
 
-  /// Construct a [DataBaseEntry] from a JSON object.
+  /// Construct a [DatabaseEntry] from a JSON object.
   ///
   /// The [Firestore] instance will output [_InternalLinkedHashMap]
   /// which must be converted into objects here.
-  DataBaseEntry.fromMap(Map map)
+  DatabaseEntry.fromMap(Map map)
       : date = map[Fields.date],
         id = map[Fields.id],
         location = Location.fromMap(map[Fields.location]),
@@ -59,7 +59,7 @@ class DataBaseEntry {
         Fields.score: score.toJson
       };
 
-  DataBaseEntry(
+  DatabaseEntry(
       {@required this.date,
       @required this.id,
       @required this.location,

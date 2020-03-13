@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class HelpPage extends StatelessWidget {
@@ -29,14 +30,14 @@ class HelpPage extends StatelessWidget {
           Padding(
               child: Text(
                 currentStep.title,
-                style: UIToolkit.cardTitleTextStyle,
+                style: TextStyles.cardTitleTextStyle,
                 textAlign: TextAlign.left,
               ),
               padding: EdgeInsets.only(bottom: 5.0)),
           Padding(
               child: Text(
                 currentStep.data,
-                style: UIToolkit.cardSubTitleTextStyle,
+                style: TextStyles.cardSubTitleTextStyle,
               ),
               padding: EdgeInsets.only(left: 4.5))
         ],

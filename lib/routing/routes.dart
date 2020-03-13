@@ -1,43 +1,49 @@
 import 'package:flutter/material.dart';
+
+import 'package:howth_golf_live/app/competitions/competitions_page.dart';
+import 'package:howth_golf_live/app/competitions/competition_page.dart';
+import 'package:howth_golf_live/app/creation/create_competition.dart';
+import 'package:howth_golf_live/app/creation/create_hole.dart';
+import 'package:howth_golf_live/app/help/helps_page.dart';
+import 'package:howth_golf_live/app/hole/hole_page.dart';
+import 'package:howth_golf_live/app/home/home_page.dart';
+
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/pages/competitions.dart';
-import 'package:howth_golf_live/pages/app_help.dart';
-import 'package:howth_golf_live/pages/home.dart';
-import 'package:howth_golf_live/domain/privileges.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:howth_golf_live/services/models.dart';
 
 Widget get homePage => HomePage();
 Widget get competitionsPage => CompetitionsPage();
-Widget get helpPage => HelpPage();
+Widget get helpsPage => HelpsPage();
 
 class Routes {
   /// The initial route.
   static String get home => "/";
 
-  /// Use [Navigator] to take the user to the main compeitions page.
-  ///
-  /// The [SharedPreferences] instance must be fetched and passed as
-  /// an argument to [pushNamed] so the new page can determine whether or
-  /// not the user is an admin and if so, adjust how it displays certain
-  /// elements.
-  static void navigateTo(BuildContext context, String destination) {
-    final Future<SharedPreferences> preferences =
-        SharedPreferences.getInstance();
+  /// Push to [CreateCompetition] page.
+  static void toCompetitionCreation(BuildContext context) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => CreateCompetition()));
 
-    preferences.then((SharedPreferences preferences) => Navigator.pushNamed(
-        context, home + destination,
-        arguments: Privileges.fromPreferences(preferences)));
-  }
+  /// Push to the [CreateHole] page.
+  static void toHoleCreation(BuildContext context, int id) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => CreateHole(id)));
 
-  /// Get the arguments passed through the route.
-  static Privileges arguments(BuildContext context) =>
-      ModalRoute.of(context).settings.arguments;
+  /// Push to the [Hole] page.
+  static void toHole(BuildContext context, int id, int index) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HolePage(id, index - 2)));
+
+  /// Push to the [Competition] page.
+  static void toCompetition(
+          BuildContext context, DataBaseEntry currentEntry, int index) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CompetitionPage(currentEntry, index)));
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
-        home: (BuildContext context) => homePage,
-        home + Strings.competitionsText: (BuildContext context) =>
-            competitionsPage,
-        home + Strings.helpText: (BuildContext context) => helpPage,
+        home: (context) => homePage,
+        home + Strings.competitionsText: (context) => competitionsPage,
+        home + Strings.helpsText: (context) => helpsPage,
       };
 }

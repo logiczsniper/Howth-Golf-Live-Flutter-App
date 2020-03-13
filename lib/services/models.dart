@@ -1,4 +1,5 @@
 import 'package:howth_golf_live/constants/fields.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:meta/meta.dart';
 
 abstract class Model {
@@ -10,9 +11,9 @@ abstract class Model {
 }
 
 class DataBaseEntry {
-  final String date;
   final int id;
   final Location location;
+  final String date;
   final String time;
   final String opposition;
   final String title;
@@ -23,6 +24,12 @@ class DataBaseEntry {
   /// it easily searchable.
   @override
   String toString() => "$date $location $time $opposition $title $holes $score";
+
+  @override
+  int get hashCode => id;
+
+  @override
+  bool operator ==(Object other) => other is DataBaseEntry && other.id == id;
 
   /// Construct a [DataBaseEntry] from a JSON object.
   ///
@@ -51,12 +58,6 @@ class DataBaseEntry {
             holes.length, (int index) => holes[index].toJson),
         Fields.score: score.toJson
       };
-
-  /// Assert whether or not [rawEntry] is the entry to be deleted, [currentEntry].
-  bool isDeletionTarget(Map rawEntry) {
-    DataBaseEntry parsedEntry = DataBaseEntry.fromMap(rawEntry);
-    return this.toString() == parsedEntry.toString();
-  }
 
   DataBaseEntry(
       {@required this.date,
@@ -154,6 +155,13 @@ class Score {
   @override
   String toString() => "Howth: $howth, Opposition: $opposition";
 
+  @override
+  int get hashCode => this.toString().hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Score && other.howth == howth && other.opposition == opposition;
+
   Score({@required this.howth, @required this.opposition});
 }
 
@@ -178,6 +186,13 @@ class Hole {
         comment = map[Fields.comment],
         lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
+  static Hole get fresh => Hole(
+      holeNumber: 0,
+      holeScore: Score.fresh,
+      players: [],
+      comment: "",
+      lastUpdated: DateTime.now());
+
   Map get toJson => {
         Fields.holeNumber: holeNumber,
         Fields.holeScore: holeScore.toJson,
@@ -200,6 +215,16 @@ class Hole {
         lastUpdated: DateTime.now());
   }
 
+  Hole updateHole({Score newScore, int newHoleNumber}) {
+    assert(newScore != null || newHoleNumber != null);
+    return Hole(
+        holeNumber: newHoleNumber ?? holeNumber,
+        holeScore: newScore ?? holeScore,
+        players: players,
+        comment: comment,
+        lastUpdated: DateTime.now());
+  }
+
   Hole(
       {@required this.holeNumber,
       @required this.holeScore,
@@ -213,16 +238,22 @@ class Location {
   ///
   /// In the database, [isHome] is actually 'is_home'.
   final String address;
-  final bool isHome;
 
   /// Convert a map into a [Location] object.
-  Location.fromMap(Map map)
-      : address = map[Fields.address],
-        isHome = map[Fields.isHome];
+  Location.fromMap(Map map) : address = map[Fields.address];
 
-  Map get toJson => {Fields.address: address, Fields.isHome: isHome};
+  Map get toJson => {Fields.address: address};
 
-  Location({@required this.address, @required this.isHome});
+  bool get isHome => address == Strings.homeAddress;
+
+  @override
+  int get hashCode => address.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Location && other.address == address;
+
+  Location({@required this.address});
 }
 
 class AppHelpEntry {

@@ -7,8 +7,7 @@ class CreationPage {
   Padding getSpecialInput(String text, DropdownButton dropdownButton) =>
       Padding(
           child: Container(
-            child: Row(
-              children: <Widget>[
+              child: Row(children: <Widget>[
                 Padding(
                     child: Text(
                       text,
@@ -16,11 +15,9 @@ class CreationPage {
                     ),
                     padding: EdgeInsets.only(left: 16.0)),
                 dropdownButton
-              ],
-            ),
-            decoration: UIToolkit.bottomSideBoxDecoration,
-            padding: EdgeInsets.only(bottom: 2.0),
-          ),
+              ]),
+              decoration: UIToolkit.bottomSideBoxDecoration,
+              padding: EdgeInsets.only(bottom: 2.0)),
           padding: EdgeInsets.only(bottom: 16.0));
 
   /// Constructs a styled [DropDownButton].
@@ -45,15 +42,14 @@ class CreationPage {
   Scaffold construct(String title, void Function() onPressed, Form form) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(title, textAlign: TextAlign.center, maxLines: 2),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.check),
-              tooltip: 'Tap to submit!',
-              onPressed: onPressed)
-        ],
-      ),
+          centerTitle: true,
+          title: Text(title, textAlign: TextAlign.center, maxLines: 2),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.check),
+                tooltip: 'Tap to submit!',
+                onPressed: onPressed)
+          ]),
       body: Padding(child: form, padding: EdgeInsets.all(5.0)),
     );
   }

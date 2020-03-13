@@ -1,7 +1,8 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
-import 'package:howth_golf_live/presentation/utils.dart';
+
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
 
@@ -23,8 +24,8 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
           style: TextStyle(color: Palette.dark),
           decoration: getDecoration(context, hintText),
           format: format,
-          validator: (DateTime input) => Utils.validator(input, true),
-          onShowPicker: (BuildContext context, DateTime currentValue) async {
+          validator: (input) => validator(input, true),
+          onShowPicker: (context, currentValue) async {
             final date = await showRoundedDatePicker(
                 context: context,
                 borderRadius: 10.0,

@@ -62,6 +62,6 @@ class StatefulAppBar {
         controller: _filter,
         style: TextStyle(color: Palette.dark),
         decoration: _getInputDecoration(hintText),
-        onSubmitted: (String _) => _codePressed(),
+        onSubmitted: (_) => _codePressed(),
       );
 }

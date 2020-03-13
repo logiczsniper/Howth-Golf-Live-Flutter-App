@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
-class SpecificHelpPage extends StatefulWidget {
-  final AppHelpEntry entry;
+class HelpPage extends StatelessWidget {
+  final AppHelpEntry helpEntry;
 
-  SpecificHelpPage(this.entry);
+  HelpPage(this.helpEntry);
 
-  @override
-  SpecificHelpPageState createState() => SpecificHelpPageState();
-}
-
-class SpecificHelpPageState extends State<SpecificHelpPage> {
   /// Converts each of the [HelpStep]s into suitable [ListTile]s.
   Widget _tileBuilder(BuildContext context, int index) {
-    List<HelpStep> steps = widget.entry.steps;
+    List<HelpStep> steps = helpEntry.steps;
     if (index == steps.length)
       return Padding(
           child: Icon(
@@ -50,7 +45,7 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
   }
 
   Text get _title =>
-      Text(widget.entry.title, textAlign: TextAlign.center, maxLines: 2);
+      Text(helpEntry.title, textAlign: TextAlign.center, maxLines: 2);
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +57,9 @@ class SpecificHelpPageState extends State<SpecificHelpPage> {
       ),
       body: ListView.separated(
           itemBuilder: _tileBuilder,
-          itemCount: widget.entry.steps.length + 1,
-          separatorBuilder: (BuildContext context, int index) {
-            return index != widget.entry.steps.length - 1
+          itemCount: helpEntry.steps.length + 1,
+          separatorBuilder: (context, index) {
+            return index != helpEntry.steps.length - 1
                 ? Divider()
                 : Container();
           }),

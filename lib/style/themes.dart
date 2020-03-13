@@ -80,7 +80,8 @@ class Themes {
       errorBorder: _border,
       enabledBorder: _border,
       disabledBorder: _border,
-      hintStyle: TextStyle(fontSize: 15, color: Palette.dark));
+      hintStyle: TextStyle(fontSize: 15, color: Palette.dark),
+      errorStyle: TextStyle(fontSize: 12, color: Palette.maroon));
 
   static UnderlineInputBorder get _border => UnderlineInputBorder(
       borderSide: BorderSide(color: Palette.maroon, width: 1.5));

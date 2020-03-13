@@ -1,15 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:ui';
+
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/domain/models.dart';
+import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
-import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -70,6 +70,13 @@ class UIToolkit {
       color: Palette.maroon,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
 
+  static Center get loadingSpinner => Center(
+          child: SpinKitPulse(
+        color: Palette.dark,
+        size: 45,
+        duration: Duration(milliseconds: 350),
+      ));
+
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
   static Container getHoleNumberDecorated(int holeNumber) => Container(
@@ -77,10 +84,7 @@ class UIToolkit {
       margin: EdgeInsets.symmetric(vertical: 2.0),
       padding: EdgeInsets.all(2.5),
       child: Padding(
-          child: Text(
-              holeNumber.toString().length == 1
-                  ? "0$holeNumber"
-                  : holeNumber.toString(),
+          child: Text(holeNumber.toString().padLeft(2, "0"),
               style: UIToolkit.cardSubTitleTextStyle),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
@@ -103,10 +107,10 @@ class UIToolkit {
 
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
-        icon: Icon(Icons.home),
-        tooltip: Strings.returnHome,
-        onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
-      );
+      icon: Icon(Icons.home),
+      tooltip: Strings.returnHome,
+      onPressed: () => Navigator.of(context).popUntil(
+          ModalRoute.withName(Routes.home + Strings.competitionsText)));
 
   /// Handles special situations with [snapshot].
   ///
@@ -130,32 +134,51 @@ class UIToolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
-  static FloatingActionButton createButton(
-          {void Function() onPressed, String text}) =>
-      FloatingActionButton.extended(
-        icon: Icon(
-          Icons.add,
-          color: Palette.inMaroon,
-        ),
-        label: Text(
+  static SnackBar snackbar(String text) => SnackBar(
+        content: Text(
           text,
-          style: TextStyle(fontSize: 14, color: Palette.inMaroon),
+          textAlign: TextAlign.center,
         ),
-        onPressed: onPressed,
       );
+
+  static FloatingActionButton createButton(
+      {@required BuildContext context, String text, int id}) {
+    if (text == Strings.newHole) assert(id != null);
+    assert(text == Strings.newCompetition || text == Strings.newHole);
+
+    return FloatingActionButton.extended(
+      icon: Icon(
+        Icons.add,
+        color: Palette.inMaroon,
+      ),
+      label: Text(
+        text,
+        style: TextStyle(fontSize: 14, color: Palette.inMaroon),
+      ),
+      onPressed: () {
+        switch (text) {
+          case Strings.newCompetition:
+            Routes.toCompetitionCreation(context);
+            break;
+          case Strings.newHole:
+            Routes.toHoleCreation(context, id);
+            break;
+        }
+      },
+    );
+  }
 
   /// Returns the centered and padded [Row] containing the [howthText] and the
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
-  static Container getVersus(DataBaseEntry currentData, String howthText) =>
+  static Container getVersus(
+          bool isHome, String opposition, String howthText) =>
       Container(
           child: Row(
             children: <Widget>[
               Expanded(
                   child: Text(
-                currentData.location.isHome
-                    ? howthText
-                    : currentData.opposition,
+                isHome ? howthText : opposition,
                 textAlign: TextAlign.right,
                 style: Themes.formStyle,
               )),
@@ -167,9 +190,7 @@ class UIToolkit {
                   padding: EdgeInsets.all(3.0)),
               Expanded(
                   child: Text(
-                !currentData.location.isHome
-                    ? howthText
-                    : currentData.opposition,
+                !isHome ? howthText : opposition,
                 textAlign: TextAlign.left,
                 style: Themes.formStyle,
               ))

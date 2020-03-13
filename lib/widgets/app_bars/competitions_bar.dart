@@ -1,5 +1,6 @@
-import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
+
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/palette.dart';
@@ -11,7 +12,7 @@ class CompetitionsPageAppBar extends StatefulWidget
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
   /// lists- one from current and the other from archived.
-  final Widget Function(String, bool) _listBuilder;
+  final Widget Function(BuildContext, String, bool) _listBuilder;
 
   CompetitionsPageAppBar(this._listBuilder, {this.title})
       : preferredSize = Size.fromHeight(56.0);
@@ -51,13 +52,17 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   /// The [IconData] switches between a search icon (if [titleBar]) and
   /// a close icon (if [inputBar]).
   AnimatedCrossFade get _iconData => AnimatedCrossFade(
-        duration: const Duration(milliseconds: 450),
+        duration: const Duration(milliseconds: 350),
         firstChild: Icon(Icons.search),
         secondChild: Icon(Icons.close),
         crossFadeState: appBarTitle != inputBar
             ? CrossFadeState.showFirst
             : CrossFadeState.showSecond,
       );
+
+  AnimatedSwitcher _buildTab(bool isCurrentTab) => AnimatedSwitcher(
+      child: widget._listBuilder(context, inputText, isCurrentTab),
+      duration: Duration(milliseconds: 350));
 
   /// Get a custom instantiated [BubbleTabIndicator].
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
@@ -72,13 +77,11 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),
-        headerSliverBuilder: (BuildContext context, bool boxIsScrolled) =>
-            <Widget>[
+        headerSliverBuilder: (context, _) => <Widget>[
           SliverAppBar(
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(40),
-              )),
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(40))),
               centerTitle: true,
               title: getTitle(appBarTitle),
               floating: true,
@@ -87,30 +90,25 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
               leading: IconButton(
                   icon: Icon(Icons.help_outline),
                   tooltip: 'Tap for help!',
-                  onPressed: () =>
-                      Routes.navigateTo(context, Strings.helpText)),
+                  onPressed: () => Navigator.pushNamed(
+                      context, Routes.home + Strings.helpsText)),
               actions: <Widget>[
                 IconButton(
-                  icon: _iconData,
-                  tooltip: 'Tap to search!',
-                  onPressed: _searchPressed,
-                )
+                    icon: _iconData,
+                    tooltip: 'Tap to search!',
+                    onPressed: _searchPressed)
               ],
               bottom: TabBar(indicator: _tabIndicator, tabs: <Widget>[
                 Tab(icon: Icon(Icons.whatshot), text: Strings.currentText),
-                Tab(text: Strings.archivedText, icon: Icon(Icons.cached))
-              ])),
+                Tab(icon: Icon(Icons.cached), text: Strings.archivedText)
+              ]))
         ],
         body: TabBarView(
           children: <Widget>[
             /// The second parameter indicates whether or not this
             /// list builder is for current events or archived.
-            AnimatedSwitcher(
-                child: widget._listBuilder(inputText, true),
-                duration: Duration(milliseconds: 450)),
-            AnimatedSwitcher(
-                child: widget._listBuilder(inputText, false),
-                duration: Duration(milliseconds: 450))
+            _buildTab(true),
+            _buildTab(false)
           ],
         ),
       ),

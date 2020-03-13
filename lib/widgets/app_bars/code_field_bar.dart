@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
+import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:provider/provider.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  final Future<bool> Function(String, int, Function(Future<bool>)) attempt;
-  final void Function(Future<bool>) onComplete;
   final int id;
-  final bool isInitVerified;
+  final UserStatusViewModel userStatus;
 
-  CodeFieldBar(this.title, this.attempt, this.onComplete, this.isInitVerified,
-      {this.id})
+  CodeFieldBar(this.title, this.userStatus, {this.id})
       : preferredSize = Size.fromHeight(56.0);
 
   @override
@@ -23,49 +23,62 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
 
 class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
-  bool isVerified;
 
   /// Change the app bar, adjust [isVerified] accordingly.
   void _codePressed() {
+    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
+    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+
     if (!isVerified) {
       String codeAttempt = inputText.toString();
+      Future<bool> isCodeCorrect = Future.value(false);
 
-      widget
-          .attempt(codeAttempt, widget.id, widget.onComplete)
-          .then((bool isCodeCorrect) {
-        if (!isCodeCorrect && inputText.isNotEmpty) {
-          /// Incorrect [codeAttempt]!
+      switch (widget.title) {
+        case Strings.helpsText:
+          isCodeCorrect = widget.userStatus
+              .adminAttempt(codeAttempt, _firebaseModel.adminCode.toString());
+          break;
+        default:
+          isCodeCorrect = widget.userStatus
+              .managerAttempt(codeAttempt, widget.id.toString());
+      }
 
-          Scaffold.of(context).showSnackBar(_snackBar);
-        }
+      isCodeCorrect.then((bool isCodeCorrect) {
+        if (!isCodeCorrect && inputText.isNotEmpty)
+          Scaffold.of(context)
+              .showSnackBar(UIToolkit.snackbar(Strings.incorrectCode));
+
         setState(() {
           appBarTitle = actionPressed(appBarTitle, context, _filter);
-          if (!isVerified && isCodeCorrect) {
-            isVerified = isCodeCorrect;
-          }
         });
       });
     }
   }
 
-  SnackBar get _snackBar => SnackBar(
-        content: Text(
-          "Incorrect code entered!",
-          textAlign: TextAlign.center,
-        ),
-      );
-
   /// This depends greatly on whether or not the user is verified.
   ///
   /// Both the message and the icon image itself change based on [isVerified].
-  IconButton get _iconButton {
-    String iconMessage =
-        isVerified ? 'You are already an Admin!' : 'Tap to enter a code!';
-    IconData iconData =
-        isVerified ? Icons.check_circle_outline : Icons.account_circle;
+  IconButton get _actionIconButton {
+    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+
+    String iconMessage = isVerified ? Strings.alreadyAdmin : Strings.tapCode;
+    IconData iconData;
+
+    if (appBarTitle == inputBar) {
+      iconData = Icons.check;
+    } else {
+      iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
+    }
+
     return IconButton(
-        icon: Icon(iconData), tooltip: iconMessage, onPressed: _codePressed);
+        icon: Icon(iconData),
+        tooltip: iconMessage,
+        onPressed: _codePressed,
+        key: ValueKey(DateTime.now()));
   }
+
+  IconButton get _backIconButton =>
+      IconButton(icon: BackButtonIcon(), onPressed: Navigator.of(context).pop);
 
   @override
   void initState() {
@@ -73,11 +86,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
     /// Build the two bars.
     titleBar = buildTitleBar(widget.title);
-    inputBar = buildInputBar(TextInputType.number, true, 'Enter code here...',
-        _filter, _codePressed);
-
-    isVerified = widget.isInitVerified;
-    title = widget.title;
+    inputBar = buildInputBar(
+        TextInputType.number, true, Strings.enterCode, _filter, _codePressed);
 
     /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
@@ -89,13 +99,12 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: getTitle(appBarTitle),
-      centerTitle: true,
-      leading: IconButton(
-        icon: BackButtonIcon(),
-        onPressed: () => Routes.navigateTo(context, Strings.competitionsText),
-      ),
-      actions: <Widget>[_iconButton],
-    );
+        title: getTitle(appBarTitle),
+        centerTitle: true,
+        leading: _backIconButton,
+        actions: <Widget>[
+          AnimatedSwitcher(
+              child: _actionIconButton, duration: Duration(milliseconds: 350))
+        ]);
   }
 }

@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-import 'package:howth_golf_live/domain/models.dart';
-import 'package:howth_golf_live/presentation/utils.dart';
+import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
@@ -26,25 +26,20 @@ class ComplexScore extends StatelessWidget {
           : "",
       style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
 
-  static RichText getMixedFraction(
-          bool condition, Score scores, Score oldScores) =>
-      RichText(
-          key: scores.toString == oldScores.toString
-              ? null
-              : ValueKey(DateTime.now()),
-          text: TextSpan(
-            style: TextStyle(
-                fontSize: 21,
-                color: Palette.inMaroon,
-                fontWeight: FontWeight.w400),
-            children: <TextSpan>[
-              /// Main number.
-              TextSpan(text: Utils.getMainNumber(condition, scores)),
+  static RichText getMixedFraction(bool condition, Score score) => RichText(
+      key: ValueKey(DateTime.now()),
+      text: TextSpan(
+          style: TextStyle(
+              fontSize: 21,
+              color: Palette.inMaroon,
+              fontWeight: FontWeight.w400),
+          children: <TextSpan>[
+            /// Main number.
+            TextSpan(text: Utils.getMainNumber(condition, score)),
 
-              /// Fraction.
-              getFraction(condition, scores)
-            ],
-          ));
+            /// Fraction.
+            getFraction(condition, score)
+          ]));
 
   @override
   Widget build(BuildContext context) {

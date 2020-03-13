@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/pages/creation/creation_page.dart';
-import 'package:howth_golf_live/domain/firebase_interation.dart';
+import 'package:howth_golf_live/app/creation/creation_page.dart';
+import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
@@ -9,9 +9,8 @@ import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
 class CreateCompetition extends StatefulWidget {
   /// A page for the form to reside when an admin is creating a competition.
-  final AsyncSnapshot<QuerySnapshot> snapshot;
 
-  CreateCompetition(this.snapshot);
+  CreateCompetition();
 
   @override
   CreateCompetitionState createState() => CreateCompetitionState();
@@ -33,7 +32,7 @@ class CreateCompetitionState extends State<CreateCompetition>
       isHome,
       (bool newValue) => setState(() {
             isHome = newValue;
-            locationField.controller.text = isHome ? "Howth Golf Club" : "";
+            locationField.controller.text = isHome ? Strings.homeAddress : "";
           }),
       <bool>[true, false]
           .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
@@ -52,9 +51,8 @@ class CreateCompetitionState extends State<CreateCompetition>
             shrinkWrap: true,
             children: <Widget>[
               titleField,
-              UIToolkit.getFormText(
-                  "Try to keep title length < ~30 characters."),
-              getSpecialInput("At home: ", _home),
+              UIToolkit.getFormText(Strings.titleLengthNote),
+              getSpecialInput(Strings.atHome, _home),
               isHome ? Container() : locationField,
               oppositionField,
               dateTimeField
@@ -63,12 +61,12 @@ class CreateCompetitionState extends State<CreateCompetition>
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    DataBaseInteraction.addCompetition(context, widget.snapshot, _formKey,
-        titleField, isHome, locationField, oppositionField, dateTimeField);
+    DataBaseInteraction.addCompetition(context, _formKey, titleField,
+        locationField, oppositionField, dateTimeField);
   }
 
   @override
   Widget build(BuildContext context) {
-    return construct('New Competition', _onPressed, _form);
+    return construct(Strings.newCompetition, _onPressed, _form);
   }
 }

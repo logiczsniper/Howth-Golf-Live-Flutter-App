@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/presentation/utils.dart';
+
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
@@ -26,5 +26,5 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
           controller: controller,
           style: Themes.formStyle,
           decoration: getDecoration(context, hintText),
-          validator: (String input) => Utils.validator(input, isRequired)));
+          validator: (input) => validator(input, isRequired)));
 }

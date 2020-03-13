@@ -6,16 +6,17 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 
-import 'package:howth_golf_live/main.dart';
+import 'package:howth_golf_live/my_app.dart';
 
 void main() {
   testWidgets('Init test', (WidgetTester tester) async {
     // Build the app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(MyApp.providedApp);
 
     // Find the intro text.
-    final introTextFinder = find.text("Tap anywhere to begin!");
+    final introTextFinder = find.text(Strings.tapMe);
 
     // Test!
     expect(introTextFinder, findsOneWidget);

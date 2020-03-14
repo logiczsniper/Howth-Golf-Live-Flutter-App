@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/alert_dialog.dart';
@@ -85,9 +86,11 @@ class HolePage extends StatelessWidget {
     bool isHome = _holeModel.isHome(id);
     Hole hole = _holeModel.hole(id, index);
 
+    /// if (hole == null) Navigator.of(context).pop();
+
     Text homeScoreText = _getScoreText(isHome, hole.holeScore);
     Text awayScoreText = _getScoreText(!isHome, hole.holeScore);
-    Text lastUpdated = _getLastUpdated(_holeModel, hole.lastUpdated);
+    Text lastUpdated = _getLastUpdated(_holeModel, hole?.lastUpdated);
 
     Widget incrementHoleNumber =
         _getHoleButtons(context, hole, Icons.add, 1, hasAccess);
@@ -104,8 +107,9 @@ class HolePage extends StatelessWidget {
                 ? IconButton(
                     icon: Icon(Icons.remove_circle_outline),
                     tooltip: Strings.deleteHole,
-                    onPressed: () => showDialog(
+                    onPressed: () => showModal(
                         context: context,
+                        configuration: FadeScaleTransitionConfiguration(),
                         builder: (context) => CustomAlertDialog(
                             FirebaseInteration(context).deleteHole,
                             index: index,

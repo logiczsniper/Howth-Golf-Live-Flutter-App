@@ -15,10 +15,10 @@ class CustomAlertDialog extends StatelessWidget {
   CustomAlertDialog(this.deletionMethod,
       {this.currentEntry, this.index, this.id})
       : assert(deletionMethod is void Function(DatabaseEntry) &&
-            currentEntry != null),
-        assert(deletionMethod is void Function(int, int) &&
-            index != null &&
-            id != null);
+                currentEntry != null ||
+            deletionMethod is void Function(int, int) &&
+                index != null &&
+                id != null);
 
   @override
   Widget build(BuildContext context) {

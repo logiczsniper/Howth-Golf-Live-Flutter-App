@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
+
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
@@ -56,8 +58,8 @@ class Themes {
 
   static PageTransitionsTheme pageTransitionsTheme =
       PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-    TargetPlatform.android: ZoomPageTransitionsBuilder(),
-    TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+    TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
+    TargetPlatform.iOS: FadeThroughPageTransitionsBuilder()
   });
 
   static TooltipThemeData tooltipTheme = TooltipThemeData(
@@ -69,7 +71,8 @@ class Themes {
           borderRadius: BorderRadius.circular(5.0)));
 
   static TabBarTheme tabBarTheme = TabBarTheme(
-      labelColor: Palette.inMaroon, unselectedLabelColor: Palette.dark);
+      labelColor: Color.fromARGB(250, 240, 240, 240),
+      unselectedLabelColor: Palette.dark);
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =
       FloatingActionButtonThemeData(
@@ -114,7 +117,7 @@ class Themes {
 
   static CardTheme get cardTheme => CardTheme(
         color: Palette.card,
-        elevation: 0.25,
+        elevation: 0.01,
         margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

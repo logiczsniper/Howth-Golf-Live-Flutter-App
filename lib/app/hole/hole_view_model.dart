@@ -8,9 +8,11 @@ class HoleViewModel {
 
   bool isHome(int id) => databaseEntry(id)?.location?.isHome ?? true;
   String opposition(int id) => databaseEntry(id)?.opposition ?? "";
+  int holeCount(int id) => databaseEntry(id)?.holes?.length ?? 0;
+  List<Hole> holes(int id) => databaseEntry(id)?.holes ?? [];
 
   Hole hole(int id, int index) =>
-      databaseEntry(id)?.holes?.elementAt(index) ?? Hole.fresh;
+      holes(id).length - 1 < index ? null : holes(id).elementAt(index);
 
   HoleViewModel(this._firebaseModel);
 

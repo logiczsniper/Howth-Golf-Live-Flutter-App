@@ -189,7 +189,7 @@ class Hole {
   static Hole get fresh => Hole(
       holeNumber: 0,
       holeScore: Score.fresh,
-      players: [],
+      players: [""],
       comment: "",
       lastUpdated: DateTime.now());
 

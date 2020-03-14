@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
@@ -31,7 +32,7 @@ class ComplexCard extends StatelessWidget {
           child: Material(
               color: Colors.transparent,
               child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5.5, horizontal: 9.5),
+                  margin: EdgeInsets.symmetric(vertical: 5.5, horizontal: 12.0),
                   child: _inkWell))),
       Align(
           alignment: Alignment.centerRight,

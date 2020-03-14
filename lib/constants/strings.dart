@@ -9,6 +9,8 @@ class Strings {
   static const String returnHome = "Tap to return to home!";
   static const String deleteHole = "Tap to delete this hole!";
   static const String tapCode = "Tap to enter a code!";
+  static const String tapHelp = "Tap for help!";
+  static const String tapSearch = "Tap to search!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -46,8 +48,7 @@ class Strings {
   static const String enterCode = "Enter code here...";
   static const String incorrectCode = "Incorrect code entered!";
 
-  static const String up = "Up";
-  static const String under = "Under";
+  static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";
 
   static const String requiredField = "This field is required.";

@@ -4,6 +4,7 @@ import 'package:bubble_tab_indicator/bubble_tab_indicator.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
@@ -64,13 +65,12 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       child: widget._listBuilder(context, inputText, isCurrentTab),
       duration: Duration(milliseconds: 350));
 
-  /// Get a custom instantiated [BubbleTabIndicator].
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
       indicatorColor: Palette.maroon,
       tabBarIndicatorSize: TabBarIndicatorSize.tab,
-      indicatorHeight: 70.0,
-      indicatorRadius: 10.0,
-      insets: EdgeInsets.symmetric(vertical: 1.0, horizontal: 45.0));
+      indicatorHeight: 29.0,
+      indicatorRadius: 13,
+      insets: EdgeInsets.zero);
 
   @override
   Widget build(BuildContext context) {
@@ -89,28 +89,53 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
               snap: true,
               leading: IconButton(
                   icon: Icon(Icons.help_outline),
-                  tooltip: 'Tap for help!',
+                  padding: EdgeInsets.fromLTRB(32.0, 8.0, 8.0, 8.0),
+                  tooltip: Strings.tapHelp,
                   onPressed: () => Navigator.pushNamed(
                       context, Routes.home + Strings.helpsText)),
               actions: <Widget>[
                 IconButton(
                     icon: _iconData,
-                    tooltip: 'Tap to search!',
+                    padding: EdgeInsets.fromLTRB(8.0, 8.0, 32.0, 8.0),
+                    tooltip: Strings.tapSearch,
                     onPressed: _searchPressed)
               ],
-              bottom: TabBar(indicator: _tabIndicator, tabs: <Widget>[
-                Tab(icon: Icon(Icons.whatshot), text: Strings.currentText),
-                Tab(icon: Icon(Icons.cached), text: Strings.archivedText)
-              ]))
+              bottom: PreferredSize(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(32.0, 5.0, 0.0, 0.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            child: Text(
+                              Strings.competitionsText,
+                              style: TextStyles.titleStyle.copyWith(
+                                  fontSize: 32.0, fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.start,
+                            ),
+                            padding: EdgeInsets.only(bottom: 6.0),
+                          ),
+                          TabBar(
+                              isScrollable: true,
+                              indicator: _tabIndicator,
+                              tabs: <Widget>[
+                                Tab(text: Strings.currentText),
+                                Tab(text: Strings.archivedText)
+                              ])
+                        ],
+                      ),
+                    ),
+                  ),
+                  preferredSize: Size.fromHeight(87.0)))
         ],
-        body: TabBarView(
-          children: <Widget>[
-            /// The second parameter indicates whether or not this
-            /// list builder is for current events or archived.
-            _buildTab(true),
-            _buildTab(false)
-          ],
-        ),
+        body: TabBarView(children: <Widget>[
+          /// The second parameter indicates whether or not this
+          /// list builder is for current events or archived.
+          _buildTab(true),
+          _buildTab(false)
+        ]),
       ),
     );
   }

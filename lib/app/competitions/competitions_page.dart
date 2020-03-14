@@ -1,11 +1,12 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
@@ -62,7 +63,7 @@ class CompetitionsPage extends StatelessWidget {
         target: AnimatedSwitcher(
             duration: Duration(milliseconds: 350),
             child: ListView.builder(
-                padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 100.0),
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
                 itemCount:
                     activeElements.length == 0 ? 1 : activeElements.length,
                 itemBuilder: (context, index) {
@@ -85,10 +86,12 @@ class CompetitionsPage extends StatelessWidget {
                           ? IconButton(
                               icon: Icon(Icons.remove_circle_outline),
 
-                              /// When deleting a [DataBaseEntry], prompts the user to double check their intent
+                              /// When deleting a [DatabaseEntry], prompts the user to double check their intent
                               /// is to do so as this can have major consquences if an accident.
-                              onPressed: () => showDialog(
+                              onPressed: () => showModal(
                                   context: context,
+                                  configuration:
+                                      FadeScaleTransitionConfiguration(),
                                   builder: (context) => CustomAlertDialog(
                                       FirebaseInteration(context)
                                           .deleteCompetition,

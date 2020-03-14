@@ -27,14 +27,14 @@ class FirebaseInteration {
       .collection(Strings.competitionsText.toLowerCase())
       .snapshots();
 
-  void _updateDatabase({bool pop = true}) {
+  void _updateDatabase({bool pop = true, bool popAgain = false}) {
+    if (pop) Navigator.of(context).pop();
+    if (popAgain) Navigator.of(context).pop();
+
     Map<String, dynamic> newData = {Fields.data: _databaseEntries};
     DocumentSnapshot _documentSnapshot = _firebaseModel.document;
-    _documentSnapshot.reference
-        .updateData(newData)
-        .catchError((_) => Scaffold.of(context)
-            .showSnackBar(UIToolkit.snackbar(Strings.failure)))
-        .whenComplete(pop ? Navigator.of(context).pop : null);
+    _documentSnapshot.reference.updateData(newData).catchError((_) =>
+        Scaffold.of(context).showSnackBar(UIToolkit.snackbar(Strings.failure)));
   }
 
   /// Remove [currentEntry] from the entries in the database.
@@ -100,7 +100,7 @@ class FirebaseInteration {
       }
     }
 
-    _updateDatabase();
+    _updateDatabase(popAgain: true);
   }
 
   /// Using the form fields, create a [Hole] and add it to the

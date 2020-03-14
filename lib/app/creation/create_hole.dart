@@ -40,7 +40,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
             oppositionScoreField.controller.text =
                 scoreStatus == Strings.aS ? "-" : "";
           }),
-      <String>[Strings.up, Strings.under, Strings.aS]
+      <String>[Strings.upUnder, Strings.aS]
           .map<DropdownMenuItem<String>>((String value) =>
               DropdownMenuItem<String>(value: value, child: Text(value)))
           .toList());
@@ -78,6 +78,6 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
 
   @override
   Widget build(BuildContext context) {
-    return construct('New Hole', _onPressed, _form);
+    return construct(Strings.newHole, _onPressed, _form);
   }
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -9,6 +7,8 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/utils.dart';
+import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';

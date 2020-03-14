@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class StatefulAppBar {
   String inputText = "";
@@ -23,12 +24,12 @@ class StatefulAppBar {
   /// Get a custom instantiated [InputDecoration].
   static InputDecoration _getInputDecoration(String hintText) =>
       InputDecoration(
-              enabledBorder: UIToolkit.outlineInputBorder,
-              focusedBorder: UIToolkit.outlineInputBorder,
-              prefixIcon: Icon(
-                Icons.keyboard_arrow_right,
-                color: Palette.dark,
-              ),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              // prefixIcon: Icon(
+              //   Icons.keyboard_arrow_right,
+              //   color: Palette.dark,
+              // ),
               hintText: hintText)
           .applyDefaults(Themes.inputDecorationTheme);
 
@@ -39,7 +40,7 @@ class StatefulAppBar {
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title) => Center(
           child: Text(
-        title,
+        title == Strings.competitionsText ? "" : title,
         softWrap: true,
         textAlign: TextAlign.center,
         maxLines: 2,
@@ -47,21 +48,35 @@ class StatefulAppBar {
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.
-  TextField buildInputBar(
+  Widget buildInputBar(
           TextInputType textType,
           bool obscureText,
           String hintText,
           TextEditingController _filter,
           Function _codePressed) =>
-      TextField(
-        keyboardType: textType,
-        obscureText: obscureText,
-        cursorColor: Palette.maroon,
-        textCapitalization: TextCapitalization.sentences,
-        autocorrect: false,
-        controller: _filter,
-        style: TextStyle(color: Palette.dark),
-        decoration: _getInputDecoration(hintText),
-        onSubmitted: (_) => _codePressed(),
-      );
+      Container(
+          height: 45,
+          decoration: BoxDecoration(
+              color: Palette.light,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Palette.dark,
+                  spreadRadius: 0.3,
+                  blurRadius: 1.5,
+                  offset: Offset(0, 0.75),
+                )
+              ],
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(10.0)),
+          child: TextField(
+            keyboardType: textType,
+            obscureText: obscureText,
+            cursorColor: Palette.maroon,
+            textCapitalization: TextCapitalization.sentences,
+            autocorrect: false,
+            controller: _filter,
+            style: TextStyle(color: Palette.dark),
+            decoration: _getInputDecoration(hintText),
+            onSubmitted: (_) => _codePressed(),
+          ));
 }

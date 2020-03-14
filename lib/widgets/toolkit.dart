@@ -53,10 +53,6 @@ class UIToolkit {
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10.0));
 
-  static OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: Palette.maroon, width: 1.8),
-      borderRadius: const BorderRadius.all(const Radius.circular(10.0)));
-
   /// Some common methods used in various pages and widgets.
   static Card getCard(Widget child) => Card(
       child: Container(

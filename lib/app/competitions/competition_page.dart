@@ -56,57 +56,56 @@ class CompetitionPage extends StatelessWidget {
   Widget _rowBuilder(BuildContext context, Hole hole, bool isHome,
           String opposition, int index, int id) =>
       GestureDetector(
-          child: Container(
-              child: Padding(
-                  padding: EdgeInsets.all(5.3),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        /// Home team section.
-                        Expanded(
-                            child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                              /// Home player.
-                              _getPlayer(
-                                  hole,
-                                  isHome
-                                      ? Utils.formatPlayers(hole.players)
-                                      : opposition,
-                                  index),
+          child: Padding(
+              padding: EdgeInsets.all(5.3),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    /// Home team section.
+                    Expanded(
+                        child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                          /// Home player.
+                          _getPlayer(
+                              hole,
+                              isHome
+                                  ? Utils.formatPlayers(hole.players)
+                                  : opposition,
+                              index),
 
-                              /// Home score.
-                              _getScore(isHome
+                          /// Home score.
+                          _getScore(isHome
+                              ? hole.holeScore.howth
+                              : hole.holeScore.opposition)
+                        ])),
+
+                    /// Hole Number
+                    UIToolkit.getHoleNumberDecorated(hole.holeNumber),
+
+                    /// Away team section.
+                    Expanded(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                          /// Away team score.
+                          _getScore(
+                              !isHome
                                   ? hole.holeScore.howth
-                                  : hole.holeScore.opposition)
-                            ])),
+                                  : hole.holeScore.opposition,
+                              away: true),
 
-                        /// Hole Number
-                        UIToolkit.getHoleNumberDecorated(hole.holeNumber),
-
-                        /// Away team section.
-                        Expanded(
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                              /// Away team score.
-                              _getScore(
-                                  !isHome
-                                      ? hole.holeScore.howth
-                                      : hole.holeScore.opposition,
-                                  away: true),
-
-                              /// Away team player.
-                              _getPlayer(
-                                  hole,
-                                  !isHome
-                                      ? Utils.formatPlayers(hole.players)
-                                      : opposition,
-                                  index,
-                                  away: true)
-                            ]))
-                      ]))),
+                          /// Away team player.
+                          _getPlayer(
+                              hole,
+                              !isHome
+                                  ? Utils.formatPlayers(hole.players)
+                                  : opposition,
+                              index,
+                              away: true)
+                        ]))
+                  ])),
           onTap: () => Routes.toHole(context, id, index));
 
   @override

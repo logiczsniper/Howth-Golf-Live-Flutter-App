@@ -8,6 +8,8 @@ import 'package:howth_golf_live/app/help/help_page.dart';
 import 'package:howth_golf_live/app/help/helps_page.dart';
 import 'package:howth_golf_live/app/hole/hole_page.dart';
 import 'package:howth_golf_live/app/home/home_page.dart';
+import 'package:howth_golf_live/app/modification/modify_competition.dart';
+import 'package:howth_golf_live/app/modification/modify_hole.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
@@ -24,6 +26,16 @@ class Routes {
   static void pushTo(BuildContext context, Widget destination) =>
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => destination));
+
+  /// Push to [ModifyCompetition] page.
+  static void toCompetitionModification(
+          BuildContext context, DatabaseEntry currentEntry) =>
+      pushTo(context, ModifyCompetition(currentEntry));
+
+  /// Push to [ModifyHole] page.
+  static void toHoleModification(
+          BuildContext context, int id, int index, Hole currentHole) =>
+      pushTo(context, ModifyHole(id, index, currentHole));
 
   /// Push to [CreateCompetition] page.
   static void toCompetitionCreation(BuildContext context) =>

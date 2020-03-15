@@ -11,6 +11,8 @@ class DecoratedField {
   ///
   /// Does this by capitalising each term and replaces "_" with " ".
   String _formatHintText(String input) {
+    if (input.isEmpty) return input;
+
     input = input.replaceAll("_", " ");
 
     String caps = "";

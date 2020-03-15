@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:provider/provider.dart';
 
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -12,7 +13,8 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final UserStatusViewModel userStatus;
 
   CodeFieldBar(this.title, this.userStatus, {this.id})
-      : preferredSize = Size.fromHeight(56.0);
+      : preferredSize = Size.fromHeight(56.0),
+        assert(title == Strings.helpsText ? id == null : id != null);
 
   @override
   CodeFieldBarState createState() => CodeFieldBarState();
@@ -98,6 +100,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   @override
   Widget build(BuildContext context) {
+    titleBar = buildTitleBar(widget.title);
     return AppBar(
         title: getTitle(appBarTitle),
         centerTitle: true,

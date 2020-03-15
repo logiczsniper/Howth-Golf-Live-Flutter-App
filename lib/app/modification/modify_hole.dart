@@ -47,18 +47,17 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
         newPlayers: playersField.controller.value.text.split(", "),
         newComment: commentField.controller.value.text);
     FirebaseInteration(context)
-        .updateHole(widget.index, widget.currentId, updatedHole);
+        .updateHole(widget.index, widget.currentId, updatedHole, pop: true);
   }
 
   @override
   void initState() {
     super.initState();
 
-    /// TODO: change this to the default text, not the hint text! same on modify competition!!
-    commentField =
-        DecoratedTextField(widget.currentHole.comment, isRequired: false);
-    playersField =
-        DecoratedTextField(Utils.formatPlayers(widget.currentHole.players));
+    commentField = DecoratedTextField("",
+        initialValue: widget.currentHole.comment, isRequired: false);
+    playersField = DecoratedTextField("",
+        initialValue: Utils.formatPlayers(widget.currentHole.players));
   }
 
   @override

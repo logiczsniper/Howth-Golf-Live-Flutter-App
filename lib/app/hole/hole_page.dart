@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
@@ -86,8 +87,6 @@ class HolePage extends StatelessWidget {
     bool isHome = _holeModel.isHome(id);
     Hole hole = _holeModel.hole(id, index);
 
-    /// if (hole == null) Navigator.of(context).pop();
-
     Text homeScoreText = _getScoreText(isHome, hole.holeScore);
     Text awayScoreText = _getScoreText(!isHome, hole.holeScore);
     Text lastUpdated = _getLastUpdated(_holeModel, hole?.lastUpdated);
@@ -103,6 +102,14 @@ class HolePage extends StatelessWidget {
           title: Text(Strings.specificHole,
               textAlign: TextAlign.center, maxLines: 2),
           actions: <Widget>[
+            hasAccess
+                ? IconButton(
+                    icon: Icon(Icons.edit),
+                    padding: EdgeInsets.only(left: 13.5),
+                    tooltip: Strings.tapModify,
+                    onPressed: () =>
+                        Routes.toHoleModification(context, id, index, hole))
+                : Container(),
             hasAccess
                 ? IconButton(
                     icon: Icon(Icons.remove_circle_outline),

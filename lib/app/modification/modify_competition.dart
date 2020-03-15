@@ -65,6 +65,7 @@ class ModifyCompetitionState extends State<ModifyCompetition>
     FirebaseInteration(context).updateCompetition(
         _formKey,
         widget.currentEntry.id,
+        isHome,
         titleField,
         locationField,
         oppositionField,
@@ -74,12 +75,17 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   @override
   void initState() {
     super.initState();
-    titleField = DecoratedTextField(widget.currentEntry.title);
-    locationField = DecoratedTextField(widget.currentEntry.location.address);
-    oppositionField = DecoratedTextField(widget.currentEntry.opposition);
-    dateTimeField = DecoratedDateTimeField(
-        "${widget.currentEntry.date} & ${widget.currentEntry.time}");
+
     isHome = widget.currentEntry.location.isHome;
+    titleField =
+        DecoratedTextField("", initialValue: widget.currentEntry.title);
+    locationField = DecoratedTextField("",
+        initialValue: widget.currentEntry.location.address);
+    oppositionField =
+        DecoratedTextField("", initialValue: widget.currentEntry.opposition);
+    dateTimeField = DecoratedDateTimeField("",
+        initialValue:
+            "${widget.currentEntry.date} ${widget.currentEntry.time}");
   }
 
   @override

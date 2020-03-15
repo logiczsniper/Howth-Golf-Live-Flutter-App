@@ -12,6 +12,7 @@ class Strings {
   static const String tapHelp = "Tap for help!";
   static const String tapSearch = "Tap to search!";
   static const String tapSubmit = "Tap to submit!";
+  static const String tapModify = "Tap to modify!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -49,6 +50,7 @@ class Strings {
 
   static const String alreadyAdmin = "You are already an admin!";
   static const String enterCode = "Enter code here...";
+  static const String enterSearch = "Enter search text here...";
   static const String incorrectCode = "Incorrect code entered!";
 
   static const String upUnder = "Up\\Under";

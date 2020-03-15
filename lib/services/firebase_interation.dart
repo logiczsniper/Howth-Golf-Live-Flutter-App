@@ -78,6 +78,7 @@ class FirebaseInteration {
   void updateCompetition(
       GlobalKey<FormState> _formKey,
       int currentId,
+      bool homeStatus,
       DecoratedTextField titleField,
       DecoratedTextField locationField,
       DecoratedTextField oppositionField,
@@ -88,7 +89,11 @@ class FirebaseInteration {
         if (entry[Fields.id] == currentId) {
           /// This is the competition to be updated.
           entry[Fields.title] = titleField.controller.value.text;
-          entry[Fields.location] = locationField.controller.value.text;
+          entry[Fields.location] = Location(
+                  address: homeStatus
+                      ? Strings.homeAddress
+                      : locationField.controller.value.text)
+              .toJson;
           entry[Fields.opposition] = oppositionField.controller.value.text;
           entry[Fields.date] =
               dateTimeField.controller.value.text.split(" ")[0];
@@ -200,7 +205,8 @@ class FirebaseInteration {
     }
   }
 
-  void updateHole(int index, int currentId, Hole updatedHole) {
+  void updateHole(int index, int currentId, Hole updatedHole,
+      {bool pop = false}) {
     List newHoles = List();
 
     /// A list of all holes with the updated one!
@@ -232,6 +238,6 @@ class FirebaseInteration {
       }
     }
 
-    _updateDatabase(pop: false);
+    _updateDatabase(pop: pop);
   }
 }

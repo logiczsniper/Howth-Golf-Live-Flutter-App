@@ -83,19 +83,32 @@ class CompetitionsPage extends StatelessWidget {
                           context, currentEntry, _userStatus.isAdmin),
                       onTap: () => Routes.toCompetition(context, currentEntry),
                       iconButton: _userStatus.isAdmin
-                          ? IconButton(
-                              icon: Icon(Icons.remove_circle_outline),
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                  IconButton(
+                                    padding: EdgeInsets.only(top: 10.0),
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () =>
+                                        Routes.toCompetitionModification(
+                                            context, currentEntry),
+                                  ),
+                                  IconButton(
+                                      icon: Icon(Icons.remove_circle_outline),
+                                      padding: EdgeInsets.only(bottom: 10.0),
 
-                              /// When deleting a [DatabaseEntry], prompts the user to double check their intent
-                              /// is to do so as this can have major consquences if an accident.
-                              onPressed: () => showModal(
-                                  context: context,
-                                  configuration:
-                                      FadeScaleTransitionConfiguration(),
-                                  builder: (context) => CustomAlertDialog(
-                                      FirebaseInteration(context)
-                                          .deleteCompetition,
-                                      currentEntry: currentEntry)))
+                                      /// When deleting a [DatabaseEntry], prompts the user to double check their intent
+                                      /// is to do so as this can have major consquences if an accident.
+                                      onPressed: () => showModal(
+                                          context: context,
+                                          configuration:
+                                              FadeScaleTransitionConfiguration(),
+                                          builder: (context) =>
+                                              CustomAlertDialog(
+                                                  FirebaseInteration(context)
+                                                      .deleteCompetition,
+                                                  currentEntry: currentEntry))),
+                                ])
                           : null);
                 })));
   }

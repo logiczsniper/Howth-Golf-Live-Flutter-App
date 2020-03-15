@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/style/text_styles.dart';
-import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class ModificationPage {
   /// Builds a page with a suitable [AppBar] and style.

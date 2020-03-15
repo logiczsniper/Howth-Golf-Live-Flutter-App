@@ -26,6 +26,7 @@ class FirebaseViewModel {
 
   int bonusEntries(DatabaseEntry currentData) =>
       currentData.holes.length == 0 ? 3 : 2;
+  String title(int id) => entryFromId(id)?.title ?? "";
 
   /// Sorts elements into either current or archived lists.
   ///

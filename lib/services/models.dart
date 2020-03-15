@@ -121,6 +121,8 @@ class Score {
     return calculatedScore;
   }
 
+  bool get isAllSquare => howth == opposition && howth == "0";
+
   String get _leader {
     double howth = double.tryParse(this.howth);
     double opposition = double.tryParse(this.opposition);
@@ -215,13 +217,20 @@ class Hole {
         lastUpdated: DateTime.now());
   }
 
-  Hole updateHole({Score newScore, int newHoleNumber}) {
-    assert(newScore != null || newHoleNumber != null);
+  Hole updateHole(
+      {Score newScore,
+      int newHoleNumber,
+      List<String> newPlayers,
+      String newComment}) {
+    assert(newScore != null ||
+        newHoleNumber != null ||
+        newPlayers != null ||
+        newComment != null);
     return Hole(
         holeNumber: newHoleNumber ?? holeNumber,
         holeScore: newScore ?? holeScore,
-        players: players,
-        comment: comment,
+        players: newPlayers ?? players,
+        comment: newComment ?? comment,
         lastUpdated: DateTime.now());
   }
 

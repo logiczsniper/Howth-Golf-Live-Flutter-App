@@ -11,6 +11,7 @@ class Strings {
   static const String tapCode = "Tap to enter a code!";
   static const String tapHelp = "Tap for help!";
   static const String tapSearch = "Tap to search!";
+  static const String tapSubmit = "Tap to submit!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -20,6 +21,8 @@ class Strings {
   static const String specificHole = "Specific Hole";
   static const String newHole = "New Hole";
   static const String newCompetition = "New Competition";
+  static const String modifyHole = "Modify Hole";
+  static const String modifyCompetition = "Modify Competition";
 
   /// Paths to assets used in the app.
   static const String iconPath = "lib/assets/logo.svg";

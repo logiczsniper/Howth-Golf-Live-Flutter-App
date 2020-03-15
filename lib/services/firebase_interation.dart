@@ -71,6 +71,38 @@ class FirebaseInteration {
     }
   }
 
+  /// Updates the competition with the given [currentId].
+  ///
+  /// The data used to replace the data found in the competition is found within
+  /// the input fields.
+  void updateCompetition(
+      GlobalKey<FormState> _formKey,
+      int currentId,
+      DecoratedTextField titleField,
+      DecoratedTextField locationField,
+      DecoratedTextField oppositionField,
+      DecoratedDateTimeField dateTimeField) {
+    /// If the form inputs have been validated, update the competition.
+    if (_formKey.currentState.validate()) {
+      for (Map entry in _databaseEntries) {
+        if (entry[Fields.id] == currentId) {
+          /// This is the competition to be updated.
+          entry[Fields.title] = titleField.controller.value.text;
+          entry[Fields.location] = locationField.controller.value.text;
+          entry[Fields.opposition] = oppositionField.controller.value.text;
+          entry[Fields.date] =
+              dateTimeField.controller.value.text.split(" ")[0];
+          entry[Fields.time] =
+              dateTimeField.controller.value.text.split(" ")[1];
+
+          break;
+        }
+      }
+
+      _updateDatabase();
+    }
+  }
+
   /// Remove the hole at the [index] within [DatabaseEntry.holes] at the
   /// competition with the [currentId].
   void deleteHole(int index, int currentId) {

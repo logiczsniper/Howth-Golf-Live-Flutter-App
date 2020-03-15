@@ -123,7 +123,6 @@ class CompetitionPage extends StatelessWidget {
             context: context, text: Strings.newHole, id: currentData.id)
         : null;
 
-    /// TODO: fix error regarding the deletion of the last hole.
     return Scaffold(
         floatingActionButton: Container(
             padding: EdgeInsets.only(bottom: 10.0),

@@ -1,4 +1,6 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/hole/hole_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -7,7 +9,6 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/utils.dart';
-import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
@@ -55,58 +56,51 @@ class CompetitionPage extends StatelessWidget {
   /// the hole specified by the index.
   Widget _rowBuilder(BuildContext context, Hole hole, bool isHome,
           String opposition, int index, int id) =>
-      GestureDetector(
-          child: Padding(
-              padding: EdgeInsets.all(5.3),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    /// Home team section.
-                    Expanded(
-                        child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                          /// Home player.
-                          _getPlayer(
-                              hole,
-                              isHome
-                                  ? Utils.formatPlayers(hole.players)
-                                  : opposition,
-                              index),
+      Padding(
+          padding: EdgeInsets.all(5.3),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
+                  Widget>[
+            /// Home team section.
+            Expanded(
+                child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                  /// Home player.
+                  _getPlayer(
+                      hole,
+                      isHome ? Utils.formatPlayers(hole.players) : opposition,
+                      index),
 
-                          /// Home score.
-                          _getScore(isHome
-                              ? hole.holeScore.howth
-                              : hole.holeScore.opposition)
-                        ])),
+                  /// Home score.
+                  _getScore(
+                      isHome ? hole.holeScore.howth : hole.holeScore.opposition)
+                ])),
 
-                    /// Hole Number
-                    UIToolkit.getHoleNumberDecorated(hole.holeNumber),
+            /// Hole Number
+            UIToolkit.getHoleNumberDecorated(hole.holeNumber),
 
-                    /// Away team section.
-                    Expanded(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                          /// Away team score.
-                          _getScore(
-                              !isHome
-                                  ? hole.holeScore.howth
-                                  : hole.holeScore.opposition,
-                              away: true),
+            /// Away team section.
+            Expanded(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                  /// Away team score.
+                  _getScore(
+                      !isHome
+                          ? hole.holeScore.howth
+                          : hole.holeScore.opposition,
+                      away: true),
 
-                          /// Away team player.
-                          _getPlayer(
-                              hole,
-                              !isHome
-                                  ? Utils.formatPlayers(hole.players)
-                                  : opposition,
-                              index,
-                              away: true)
-                        ]))
-                  ])),
-          onTap: () => Routes.toHole(context, id, index));
+                  /// Away team player.
+                  _getPlayer(
+                      hole,
+                      !isHome ? Utils.formatPlayers(hole.players) : opposition,
+                      index,
+                      away: true)
+                ]))
+          ]));
 
   @override
   Widget build(BuildContext context) {
@@ -153,17 +147,23 @@ class CompetitionPage extends StatelessWidget {
                         return Center(
                             child: Padding(
                                 child: Text(
-                                    "No hole data found for the ${currentData.title}!",
+                                    Strings.noHoles + currentData.title + "!",
                                     style: TextStyles.noDataTextStyle),
                                 padding: EdgeInsets.only(top: 25.0)));
                       else
-                        return _rowBuilder(
-                            context,
-                            currentData.holes[index - 2],
-                            currentData.location.isHome,
-                            currentData.opposition,
-                            index,
-                            currentData.id);
+                        return OpenContainer(
+                          closedElevation: 0.0,
+                          transitionDuration: Duration(milliseconds: 350),
+                          openBuilder: (context, _) =>
+                              HolePage(currentData.id, index - 2),
+                          closedBuilder: (context, _) => _rowBuilder(
+                              context,
+                              currentData.holes[index - 2],
+                              currentData.location.isHome,
+                              currentData.opposition,
+                              index,
+                              currentData.id),
+                        );
                     }))));
   }
 }

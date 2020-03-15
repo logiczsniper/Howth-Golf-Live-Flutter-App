@@ -27,6 +27,7 @@ dependencies:
   animations: ^1.0.0+5
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.7.0
   flutter_test:
     sdk: flutter
 
@@ -41,3 +42,11 @@ flutter:
         - asset: lib/assets/fonts/Fira_Sans/FiraSans-Regular.ttf
   assets:
     - lib/assets/
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "lib/assets/icon/icon.png"
+  image_path_android: "lib/assets/icon/icon.png"
+  adaptive_icon_background: "lib/assets/icon/background.png"
+  adaptive_icon_foreground: "lib/assets/icon/foreground.png"

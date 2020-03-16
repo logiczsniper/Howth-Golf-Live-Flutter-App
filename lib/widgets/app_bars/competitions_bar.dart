@@ -46,8 +46,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
     /// [appBarTitle] defaults to the title bar.
     appBarTitle = titleBar;
-    _filter.addListener(() =>
-        setState(() => inputText = _filter.text.isEmpty ? "" : _filter.text));
+    _filter.addListener(() => setState(
+        () => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text));
   }
 
   /// The [IconData] switches between a search icon (if [titleBar]) and

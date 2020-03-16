@@ -32,7 +32,8 @@ class CreateCompetitionState extends State<CreateCompetition>
       isHome,
       (bool newValue) => setState(() {
             isHome = newValue;
-            locationField.controller.text = isHome ? Strings.homeAddress : "";
+            locationField.controller.text =
+                isHome ? Strings.homeAddress : Strings.empty;
           }),
       <bool>[true, false]
           .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(

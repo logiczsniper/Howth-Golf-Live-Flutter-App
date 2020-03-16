@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 /// Required logic for Howth Golf Live to function are stored in this class,
@@ -11,12 +12,12 @@ class Utils {
   /// final value. Does not allow 0 to be the first value in the
   /// [code] as when this is parsed, the 0 will be lost.
   static int get id {
-    String code = "";
+    String code = Strings.empty;
     final Random randomIntGenerator = Random();
 
     for (int i = 0; i < 6; i++) {
       int nextInt = randomIntGenerator.nextInt(10);
-      if (nextInt == 0 && code == "") {
+      if (nextInt == 0 && code.isEmpty) {
         i -= 1;
         continue;
       }
@@ -38,15 +39,7 @@ class Utils {
     String score = condition ? scores.howth : scores.opposition;
 
     return double.tryParse(score).toInt() == 0 && isFraction(score)
-        ? ""
+        ? Strings.empty
         : double.tryParse(score).toInt().toString();
   }
-
-  /// Turn a list of players, [playerList], into one string with
-  /// those individual player names separated by commas, apart from the last
-  /// player in the list.
-  static String formatPlayers(List<String> playerList) => playerList.fold(
-      playerList.first,
-      (String first, String second) =>
-          second == playerList.first ? first : first + ", " + second);
 }

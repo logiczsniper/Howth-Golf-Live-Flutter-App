@@ -30,15 +30,17 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
   DecoratedTextField oppositionScoreField =
       DecoratedTextField("${Fields.opposition} Score", number: true);
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
+  DecoratedTextField oppositionField =
+      DecoratedTextField(Fields.opposition, isRequired: false);
 
   DropdownButton<String> get _score => dropdownButton(
       scoreStatus,
       (String newValue) => setState(() {
             scoreStatus = newValue;
             howthScoreField.controller.text =
-                scoreStatus == Strings.aS ? "-" : "";
+                scoreStatus == Strings.aS ? "-" : Strings.empty;
             oppositionScoreField.controller.text =
-                scoreStatus == Strings.aS ? "-" : "";
+                scoreStatus == Strings.aS ? "-" : Strings.empty;
           }),
       <String>[Strings.upUnder, Strings.aS]
           .map<DropdownMenuItem<String>>((String value) =>
@@ -59,6 +61,9 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
                 scoreStatus == Strings.aS ? Container() : oppositionScoreField,
                 playersField,
                 UIToolkit.getFormText(Strings.nameCommas),
+                oppositionField,
+                UIToolkit.getFormText(
+                    Strings.optional + " " + Strings.nameCommas),
                 commentField,
                 UIToolkit.getFormText(Strings.optional)
               ]),
@@ -73,6 +78,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
         oppositionScoreField,
         scoreStatus,
         playersField,
+        oppositionField,
         widget.currentId);
   }
 

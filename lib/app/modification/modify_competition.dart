@@ -33,7 +33,8 @@ class ModifyCompetitionState extends State<ModifyCompetition>
       isHome,
       (bool newValue) => setState(() {
             isHome = newValue;
-            locationField.controller.text = isHome ? Strings.homeAddress : "";
+            locationField.controller.text =
+                isHome ? Strings.homeAddress : Strings.empty;
           }),
       <bool>[true, false]
           .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
@@ -77,13 +78,13 @@ class ModifyCompetitionState extends State<ModifyCompetition>
     super.initState();
 
     isHome = widget.currentEntry.location.isHome;
-    titleField =
-        DecoratedTextField("", initialValue: widget.currentEntry.title);
-    locationField = DecoratedTextField("",
+    titleField = DecoratedTextField(Strings.empty,
+        initialValue: widget.currentEntry.title);
+    locationField = DecoratedTextField(Strings.empty,
         initialValue: widget.currentEntry.location.address);
-    oppositionField =
-        DecoratedTextField("", initialValue: widget.currentEntry.opposition);
-    dateTimeField = DecoratedDateTimeField("",
+    oppositionField = DecoratedTextField(Strings.empty,
+        initialValue: widget.currentEntry.opposition);
+    dateTimeField = DecoratedDateTimeField(Strings.empty,
         initialValue:
             "${widget.currentEntry.date} ${widget.currentEntry.time}");
   }

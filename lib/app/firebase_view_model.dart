@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:howth_golf_live/constants/fields.dart';
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
 
@@ -26,7 +28,7 @@ class FirebaseViewModel {
 
   int bonusEntries(DatabaseEntry currentData) =>
       currentData.holes.length == 0 ? 3 : 2;
-  String title(int id) => entryFromId(id)?.title ?? "";
+  String title(int id) => entryFromId(id)?.title ?? Strings.empty;
 
   /// Sorts elements into either current or archived lists.
   ///

@@ -15,7 +15,7 @@ class DecoratedField {
 
     input = input.replaceAll("_", " ");
 
-    String caps = "";
+    String caps = Strings.empty;
 
     for (String word in input.split(" ")) {
       caps += word[0].toUpperCase() + word.substring(1) + " ";
@@ -26,7 +26,9 @@ class DecoratedField {
 
   /// Require some form of input.
   String validator(dynamic input, bool isRequired) =>
-      input == null || input == "" && isRequired ? Strings.requiredField : null;
+      input == null || input == Strings.empty && isRequired
+          ? Strings.requiredField
+          : null;
 
   /// [InputDecoration] with a red underline in every state and custom
   /// [hintText].

@@ -94,8 +94,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
 
-    _filter.addListener(() =>
-        setState(() => inputText = _filter.text.isEmpty ? "" : _filter.text));
+    _filter.addListener(() => setState(
+        () => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text));
   }
 
   @override

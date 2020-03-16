@@ -7,7 +7,6 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
@@ -57,49 +56,53 @@ class CompetitionPage extends StatelessWidget {
           String opposition, int index, int id) =>
       Padding(
           padding: EdgeInsets.all(5.3),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <
-                  Widget>[
-            /// Home team section.
-            Expanded(
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                  /// Home player.
-                  _getPlayer(
-                      hole,
-                      isHome ? Utils.formatPlayers(hole.players) : opposition,
-                      index),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                /// Home team section.
+                Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                      /// Home player.
+                      _getPlayer(
+                          hole,
+                          isHome
+                              ? hole.formattedPlayers
+                              : hole.formattedOpposition(opposition),
+                          index),
 
-                  /// Home score.
-                  _getScore(
-                      isHome ? hole.holeScore.howth : hole.holeScore.opposition)
-                ])),
-
-            /// Hole Number
-            UIToolkit.getHoleNumberDecorated(hole.holeNumber),
-
-            /// Away team section.
-            Expanded(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                  /// Away team score.
-                  _getScore(
-                      !isHome
+                      /// Home score.
+                      _getScore(isHome
                           ? hole.holeScore.howth
-                          : hole.holeScore.opposition,
-                      away: true),
+                          : hole.holeScore.opposition)
+                    ])),
 
-                  /// Away team player.
-                  _getPlayer(
-                      hole,
-                      !isHome ? Utils.formatPlayers(hole.players) : opposition,
-                      index,
-                      away: true)
-                ]))
-          ]));
+                /// Hole Number
+                UIToolkit.getHoleNumberDecorated(hole.holeNumber),
+
+                /// Away team section.
+                Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                      /// Away team score.
+                      _getScore(
+                          !isHome
+                              ? hole.holeScore.howth
+                              : hole.holeScore.opposition,
+                          away: true),
+
+                      /// Away team player.
+                      _getPlayer(
+                          hole,
+                          !isHome
+                              ? hole.formattedPlayers
+                              : hole.formattedOpposition(opposition),
+                          index,
+                          away: true)
+                    ]))
+              ]));
 
   @override
   Widget build(BuildContext context) {

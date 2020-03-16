@@ -1,4 +1,6 @@
 import 'package:howth_golf_live/app/firebase_view_model.dart';
+
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 class HoleViewModel {
@@ -7,7 +9,7 @@ class HoleViewModel {
   DatabaseEntry databaseEntry(int id) => _firebaseModel.entryFromId(id);
 
   bool isHome(int id) => databaseEntry(id)?.location?.isHome ?? true;
-  String opposition(int id) => databaseEntry(id)?.opposition ?? "";
+  String opposition(int id) => databaseEntry(id)?.opposition ?? Strings.empty;
   int holeCount(int id) => databaseEntry(id)?.holes?.length ?? 0;
   List<Hole> holes(int id) => databaseEntry(id)?.holes ?? [];
 

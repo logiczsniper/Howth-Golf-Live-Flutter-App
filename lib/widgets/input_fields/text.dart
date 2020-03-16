@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
@@ -17,7 +18,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
       {this.withPadding = true,
       this.number = false,
       this.isRequired = true,
-      this.initialValue = ""});
+      this.initialValue = Strings.empty});
 
   @override
   Widget build(BuildContext context) {

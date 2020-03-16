@@ -153,24 +153,25 @@ class FirebaseInteration {
     DecoratedTextField oppositionScoreField,
     String scoreStatus,
     DecoratedTextField playersField,
+    DecoratedTextField oppositionField,
     int currentId,
   ) {
     /// If the form inputs have been validated, add to holes.
     if (_formKey.currentState.validate()) {
       Hole newHole = Hole(
-        holeNumber: int.tryParse(numberField.controller.value.text),
-        holeScore: scoreStatus == "A\\S"
-            ? Score.fresh
-            : Score(
-                howth: howthScoreField.controller.text,
-                opposition: oppositionScoreField.controller.text),
-        comment: commentField.controller.text,
-        lastUpdated: DateTime.now(),
+          holeNumber: int.tryParse(numberField.controller.value.text),
+          holeScore: scoreStatus == Strings.aS
+              ? Score.fresh
+              : Score(
+                  howth: howthScoreField.controller.text,
+                  opposition: oppositionScoreField.controller.text),
+          comment: commentField.controller.text,
+          lastUpdated: DateTime.now(),
 
-        /// Note: this means that the text provided by the user which contains
-        /// player names must be separated with ", " between each player.
-        players: playersField.controller.value.text.split(", "),
-      );
+          /// Note: this means that the text provided by the user which contains
+          /// player names must be separated with ", " between each player.
+          players: playersField.controller.value.text.split(", "),
+          opposition: oppositionField.controller.value.text.split(", "));
 
       for (Map entry in _databaseEntries) {
         if (entry[Fields.id] == currentId) {

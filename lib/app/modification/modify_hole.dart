@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/app/creation/creation_page.dart';
+import 'package:howth_golf_live/app/hole/hole_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
@@ -26,6 +28,7 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
   /// Fields the user must fill out to create a hole.
   DecoratedTextField commentField;
   DecoratedTextField playersField;
+  DecoratedTextField oppositionField;
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
@@ -37,6 +40,9 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
               children: <Widget>[
                 playersField,
                 UIToolkit.getFormText(Strings.nameCommas),
+                oppositionField,
+                UIToolkit.getFormText(
+                    Strings.optional + " " + Strings.nameCommas),
                 commentField,
                 UIToolkit.getFormText(Strings.optional)
               ]),
@@ -45,6 +51,7 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
   void _onPressed() {
     Hole updatedHole = widget.currentHole.updateHole(
         newPlayers: playersField.controller.value.text.split(", "),
+        newOpposition: oppositionField.controller.value.text.split(", "),
         newComment: commentField.controller.value.text);
     FirebaseInteration(context)
         .updateHole(widget.index, widget.currentId, updatedHole, pop: true);
@@ -53,11 +60,20 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
   @override
   void initState() {
     super.initState();
+    var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
 
-    commentField = DecoratedTextField("",
-        initialValue: widget.currentHole.comment, isRequired: false);
-    playersField = DecoratedTextField("",
-        initialValue: Utils.formatPlayers(widget.currentHole.players));
+    commentField = DecoratedTextField(
+        widget.currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
+        initialValue: widget.currentHole.comment.isEmpty
+            ? null
+            : widget.currentHole.comment,
+        isRequired: false);
+    playersField = DecoratedTextField(Strings.empty,
+        initialValue: widget.currentHole.formattedPlayers);
+    oppositionField = DecoratedTextField(Strings.empty,
+        initialValue: widget.currentHole
+            .formattedOpposition(_holeModel.opposition(widget.currentId)),
+        isRequired: false);
   }
 
   @override

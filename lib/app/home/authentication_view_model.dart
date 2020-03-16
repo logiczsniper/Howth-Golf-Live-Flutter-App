@@ -11,7 +11,7 @@ class AuthenticationViewModel extends ChangeNotifier {
     _status = Strings.tapMe;
   }
 
-  String get status => _status ?? "";
+  String get status => _status ?? Strings.empty;
 
   set status(String newStatus) => _status = newStatus;
 

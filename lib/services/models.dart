@@ -176,6 +176,7 @@ class Hole {
   final int holeNumber;
   final Score holeScore;
   final List<String> players;
+  final List<String> opposition;
   final String comment;
   final DateTime lastUpdated;
 
@@ -185,20 +186,24 @@ class Hole {
         holeScore = Score.fromMap(map[Fields.holeScore]),
         players = List<String>.generate(map[Fields.players].length,
             (int index) => map[Fields.players][index].toString()),
+        opposition = List<String>.generate(map[Fields.opposition].length,
+            (int index) => map[Fields.opposition][index].toString()),
         comment = map[Fields.comment],
         lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
   static Hole get fresh => Hole(
       holeNumber: 0,
       holeScore: Score.fresh,
-      players: [""],
-      comment: "",
+      players: [Strings.empty],
+      opposition: [Strings.empty],
+      comment: Strings.empty,
       lastUpdated: DateTime.now());
 
   Map get toJson => {
         Fields.holeNumber: holeNumber,
         Fields.holeScore: holeScore.toJson,
         Fields.players: players,
+        Fields.opposition: opposition,
         Fields.comment: comment,
         Fields.lastUpdated: lastUpdated.toString()
       };
@@ -213,6 +218,7 @@ class Hole {
         holeNumber: holeNumber + value,
         holeScore: holeScore,
         players: players,
+        opposition: opposition,
         comment: comment,
         lastUpdated: DateTime.now());
   }
@@ -221,24 +227,44 @@ class Hole {
       {Score newScore,
       int newHoleNumber,
       List<String> newPlayers,
+      List<String> newOpposition,
       String newComment}) {
     assert(newScore != null ||
         newHoleNumber != null ||
         newPlayers != null ||
-        newComment != null);
+        newComment != null ||
+        newOpposition != null);
     return Hole(
         holeNumber: newHoleNumber ?? holeNumber,
         holeScore: newScore ?? holeScore,
         players: newPlayers ?? players,
+        opposition: newOpposition ?? opposition,
         comment: newComment ?? comment,
         lastUpdated: DateTime.now());
   }
+
+  String get formattedPlayers => _formattedNames(players).isEmpty
+      ? Strings.homeAddress
+      : _formattedNames(players);
+  String formattedOpposition(String oppositionClub) =>
+      _formattedNames(opposition).isEmpty
+          ? oppositionClub
+          : _formattedNames(opposition);
+
+  /// Turn a list of players, [playerList], into one string with
+  /// those individual player names separated by commas, apart from the last
+  /// player in the list.
+  String _formattedNames(List<String> names) => names.fold(
+      names.first,
+      (String first, String second) =>
+          second == names.first ? first : first + ", " + second);
 
   Hole(
       {@required this.holeNumber,
       @required this.holeScore,
       @required this.players,
       this.comment,
+      this.opposition,
       @required this.lastUpdated});
 }
 

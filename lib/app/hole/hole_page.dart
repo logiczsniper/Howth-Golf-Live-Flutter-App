@@ -6,7 +6,6 @@ import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/app/hole/hole_view_model.dart';
@@ -165,8 +164,10 @@ class HolePage extends StatelessWidget {
                   hole.holeScore.updateScore(!isHome, -1),
                   hasAccess),
             ]),
-            UIToolkit.getVersus(isHome, _holeModel.opposition(id),
-                Utils.formatPlayers(hole.players)),
+            UIToolkit.getVersus(
+                isHome,
+                hole.formattedOpposition(_holeModel.opposition(id)),
+                hole.formattedPlayers),
 
             /// Edit the hole number.
             Row(

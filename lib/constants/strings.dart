@@ -1,8 +1,9 @@
 class Strings {
   static const String appName = "Howth Golf Live";
   static const String appTitle = "Howth Golf\n Live Scoring";
-  static final String homeAddress = "Howth Golf Club";
-  static final String contactDeveloper =
+  static const String homeAddress = "Howth Golf Club";
+  static const String empty = "";
+  static const String contactDeveloper =
       "Contact the developer:\nhowth.lczernel@gmail.com";
 
   static const String tapMe = "Tap anywhere to begin!";
@@ -62,7 +63,7 @@ class Strings {
   static const String atHome = "At home: ";
   static const String howthIs = "Howth is: ";
   static const String nameCommas = "Names separated by commas.";
-  static const String optional = "This is completely optional.";
+  static const String optional = "This is optional.";
   static const String titleLengthNote =
       "Try to keep title length < ~30 characters.";
 }

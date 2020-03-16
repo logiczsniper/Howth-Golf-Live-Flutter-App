@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/style/palette.dart';
@@ -23,7 +24,7 @@ class ComplexScore extends StatelessWidget {
       /// no fraction is displayed if the [currentEntry.score] is whole.
       text: Utils.isFraction(condition ? scores.howth : scores.opposition)
           ? "1/2"
-          : "",
+          : Strings.empty,
       style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
 
   static RichText getMixedFraction(bool condition, Score score) => RichText(

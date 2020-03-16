@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 
+import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/input_fields/decorated.dart';
@@ -15,7 +16,7 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
 
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedDateTimeField(this.hintText,
-      {this.withPadding = true, this.initialValue = ""});
+      {this.withPadding = true, this.initialValue = Strings.empty});
 
   @override
   Widget build(BuildContext context) {

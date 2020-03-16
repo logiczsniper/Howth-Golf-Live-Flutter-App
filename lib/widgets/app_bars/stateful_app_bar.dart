@@ -5,7 +5,7 @@ import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
 
 class StatefulAppBar {
-  String inputText = "";
+  String inputText = Strings.empty;
   String title;
   Widget appBarTitle;
   Widget titleBar;
@@ -40,7 +40,7 @@ class StatefulAppBar {
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title) => Center(
           child: Text(
-        title == Strings.competitionsText ? "" : title,
+        title == Strings.competitionsText ? Strings.empty : title,
         softWrap: true,
         textAlign: TextAlign.center,
         maxLines: 2,

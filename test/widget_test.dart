@@ -22,10 +22,10 @@ void main() {
     final introTextFinder = find.text(Strings.tapMe);
     expect(introTextFinder, findsOneWidget);
 
-    tester.tap(find.widgetWithText(Text, Strings.tapMe)).then((_) {
-      // loading text.
-      final loadingTextFinder = find.text(Strings.loading);
-      expect(loadingTextFinder, findsOneWidget);
-    });
+    // loading text.
+    await tester.tap(find.byType(Text));
+    await tester.pump();
+    final loadingTextFinder = find.text(Strings.loading);
+    expect(loadingTextFinder, findsOneWidget);
   });
 }

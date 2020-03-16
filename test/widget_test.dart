@@ -23,9 +23,9 @@ void main() {
     expect(introTextFinder, findsOneWidget);
 
     // loading text.
-    await tester.tap(find.byType(Text));
-    await tester.pump();
-    final loadingTextFinder = find.text(Strings.loading);
-    expect(loadingTextFinder, findsOneWidget);
+    // await tester.tap(find.byType(Text));
+    // await tester.pump();
+    // final loadingTextFinder = find.text(Strings.loading);
+    // expect(loadingTextFinder, findsOneWidget);
   });
 }

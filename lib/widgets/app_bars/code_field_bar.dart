@@ -51,6 +51,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
               .showSnackBar(UIToolkit.snackbar(Strings.incorrectCode));
 
         setState(() {
+          print("HI");
           appBarTitle = actionPressed(appBarTitle, context, _filter);
         });
       });
@@ -100,7 +101,6 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   @override
   Widget build(BuildContext context) {
-    titleBar = buildTitleBar(widget.title);
     return AppBar(
         title: getTitle(appBarTitle),
         centerTitle: true,

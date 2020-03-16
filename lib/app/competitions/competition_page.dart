@@ -1,6 +1,5 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/app/hole/hole_page.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -151,19 +150,17 @@ class CompetitionPage extends StatelessWidget {
                                     style: TextStyles.noDataTextStyle),
                                 padding: EdgeInsets.only(top: 25.0)));
                       else
-                        return OpenContainer(
-                          closedElevation: 0.0,
-                          transitionDuration: Duration(milliseconds: 350),
-                          openBuilder: (context, _) =>
-                              HolePage(currentData.id, index - 2),
-                          closedBuilder: (context, _) => _rowBuilder(
-                              context,
-                              currentData.holes[index - 2],
-                              currentData.location.isHome,
-                              currentData.opposition,
-                              index,
-                              currentData.id),
-                        );
+                        return GestureDetector(
+                            onTap: () =>
+                                Routes.toHole(context, currentData.id, index),
+                            child: Container(
+                                child: _rowBuilder(
+                                    context,
+                                    currentData.holes[index - 2],
+                                    currentData.location.isHome,
+                                    currentData.opposition,
+                                    index,
+                                    currentData.id)));
                     }))));
   }
 }

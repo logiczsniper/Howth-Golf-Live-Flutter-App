@@ -46,6 +46,7 @@ class CreationPage {
       appBar: AppBar(
           centerTitle: true,
           title: Text(title, textAlign: TextAlign.center, maxLines: 2),
+          leading: CloseButton(),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.check),

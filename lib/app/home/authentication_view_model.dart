@@ -21,13 +21,16 @@ class AuthenticationViewModel extends ChangeNotifier {
       notifyListeners();
       await FirebaseAuth.instance
           .signInAnonymously()
-          .timeout(Duration(seconds: 15), onTimeout: () => throw Exception)
-          .then((_) {
+          .timeout(Duration(seconds: 15), onTimeout: () {
+        _status = Strings.timedOut;
+        notifyListeners();
+        return null;
+      }).then((_) {
         _status = Strings.connected;
         notifyListeners();
       });
     } catch (_) {
-      _status = Strings.failure;
+      _status = Strings.noConnection;
       notifyListeners();
     }
   }

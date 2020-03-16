@@ -42,9 +42,10 @@ class Strings {
   static const String irreversibleAction = "This action is irreversible.";
   static const String doubleCheck = "Are you sure?";
 
-  static const String noConnection = "No connection to Firebase!";
+  static const String noConnection = "No connection found!";
   static const String loading = "Loading...";
   static const String failure = "Failed!";
+  static const String timedOut = "Timed out!";
   static const String connected = "Connected!";
   static const String entering = "Entering...";
   static const String noCompetitions = "No competitions found!";

@@ -71,7 +71,7 @@ class Themes {
           borderRadius: BorderRadius.circular(5.0)));
 
   static TabBarTheme tabBarTheme = TabBarTheme(
-      labelColor: Color.fromARGB(250, 240, 240, 240),
+      labelColor: Color.fromARGB(250, 247, 247, 247),
       unselectedLabelColor: Palette.dark);
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =

@@ -36,20 +36,8 @@ class UIToolkit {
           top: BorderSide(width: 1.5, color: Palette.maroon)));
 
   static BoxDecoration roundedRectBoxDecoration = BoxDecoration(
-/*       boxShadow: [
-        BoxShadow(
-            color: Palette.dark,
-            spreadRadius: 0.5,
-            blurRadius: 4.5,
-            offset: Offset(5, 5)),
-        BoxShadow(
-            color: Palette.light,
-            spreadRadius: 0.5,
-            blurRadius: 3.5,
-            offset: Offset(-5, -5))
-      ],*/
       gradient: LinearGradient(
-          colors: [Palette.card, Color.fromARGB(255, 236, 236, 236)]),
+          colors: [Palette.card, Color.fromARGB(255, 238, 238, 238)]),
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(10.0));
 

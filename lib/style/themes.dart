@@ -41,8 +41,8 @@ class Themes {
           borderRadius: BorderRadius.vertical(
         top: Radius.circular(20),
       )),
-      backgroundColor: Palette.divider.withAlpha(215),
-      contentTextStyle: TextStyle(color: Palette.maroon));
+      backgroundColor: Palette.card.withAlpha(253),
+      contentTextStyle: TextStyle(color: Palette.dark));
 
   static ButtonThemeData buttonTheme = ButtonThemeData(
       splashColor: Palette.maroon.withAlpha(60),

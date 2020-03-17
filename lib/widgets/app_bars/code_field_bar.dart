@@ -47,8 +47,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
       isCodeCorrect.then((bool isCodeCorrect) {
         if (!isCodeCorrect && inputText.isNotEmpty)
-          Scaffold.of(context)
-              .showSnackBar(UIToolkit.snackbar(Strings.incorrectCode));
+          Scaffold.of(context).showSnackBar(
+              UIToolkit.snackbar(Strings.incorrectCode, Icons.lock_outline));
 
         setState(() {
           print("HI");

@@ -55,7 +55,8 @@ class FirebaseInteration {
     Map<String, dynamic> newData = {Fields.data: _databaseEntries};
     DocumentSnapshot _documentSnapshot = _firebaseModel.document;
     _documentSnapshot.reference.updateData(newData).catchError((_) =>
-        Scaffold.of(context).showSnackBar(UIToolkit.snackbar(Strings.failure)));
+        Scaffold.of(context).showSnackBar(
+            UIToolkit.snackbar(Strings.failure, Icons.error_outline)));
   }
 
   /// Remove [currentEntry] from the entries in the database.

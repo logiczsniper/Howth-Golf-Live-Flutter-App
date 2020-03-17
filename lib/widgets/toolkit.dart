@@ -117,12 +117,26 @@ class UIToolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
-  static SnackBar snackbar(String text, {Duration duration}) => SnackBar(
-        content: Text(
-          text,
-          textAlign: TextAlign.center,
+  static SnackBar snackbar(String text, IconData iconData,
+          {Duration duration}) =>
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              iconData,
+              color: Palette.maroon,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5.0),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
         ),
-        duration: duration,
+        duration: duration ?? Duration(seconds: 5),
       );
 
   static FloatingActionButton createButton(

@@ -43,6 +43,7 @@ class StatefulAppBar {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
             Strings.noConnection,
+            Icons.signal_cellular_connected_no_internet_4_bar,
             duration: Duration(seconds: 8)));
       });
     }

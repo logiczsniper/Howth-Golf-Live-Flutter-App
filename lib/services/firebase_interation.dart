@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/constants/fields.dart';
-import 'package:howth_golf_live/services/utils.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
@@ -26,6 +27,26 @@ class FirebaseInteration {
   static Stream<QuerySnapshot> get stream => Firestore.instance
       .collection(Strings.competitionsText.toLowerCase())
       .snapshots();
+
+  /// Generates a 6 digit id using [Random].
+  ///
+  /// Appends each new value to a string before parsing the
+  /// final value. Does not allow 0 to be the first value in the
+  /// [code] as when this is parsed, the 0 will be lost.
+  int get _id {
+    String code = Strings.empty;
+    final Random randomIntGenerator = Random();
+
+    for (int i = 0; i < 6; i++) {
+      int nextInt = randomIntGenerator.nextInt(10);
+      if (nextInt == 0 && code.isEmpty) {
+        i -= 1;
+        continue;
+      }
+      code += nextInt.toString();
+    }
+    return int.parse(code);
+  }
 
   void _updateDatabase({bool pop = true, bool popAgain = false}) {
     if (pop) Navigator.of(context).pop();
@@ -56,7 +77,7 @@ class FirebaseInteration {
     /// If the form inputs have been validated, add to competitions.
     if (_formKey.currentState.validate()) {
       DatabaseEntry newEntry = DatabaseEntry(
-          id: Utils.id,
+          id: _id,
           title: titleField.controller.value.text,
           location: Location(address: locationField.controller.value.text),
           opposition: oppositionField.controller.value.text,

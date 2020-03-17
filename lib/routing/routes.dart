@@ -22,40 +22,43 @@ class Routes {
   /// The initial route.
   static String get home => "/";
 
+  BuildContext context;
+  Routes(this.context);
+  Routes.of(BuildContext context) : context = context;
+
   /// Push to [destination].
-  static void pushTo(BuildContext context, Widget destination) =>
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => destination));
+  void pushTo(Widget destination) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => destination));
 
   /// Push to [ModifyCompetition] page.
-  static void toCompetitionModification(
-          BuildContext context, DatabaseEntry currentEntry) =>
-      pushTo(context, ModifyCompetition(currentEntry));
+  void toCompetitionModification(DatabaseEntry currentEntry) =>
+      pushTo(ModifyCompetition(currentEntry));
 
   /// Push to [ModifyHole] page.
-  static void toHoleModification(
-          BuildContext context, int id, int index, Hole currentHole) =>
-      pushTo(context, ModifyHole(id, index, currentHole));
+  void toHoleModification(int id, int index, Hole currentHole) =>
+      pushTo(ModifyHole(id, index, currentHole));
 
   /// Push to [CreateCompetition] page.
-  static void toCompetitionCreation(BuildContext context) =>
-      pushTo(context, CreateCompetition());
+  void toCompetitionCreation() => pushTo(CreateCompetition());
 
   /// Push to the [CreateHole] page.
-  static void toHoleCreation(BuildContext context, int id) =>
-      pushTo(context, CreateHole(id));
+  void toHoleCreation(int id) => pushTo(CreateHole(id));
+
+  /// Push to the [Helps] page.
+  void toHelps() => pushTo(HelpsPage());
 
   /// Push to the [Help] page.
-  static void toHelp(BuildContext context, AppHelpEntry helpEntry) =>
-      pushTo(context, HelpPage(helpEntry));
+  void toHelp(AppHelpEntry helpEntry) => pushTo(HelpPage(helpEntry));
 
   /// Push to the [Hole] page.
-  static void toHole(BuildContext context, int id, int index) =>
-      pushTo(context, HolePage(id, index - 2));
+  void toHole(int id, int index) => pushTo(HolePage(id, index - 2));
+
+  /// Push to [Competitions] page.
+  void toCompetitions() => pushTo(CompetitionsPage());
 
   /// Push to the [Competition] page.
-  static void toCompetition(BuildContext context, DatabaseEntry currentEntry) =>
-      pushTo(context, CompetitionPage(currentEntry));
+  void toCompetition(DatabaseEntry currentEntry) =>
+      pushTo(CompetitionPage(currentEntry));
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {

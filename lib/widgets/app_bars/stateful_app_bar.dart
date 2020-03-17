@@ -26,10 +26,6 @@ class StatefulAppBar {
       InputDecoration(
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              // prefixIcon: Icon(
-              //   Icons.keyboard_arrow_right,
-              //   color: Palette.dark,
-              // ),
               hintText: hintText)
           .applyDefaults(Themes.inputDecorationTheme);
 

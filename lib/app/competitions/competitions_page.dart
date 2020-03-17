@@ -81,7 +81,8 @@ class CompetitionsPage extends StatelessWidget {
                   return ComplexCard(
                       child: _tileBuilder(
                           context, currentEntry, _userStatus.isAdmin),
-                      onTap: () => Routes.toCompetition(context, currentEntry),
+                      onTap: () =>
+                          Routes.of(context).toCompetition(currentEntry),
                       iconButton: _userStatus.isAdmin
                           ? Column(
                               mainAxisSize: MainAxisSize.min,
@@ -89,9 +90,9 @@ class CompetitionsPage extends StatelessWidget {
                                   IconButton(
                                     padding: EdgeInsets.only(top: 10.0),
                                     icon: Icon(Icons.edit),
-                                    onPressed: () =>
-                                        Routes.toCompetitionModification(
-                                            context, currentEntry),
+                                    onPressed: () => Routes.of(context)
+                                        .toCompetitionModification(
+                                            currentEntry),
                                   ),
                                   IconButton(
                                       icon: Icon(Icons.remove_circle_outline),

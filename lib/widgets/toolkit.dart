@@ -153,10 +153,10 @@ class UIToolkit {
       onPressed: () {
         switch (text) {
           case Strings.newCompetition:
-            Routes.toCompetitionCreation(context);
+            Routes.of(context).toCompetitionCreation();
             break;
           case Strings.newHole:
-            Routes.toHoleCreation(context, id);
+            Routes.of(context).toHoleCreation(id);
             break;
         }
       },

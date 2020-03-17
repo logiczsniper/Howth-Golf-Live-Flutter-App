@@ -91,8 +91,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                   icon: Icon(Icons.help_outline),
                   padding: EdgeInsets.fromLTRB(32.0, 8.0, 8.0, 8.0),
                   tooltip: Strings.tapHelp,
-                  onPressed: () => Navigator.pushNamed(
-                      context, Routes.home + Strings.helpsText)),
+                  onPressed: () => Routes.of(context).toHelps()),
               actions: <Widget>[
                 IconButton(
                     icon: _iconData,

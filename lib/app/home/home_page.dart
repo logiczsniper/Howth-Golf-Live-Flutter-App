@@ -55,8 +55,7 @@ class HomePage extends StatelessWidget {
       if (authenticationViewModel.status == Strings.connected) {
         authenticationViewModel.status = Strings.entering;
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(
-              context, Routes.home + Strings.competitionsText);
+          Routes.of(context).toCompetitions();
         });
       }
       return _page(context, authenticationViewModel);

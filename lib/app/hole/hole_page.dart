@@ -107,7 +107,7 @@ class HolePage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 13.5),
                     tooltip: Strings.tapModify,
                     onPressed: () =>
-                        Routes.toHoleModification(context, id, index, hole))
+                        Routes.of(context).toHoleModification(id, index, hole))
                 : Container(),
             hasAccess
                 ? IconButton(

@@ -150,12 +150,13 @@ class CompetitionPage extends StatelessWidget {
                             child: Padding(
                                 child: Text(
                                     Strings.noHoles + currentData.title + "!",
+                                    textAlign: TextAlign.center,
                                     style: TextStyles.noDataTextStyle),
                                 padding: EdgeInsets.only(top: 25.0)));
                       else
                         return GestureDetector(
-                            onTap: () =>
-                                Routes.toHole(context, currentData.id, index),
+                            onTap: () => Routes.of(context)
+                                .toHole(currentData.id, index),
                             child: Container(
                                 child: _rowBuilder(
                                     context,

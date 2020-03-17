@@ -21,6 +21,7 @@ class Strings {
   static const String competitionsText = "Competitions";
   static const String helpsText = "App Help";
   static const String specificHole = "Specific Hole";
+  static const String specificCompetition = "Specific Competition";
   static const String newHole = "New Hole";
   static const String newCompetition = "New Competition";
   static const String modifyHole = "Modify Hole";
@@ -67,4 +68,8 @@ class Strings {
   static const String optional = "This is optional.";
   static const String titleLengthNote =
       "Try to keep title length < ~30 characters.";
+
+  static const String activeAdminText = "activeAdmin";
+  static const String activeCompetitionsText = "activeCompetitions";
+  static const String visitedRoutes = "visitedRoutes";
 }

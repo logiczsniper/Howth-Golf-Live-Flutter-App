@@ -42,7 +42,7 @@ class HelpsPage extends StatelessWidget {
                   maxLines: 2,
                   style: TextStyles.cardSubTitleTextStyle),
               trailing: Icon(Icons.keyboard_arrow_right)),
-          onTap: () => Routes.toHelp(context, currentHelpEntry));
+          onTap: () => Routes.of(context).toHelp(currentHelpEntry));
 
   @override
   Widget build(BuildContext context) {

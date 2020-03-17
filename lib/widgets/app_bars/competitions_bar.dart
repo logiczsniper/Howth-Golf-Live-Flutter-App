@@ -74,6 +74,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
   @override
   Widget build(BuildContext context) {
+    checkConnectivity(context);
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),

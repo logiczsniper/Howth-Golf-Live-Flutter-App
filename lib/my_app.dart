@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/connectivity_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
@@ -17,15 +18,23 @@ class MyApp extends StatelessWidget {
   static MultiProvider get providedApp =>
       MultiProvider(child: MyApp(), providers: [
         ChangeNotifierProvider<UserStatusViewModel>(
-            create: (_) => UserStatusViewModel()),
+          create: (_) => UserStatusViewModel(),
+        ),
         ChangeNotifierProvider<AuthenticationViewModel>(
-            create: (_) => AuthenticationViewModel()),
+          create: (_) => AuthenticationViewModel(),
+        ),
         FutureProvider<HelpDataViewModel>(
-            create: (_) => HelpDataViewModel.getModel,
-            initialData: HelpDataViewModel.init()),
+          create: (_) => HelpDataViewModel.getModel,
+          initialData: HelpDataViewModel.init(),
+        ),
         StreamProvider<FirebaseViewModel>(
-            create: (_) => FirebaseViewModel.stream,
-            initialData: FirebaseViewModel.init()),
+          create: (_) => FirebaseViewModel.stream,
+          initialData: FirebaseViewModel.init(),
+        ),
+        StreamProvider<ConnectivityViewModel>(
+          create: (_) => ConnectivityViewModel.stream,
+          initialData: ConnectivityViewModel.init(),
+        ),
         ProxyProvider<FirebaseViewModel, HoleViewModel>(
             update: (_, firebaseModel, __) => HoleViewModel(firebaseModel))
       ]);

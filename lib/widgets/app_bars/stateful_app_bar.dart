@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/app/connectivity_view_model.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class StatefulAppBar {
   String inputText = Strings.empty;
@@ -32,6 +35,18 @@ class StatefulAppBar {
   /// The title must be an [AnimatedSwitcher].
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
       duration: Duration(milliseconds: 350), child: appBarTitle);
+
+  void checkConnectivity(BuildContext context) {
+    var _connectivityStatus = Provider.of<ConnectivityViewModel>(context);
+
+    if (_connectivityStatus.isNotConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
+            Strings.noConnection,
+            duration: Duration(seconds: 8)));
+      });
+    }
+  }
 
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title) => Center(

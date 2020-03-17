@@ -129,11 +129,12 @@ class UIToolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
-  static SnackBar snackbar(String text) => SnackBar(
+  static SnackBar snackbar(String text, {Duration duration}) => SnackBar(
         content: Text(
           text,
           textAlign: TextAlign.center,
         ),
+        duration: duration,
       );
 
   static FloatingActionButton createButton(

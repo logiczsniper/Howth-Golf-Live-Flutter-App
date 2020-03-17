@@ -35,6 +35,8 @@ class Strings {
   static const String firaSans = "FiraSans";
   static const String cormorantGaramond = "CormorantGaramond";
 
+  static const String consequences = "You may not see the latest data.";
+  static const String lostConnection = "Lost connection with database!";
   static const String error =
       "Oof, please email the address in App Help to report this error.";
 

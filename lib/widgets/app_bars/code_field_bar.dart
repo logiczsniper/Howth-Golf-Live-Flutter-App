@@ -101,6 +101,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   @override
   Widget build(BuildContext context) {
+    checkConnectivity(context);
     return AppBar(
         title: getTitle(appBarTitle),
         centerTitle: true,

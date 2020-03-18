@@ -13,6 +13,8 @@ class Themes {
       accentColor: Palette.maroon,
       splashColor: Palette.maroon.withAlpha(50),
       disabledColor: Palette.maroon,
+      textSelectionHandleColor: Palette.maroon,
+      textSelectionColor: Palette.maroon,
       scaffoldBackgroundColor: Palette.light,
       fontFamily: Strings.firaSans,
       textTheme: textTheme,

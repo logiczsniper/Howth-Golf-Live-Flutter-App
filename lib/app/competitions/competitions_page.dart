@@ -81,8 +81,6 @@ class CompetitionsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   if (!hasVisited && index == 0 && isCurrentTab) {
                     return ComplexCard(
-
-                        /// TODO: test me
                         child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 13.0, vertical: 5.0),

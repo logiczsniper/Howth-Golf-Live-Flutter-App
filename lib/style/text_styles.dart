@@ -9,7 +9,10 @@ class TextStyles {
       fontFamily: Strings.cormorantGaramond,
       fontSize: 27.0,
       height: 0.95,
-      color: Color.fromARGB(255, 85, 85, 85));
+      color: Palette.darker);
+
+  static const TextStyle helpTitle =
+      TextStyle(fontSize: 18, color: Palette.darker);
 
   static const TextStyle cardTitle =
       TextStyle(fontSize: 16, color: Palette.dark, fontWeight: FontWeight.w300);

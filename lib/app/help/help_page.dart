@@ -45,8 +45,8 @@ class HelpPage extends StatelessWidget {
     );
   }
 
-  Text get _title =>
-      Text(helpEntry.title, textAlign: TextAlign.center, maxLines: 2);
+  Text get _title => Text(helpEntry.title,
+      textAlign: TextAlign.center, maxLines: 2, style: TextStyles.helpTitle);
 
   @override
   Widget build(BuildContext context) {

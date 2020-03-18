@@ -90,6 +90,10 @@
                 "data": "Click on the hole you want to remove. Once on the individual hole page, click the delete icon in the top right."
             },
             {
+                "title": "Modify a hole",
+                "data": "Click on the hole you want to modify. On the individual hole page, click the edit icon (left of delete icon) in the top right."
+            },
+            {
                 "title": "Updating hole numbers / scores",
                 "data": "In the individual hole page, use the plus/minus icons."
             }
@@ -105,11 +109,15 @@
             },
             {
                 "title": "Remove a competition",
-                "data": "In the competitions page, each card will have a remove icon on the right of it. Click this icon to remove the associated competition."
+                "data": "In the competitions page, each card will have a remove icon on the bottom right of it. Click this icon to remove the associated competition."
+            },
+            {
+                "title": "Modify a competition",
+                "data": "In the competitions page, each card will have a edit icon on the top right of it. Click this icon to modify the associated competition."
             },
             {
                 "title": "Add a manager",
-                "data": "In a competition page, you will see a 6-digit code. Give this to the future manager to type into their app to gain access to the associated competition."
+                "data": "In a competition page, the last competition detail is a 6-digit code. Give this to the future-manager to type into their app to gain access to the associated competition."
             }
         ]
     }

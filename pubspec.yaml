@@ -38,10 +38,10 @@ flutter:
   fonts:
     - family: CormorantGaramond
       fonts:
-        - asset: lib/assets/fonts/Cormorant_Garamond/CormorantGaramond-BoldItalic.ttf
+        - asset: lib/assets/fonts/CormorantGaramond-BoldItalic.ttf
     - family: FiraSans
       fonts:
-        - asset: lib/assets/fonts/Fira_Sans/FiraSans-Regular.ttf
+        - asset: lib/assets/fonts/FiraSans-Regular.ttf
   assets:
     - lib/assets/
 

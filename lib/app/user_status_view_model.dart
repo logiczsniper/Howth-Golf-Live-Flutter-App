@@ -35,6 +35,7 @@ class UserStatusViewModel extends ChangeNotifier {
     _isAdmin = preferences.getBool(Strings.activeAdminText) ?? false;
     _competitionAccess =
         preferences.getStringList(Strings.activeCompetitionsText) ?? [];
+    _visitedRoutes = preferences.getStringList(Strings.visitedRoutes) ?? [];
     notifyListeners();
   }
 

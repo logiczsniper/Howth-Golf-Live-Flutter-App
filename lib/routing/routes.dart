@@ -10,9 +10,12 @@ import 'package:howth_golf_live/app/hole/hole_page.dart';
 import 'package:howth_golf_live/app/home/home_page.dart';
 import 'package:howth_golf_live/app/modification/modify_competition.dart';
 import 'package:howth_golf_live/app/modification/modify_hole.dart';
+import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
+import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 Widget get homePage => HomePage();
 Widget get competitionsPage => CompetitionsPage();
@@ -28,7 +31,31 @@ class Routes {
 
   /// Push to [destination].
   void pushTo(Widget destination) => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => destination));
+      context,
+      MaterialPageRoute(
+          builder: (context) => ShowCaseWidget(
+              onFinish: () {
+                var _userStatus =
+                    Provider.of<UserStatusViewModel>(context, listen: false);
+
+                String route;
+
+                switch (destination.runtimeType) {
+                  case CompetitionsPage:
+                    route = Strings.competitionsText;
+                    break;
+                  case HelpsPage:
+                    route = Strings.helpsText;
+                    break;
+                  case CompetitionPage:
+                    route = Strings.specificCompetition;
+                    break;
+                  default:
+                    route = Strings.empty;
+                }
+                if (route.isNotEmpty) _userStatus.visitRoute(route);
+              },
+              builder: Builder(builder: (context) => destination))));
 
   /// Push to [ModifyCompetition] page.
   void toCompetitionModification(DatabaseEntry currentEntry) =>
@@ -51,7 +78,7 @@ class Routes {
   void toHelp(AppHelpEntry helpEntry) => pushTo(HelpPage(helpEntry));
 
   /// Push to the [Hole] page.
-  void toHole(int id, int index) => pushTo(HolePage(id, index - 2));
+  void toHole(int id, int index) => pushTo(HolePage(id, index));
 
   /// Push to [Competitions] page.
   void toCompetitions() => pushTo(CompetitionsPage());

@@ -14,7 +14,7 @@ class MyDetails extends StatelessWidget {
   /// My (contextual) contact details, styled.
   static Text get _text => Text(
         Strings.contactDeveloper,
-        style: TextStyles.cardSubTitleTextStyle,
+        style: TextStyles.cardSubTitle,
         textAlign: TextAlign.center,
       );
 

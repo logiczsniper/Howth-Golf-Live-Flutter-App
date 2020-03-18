@@ -6,6 +6,7 @@ import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -13,9 +14,15 @@ class CompetitionsPageAppBar extends StatefulWidget
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
   /// lists- one from current and the other from archived.
-  final Widget Function(BuildContext, String, bool) _listBuilder;
+  final Widget Function(
+          BuildContext, String, bool, bool, GlobalKey, GlobalKey, GlobalKey)
+      _listBuilder;
 
-  CompetitionsPageAppBar(this._listBuilder, {this.title})
+  final List<GlobalKey> keys;
+  final bool hasVisited;
+
+  CompetitionsPageAppBar(this._listBuilder,
+      {this.title, this.hasVisited, this.keys})
       : preferredSize = Size.fromHeight(56.0);
 
   @override
@@ -62,7 +69,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       );
 
   AnimatedSwitcher _buildTab(bool isCurrentTab) => AnimatedSwitcher(
-      child: widget._listBuilder(context, inputText, isCurrentTab),
+      child: widget._listBuilder(context, inputText, isCurrentTab,
+          widget.hasVisited, widget.keys[4], widget.keys[5], widget.keys[6]),
       duration: Duration(milliseconds: 350));
 
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
@@ -75,6 +83,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
   @override
   Widget build(BuildContext context) {
     checkConnectivity(context);
+
     return SafeArea(
       child: NestedScrollView(
         controller: ScrollController(),
@@ -88,30 +97,39 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
               floating: true,
               pinned: false,
               snap: true,
-              leading: IconButton(
-                  icon: Icon(Icons.help_outline),
-                  padding: EdgeInsets.fromLTRB(32.0, 8.0, 8.0, 8.0),
-                  tooltip: Strings.tapHelp,
-                  onPressed: () => Routes.of(context).toHelps()),
+              leading: UIToolkit.showcase(
+                context: context,
+                key: widget.keys[1],
+                description: Strings.tapHelp,
+                child: IconButton(
+                    icon: Icon(Icons.help_outline),
+                    padding: EdgeInsets.fromLTRB(27.0, 8.0, 8.0, 8.0),
+                    tooltip: Strings.tapHelp,
+                    onPressed: () => Routes.of(context).toHelps()),
+              ),
               actions: <Widget>[
-                IconButton(
-                    icon: _iconData,
-                    padding: EdgeInsets.fromLTRB(8.0, 8.0, 32.0, 8.0),
-                    tooltip: Strings.tapSearch,
-                    onPressed: _searchPressed)
+                UIToolkit.showcase(
+                    context: context,
+                    key: widget.keys[0],
+                    description: Strings.tapSearch,
+                    child: IconButton(
+                        icon: _iconData,
+                        padding: EdgeInsets.fromLTRB(8.0, 8.0, 27.0, 8.0),
+                        tooltip: Strings.tapSearch,
+                        onPressed: _searchPressed))
               ],
               bottom: PreferredSize(
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(32.0, 5.0, 0.0, 0.0),
+                      padding: EdgeInsets.fromLTRB(28.0, 5.0, 0.0, 0.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
                             child: Text(
                               Strings.competitionsText,
-                              style: TextStyles.titleStyle.copyWith(
+                              style: TextStyles.title.copyWith(
                                   fontSize: 32.0, fontWeight: FontWeight.w700),
                               textAlign: TextAlign.start,
                             ),
@@ -121,8 +139,16 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                               isScrollable: true,
                               indicator: _tabIndicator,
                               tabs: <Widget>[
-                                Tab(text: Strings.currentText),
-                                Tab(text: Strings.archivedText)
+                                UIToolkit.showcase(
+                                    context: context,
+                                    key: widget.keys[2],
+                                    description: Strings.currentWelcome,
+                                    child: Tab(text: Strings.currentText)),
+                                UIToolkit.showcase(
+                                    context: context,
+                                    key: widget.keys[3],
+                                    description: Strings.archivedWelcome,
+                                    child: Tab(text: Strings.archivedText)),
                               ])
                         ],
                       ),

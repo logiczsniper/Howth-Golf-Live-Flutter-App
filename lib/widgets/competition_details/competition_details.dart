@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/user_status_view_model.dart';
@@ -8,8 +10,14 @@ import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
 class CompetitionDetails extends StatelessWidget {
   final DatabaseEntry currentEntry;
+  final GlobalKey homeScoreKey;
+  final GlobalKey awayScoreKey;
+  final GlobalKey locationKey;
+  final GlobalKey dateKey;
+  final GlobalKey timeKey;
 
-  CompetitionDetails(this.currentEntry);
+  CompetitionDetails(this.currentEntry, this.homeScoreKey, this.awayScoreKey,
+      this.locationKey, this.dateKey, this.timeKey);
 
   /// Get a padded [MiddleRow].
   ///
@@ -25,16 +33,31 @@ class CompetitionDetails extends StatelessWidget {
   ///
   /// If [hasAccess], a fourth row must be displayed which shows the key ([id])
   /// of the competition.
-  Widget _centralFlexible(bool hasAccess) => Flexible(
+  Widget _centralFlexible(BuildContext context, bool hasAccess) => Flexible(
         flex: 2,
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _getMiddleRow(
-                currentEntry.location.address, Icons.location_on, 18.5),
-            _getMiddleRow(currentEntry.date, Icons.date_range, 18.0),
-            _getMiddleRow(currentEntry.time, Icons.access_time, 18),
+            UIToolkit.showcase(
+              context: context,
+              key: locationKey,
+              description: Strings.location,
+              child: _getMiddleRow(
+                  currentEntry.location.address, Icons.location_on, 18.5),
+            ),
+            UIToolkit.showcase(
+              context: context,
+              key: dateKey,
+              description: Strings.date,
+              child: _getMiddleRow(currentEntry.date, Icons.date_range, 18.0),
+            ),
+            UIToolkit.showcase(
+              context: context,
+              key: timeKey,
+              description: Strings.time,
+              child: _getMiddleRow(currentEntry.time, Icons.access_time, 18),
+            ),
             hasAccess
                 ? _getMiddleRow(currentEntry.id.toString(), Icons.vpn_key, 17.0)
                 : Container()
@@ -57,13 +80,20 @@ class CompetitionDetails extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 /// Home team score.
-                SideFlexible(currentEntry.score, currentEntry.location.isHome),
+
+                SideFlexible(currentEntry.score, currentEntry.location.isHome,
+                    homeScoreKey, Strings.homeScore),
 
                 /// Details of competition.
-                _centralFlexible(hasAccess),
+                _centralFlexible(context, hasAccess),
 
                 /// Away team score.
-                SideFlexible(currentEntry.score, !currentEntry.location.isHome)
+                SideFlexible(
+                  currentEntry.score,
+                  !currentEntry.location.isHome,
+                  awayScoreKey,
+                  Strings.awayScore,
+                )
               ],
             ),
           ],

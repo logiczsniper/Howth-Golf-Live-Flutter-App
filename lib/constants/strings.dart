@@ -13,7 +13,10 @@ class Strings {
   static const String tapHelp = "Tap for help!";
   static const String tapSearch = "Tap to search!";
   static const String tapSubmit = "Tap to submit!";
+  static const String tapBack = "Tap to go back!";
   static const String tapModify = "Tap to modify!";
+  static const String tapAdmin = "Tap to enter admin code!";
+  static const String tapManager = "Tap to enter manager code!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -26,6 +29,27 @@ class Strings {
   static const String newCompetition = "New Competition";
   static const String modifyHole = "Modify Hole";
   static const String modifyCompetition = "Modify Competition";
+
+  static const String currentWelcome = "Tap for current competitions!";
+  static const String archivedWelcome = "Tap for archived competitions!";
+
+  static const String competitionTitle = "The title of the competition!";
+  static const String competitionDate = "Competition date (YYYY-MM-DD)!";
+  static const String competitionScore = "Competition score (home on left)!";
+
+  static const String homeScore = "Home team's overall score!";
+  static const String awayScore = "Away team's overall score!";
+  static const String location = "Competition location!";
+  static const String date = "Competition date!";
+  static const String time = "Competition time!";
+  static const String players = "Home team's player(s)!";
+  static const String opposition = "Away team's player(s)!";
+  static const String hole = "Tap for this match-up's details!";
+  static const String holeNumber = "Current hole number!";
+  static const String holeHomeScore = "Home team's score!";
+  static const String holeAwayScore = "Away team's score!";
+  static const String homeTeam = "Home team name!";
+  static const String awayTeam = "Away team name!";
 
   /// Paths to assets used in the app.
   static const String iconPath = "lib/assets/logo.svg";

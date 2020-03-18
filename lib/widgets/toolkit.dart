@@ -9,6 +9,7 @@ import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
+import 'package:showcaseview/showcase.dart';
 
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -68,7 +69,7 @@ class UIToolkit {
       padding: EdgeInsets.all(2.5),
       child: Padding(
           child: Text(holeNumber.toString().padLeft(2, "0"),
-              style: TextStyles.cardSubTitleTextStyle),
+              style: TextStyles.cardSubTitle),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
           color: Palette.light,
@@ -76,24 +77,21 @@ class UIToolkit {
           borderRadius: BorderRadius.circular(9.0)));
 
   static Text getLeadingText(String text) => Text(text,
-      overflow: TextOverflow.fade,
-      maxLines: 1,
-      style: TextStyles.leadingChildTextStyle);
+      overflow: TextOverflow.fade, maxLines: 1, style: TextStyles.leadingChild);
 
   /// The text that appears in a form.
   static Widget getFormText(String text) => Center(
           child: Text(
         Strings.note + text,
         textAlign: TextAlign.center,
-        style: TextStyles.formStyle,
+        style: TextStyles.form,
       ));
 
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
       icon: Icon(Icons.home),
       tooltip: Strings.returnHome,
-      onPressed: () => Navigator.of(context).popUntil(
-          ModalRoute.withName(Routes.home + Strings.competitionsText)));
+      onPressed: () => Routes.of(context).toCompetitions());
 
   /// Handles special situations with [snapshot].
   ///
@@ -108,7 +106,7 @@ class UIToolkit {
       Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         Text(
           smallText,
-          style: TextStyles.cardSubTitleTextStyle.apply(fontSizeDelta: -1.5),
+          style: TextStyles.cardSubTitle.apply(fontSizeDelta: -1.5),
         ),
         Text(relevantNumber,
             style: TextStyle(
@@ -116,6 +114,20 @@ class UIToolkit {
                 color: Palette.dark,
                 fontWeight: FontWeight.w400))
       ]);
+
+  static Showcase showcase(
+          {@required BuildContext context,
+          @required GlobalKey key,
+          String description,
+          Widget child}) =>
+      Showcase(
+          key: key,
+          description: description ?? "",
+          descTextStyle: TextStyles.description,
+          showArrow: false,
+          textColor: Palette.dark,
+          overlayColor: Palette.dark,
+          child: child ?? Container());
 
   static SnackBar snackbar(String text, IconData iconData,
           {Duration duration}) =>
@@ -170,16 +182,26 @@ class UIToolkit {
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
   static Container getVersus(
-          bool isHome, String opposition, String howthText) =>
+          BuildContext context,
+          bool isHome,
+          String opposition,
+          String howthText,
+          GlobalKey _homeTeamKey,
+          GlobalKey _awayTeamKey) =>
       Container(
           child: Row(
             children: <Widget>[
               Expanded(
-                  child: Text(
-                isHome ? howthText : opposition,
-                textAlign: TextAlign.right,
-                style: TextStyles.formStyle,
-              )),
+                child: UIToolkit.showcase(
+                    context: context,
+                    key: _homeTeamKey,
+                    description: Strings.homeTeam,
+                    child: Text(
+                      isHome ? howthText : opposition,
+                      textAlign: TextAlign.right,
+                      style: TextStyles.form,
+                    )),
+              ),
               Padding(
                   child: Icon(
                     FontAwesomeIcons.fistRaised,
@@ -187,11 +209,15 @@ class UIToolkit {
                   ),
                   padding: EdgeInsets.all(3.0)),
               Expanded(
-                  child: Text(
-                !isHome ? howthText : opposition,
-                textAlign: TextAlign.left,
-                style: TextStyles.formStyle,
-              ))
+                  child: UIToolkit.showcase(
+                      context: context,
+                      key: _awayTeamKey,
+                      description: Strings.awayTeam,
+                      child: Text(
+                        !isHome ? howthText : opposition,
+                        textAlign: TextAlign.left,
+                        style: TextStyles.form,
+                      )))
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0));

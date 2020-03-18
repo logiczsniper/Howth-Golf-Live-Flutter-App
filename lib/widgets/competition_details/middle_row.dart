@@ -18,7 +18,7 @@ class MiddleRow extends StatelessWidget {
             text,
             maxLines: 2,
             overflow: TextOverflow.fade,
-            style: TextStyles.cardSubTitleTextStyle.apply(fontSizeDelta: -2),
+            style: TextStyles.cardSubTitle.apply(fontSizeDelta: -2),
           )),
         ],
       );

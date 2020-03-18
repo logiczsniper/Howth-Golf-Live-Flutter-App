@@ -26,8 +26,9 @@ class FirebaseViewModel {
       databaseEntries?.firstWhere((entry) => entry?.id == id);
   DatabaseEntry entryFromIndex(int index) => databaseEntries?.elementAt(index);
 
-  int bonusEntries(DatabaseEntry currentData) =>
-      currentData.holes.length == 0 ? 3 : 2;
+  int bonusEntries(DatabaseEntry currentData, bool hasVisited) =>
+      currentData.holes.isEmpty ? 3 : (hasVisited ? 2 : 3);
+
   String title(int id) => entryFromId(id)?.title ?? Strings.empty;
 
   /// Sorts elements into either current or archived lists.

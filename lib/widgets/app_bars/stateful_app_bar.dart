@@ -72,11 +72,10 @@ class StatefulAppBar {
               color: Palette.light,
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: Palette.dark,
-                  spreadRadius: 0.3,
-                  blurRadius: 1.5,
-                  offset: Offset(0, 0.75),
-                )
+                    color: Palette.dark,
+                    spreadRadius: 0.3,
+                    blurRadius: 1.5,
+                    offset: Offset(0, 0.75))
               ],
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(10.0)),
@@ -84,6 +83,7 @@ class StatefulAppBar {
             keyboardType: textType,
             obscureText: obscureText,
             cursorColor: Palette.maroon,
+            textAlign: TextAlign.center,
             textCapitalization: TextCapitalization.sentences,
             autocorrect: false,
             controller: _filter,

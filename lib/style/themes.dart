@@ -79,7 +79,7 @@ class Themes {
           backgroundColor: Palette.maroon, elevation: 0.25);
 
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
-      contentPadding: EdgeInsets.all(16.0),
+      contentPadding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 14.0),
       focusedBorder: _border,
       errorBorder: _border,
       focusedErrorBorder: _border,
@@ -107,13 +107,13 @@ class Themes {
       brightness: Brightness.light);
 
   static TextTheme get textTheme => TextTheme(
-          button: TextStyles.dialogStyle,
+          button: TextStyles.dialog,
 
           /// Used for list tile titles.
           subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
       .apply(bodyColor: Palette.dark, displayColor: Palette.dark);
 
-  static TextTheme get titleTheme => TextTheme(title: TextStyles.titleStyle);
+  static TextTheme get titleTheme => TextTheme(title: TextStyles.title);
 
   static CardTheme get cardTheme => CardTheme(
         color: Palette.card,

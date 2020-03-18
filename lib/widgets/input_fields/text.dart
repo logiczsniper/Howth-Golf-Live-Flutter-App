@@ -31,7 +31,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
             autocorrect: false,
             keyboardType: number ? TextInputType.number : TextInputType.text,
             controller: controller,
-            style: TextStyles.formStyle,
+            style: TextStyles.form,
             decoration: getDecoration(context, hintText),
             validator: (input) => validator(input, isRequired)));
   }

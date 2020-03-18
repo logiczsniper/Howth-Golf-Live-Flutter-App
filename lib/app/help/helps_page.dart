@@ -13,12 +13,11 @@ import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/my_details.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class HelpsPage extends StatelessWidget {
   static Text _getLeadingText(String text) => Text(text,
-      overflow: TextOverflow.fade,
-      maxLines: 1,
-      style: TextStyles.leadingChildTextStyle);
+      overflow: TextOverflow.fade, maxLines: 1, style: TextStyles.leadingChild);
 
   static Widget _tileBuilder(
           BuildContext context, AppHelpEntry currentHelpEntry, int index) =>
@@ -40,7 +39,7 @@ class HelpsPage extends StatelessWidget {
               subtitle: Text(currentHelpEntry.subtitle,
                   overflow: TextOverflow.fade,
                   maxLines: 2,
-                  style: TextStyles.cardSubTitleTextStyle),
+                  style: TextStyles.cardSubTitle),
               trailing: Icon(Icons.keyboard_arrow_right)),
           onTap: () => Routes.of(context).toHelp(currentHelpEntry));
 
@@ -49,10 +48,21 @@ class HelpsPage extends StatelessWidget {
     var _helpData = Provider.of<HelpDataViewModel>(context);
     var _userStatus = Provider.of<UserStatusViewModel>(context);
 
+    final GlobalKey _backKey = GlobalKey();
+    final GlobalKey _codeKey = GlobalKey();
+
+    List<GlobalKey> keys = [_codeKey, _backKey];
+
+    if (!_userStatus.hasVisited(Strings.helpsText)) {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ShowCaseWidget.of(context).startShowCase(keys));
+    }
+
     return Scaffold(
-        appBar: CodeFieldBar(Strings.helpsText, _userStatus),
+        appBar:
+            CodeFieldBar(Strings.helpsText, _userStatus, _backKey, _codeKey),
         body: OpacityChangeWidget(
-            target: _helpData.data.length == 0
+            target: _helpData.data.isEmpty
                 ? UIToolkit.loadingSpinner
                 : ListView.builder(
                     padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),

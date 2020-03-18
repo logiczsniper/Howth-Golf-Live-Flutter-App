@@ -11,8 +11,11 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final int id;
   final UserStatusViewModel userStatus;
+  final GlobalKey backKey;
+  final GlobalKey codeKey;
 
-  CodeFieldBar(this.title, this.userStatus, {this.id})
+  CodeFieldBar(this.title, this.userStatus, this.backKey, this.codeKey,
+      {this.id})
       : preferredSize = Size.fromHeight(56.0),
         assert(title == Strings.helpsText ? id == null : id != null);
 
@@ -51,7 +54,6 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
               UIToolkit.snackbar(Strings.incorrectCode, Icons.lock_outline));
 
         setState(() {
-          print("HI");
           appBarTitle = actionPressed(appBarTitle, context, _filter);
         });
       });
@@ -61,7 +63,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   /// This depends greatly on whether or not the user is verified.
   ///
   /// Both the message and the icon image itself change based on [isVerified].
-  IconButton get _actionIconButton {
+  Widget get _actionIconButton {
     bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
 
     String iconMessage = isVerified ? Strings.alreadyAdmin : Strings.tapCode;
@@ -73,15 +75,29 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
     }
 
-    return IconButton(
-        icon: Icon(iconData),
-        tooltip: iconMessage,
-        onPressed: _codePressed,
-        key: ValueKey(DateTime.now()));
+    String description = widget.title == Strings.helpsText
+        ? Strings.tapAdmin
+        : Strings.tapManager;
+
+    return UIToolkit.showcase(
+        context: context,
+        key: widget.codeKey,
+        description: description,
+        child: IconButton(
+            icon: Icon(iconData),
+            tooltip: iconMessage,
+            onPressed: _codePressed,
+            key: ValueKey(DateTime.now())));
   }
 
-  IconButton get _backIconButton =>
-      IconButton(icon: BackButtonIcon(), onPressed: Navigator.of(context).pop);
+  Widget get _backIconButton {
+    return UIToolkit.showcase(
+        context: context,
+        key: widget.backKey,
+        description: Strings.tapBack,
+        child: IconButton(
+            icon: BackButtonIcon(), onPressed: Navigator.of(context).pop));
+  }
 
   @override
   void initState() {

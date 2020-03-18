@@ -64,7 +64,7 @@ class ComplexScore extends StatelessWidget {
       /// Conditions similar to the ternary operator below are
       /// ensuring that whichever team is home has their information
       /// on the left, and whoever is away on the right.
-      text: TextSpan(style: TextStyles.scoreCardTextStyle, children: <TextSpan>[
+      text: TextSpan(style: TextStyles.scoreCard, children: <TextSpan>[
         /// Home team score.
         TextSpan(text: _getMainNumber(isHome, score)),
         getFraction(isHome, score),

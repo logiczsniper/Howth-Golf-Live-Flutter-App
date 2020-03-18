@@ -30,14 +30,14 @@ class HelpPage extends StatelessWidget {
           Padding(
               child: Text(
                 currentStep.title,
-                style: TextStyles.cardTitleTextStyle,
+                style: TextStyles.cardTitle,
                 textAlign: TextAlign.left,
               ),
               padding: EdgeInsets.only(bottom: 5.0)),
           Padding(
               child: Text(
                 currentStep.data,
-                style: TextStyles.cardSubTitleTextStyle,
+                style: TextStyles.cardSubTitle,
               ),
               padding: EdgeInsets.only(left: 4.5))
         ],

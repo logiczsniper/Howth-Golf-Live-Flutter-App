@@ -46,6 +46,17 @@ class DatabaseEntry {
             (int index) => Hole.fromMap(map[Fields.holes][index])),
         score = Score.fromMap(map[Fields.score]);
 
+  static DatabaseEntry get example => DatabaseEntry(
+      date:
+          "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+      id: -1,
+      location: Location.example,
+      time: "${DateTime.now().hour}:${DateTime.now().minute}",
+      opposition: "Opposing Club Name",
+      title: "Example Competition Title",
+      holes: [Hole.example],
+      score: Score.example);
+
   /// Converts a database entry into a map so it can be put into the database.
   Map<String, dynamic> get toJson => {
         Fields.date: date,
@@ -88,6 +99,9 @@ class Score {
       : assert(_calculateScore(parsedHoles).length == 2),
         howth = _calculateScore(parsedHoles)[0],
         opposition = _calculateScore(parsedHoles)[1];
+
+  static Score get example => Score(howth: "1", opposition: "0");
+  static Score get holeExample => Score(howth: "4", opposition: "0");
 
   static Score get fresh => Score(howth: "0", opposition: "0");
 
@@ -191,6 +205,14 @@ class Hole {
         comment = map[Fields.comment],
         lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
+  static Hole get example => Hole(
+      holeNumber: 2,
+      holeScore: Score.holeExample,
+      players: ["Simon"],
+      opposition: [Strings.empty],
+      comment: "Example comment here!",
+      lastUpdated: DateTime.now().subtract(Duration(seconds: 60)));
+
   static Hole get fresh => Hole(
       holeNumber: 0,
       holeScore: Score.fresh,
@@ -280,6 +302,8 @@ class Location {
   Map get toJson => {Fields.address: address};
 
   bool get isHome => address == Strings.homeAddress;
+
+  static Location get example => Location(address: Strings.homeAddress);
 
   @override
   int get hashCode => address.hashCode;

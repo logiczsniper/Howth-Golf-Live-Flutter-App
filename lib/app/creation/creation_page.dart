@@ -13,7 +13,7 @@ class CreationPage {
                 Padding(
                     child: Text(
                       text,
-                      style: TextStyles.formStyle,
+                      style: TextStyles.form,
                     ),
                     padding: EdgeInsets.only(left: 16.0)),
                 dropdownButton
@@ -33,7 +33,7 @@ class CreationPage {
           value: _value,
           iconEnabledColor: Palette.dark,
           iconSize: 30.0,
-          style: TextStyles.formStyle,
+          style: TextStyles.form,
           underline: Container(
             height: 0.0,
           ),

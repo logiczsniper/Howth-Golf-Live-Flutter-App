@@ -37,7 +37,7 @@ class HolePage extends StatelessWidget {
   Text _getLastUpdated(HoleViewModel holeModel, DateTime lastUpdated) =>
       Text(holeModel.prettyLastUpdated(lastUpdated),
           textAlign: TextAlign.center,
-          style: TextStyles.cardTitleTextStyle,
+          style: TextStyles.cardTitle,
           key: ValueKey(DateTime.now()));
 
   Widget _getScoreButtons(BuildContext context, Hole hole,
@@ -149,7 +149,7 @@ class HolePage extends StatelessWidget {
 
               Text(
                 " - ",
-                style: TextStyles.leadingChildTextStyle,
+                style: TextStyles.leadingChild,
               ),
 
               _getScore(awayScoreText),
@@ -165,9 +165,12 @@ class HolePage extends StatelessWidget {
                   hasAccess),
             ]),
             UIToolkit.getVersus(
+                context,
                 isHome,
                 hole.formattedOpposition(_holeModel.opposition(id)),
-                hole.formattedPlayers),
+                hole.formattedPlayers,
+                GlobalKey(),
+                GlobalKey()),
 
             /// Edit the hole number.
             Row(
@@ -202,7 +205,7 @@ class HolePage extends StatelessWidget {
                     child: Text(
                       "Comment: ${hole.comment}",
                       textAlign: TextAlign.center,
-                      style: TextStyles.cardTitleTextStyle,
+                      style: TextStyles.cardTitle,
                     ))
           ]))),
     );

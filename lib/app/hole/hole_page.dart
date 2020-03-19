@@ -46,6 +46,7 @@ class HolePage extends StatelessWidget {
           ? Column(children: <Widget>[
               IconButton(
                   icon: Icon(Icons.add),
+                  iconSize: 25.5,
                   onPressed: () {
                     Hole updatedHole =
                         hole.updateHole(newScore: incrementedScore);
@@ -54,6 +55,7 @@ class HolePage extends StatelessWidget {
                   }),
               IconButton(
                   icon: Icon(Icons.remove),
+                  iconSize: 25.5,
                   onPressed: () {
                     Hole updatedHole =
                         hole.updateHole(newScore: decrementedScore);
@@ -69,6 +71,7 @@ class HolePage extends StatelessWidget {
     return hasAccess
         ? IconButton(
             icon: Icon(iconData),
+            iconSize: 25.5,
             onPressed: () {
               /// Apply value of one or minus one to the [holeNumber].
               Hole updatedHole = hole.updateNumber(value);

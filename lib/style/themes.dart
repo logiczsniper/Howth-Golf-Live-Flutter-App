@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
@@ -60,8 +59,8 @@ class Themes {
 
   static PageTransitionsTheme pageTransitionsTheme =
       PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-    TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
-    TargetPlatform.iOS: FadeThroughPageTransitionsBuilder()
+    TargetPlatform.android: ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
   });
 
   static TooltipThemeData tooltipTheme = TooltipThemeData(

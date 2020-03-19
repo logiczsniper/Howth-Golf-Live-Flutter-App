@@ -84,7 +84,7 @@ class UIToolkit {
 
   /// The text that appears in a form.
   static Widget getFormText(String text) => Padding(
-      padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
+      padding: EdgeInsets.only(top: 2.0, bottom: 8.0),
       child: Center(
           child: Text(
         Strings.note + text,

@@ -15,7 +15,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
 
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedTextField(this.hintText,
-      {this.withPadding = true,
+      {this.withPadding = false,
       this.number = false,
       this.isRequired = true,
       this.initialValue = Strings.empty});
@@ -30,6 +30,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
             textCapitalization: TextCapitalization.sentences,
             autocorrect: false,
             keyboardType: number ? TextInputType.number : TextInputType.text,
+            maxLength: number ? 3 : 80,
             controller: controller,
             style: TextStyles.form,
             decoration: getDecoration(context, hintText),

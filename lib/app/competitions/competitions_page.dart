@@ -71,6 +71,8 @@ class CompetitionsPage extends StatelessWidget {
             ? activeElements.length
             : activeElements.length + 1);
 
+    // _userStatus.clearPreferences();
+
     return OpacityChangeWidget(
         key: ValueKey(DateTime.now()),
         target: AnimatedSwitcher(

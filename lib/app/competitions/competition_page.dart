@@ -33,7 +33,7 @@ class CompetitionPage extends StatelessWidget {
                       color: index % 2 != 0
                           ? Palette.light
                           : Palette.card.withAlpha(240),
-                      borderRadius: BorderRadius.circular(6.0)),
+                      borderRadius: BorderRadius.circular(13.0)),
                   child: Text(text,
                       textAlign: away ? TextAlign.right : TextAlign.left,
                       style: TextStyles.cardSubTitle))));
@@ -196,7 +196,6 @@ class CompetitionPage extends StatelessWidget {
                       else if (!hasVisited && index == 2) {
                         Hole hole = Hole.example;
                         bool isHome = currentData.location.isHome;
-                        String opposition = currentData.opposition;
                         return UIToolkit.showcase(
                             context: context,
                             key: _holeKey,
@@ -228,17 +227,17 @@ class CompetitionPage extends StatelessWidget {
                                                                 EdgeInsets.all(
                                                                     8.0),
                                                             decoration: BoxDecoration(
-                                                                color: Palette.card
+                                                                color: Palette
+                                                                    .card
                                                                     .withAlpha(
                                                                         240),
                                                                 borderRadius:
                                                                     BorderRadius.circular(
-                                                                        6.0)),
+                                                                        13.0)),
                                                             child: Text(
-                                                                isHome
-                                                                    ? hole.formattedPlayers
-                                                                    : hole.formattedOpposition(opposition),
-                                                                textAlign: TextAlign.left,
+                                                                "Home player(s)/club",
+                                                                textAlign:
+                                                                    TextAlign.left,
                                                                 style: TextStyles.cardSubTitle))))),
 
                                             /// Home score.
@@ -321,12 +320,12 @@ class CompetitionPage extends StatelessWidget {
                                                                         240),
                                                                 borderRadius:
                                                                     BorderRadius.circular(
-                                                                        6.0)),
+                                                                        13.0)),
                                                             child: Text(
-                                                                !isHome
-                                                                    ? hole.formattedPlayers
-                                                                    : hole.formattedOpposition(opposition),
-                                                                textAlign: TextAlign.right,
+                                                                "Away player(s)/club",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
                                                                 style: TextStyles.cardSubTitle))))),
                                           ]))
                                     ])));

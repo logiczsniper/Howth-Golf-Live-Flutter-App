@@ -78,7 +78,7 @@ class StatefulAppBar {
                     offset: Offset(0, 0.75))
               ],
               shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(13.0)),
           child: TextField(
             keyboardType: textType,
             obscureText: obscureText,

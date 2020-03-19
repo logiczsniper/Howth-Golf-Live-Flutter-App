@@ -46,7 +46,7 @@ class HelpPage extends StatelessWidget {
   }
 
   Text get _title => Text(helpEntry.title,
-      textAlign: TextAlign.center, maxLines: 2, style: TextStyles.helpTitle);
+      textAlign: TextAlign.center, maxLines: 2, style: TextStyles.title);
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +57,7 @@ class HelpPage extends StatelessWidget {
         actions: <Widget>[UIToolkit.getHomeButton(context)],
       ),
       body: ListView.separated(
+          padding: EdgeInsets.only(top: 10.0),
           itemBuilder: _tileBuilder,
           itemCount: helpEntry.steps.length + 1,
           separatorBuilder: (context, index) {

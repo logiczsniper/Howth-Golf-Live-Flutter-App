@@ -9,7 +9,7 @@ class MyDetails extends StatelessWidget {
   /// A red border with rounded corners.
   static BoxDecoration get _border => BoxDecoration(
       border: Border.all(color: Palette.maroon, width: 2.0),
-      borderRadius: BorderRadius.all(Radius.circular(10.0)));
+      borderRadius: BorderRadius.all(Radius.circular(13.0)));
 
   /// My (contextual) contact details, styled.
   static Text get _text => Text(

@@ -41,18 +41,18 @@ class Themes {
   static SnackBarThemeData snackBarThemeData = SnackBarThemeData(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-        top: Radius.circular(20),
+        top: Radius.circular(13),
       )),
       backgroundColor: Palette.card.withAlpha(253),
       contentTextStyle: TextStyle(color: Palette.dark));
 
   static ButtonThemeData buttonTheme = ButtonThemeData(
       splashColor: Palette.maroon.withAlpha(60),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       textTheme: ButtonTextTheme.accent);
 
   static DialogTheme dialogTheme = DialogTheme(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
     elevation: 0.1,
     titleTextStyle: TextStyle(color: Palette.dark, fontSize: 13.0),
     contentTextStyle: TextStyle(color: Palette.dark, fontSize: 12.0),
@@ -70,7 +70,7 @@ class Themes {
       decoration: BoxDecoration(
           color: Palette.card.withAlpha(254),
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(5.0)));
+          borderRadius: BorderRadius.circular(13.0)));
 
   static TabBarTheme tabBarTheme = TabBarTheme(
       labelColor: Color.fromARGB(250, 247, 247, 247),
@@ -78,7 +78,10 @@ class Themes {
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =
       FloatingActionButtonThemeData(
-          backgroundColor: Palette.maroon, elevation: 0.25);
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+          backgroundColor: Palette.maroon,
+          elevation: 0.25);
 
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
       contentPadding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 14.0),
@@ -122,7 +125,7 @@ class Themes {
         elevation: 0.01,
         margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
       );
 
   static AppBarTheme get appBarTheme => AppBarTheme(

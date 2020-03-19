@@ -16,7 +16,7 @@ class ComplexCard extends StatelessWidget {
   InkWell get _inkWell => InkWell(
         highlightColor: Colors.transparent,
         radius: 500.0,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(13.0),
         splashColor: Palette.maroon.withAlpha(60),
         onTap: onTap,
       );

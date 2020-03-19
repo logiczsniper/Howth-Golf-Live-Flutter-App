@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
 
   Widget get _howthLogo => Center(
       child: SvgPicture.asset(Strings.iconPath,
-          color: Palette.inMaroon.withAlpha(80), width: 200.0, height: 380.0));
+          color: Palette.inMaroon.withAlpha(90), width: 200.0, height: 380.0));
 
   Widget _page(
           BuildContext context, AuthenticationViewModel authenticationModel) =>

@@ -40,7 +40,7 @@ class UIToolkit {
       gradient: LinearGradient(
           colors: [Palette.card, Color.fromARGB(255, 238, 238, 238)]),
       shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.circular(10.0));
+      borderRadius: BorderRadius.circular(13.0));
 
   /// Some common methods used in various pages and widgets.
   static Card getCard(Widget child) => Card(
@@ -52,7 +52,7 @@ class UIToolkit {
   /// The maroon decoration around the [text].
   static Decoration get scoreDecoration => ShapeDecoration(
       color: Palette.maroon,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)));
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
   static Center get loadingSpinner => Center(
           child: SpinKitPulse(
@@ -67,25 +67,30 @@ class UIToolkit {
       key: ValueKey(DateTime.now()),
       margin: EdgeInsets.symmetric(vertical: 2.0),
       padding: EdgeInsets.all(2.5),
+      width: 32.0,
       child: Padding(
-          child: Text(holeNumber.toString().padLeft(2, "0"),
-              style: TextStyles.cardSubTitle),
+          child: Align(
+              alignment: Alignment.center,
+              child:
+                  Text(holeNumber.toString(), style: TextStyles.cardSubTitle)),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
           color: Palette.light,
           border: Border.all(color: Palette.maroon, width: 1.5),
-          borderRadius: BorderRadius.circular(9.0)));
+          borderRadius: BorderRadius.circular(13.0)));
 
   static Text getLeadingText(String text) => Text(text,
       overflow: TextOverflow.fade, maxLines: 1, style: TextStyles.leadingChild);
 
   /// The text that appears in a form.
-  static Widget getFormText(String text) => Center(
+  static Widget getFormText(String text) => Padding(
+      padding: EdgeInsets.only(top: 2.0, bottom: 5.0),
+      child: Center(
           child: Text(
         Strings.note + text,
         textAlign: TextAlign.center,
         style: TextStyles.form,
-      ));
+      )));
 
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(

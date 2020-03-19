@@ -208,9 +208,9 @@ class Hole {
   static Hole get example => Hole(
       holeNumber: 2,
       holeScore: Score.holeExample,
-      players: ["Simon"],
-      opposition: [Strings.empty],
-      comment: "Example comment here!",
+      players: ["Home player(s)"],
+      opposition: ["Opposing club/player(s)"],
+      comment: Strings.empty,
       lastUpdated: DateTime.now().subtract(Duration(seconds: 60)));
 
   static Hole get fresh => Hole(

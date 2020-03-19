@@ -91,7 +91,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
           SliverAppBar(
               shape: RoundedRectangleBorder(
                   borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(40))),
+                      BorderRadius.vertical(bottom: Radius.circular(13))),
               centerTitle: true,
               title: getTitle(appBarTitle),
               floating: true,

@@ -14,7 +14,7 @@ class HoleViewModel {
   List<Hole> holes(int id) => databaseEntry(id)?.holes ?? [];
 
   Hole hole(int id, int index) =>
-      holes(id).length - 1 < index ? null : holes(id).elementAt(index);
+      holes(id).length - 1 < index ? Hole.fresh : holes(id).elementAt(index);
 
   HoleViewModel(this._firebaseModel);
 

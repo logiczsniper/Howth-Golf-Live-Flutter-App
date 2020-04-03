@@ -152,7 +152,7 @@ class CompetitionsPage extends StatelessWidget {
                                             currentEntry),
                                   ),
                                   IconButton(
-                                      icon: Icon(Icons.remove_circle_outline),
+                                      icon: Icon(Icons.delete),
                                       padding: EdgeInsets.only(bottom: 10.0),
 
                                       /// When deleting a [DatabaseEntry], prompts the user to double check their intent

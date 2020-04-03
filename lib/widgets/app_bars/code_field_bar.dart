@@ -51,7 +51,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
       isCodeCorrect.then((bool isCodeCorrect) {
         if (!isCodeCorrect && inputText.isNotEmpty)
           Scaffold.of(context).showSnackBar(
-              UIToolkit.snackbar(Strings.incorrectCode, Icons.lock_outline));
+              UIToolkit.snackbar(Strings.incorrectCode, Icons.lock));
 
         setState(() {
           appBarTitle = actionPressed(appBarTitle, context, _filter);
@@ -72,7 +72,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     if (appBarTitle == inputBar) {
       iconData = Icons.check;
     } else {
-      iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
+      iconData = isVerified ? Icons.check_circle : Icons.account_circle;
     }
 
     String description = widget.title == Strings.helpsText

@@ -11,7 +11,6 @@ import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
-import 'package:howth_golf_live/widgets/my_details.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
@@ -68,11 +67,8 @@ class HelpsPage extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
                     itemCount: _helpData.data.length + _userStatus.bonusEntries,
                     itemBuilder: (context, index) {
-                      /// At the top of the list, [MyDetails] are displayed.
-                      if (index == 0) return MyDetails();
-
-                      AppHelpEntry currentHelpEntry = _helpData.data[index - 1];
-                      return _tileBuilder(context, currentHelpEntry, index);
+                      AppHelpEntry currentHelpEntry = _helpData.data[index];
+                      return _tileBuilder(context, currentHelpEntry, index + 1);
                     },
                   )));
   }

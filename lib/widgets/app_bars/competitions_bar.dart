@@ -130,7 +130,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                             child: Text(
                               Strings.competitionsText,
                               style: TextStyles.title.copyWith(
-                                  fontSize: 32.0, fontWeight: FontWeight.w700),
+                                  fontSize: 33.0, fontWeight: FontWeight.w700),
                               textAlign: TextAlign.start,
                             ),
                             padding: EdgeInsets.only(bottom: 6.0),

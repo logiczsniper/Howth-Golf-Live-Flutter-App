@@ -45,17 +45,24 @@ class FirebaseViewModel {
     List<DatabaseEntry> archivedElements = [];
     for (DatabaseEntry filteredElement in filteredElements) {
       DateTime competitionDate =
-          DateTime.parse("${filteredElement.date} ${filteredElement.time}");
+          DateTime.parse(_convertDateFormat(filteredElement));
       int daysFromNow = competitionDate.difference(DateTime.now()).inDays.abs();
 
       bool inPast = competitionDate.isBefore(DateTime.now());
-      if (daysFromNow >= 8 && inPast) {
+      if (daysFromNow >= 1 && inPast) {
         archivedElements.add(filteredElement);
       } else {
         currentElements.add(filteredElement);
       }
     }
     return [currentElements, archivedElements];
+  }
+
+  /// Converts the date format from irish date format (dd-MM-yyyy HH:mm)
+  /// to the standard DateTime format (yyyy-MM-dd HH:mm).
+  static String _convertDateFormat(DatabaseEntry filteredElement) {
+    List<String> _splitDMY = filteredElement.date.split("-");
+    return "${_splitDMY[2]}-${_splitDMY[1]}-${_splitDMY[0]} ${filteredElement.time}";
   }
 
   /// Based on the user's [_searchText], filters the competitions.

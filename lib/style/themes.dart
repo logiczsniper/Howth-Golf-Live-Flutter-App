@@ -53,8 +53,8 @@ class Themes {
   static DialogTheme dialogTheme = DialogTheme(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
     elevation: 0.1,
-    titleTextStyle: TextStyle(color: Palette.dark, fontSize: 13.0),
-    contentTextStyle: TextStyle(color: Palette.dark, fontSize: 12.0),
+    titleTextStyle: TextStyle(color: Palette.dark, fontSize: 14.0),
+    contentTextStyle: TextStyle(color: Palette.dark, fontSize: 13.0),
   );
 
   static PageTransitionsTheme pageTransitionsTheme =
@@ -89,8 +89,8 @@ class Themes {
       focusedErrorBorder: _border,
       enabledBorder: _border,
       disabledBorder: _border,
-      hintStyle: TextStyle(fontSize: 15, color: Palette.dark),
-      errorStyle: TextStyle(fontSize: 12, color: Palette.maroon));
+      hintStyle: TextStyle(fontSize: 16, color: Palette.dark),
+      errorStyle: TextStyle(fontSize: 13, color: Palette.maroon));
 
   static UnderlineInputBorder get _border => UnderlineInputBorder(
       borderSide: BorderSide(color: Palette.maroon, width: 1.5));
@@ -114,7 +114,7 @@ class Themes {
           button: TextStyles.dialog,
 
           /// Used for list tile titles.
-          subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
+          subhead: TextStyle(fontSize: 17, fontWeight: FontWeight.w300))
       .apply(bodyColor: Palette.dark, displayColor: Palette.dark);
 
   static TextTheme get titleTheme => TextTheme(title: TextStyles.title);

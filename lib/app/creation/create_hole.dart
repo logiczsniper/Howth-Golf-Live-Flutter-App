@@ -18,34 +18,15 @@ class CreateHole extends StatefulWidget {
 
 class CreateHoleState extends State<CreateHole> with CreationPage {
   final _formKey = GlobalKey<FormState>();
-  String scoreStatus = Strings.aS;
 
   /// Fields the user must fill out to create a hole.
   DecoratedTextField numberField =
       DecoratedTextField(Fields.holeNumber, number: true);
   DecoratedTextField commentField =
       DecoratedTextField(Fields.comment, isRequired: false);
-  DecoratedTextField howthScoreField =
-      DecoratedTextField("${Fields.howth} Score", number: true);
-  DecoratedTextField oppositionScoreField =
-      DecoratedTextField("${Fields.opposition} Score", number: true);
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
   DecoratedTextField oppositionField =
       DecoratedTextField(Fields.opposition, isRequired: false);
-
-  DropdownButton<String> get _score => dropdownButton(
-      scoreStatus,
-      (String newValue) => setState(() {
-            scoreStatus = newValue;
-            howthScoreField.controller.text =
-                scoreStatus == Strings.aS ? "-" : Strings.empty;
-            oppositionScoreField.controller.text =
-                scoreStatus == Strings.aS ? "-" : Strings.empty;
-          }),
-      <String>[Strings.upUnder, Strings.aS]
-          .map<DropdownMenuItem<String>>((String value) =>
-              DropdownMenuItem<String>(value: value, child: Text(value)))
-          .toList());
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
@@ -56,9 +37,6 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
               shrinkWrap: true,
               children: <Widget>[
                 numberField,
-                getSpecialInput(Strings.howthIs, _score),
-                scoreStatus == Strings.aS ? Container() : howthScoreField,
-                scoreStatus == Strings.aS ? Container() : oppositionScoreField,
                 playersField,
                 UIToolkit.getFormText(Strings.nameCommas),
                 oppositionField,
@@ -70,16 +48,8 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    FirebaseInteration(context).addHole(
-        _formKey,
-        numberField,
-        commentField,
-        howthScoreField,
-        oppositionScoreField,
-        scoreStatus,
-        playersField,
-        oppositionField,
-        widget.currentId);
+    FirebaseInteration(context).addHole(_formKey, numberField, commentField,
+        playersField, oppositionField, widget.currentId);
   }
 
   @override

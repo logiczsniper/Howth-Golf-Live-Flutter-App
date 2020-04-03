@@ -47,7 +47,7 @@ class ComplexScore extends StatelessWidget {
       key: ValueKey(DateTime.now()),
       text: TextSpan(
           style: TextStyle(
-              fontSize: 21,
+              fontSize: 22,
               color: Palette.inMaroon,
               fontWeight: FontWeight.w400),
           children: <TextSpan>[

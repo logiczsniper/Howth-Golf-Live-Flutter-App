@@ -19,25 +19,25 @@ class CreateCompetition extends StatefulWidget {
 class CreateCompetitionState extends State<CreateCompetition>
     with CreationPage {
   final _formKey = GlobalKey<FormState>();
-  bool isHome = false;
+  String isHome = Strings.home;
 
   /// The various fields the user must fill out.
-  DecoratedTextField titleField = DecoratedTextField(Fields.title);
+  DecoratedTextField titleField = DecoratedTextField(Strings.competitionName);
   DecoratedTextField locationField = DecoratedTextField(Fields.location);
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
   DecoratedDateTimeField dateTimeField =
       DecoratedDateTimeField("${Fields.date} & ${Fields.time}");
 
-  DropdownButton<bool> get _home => dropdownButton(
+  DropdownButton<String> get _home => dropdownButton(
       isHome,
-      (bool newValue) => setState(() {
+      (String newValue) => setState(() {
             isHome = newValue;
             locationField.controller.text =
-                isHome ? Strings.homeAddress : Strings.empty;
+                isHome == Strings.home ? Strings.homeAddress : Strings.empty;
           }),
-      <bool>[true, false]
-          .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
-              value: value, child: Text(value.toString())))
+      <String>[Strings.home, Strings.away]
+          .map<DropdownMenuItem<String>>((String value) =>
+              DropdownMenuItem<String>(value: value, child: Text(value)))
           .toList());
 
   /// Gets a padded [Form] with [Spacer] widgets
@@ -53,8 +53,8 @@ class CreateCompetitionState extends State<CreateCompetition>
             children: <Widget>[
               titleField,
               UIToolkit.getFormText(Strings.titleLengthNote),
-              getSpecialInput(Strings.atHome, _home),
-              isHome ? Container() : locationField,
+              getSpecialInput(Strings.empty, _home),
+              isHome == Strings.home ? Container() : locationField,
               oppositionField,
               dateTimeField
             ],

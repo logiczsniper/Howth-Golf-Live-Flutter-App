@@ -21,7 +21,7 @@ class ModifyCompetition extends StatefulWidget {
 class ModifyCompetitionState extends State<ModifyCompetition>
     with CreationPage {
   final _formKey = GlobalKey<FormState>();
-  bool isHome;
+  String isHome;
 
   /// The various fields the user must fill out.
   DecoratedTextField titleField;
@@ -29,16 +29,16 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   DecoratedTextField oppositionField;
   DecoratedDateTimeField dateTimeField;
 
-  DropdownButton<bool> get _home => dropdownButton(
+  DropdownButton<String> get _home => dropdownButton(
       isHome,
-      (bool newValue) => setState(() {
+      (String newValue) => setState(() {
             isHome = newValue;
             locationField.controller.text =
-                isHome ? Strings.homeAddress : Strings.empty;
+                newValue == Strings.home ? Strings.homeAddress : Strings.empty;
           }),
-      <bool>[true, false]
-          .map<DropdownMenuItem<bool>>((bool value) => DropdownMenuItem<bool>(
-              value: value, child: Text(value.toString())))
+      <String>[Strings.home, Strings.away]
+          .map<DropdownMenuItem<String>>((String value) =>
+              DropdownMenuItem<String>(value: value, child: Text(value)))
           .toList());
 
   /// Gets a padded [Form] with [Spacer] widgets
@@ -54,8 +54,8 @@ class ModifyCompetitionState extends State<ModifyCompetition>
             children: <Widget>[
               titleField,
               UIToolkit.getFormText(Strings.titleLengthNote),
-              getSpecialInput(Strings.atHome, _home),
-              isHome ? Container() : locationField,
+              getSpecialInput(Strings.empty, _home),
+              isHome == Strings.home ? Container() : locationField,
               oppositionField,
               dateTimeField
             ],
@@ -66,7 +66,7 @@ class ModifyCompetitionState extends State<ModifyCompetition>
     FirebaseInteration(context).updateCompetition(
         _formKey,
         widget.currentEntry.id,
-        isHome,
+        isHome == Strings.home,
         titleField,
         locationField,
         oppositionField,
@@ -77,10 +77,11 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   void initState() {
     super.initState();
 
-    isHome = widget.currentEntry.location.isHome;
+    isHome = widget.currentEntry.location.isHome ? Strings.home : Strings.away;
     titleField = DecoratedTextField(Strings.empty,
         initialValue: widget.currentEntry.title);
-    locationField = DecoratedTextField(Strings.empty,
+    locationField = DecoratedTextField(
+        Strings.location.substring(0, Strings.location.length - 1),
         initialValue: widget.currentEntry.location.address);
     oppositionField = DecoratedTextField(Strings.empty,
         initialValue: widget.currentEntry.opposition);

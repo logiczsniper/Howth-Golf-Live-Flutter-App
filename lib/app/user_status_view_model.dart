@@ -89,10 +89,10 @@ class UserStatusViewModel extends ChangeNotifier {
 
   int get bonusEntries {
     if (isAdmin)
-      return 1;
-    else if (competitionAccess.isNotEmpty)
       return 0;
-    else
+    else if (competitionAccess.isNotEmpty)
       return -1;
+    else
+      return -2;
   }
 }

@@ -5,7 +5,7 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
 class DecoratedField {
-  final DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
+  final DateFormat format = DateFormat("dd-MM-yyyy HH:mm");
 
   /// Modifies the field to a nicer looking string.
   ///

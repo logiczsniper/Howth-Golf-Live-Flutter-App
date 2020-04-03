@@ -23,9 +23,9 @@ class Strings {
   static const String archivedText = "Archived";
   static const String competitionsText = "Competitions";
   static const String helpsText = "App Help";
-  static const String specificHole = "Specific Hole";
+  static const String specificHole = "Score";
   static const String specificCompetition = "Specific Competition";
-  static const String newHole = "New Hole";
+  static const String newHole = "Add Players";
   static const String newCompetition = "New Competition";
   static const String modifyHole = "Modify Hole";
   static const String modifyCompetition = "Modify Competition";
@@ -37,6 +37,8 @@ class Strings {
   static const String competitionDate = "Competition date (YYYY-MM-DD)!";
   static const String competitionScore = "Competition score (home on left)!";
 
+  static const String competitionName = "Competition name";
+
   static const String homeScore = "Home team's overall score!";
   static const String awayScore = "Away team's overall score!";
   static const String location = "Competition location!";
@@ -45,11 +47,12 @@ class Strings {
   static const String players = "Home team's player(s)!";
   static const String opposition = "Away team's player(s)!";
   static const String hole = "Tap for this match-up's details!";
-  static const String holeNumber = "Current hole number!";
+  static const String currentHoleNumber = "Current hole number!";
   static const String holeHomeScore = "Home team's score!";
   static const String holeAwayScore = "Away team's score!";
   static const String homeTeam = "Home team name!";
   static const String awayTeam = "Away team name!";
+  static const String holeNumber = "Hole Number:";
 
   /// Paths to assets used in the app.
   static const String iconPath = "lib/assets/logo.svg";
@@ -67,7 +70,7 @@ class Strings {
   static const String ok = "OK";
   static const String cancel = "CANCEL";
   static const String irreversibleAction = "This action is irreversible.";
-  static const String doubleCheck = "Are you sure?";
+  static const String doubleCheck = "Are you sure you want to delete this?";
 
   static const String noConnection = "No connection found!";
   static const String loading = "Loading...";
@@ -85,10 +88,12 @@ class Strings {
 
   static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";
+  static const String versus = "VS";
 
   static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";
-  static const String atHome = "At home: ";
+  static const String home = "Home";
+  static const String away = "Away";
   static const String howthIs = "Howth is: ";
   static const String nameCommas = "Names separated by commas.";
   static const String optional = "This is optional.";

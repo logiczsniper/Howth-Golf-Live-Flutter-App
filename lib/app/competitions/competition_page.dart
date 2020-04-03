@@ -267,7 +267,8 @@ class CompetitionPage extends StatelessWidget {
                                       UIToolkit.showcase(
                                           context: context,
                                           key: _holeNumberKey,
-                                          description: Strings.holeNumber,
+                                          description:
+                                              Strings.currentHoleNumber,
                                           child:
                                               UIToolkit.getHoleNumberDecorated(
                                                   hole.holeNumber)),

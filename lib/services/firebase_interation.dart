@@ -55,8 +55,8 @@ class FirebaseInteration {
     Map<String, dynamic> newData = {Fields.data: _databaseEntries};
     DocumentSnapshot _documentSnapshot = _firebaseModel.document;
     _documentSnapshot.reference.updateData(newData).catchError((_) =>
-        Scaffold.of(context).showSnackBar(
-            UIToolkit.snackbar(Strings.failure, Icons.error_outline)));
+        Scaffold.of(context)
+            .showSnackBar(UIToolkit.snackbar(Strings.failure, Icons.error)));
   }
 
   /// Remove [currentEntry] from the entries in the database.
@@ -171,9 +171,6 @@ class FirebaseInteration {
     GlobalKey<FormState> _formKey,
     DecoratedTextField numberField,
     DecoratedTextField commentField,
-    DecoratedTextField howthScoreField,
-    DecoratedTextField oppositionScoreField,
-    String scoreStatus,
     DecoratedTextField playersField,
     DecoratedTextField oppositionField,
     int currentId,
@@ -182,11 +179,7 @@ class FirebaseInteration {
     if (_formKey.currentState.validate()) {
       Hole newHole = Hole(
           holeNumber: int.tryParse(numberField.controller.value.text),
-          holeScore: scoreStatus == Strings.aS
-              ? Score.fresh
-              : Score(
-                  howth: howthScoreField.controller.text,
-                  opposition: oppositionScoreField.controller.text),
+          holeScore: Score.fresh,
           comment: commentField.controller.text,
           lastUpdated: DateTime.now(),
 

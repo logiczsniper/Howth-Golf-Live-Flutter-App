@@ -30,7 +30,7 @@ class HolePage extends StatelessWidget {
       Text(condition ? score.howth : score.opposition,
           key: ValueKey(DateTime.now()),
           style: TextStyle(
-              fontSize: 21,
+              fontSize: 22,
               color: Palette.inMaroon,
               fontWeight: FontWeight.w400));
 
@@ -43,26 +43,30 @@ class HolePage extends StatelessWidget {
   Widget _getScoreButtons(BuildContext context, Hole hole,
           Score incrementedScore, Score decrementedScore, bool hasAccess) =>
       hasAccess
-          ? Column(children: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.add),
-                  iconSize: 25.5,
-                  onPressed: () {
-                    Hole updatedHole =
-                        hole.updateHole(newScore: incrementedScore);
-                    FirebaseInteration(context)
-                        .updateHole(index, id, updatedHole);
-                  }),
-              IconButton(
-                  icon: Icon(Icons.remove),
-                  iconSize: 25.5,
-                  onPressed: () {
-                    Hole updatedHole =
-                        hole.updateHole(newScore: decrementedScore);
-                    FirebaseInteration(context)
-                        .updateHole(index, id, updatedHole);
-                  })
-            ])
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.add_circle),
+                      padding: EdgeInsets.zero,
+                      iconSize: 30.0,
+                      onPressed: () {
+                        Hole updatedHole =
+                            hole.updateHole(newScore: incrementedScore);
+                        FirebaseInteration(context)
+                            .updateHole(index, id, updatedHole);
+                      }),
+                  IconButton(
+                      icon: Icon(Icons.remove_circle),
+                      padding: EdgeInsets.zero,
+                      iconSize: 30.0,
+                      onPressed: () {
+                        Hole updatedHole =
+                            hole.updateHole(newScore: decrementedScore);
+                        FirebaseInteration(context)
+                            .updateHole(index, id, updatedHole);
+                      })
+                ])
           : Container();
 
   Widget _getHoleButtons(BuildContext context, Hole hole, IconData iconData,
@@ -71,7 +75,8 @@ class HolePage extends StatelessWidget {
     return hasAccess
         ? IconButton(
             icon: Icon(iconData),
-            iconSize: 25.5,
+            padding: EdgeInsets.all(3.0),
+            iconSize: 30.0,
             onPressed: () {
               /// Apply value of one or minus one to the [holeNumber].
               Hole updatedHole = hole.updateNumber(value);
@@ -94,9 +99,9 @@ class HolePage extends StatelessWidget {
     Text lastUpdated = _getLastUpdated(_holeModel, hole?.lastUpdated);
 
     Widget incrementHoleNumber =
-        _getHoleButtons(context, hole, Icons.add, 1, hasAccess);
+        _getHoleButtons(context, hole, Icons.add_circle, 1, hasAccess);
     Widget decrementHoleNumber =
-        _getHoleButtons(context, hole, Icons.remove, -1, hasAccess);
+        _getHoleButtons(context, hole, Icons.remove_circle, -1, hasAccess);
 
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +119,7 @@ class HolePage extends StatelessWidget {
                 : Container(),
             hasAccess
                 ? IconButton(
-                    icon: Icon(Icons.remove_circle_outline),
+                    icon: Icon(Icons.delete),
                     tooltip: Strings.deleteHole,
                     onPressed: () => showModal(
                         context: context,
@@ -167,6 +172,7 @@ class HolePage extends StatelessWidget {
                   hole.holeScore.updateScore(!isHome, -1),
                   hasAccess),
             ]),
+
             UIToolkit.getVersus(
                 context,
                 isHome,
@@ -176,19 +182,29 @@ class HolePage extends StatelessWidget {
                 GlobalKey()),
 
             /// Edit the hole number.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                incrementHoleNumber,
-
-                /// Hole Number
-                AnimatedSwitcher(
-                  child: UIToolkit.getHoleNumberDecorated(hole.holeNumber),
-                  duration: Duration(milliseconds: 300),
-                ),
-
-                decrementHoleNumber,
-              ],
+            Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    child:
+                        Text(Strings.holeNumber, style: TextStyles.cardTitle),
+                    padding: EdgeInsets.only(bottom: 2.0),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      incrementHoleNumber,
+                      AnimatedSwitcher(
+                        child:
+                            UIToolkit.getHoleNumberDecorated(hole.holeNumber),
+                        duration: Duration(milliseconds: 300),
+                      ),
+                      decrementHoleNumber
+                    ],
+                  )
+                ],
+              ),
             ),
 
             /// Display the [lastUpdated] formatted.

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:ui';
 
 import 'package:howth_golf_live/constants/strings.dart';
@@ -115,7 +114,7 @@ class UIToolkit {
         ),
         Text(relevantNumber,
             style: TextStyle(
-                fontSize: 21.5,
+                fontSize: 22.5,
                 color: Palette.dark,
                 fontWeight: FontWeight.w400))
       ]);
@@ -163,12 +162,12 @@ class UIToolkit {
 
     return FloatingActionButton.extended(
       icon: Icon(
-        Icons.add,
+        Icons.add_circle,
         color: Palette.inMaroon,
       ),
       label: Text(
         text,
-        style: TextStyle(fontSize: 14, color: Palette.inMaroon),
+        style: TextStyle(fontSize: 15, color: Palette.inMaroon),
       ),
       onPressed: () {
         switch (text) {
@@ -208,11 +207,12 @@ class UIToolkit {
                     )),
               ),
               Padding(
-                  child: Icon(
-                    FontAwesomeIcons.fistRaised,
-                    size: 16.7,
+                  child: Text(
+                    Strings.versus,
+                    style: TextStyles.helpTitle
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  padding: EdgeInsets.all(3.0)),
+                  padding: EdgeInsets.all(10.0)),
               Expanded(
                   child: UIToolkit.showcase(
                       context: context,

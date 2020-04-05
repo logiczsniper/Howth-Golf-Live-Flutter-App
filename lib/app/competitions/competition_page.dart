@@ -23,10 +23,12 @@ class CompetitionPage extends StatelessWidget {
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
-  Expanded _getPlayer(Hole hole, String text, int index, {bool away = false}) =>
+  Expanded _getPlayer(Hole hole, String text, int index,
+          {bool isOpposition = false}) =>
       Expanded(
           child: Align(
-              alignment: away ? Alignment.centerRight : Alignment.centerLeft,
+              alignment:
+                  isOpposition ? Alignment.centerRight : Alignment.centerLeft,
               child: Container(
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
@@ -35,14 +37,15 @@ class CompetitionPage extends StatelessWidget {
                           : Palette.card.withAlpha(240),
                       borderRadius: BorderRadius.circular(13.0)),
                   child: Text(text,
-                      textAlign: away ? TextAlign.right : TextAlign.left,
+                      textAlign:
+                          isOpposition ? TextAlign.right : TextAlign.left,
                       style: TextStyles.cardSubTitle))));
 
   /// Gets the properly padded and styled score widget.
-  Container _getScore(String text, {bool away = false}) => Container(
+  Container _getScore(String text, {bool isOpposition = false}) => Container(
       child: Text(text, style: TextStyles.leadingChild),
       padding: EdgeInsets.fromLTRB(
-          away ? 12.0 : 16.0, 3.0, !away ? 12.0 : 16.0, 3.0));
+          isOpposition ? 12.0 : 16.0, 3.0, !isOpposition ? 12.0 : 16.0, 3.0));
 
   /// Constructs a single row in the table of holes.
   ///
@@ -67,16 +70,13 @@ class CompetitionPage extends StatelessWidget {
                         children: <Widget>[
                       /// Home player.
                       _getPlayer(
-                          hole,
-                          isHome
-                              ? hole.formattedPlayers
-                              : hole.formattedOpposition(opposition),
-                          index),
+                        hole,
+                        hole.formattedPlayers,
+                        index,
+                      ),
 
                       /// Home score.
-                      _getScore(isHome
-                          ? hole.holeScore.howth
-                          : hole.holeScore.opposition)
+                      _getScore(hole.holeScore.howth)
                     ])),
 
                 /// Hole Number
@@ -88,20 +88,15 @@ class CompetitionPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                       /// Away team score.
-                      _getScore(
-                          !isHome
-                              ? hole.holeScore.howth
-                              : hole.holeScore.opposition,
-                          away: true),
+                      _getScore(hole.holeScore.opposition, isOpposition: true),
 
                       /// Away team player.
                       _getPlayer(
-                          hole,
-                          !isHome
-                              ? hole.formattedPlayers
-                              : hole.formattedOpposition(opposition),
-                          index,
-                          away: true)
+                        hole,
+                        hole.formattedOpposition(opposition),
+                        index,
+                        isOpposition: true,
+                      )
                     ]))
               ]));
 
@@ -119,36 +114,36 @@ class CompetitionPage extends StatelessWidget {
             context: context, text: Strings.newHole, id: currentData.id)
         : null;
 
-    final GlobalKey _homeScoreKey = GlobalKey();
-    final GlobalKey _awayScoreKey = GlobalKey();
+    final GlobalKey _howthScoreKey = GlobalKey();
+    final GlobalKey _oppositionScoreKey = GlobalKey();
     final GlobalKey _locationKey = GlobalKey();
     final GlobalKey _dateKey = GlobalKey();
     final GlobalKey _timeKey = GlobalKey();
-    final GlobalKey _homeTeamKey = GlobalKey();
-    final GlobalKey _awayTeamKey = GlobalKey();
+    final GlobalKey _howthTeamKey = GlobalKey();
+    final GlobalKey _oppositionTeamKey = GlobalKey();
     final GlobalKey _holeKey = GlobalKey();
     final GlobalKey _playersKey = GlobalKey();
     final GlobalKey _oppositionKey = GlobalKey();
     final GlobalKey _holeNumberKey = GlobalKey();
-    final GlobalKey _holeHomeScoreKey = GlobalKey();
-    final GlobalKey _holeAwayScoreKey = GlobalKey();
+    final GlobalKey _holeHowthScoreKey = GlobalKey();
+    final GlobalKey _holeOppositionScoreKey = GlobalKey();
     final GlobalKey _backKey = GlobalKey();
     final GlobalKey _codeKey = GlobalKey();
 
     List<GlobalKey> keys = [
-      _homeScoreKey,
-      _awayScoreKey,
+      _howthScoreKey,
+      _oppositionScoreKey,
       _locationKey,
       _dateKey,
       _timeKey,
-      _homeTeamKey,
-      _awayTeamKey,
+      _howthTeamKey,
+      _oppositionTeamKey,
       _holeKey,
       _playersKey,
       _oppositionKey,
-      _holeHomeScoreKey,
+      _holeHowthScoreKey,
       _holeNumberKey,
-      _holeAwayScoreKey,
+      _holeOppositionScoreKey,
       _backKey,
       _codeKey
     ];
@@ -183,19 +178,22 @@ class CompetitionPage extends StatelessWidget {
                     },
                     itemBuilder: (context, index) {
                       if (index == 0)
-                        return CompetitionDetails(currentData, _homeScoreKey,
-                            _awayScoreKey, _locationKey, _dateKey, _timeKey);
+                        return CompetitionDetails(
+                            currentData,
+                            _howthScoreKey,
+                            _oppositionScoreKey,
+                            _locationKey,
+                            _dateKey,
+                            _timeKey);
                       else if (index == 1)
                         return UIToolkit.getVersus(
                             context,
-                            currentData.location.isHome,
                             currentData.opposition,
                             Strings.homeAddress,
-                            _homeTeamKey,
-                            _awayTeamKey);
+                            _howthTeamKey,
+                            _oppositionTeamKey);
                       else if (!hasVisited && index == 2) {
                         Hole hole = Hole.example;
-                        bool isHome = currentData.location.isHome;
                         return UIToolkit.showcase(
                             context: context,
                             key: _holeKey,
@@ -232,27 +230,27 @@ class CompetitionPage extends StatelessWidget {
                                                                     .withAlpha(
                                                                         240),
                                                                 borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        13.0)),
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0)),
                                                             child: Text(
-                                                                "Home player(s)/club",
-                                                                textAlign:
-                                                                    TextAlign.left,
-                                                                style: TextStyles.cardSubTitle))))),
+                                                              "Howth player(s)",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyles
+                                                                  .cardSubTitle,
+                                                            ))))),
 
                                             /// Home score.
                                             UIToolkit.showcase(
                                                 context: context,
-                                                key: _holeHomeScoreKey,
+                                                key: _holeHowthScoreKey,
                                                 description:
                                                     Strings.holeHomeScore,
                                                 child: Container(
                                                     child: Text(
-                                                        isHome
-                                                            ? hole
-                                                                .holeScore.howth
-                                                            : hole.holeScore
-                                                                .opposition,
+                                                        hole.holeScore.howth,
                                                         style: TextStyles
                                                             .leadingChild),
                                                     padding:
@@ -282,16 +280,13 @@ class CompetitionPage extends StatelessWidget {
                                             /// Away team score.
                                             UIToolkit.showcase(
                                                 context: context,
-                                                key: _holeAwayScoreKey,
+                                                key: _holeOppositionScoreKey,
                                                 description:
                                                     Strings.holeAwayScore,
                                                 child: Container(
                                                     child: Text(
-                                                        !isHome
-                                                            ? hole
-                                                                .holeScore.howth
-                                                            : hole.holeScore
-                                                                .opposition,
+                                                        hole.holeScore
+                                                            .opposition,
                                                         style: TextStyles
                                                             .leadingChild),
                                                     padding:
@@ -316,18 +311,22 @@ class CompetitionPage extends StatelessWidget {
                                                                 EdgeInsets.all(
                                                                     8.0),
                                                             decoration: BoxDecoration(
-                                                                color: Palette.card
+                                                                color: Palette
+                                                                    .card
                                                                     .withAlpha(
                                                                         240),
                                                                 borderRadius:
-                                                                    BorderRadius.circular(
-                                                                        13.0)),
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            13.0)),
                                                             child: Text(
-                                                                "Away player(s)/club",
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .right,
-                                                                style: TextStyles.cardSubTitle))))),
+                                                              "Opposition player(s)/club",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyles
+                                                                  .cardSubTitle,
+                                                            ))))),
                                           ]))
                                     ])));
                       } else if (currentData.holes.isEmpty)

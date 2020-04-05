@@ -187,21 +187,20 @@ class UIToolkit {
   /// [currentData.location.isHome].
   static Container getVersus(
           BuildContext context,
-          bool isHome,
           String opposition,
           String howthText,
-          GlobalKey _homeTeamKey,
-          GlobalKey _awayTeamKey) =>
+          GlobalKey _howthTeamKey,
+          GlobalKey _oppositionTeamKey) =>
       Container(
           child: Row(
             children: <Widget>[
               Expanded(
                 child: UIToolkit.showcase(
                     context: context,
-                    key: _homeTeamKey,
+                    key: _howthTeamKey,
                     description: Strings.homeTeam,
                     child: Text(
-                      isHome ? howthText : opposition,
+                      howthText,
                       textAlign: TextAlign.right,
                       style: TextStyles.form,
                     )),
@@ -216,10 +215,10 @@ class UIToolkit {
               Expanded(
                   child: UIToolkit.showcase(
                       context: context,
-                      key: _awayTeamKey,
+                      key: _oppositionTeamKey,
                       description: Strings.awayTeam,
                       child: Text(
-                        !isHome ? howthText : opposition,
+                        opposition,
                         textAlign: TextAlign.left,
                         style: TextStyles.form,
                       )))

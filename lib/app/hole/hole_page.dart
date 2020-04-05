@@ -91,11 +91,10 @@ class HolePage extends StatelessWidget {
     var _holeModel = Provider.of<HoleViewModel>(context);
 
     bool hasAccess = _userStatus.isVerified(Strings.specificHole, id: id);
-    bool isHome = _holeModel.isHome(id);
     Hole hole = _holeModel.hole(id, index);
 
-    Text homeScoreText = _getScoreText(isHome, hole.holeScore);
-    Text awayScoreText = _getScoreText(!isHome, hole.holeScore);
+    Text homeScoreText = _getScoreText(true, hole.holeScore);
+    Text awayScoreText = _getScoreText(false, hole.holeScore);
     Text lastUpdated = _getLastUpdated(_holeModel, hole?.lastUpdated);
 
     Widget incrementHoleNumber =
@@ -149,8 +148,8 @@ class HolePage extends StatelessWidget {
               _getScoreButtons(
                   context,
                   hole,
-                  hole.holeScore.updateScore(isHome, 1),
-                  hole.holeScore.updateScore(isHome, -1),
+                  hole.holeScore.updateScore(true, 1),
+                  hole.holeScore.updateScore(true, -1),
                   hasAccess),
 
               _getScore(homeScoreText),
@@ -168,14 +167,13 @@ class HolePage extends StatelessWidget {
               _getScoreButtons(
                   context,
                   hole,
-                  hole.holeScore.updateScore(!isHome, 1),
-                  hole.holeScore.updateScore(!isHome, -1),
+                  hole.holeScore.updateScore(false, 1),
+                  hole.holeScore.updateScore(false, -1),
                   hasAccess),
             ]),
 
             UIToolkit.getVersus(
                 context,
-                isHome,
                 hole.formattedOpposition(_holeModel.opposition(id)),
                 hole.formattedPlayers,
                 GlobalKey(),

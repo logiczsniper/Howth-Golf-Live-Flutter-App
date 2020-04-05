@@ -7,7 +7,6 @@ import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 
 class ComplexScore extends StatelessWidget {
-  final bool isHome;
   final Score score;
 
   /// A small display for showing [Score]s.
@@ -15,7 +14,7 @@ class ComplexScore extends StatelessWidget {
   /// Must have two main capabilities: round whole numbers
   /// to int rather than having ".0" at the end, and use
   /// fractions instead of decimals.
-  ComplexScore(this.isHome, this.score);
+  ComplexScore(this.score);
 
   /// Determines whether [score] is a string containing a fraction or whole
   /// number.
@@ -26,24 +25,24 @@ class ComplexScore extends StatelessWidget {
   ///
   /// If the main number is 0, this will display just 1 / 2 rather than
   /// 0 and 1 / 2.
-  static String _getMainNumber(bool condition, Score scores) {
-    String score = condition ? scores.howth : scores.opposition;
+  static String _getMainNumber(bool isHowth, Score scores) {
+    String score = isHowth ? scores.howth : scores.opposition;
 
     return double.tryParse(score).toInt() == 0 && _isFraction(score)
         ? Strings.empty
         : double.tryParse(score).toInt().toString();
   }
 
-  static TextSpan getFraction(bool condition, Score scores) => TextSpan(
+  static TextSpan getFraction(bool isHowth, Score scores) => TextSpan(
 
       /// The ternary operator (and others like it) below ensure that
       /// no fraction is displayed if the [currentEntry.score] is whole.
-      text: _isFraction(condition ? scores.howth : scores.opposition)
+      text: _isFraction(isHowth ? scores.howth : scores.opposition)
           ? "1/2"
           : Strings.empty,
       style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
 
-  static RichText getMixedFraction(bool condition, Score score) => RichText(
+  static RichText getMixedFraction(bool isHowth, Score score) => RichText(
       key: ValueKey(DateTime.now()),
       text: TextSpan(
           style: TextStyle(
@@ -52,10 +51,10 @@ class ComplexScore extends StatelessWidget {
               fontWeight: FontWeight.w400),
           children: <TextSpan>[
             /// Main number.
-            TextSpan(text: _getMainNumber(condition, score)),
+            TextSpan(text: _getMainNumber(isHowth, score)),
 
             /// Fraction.
-            getFraction(condition, score)
+            getFraction(isHowth, score)
           ]));
 
   @override
@@ -66,15 +65,15 @@ class ComplexScore extends StatelessWidget {
       /// on the left, and whoever is away on the right.
       text: TextSpan(style: TextStyles.scoreCard, children: <TextSpan>[
         /// Home team score.
-        TextSpan(text: _getMainNumber(isHome, score)),
-        getFraction(isHome, score),
+        TextSpan(text: _getMainNumber(true, score)),
+        getFraction(true, score),
 
         /// Middle divider.
         TextSpan(text: " - "),
 
         /// Away team score.
-        TextSpan(text: _getMainNumber(!isHome, score)),
-        getFraction(!isHome, score),
+        TextSpan(text: _getMainNumber(false, score)),
+        getFraction(false, score),
       ]),
     );
   }

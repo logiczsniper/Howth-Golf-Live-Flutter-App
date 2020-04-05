@@ -35,8 +35,7 @@ class CompetitionsPage extends StatelessWidget {
                     maxLines: 1,
                     style: TextStyles.cardSubTitle)),
             Padding(
-                child: ComplexScore(
-                    currentEntry.location.isHome, currentEntry.score),
+                child: ComplexScore(currentEntry.score),
                 padding: EdgeInsets.only(left: 15.0))
           ]),
           trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right));
@@ -112,7 +111,6 @@ class CompetitionsPage extends StatelessWidget {
                                     key: _scoreKey,
                                     description: Strings.competitionScore,
                                     child: ComplexScore(
-                                        DatabaseEntry.example.location.isHome,
                                         DatabaseEntry.example.score),
                                   ),
                                   padding: EdgeInsets.only(left: 15.0))

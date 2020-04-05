@@ -10,14 +10,14 @@ import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
 class CompetitionDetails extends StatelessWidget {
   final DatabaseEntry currentEntry;
-  final GlobalKey homeScoreKey;
-  final GlobalKey awayScoreKey;
+  final GlobalKey howthScoreKey;
+  final GlobalKey oppositionScoreKey;
   final GlobalKey locationKey;
   final GlobalKey dateKey;
   final GlobalKey timeKey;
 
-  CompetitionDetails(this.currentEntry, this.homeScoreKey, this.awayScoreKey,
-      this.locationKey, this.dateKey, this.timeKey);
+  CompetitionDetails(this.currentEntry, this.howthScoreKey,
+      this.oppositionScoreKey, this.locationKey, this.dateKey, this.timeKey);
 
   /// Get a padded [MiddleRow].
   ///
@@ -81,8 +81,12 @@ class CompetitionDetails extends StatelessWidget {
               children: <Widget>[
                 /// Home team score.
 
-                SideFlexible(currentEntry.score, currentEntry.location.isHome,
-                    homeScoreKey, Strings.homeScore),
+                SideFlexible(
+                  currentEntry.score,
+                  howthScoreKey,
+                  Strings.homeScore,
+                  true,
+                ),
 
                 /// Details of competition.
                 _centralFlexible(context, hasAccess),
@@ -90,9 +94,9 @@ class CompetitionDetails extends StatelessWidget {
                 /// Away team score.
                 SideFlexible(
                   currentEntry.score,
-                  !currentEntry.location.isHome,
-                  awayScoreKey,
+                  oppositionScoreKey,
                   Strings.awayScore,
+                  false,
                 )
               ],
             ),

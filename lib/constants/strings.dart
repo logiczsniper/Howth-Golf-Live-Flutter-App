@@ -88,7 +88,7 @@ class Strings {
 
   static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";
-  static const String versus = "VS";
+  static const String versus = "V";
 
   static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";

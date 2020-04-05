@@ -31,7 +31,7 @@ class CompetitionsPage extends StatelessWidget {
                 padding: EdgeInsets.only(right: 15.0),
                 decoration: UIToolkit.rightSideBoxDecoration,
                 child: Text(currentEntry.date,
-                    overflow: TextOverflow.fade,
+                    overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyles.cardSubTitle)),
             Padding(
@@ -102,7 +102,7 @@ class CompetitionsPage extends StatelessWidget {
                                     key: _dateKey,
                                     description: Strings.competitionDate,
                                     child: Text(DatabaseEntry.example.date,
-                                        overflow: TextOverflow.fade,
+                                        overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: TextStyles.cardSubTitle)),
                               ),

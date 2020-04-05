@@ -16,7 +16,7 @@ class SideFlexible extends StatelessWidget {
 
   /// The maroon decoration around the [text].
   Decoration get _decoration => ShapeDecoration(
-      color: Palette.maroon,
+      color: Palette.light,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
   @override

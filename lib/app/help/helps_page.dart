@@ -16,7 +16,9 @@ import 'package:showcaseview/showcase_widget.dart';
 
 class HelpsPage extends StatelessWidget {
   static Text _getLeadingText(String text) => Text(text,
-      overflow: TextOverflow.fade, maxLines: 1, style: TextStyles.leadingChild);
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: TextStyles.leadingChild);
 
   static Widget _tileBuilder(
           BuildContext context, AppHelpEntry currentHelpEntry, int index) =>
@@ -36,7 +38,7 @@ class HelpsPage extends StatelessWidget {
                 maxLines: 2,
               ),
               subtitle: Text(currentHelpEntry.subtitle,
-                  overflow: TextOverflow.fade,
+                  overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: TextStyles.cardSubTitle),
               trailing: Icon(Icons.keyboard_arrow_right)),

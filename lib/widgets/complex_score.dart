@@ -47,12 +47,12 @@ class ComplexScore extends StatelessWidget {
       key: ValueKey(DateTime.now()),
       text: TextSpan(
           style: TextStyle(
-              fontSize: 22,
-              color: Palette.inMaroon,
-              fontWeight: FontWeight.w400),
+              fontSize: 32, color: Palette.dark, fontWeight: FontWeight.w800),
           children: <TextSpan>[
             /// Main number.
-            TextSpan(text: _getMainNumber(condition, score)),
+            TextSpan(
+                text: _getMainNumber(condition, score),
+                style: TextStyle(fontSize: 70.0)),
 
             /// Fraction.
             getFraction(condition, score)

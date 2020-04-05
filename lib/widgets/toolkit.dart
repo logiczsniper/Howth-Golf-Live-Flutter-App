@@ -70,16 +70,19 @@ class UIToolkit {
       child: Padding(
           child: Align(
               alignment: Alignment.center,
-              child:
-                  Text(holeNumber.toString(), style: TextStyles.cardSubTitle)),
+              child: Text(holeNumber.toString(),
+                  style: TextStyles.cardSubTitle.copyWith(
+                      color: Palette.inMaroon, fontWeight: FontWeight.bold))),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
-          color: Palette.light,
+          color: Palette.maroon,
           border: Border.all(color: Palette.maroon, width: 1.5),
           borderRadius: BorderRadius.circular(13.0)));
 
   static Text getLeadingText(String text) => Text(text,
-      overflow: TextOverflow.fade, maxLines: 1, style: TextStyles.leadingChild);
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: TextStyles.leadingChild);
 
   /// The text that appears in a form.
   static Widget getFormText(String text) => Padding(
@@ -193,6 +196,11 @@ class UIToolkit {
           GlobalKey _homeTeamKey,
           GlobalKey _awayTeamKey) =>
       Container(
+          margin: EdgeInsets.fromLTRB(20.0, 12.5, 20.0, 2.0),
+          // margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13.0),
+              color: Colors.transparent),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -203,14 +211,22 @@ class UIToolkit {
                     child: Text(
                       isHome ? howthText : opposition,
                       textAlign: TextAlign.right,
-                      style: TextStyles.form,
+                      style: TextStyles.form.copyWith(
+                          color: Palette.dark, fontWeight: FontWeight.bold),
                     )),
               ),
-              Padding(
+              Container(
+                  width: 45.0,
+                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                      color: Palette.maroon,
+                      border: Border.all(color: Palette.maroon, width: 1.5),
+                      borderRadius: BorderRadius.circular(13.0)),
                   child: Text(
                     Strings.versus,
-                    style: TextStyles.helpTitle
-                        .copyWith(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                    style: TextStyles.helpTitle.copyWith(
+                        fontWeight: FontWeight.w900, color: Palette.inMaroon),
                   ),
                   padding: EdgeInsets.all(10.0)),
               Expanded(
@@ -221,9 +237,10 @@ class UIToolkit {
                       child: Text(
                         !isHome ? howthText : opposition,
                         textAlign: TextAlign.left,
-                        style: TextStyles.form,
+                        style: TextStyles.form.copyWith(
+                            color: Palette.dark, fontWeight: FontWeight.bold),
                       )))
             ],
           ),
-          padding: EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0));
+          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0));
 }

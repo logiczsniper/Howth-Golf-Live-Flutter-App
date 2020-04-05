@@ -34,7 +34,7 @@ class CompetitionDetails extends StatelessWidget {
   /// If [hasAccess], a fourth row must be displayed which shows the key ([id])
   /// of the competition.
   Widget _centralFlexible(BuildContext context, bool hasAccess) => Flexible(
-        flex: 2,
+        flex: 1,
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

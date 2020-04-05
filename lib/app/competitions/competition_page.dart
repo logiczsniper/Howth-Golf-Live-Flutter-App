@@ -25,18 +25,19 @@ class CompetitionPage extends StatelessWidget {
   /// for the designated [hole].
   Expanded _getPlayer(Hole hole, String text, int index, {bool away = false}) =>
       Expanded(
-          child: Align(
+          child: Container(
+              padding: EdgeInsets.all(17.5),
+              // decoration: BoxDecoration(
+              //     color: index % 2 != 1
+              //         ? Palette.light
+              //         : Palette.card.withAlpha(240),
+              //     borderRadius: BorderRadius.circular(13.0)),
               alignment: away ? Alignment.centerRight : Alignment.centerLeft,
               child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: index % 2 != 0
-                          ? Palette.light
-                          : Palette.card.withAlpha(240),
-                      borderRadius: BorderRadius.circular(13.0)),
                   child: Text(text,
                       textAlign: away ? TextAlign.right : TextAlign.left,
-                      style: TextStyles.cardSubTitle))));
+                      style: TextStyles.cardSubTitle
+                          .copyWith(color: Palette.darker)))));
 
   /// Gets the properly padded and styled score widget.
   Container _getScore(String text, {bool away = false}) => Container(
@@ -182,10 +183,18 @@ class CompetitionPage extends StatelessWidget {
                         return Container();
                     },
                     itemBuilder: (context, index) {
-                      if (index == 0)
-                        return CompetitionDetails(currentData, _homeScoreKey,
-                            _awayScoreKey, _locationKey, _dateKey, _timeKey);
-                      else if (index == 1)
+                      if (index == 1)
+                        return Padding(
+                            padding: EdgeInsets.zero,
+                            // padding: EdgeInsets.only(bottom: 12.5),
+                            child: CompetitionDetails(
+                                currentData,
+                                _homeScoreKey,
+                                _awayScoreKey,
+                                _locationKey,
+                                _dateKey,
+                                _timeKey));
+                      else if (index == 0)
                         return UIToolkit.getVersus(
                             context,
                             currentData.location.isHome,
@@ -347,6 +356,12 @@ class CompetitionPage extends StatelessWidget {
                             onTap: () => Routes.of(context)
                                 .toHole(currentData.id, holeIndex - 2),
                             child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                    color: index % 2 != 0
+                                        ? Palette.light
+                                        : Palette.card.withAlpha(240),
+                                    borderRadius: BorderRadius.circular(13.0)),
                                 child: _rowBuilder(
                                     context,
                                     currentData.holes[holeIndex - 2],

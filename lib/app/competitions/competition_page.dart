@@ -183,7 +183,7 @@ class CompetitionPage extends StatelessWidget {
                         return Container();
                     },
                     itemBuilder: (context, index) {
-                      if (index == 1)
+                      if (index == 0)
                         return Padding(
                             padding: EdgeInsets.zero,
                             // padding: EdgeInsets.only(bottom: 12.5),
@@ -194,7 +194,7 @@ class CompetitionPage extends StatelessWidget {
                                 _locationKey,
                                 _dateKey,
                                 _timeKey));
-                      else if (index == 0)
+                      else if (index == 1)
                         return UIToolkit.getVersus(
                             context,
                             currentData.location.isHome,

@@ -26,36 +26,41 @@ class ComplexScore extends StatelessWidget {
   ///
   /// If the main number is 0, this will display just 1 / 2 rather than
   /// 0 and 1 / 2.
-  static String _getMainNumber(bool condition, Score scores) {
-    String score = condition ? scores.howth : scores.opposition;
+  static String _getMainNumber(bool isHowth, Score scores) {
+    String score = isHowth ? scores.howth : scores.opposition;
 
     return double.tryParse(score).toInt() == 0 && _isFraction(score)
         ? Strings.empty
         : double.tryParse(score).toInt().toString();
   }
 
-  static TextSpan getFraction(bool condition, Score scores) => TextSpan(
+  static TextSpan getFraction(bool isHowth, Score scores) => TextSpan(
 
       /// The ternary operator (and others like it) below ensure that
       /// no fraction is displayed if the [currentEntry.score] is whole.
-      text: _isFraction(condition ? scores.howth : scores.opposition)
+      text: _isFraction(isHowth ? scores.howth : scores.opposition)
           ? "1/2"
           : Strings.empty,
       style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
 
-  static RichText getMixedFraction(bool condition, Score score) => RichText(
-      key: ValueKey(DateTime.now()),
+  static RichText getMixedFraction(bool isHowth, Score score) => RichText(
+      key: ValueKey(score),
       text: TextSpan(
           style: TextStyle(
-              fontSize: 32, color: Palette.dark, fontWeight: FontWeight.w800),
+              fontSize: score.howth[0] == "0" && isHowth ||
+                      score.opposition[0] == "0" && !isHowth
+                  ? 50
+                  : 32,
+              color: Palette.dark,
+              fontWeight: FontWeight.w800),
           children: <TextSpan>[
             /// Main number.
             TextSpan(
-                text: _getMainNumber(condition, score),
+                text: _getMainNumber(isHowth, score),
                 style: TextStyle(fontSize: 70.0)),
 
             /// Fraction.
-            getFraction(condition, score)
+            getFraction(isHowth, score)
           ]));
 
   @override

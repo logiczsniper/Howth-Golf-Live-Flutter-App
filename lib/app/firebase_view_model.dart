@@ -84,6 +84,32 @@ class FirebaseViewModel {
     return databaseEntries;
   }
 
+  /// Convert [lastUpdated] to a pretty string.
+  String prettyLastUpdated(DateTime lastUpdated) {
+    Duration difference = DateTime.now().difference(lastUpdated);
+
+    String value;
+
+    if (difference.inHours < 1)
+
+      /// Less than an hour; return in minutes.
+      value = "${difference.inMinutes} minute(s) ago";
+    else if (difference.inDays < 1)
+
+      /// Less than a day; return in hours.
+      value = "${difference.inHours} hour(s) ago";
+    else if (difference.inDays < 365)
+
+      /// Less than a year; return in days.
+      value = "${difference.inDays} day(s) ago";
+    else
+
+      /// Greater than a year; return in years.
+      value = "${(difference.inDays ~/ 365)} year(s) ago";
+
+    return "Last updated: $value";
+  }
+
   static Stream<FirebaseViewModel> get stream => FirebaseInteration.stream
       .map((querySnapshot) => FirebaseViewModel(querySnapshot));
 }

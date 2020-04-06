@@ -19,7 +19,7 @@ class FirebaseInteration {
   var _firebaseModel;
   List _databaseEntries;
 
-  FirebaseInteration(this.context) {
+  FirebaseInteration.of(this.context) {
     _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
     _databaseEntries = List.from(_firebaseModel.rawEntries);
   }

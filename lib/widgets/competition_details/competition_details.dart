@@ -81,8 +81,8 @@ class CompetitionDetails extends StatelessWidget {
               children: <Widget>[
                 /// Home team score.
 
-                SideFlexible(currentEntry.score, currentEntry.location.isHome,
-                    homeScoreKey, Strings.homeScore),
+                SideFlexible(
+                    currentEntry.score, true, homeScoreKey, Strings.homeScore),
 
                 /// Details of competition.
                 _centralFlexible(context, hasAccess),
@@ -90,7 +90,7 @@ class CompetitionDetails extends StatelessWidget {
                 /// Away team score.
                 SideFlexible(
                   currentEntry.score,
-                  !currentEntry.location.isHome,
+                  false,
                   awayScoreKey,
                   Strings.awayScore,
                 )

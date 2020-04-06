@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
 import 'package:howth_golf_live/app/home/authentication_view_model.dart';
-import 'package:howth_golf_live/app/hole/hole_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 
@@ -35,8 +34,6 @@ class MyApp extends StatelessWidget {
           create: (_) => ConnectivityViewModel.stream,
           initialData: ConnectivityViewModel.init(),
         ),
-        ProxyProvider<FirebaseViewModel, HoleViewModel>(
-            update: (_, firebaseModel, __) => HoleViewModel(firebaseModel))
       ]);
 
   /// The root of the app.

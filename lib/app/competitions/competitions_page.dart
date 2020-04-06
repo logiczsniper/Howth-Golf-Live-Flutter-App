@@ -163,7 +163,7 @@ class CompetitionsPage extends StatelessWidget {
                                               FadeScaleTransitionConfiguration(),
                                           builder: (context) =>
                                               CustomAlertDialog(
-                                                  FirebaseInteration(context)
+                                                  FirebaseInteration.of(context)
                                                       .deleteCompetition,
                                                   currentEntry: currentEntry))),
                                 ])

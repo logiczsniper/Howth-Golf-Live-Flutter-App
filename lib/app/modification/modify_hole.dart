@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/app/creation/creation_page.dart';
-import 'package:howth_golf_live/app/hole/hole_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interation.dart';
 import 'package:howth_golf_live/services/models.dart';
@@ -15,8 +13,9 @@ class ModifyHole extends StatefulWidget {
   final int index;
   final int currentId;
   final Hole currentHole;
+  final String opposition;
 
-  ModifyHole(this.currentId, this.index, this.currentHole);
+  ModifyHole(this.currentId, this.index, this.currentHole, this.opposition);
 
   @override
   ModifyHoleState createState() => ModifyHoleState();
@@ -53,14 +52,13 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
         newPlayers: playersField.controller.value.text.split(", "),
         newOpposition: oppositionField.controller.value.text.split(", "),
         newComment: commentField.controller.value.text);
-    FirebaseInteration(context)
+    FirebaseInteration.of(context)
         .updateHole(widget.index, widget.currentId, updatedHole, pop: true);
   }
 
   @override
   void initState() {
     super.initState();
-    var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
 
     commentField = DecoratedTextField(
         widget.currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
@@ -71,8 +69,7 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
     playersField = DecoratedTextField(Strings.empty,
         initialValue: widget.currentHole.formattedPlayers);
     oppositionField = DecoratedTextField(Strings.empty,
-        initialValue: widget.currentHole
-            .formattedOpposition(_holeModel.opposition(widget.currentId)),
+        initialValue: widget.currentHole.formattedOpposition(widget.opposition),
         isRequired: false);
   }
 

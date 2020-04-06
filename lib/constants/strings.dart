@@ -39,19 +39,19 @@ class Strings {
 
   static const String competitionName = "Competition name";
 
-  static const String homeScore = "Home team's overall score!";
-  static const String awayScore = "Away team's overall score!";
+  static const String homeScore = "Howth's overall score!";
+  static const String awayScore = "Opposition's overall score!";
   static const String location = "Competition location!";
   static const String date = "Competition date!";
   static const String time = "Competition time!";
-  static const String players = "Home team's player(s)!";
-  static const String opposition = "Away team's player(s)!";
+  static const String players = "Howth's player(s)!";
+  static const String opposition = "Opposition's player(s)!";
   static const String hole = "Tap for this match-up's details!";
   static const String currentHoleNumber = "Current hole number!";
-  static const String holeHomeScore = "Home team's score!";
-  static const String holeAwayScore = "Away team's score!";
-  static const String homeTeam = "Home team name!";
-  static const String awayTeam = "Away team name!";
+  static const String holeHomeScore = "Howth's score!";
+  static const String holeAwayScore = "Opposition's score!";
+  static const String homeTeam = "Howth name!";
+  static const String awayTeam = "Opposition name!";
   static const String holeNumber = "Hole Number:";
 
   /// Paths to assets used in the app.

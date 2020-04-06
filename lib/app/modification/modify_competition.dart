@@ -63,7 +63,7 @@ class ModifyCompetitionState extends State<ModifyCompetition>
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    FirebaseInteration(context).updateCompetition(
+    FirebaseInteration.of(context).updateCompetition(
         _formKey,
         widget.currentEntry.id,
         isHome == Strings.home,

@@ -62,7 +62,7 @@ class CreateCompetitionState extends State<CreateCompetition>
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    FirebaseInteration(context).addCompetition(
+    FirebaseInteration.of(context).addCompetition(
         _formKey, titleField, locationField, oppositionField, dateTimeField);
   }
 

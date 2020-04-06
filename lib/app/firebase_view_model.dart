@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 class FirebaseViewModel {
@@ -110,6 +110,6 @@ class FirebaseViewModel {
     return "Last updated: $value";
   }
 
-  static Stream<FirebaseViewModel> get stream => FirebaseInteration.stream
+  static Stream<FirebaseViewModel> get stream => FirebaseInteraction.stream
       .map((querySnapshot) => FirebaseViewModel(querySnapshot));
 }

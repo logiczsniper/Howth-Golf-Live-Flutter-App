@@ -83,7 +83,6 @@ class StatefulAppBar {
             keyboardType: textType,
             obscureText: obscureText,
             cursorColor: Palette.maroon,
-            textAlign: TextAlign.center,
             textCapitalization: TextCapitalization.sentences,
             autocorrect: false,
             controller: _filter,

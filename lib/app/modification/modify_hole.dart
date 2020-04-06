@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/app/creation/creation_page.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -52,7 +52,7 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
         newPlayers: playersField.controller.value.text.split(", "),
         newOpposition: oppositionField.controller.value.text.split(", "),
         newComment: commentField.controller.value.text);
-    FirebaseInteration.of(context)
+    FirebaseInteraction.of(context)
         .updateHole(widget.index, widget.currentId, updatedHole, pop: true);
   }
 

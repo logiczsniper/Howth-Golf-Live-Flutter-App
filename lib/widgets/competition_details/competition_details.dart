@@ -72,7 +72,7 @@ class CompetitionDetails extends StatelessWidget {
         _userStatus.isVerified(currentEntry.title, id: currentEntry.id);
 
     return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 1.5),
+        padding: EdgeInsets.fromLTRB(0.0, 3.5, 0.0, 0.0),
         child: Column(
           children: <Widget>[
             Row(

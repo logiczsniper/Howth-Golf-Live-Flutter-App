@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -8,7 +9,7 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 
 import 'package:howth_golf_live/widgets/alert_dialog.dart';
@@ -39,7 +40,8 @@ class CompetitionsPage extends StatelessWidget {
                     currentEntry.location.isHome, currentEntry.score),
                 padding: EdgeInsets.only(left: 15.0))
           ]),
-          trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right));
+          trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right,
+              color: Palette.maroon));
 
   Widget _buildElementsList(
       BuildContext context,
@@ -117,16 +119,26 @@ class CompetitionsPage extends StatelessWidget {
                                   ),
                                   padding: EdgeInsets.only(left: 15.0))
                             ]),
-                            trailing: Icon(Icons.keyboard_arrow_right)));
+                            trailing: Icon(Icons.keyboard_arrow_right,
+                                color: Palette.maroon)));
                   }
 
                   /// In the case where the user searched for something with no results,
                   /// return a [Text] widget to notify the user of that.
                   if (activeElements.isEmpty) {
                     return ListTile(
-                        title: Center(
-                            child: Text(Strings.noCompetitions,
-                                style: TextStyles.noData)));
+                        title: Container(
+                            padding: EdgeInsets.only(top: 25),
+                            alignment: Alignment.center,
+                            child: Column(children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 7.0),
+                                  child: Icon(Icons.live_help,
+                                      color: Palette.dark.withAlpha(200),
+                                      size: 30.0)),
+                              Text(Strings.noCompetitions,
+                                  style: TextStyles.noData)
+                            ])));
                   }
 
                   int elementIndex = index;
@@ -141,32 +153,29 @@ class CompetitionsPage extends StatelessWidget {
                       onTap: () =>
                           Routes.of(context).toCompetition(currentEntry),
                       iconButton: _userStatus.isAdmin
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                  IconButton(
-                                    padding: EdgeInsets.only(top: 10.0),
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () => Routes.of(context)
-                                        .toCompetitionModification(
-                                            currentEntry),
-                                  ),
-                                  IconButton(
-                                      icon: Icon(Icons.delete),
-                                      padding: EdgeInsets.only(bottom: 10.0),
+                          ? Column(mainAxisSize: MainAxisSize.min, children: <
+                              Widget>[
+                              IconButton(
+                                padding: EdgeInsets.only(top: 10.0),
+                                icon: Icon(Icons.edit),
+                                onPressed: () => Routes.of(context)
+                                    .toCompetitionModification(currentEntry),
+                              ),
+                              IconButton(
+                                  icon: Icon(Icons.delete),
+                                  padding: EdgeInsets.only(bottom: 10.0),
 
-                                      /// When deleting a [DatabaseEntry], prompts the user to double check their intent
-                                      /// is to do so as this can have major consquences if an accident.
-                                      onPressed: () => showModal(
-                                          context: context,
-                                          configuration:
-                                              FadeScaleTransitionConfiguration(),
-                                          builder: (context) =>
-                                              CustomAlertDialog(
-                                                  FirebaseInteration.of(context)
-                                                      .deleteCompetition,
-                                                  currentEntry: currentEntry))),
-                                ])
+                                  /// When deleting a [DatabaseEntry], prompts the user to double check their intent
+                                  /// is to do so as this can have major consquences if an accident.
+                                  onPressed: () => showModal(
+                                      context: context,
+                                      configuration:
+                                          FadeScaleTransitionConfiguration(),
+                                      builder: (context) => CustomAlertDialog(
+                                          FirebaseInteraction.of(context)
+                                              .deleteCompetition,
+                                          currentEntry: currentEntry))),
+                            ])
                           : null);
                 })));
   }

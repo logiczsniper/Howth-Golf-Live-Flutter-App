@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/app/creation/creation_page.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
@@ -63,7 +63,7 @@ class ModifyCompetitionState extends State<ModifyCompetition>
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    FirebaseInteration.of(context).updateCompetition(
+    FirebaseInteraction.of(context).updateCompetition(
         _formKey,
         widget.currentEntry.id,
         isHome == Strings.home,

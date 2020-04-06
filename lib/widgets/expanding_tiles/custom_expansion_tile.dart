@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/style/palette.dart';
 
 /// Logan Czernel - modification to [ExpansionTile].
 ///
@@ -73,7 +74,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
 
   final ColorTween _borderColorTween = ColorTween();
   final ColorTween _headerColorTween = ColorTween();
-  final ColorTween _iconColorTween = ColorTween();
   final ColorTween _backgroundColorTween = ColorTween();
 
   AnimationController _controller;
@@ -161,12 +161,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween..end = Palette.card;
     _headerColorTween
       ..begin = theme.textTheme.subhead.color
-      ..end = theme.accentColor;
-    _iconColorTween
-      ..begin = theme.unselectedWidgetColor
       ..end = theme.accentColor;
     _backgroundColorTween..end = widget.backgroundColor;
     super.didChangeDependencies();

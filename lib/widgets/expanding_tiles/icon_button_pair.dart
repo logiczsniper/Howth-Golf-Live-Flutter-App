@@ -14,15 +14,12 @@ class IconButtonPair extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.all(4.0),
+        padding: EdgeInsets.only(bottom: 4.0, left: 0.5, right: 0.5),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               GestureDetector(
-                  // padding: EdgeInsets.zero,
-                  // padding: EdgeInsets.only(top: 8.0),
-
                   onTap: onAdd,
                   child: Icon(
                     Icons.add_circle,
@@ -30,14 +27,11 @@ class IconButtonPair extends StatelessWidget {
                     size: 35.0,
                   )),
               GestureDetector(
-                  // padding: EdgeInsets.only(top: 3.0),
-                  // padding: EdgeInsets.zero,
-
                   onTap: onSubtract,
                   child: Icon(
                     Icons.remove_circle,
-                    size: 23.0,
-                    color: iconColor,
+                    size: 32.5,
+                    color: iconColor.withAlpha(245),
                   )),
             ]));
   }

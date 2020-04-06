@@ -24,7 +24,7 @@ class HelpPage extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(4.0),
-      margin: EdgeInsets.all(2.0),
+      margin: EdgeInsets.only(top: 5.0, bottom: 15.0),
       child: Column(
         children: <Widget>[
           Padding(
@@ -54,17 +54,24 @@ class HelpPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: _title,
-        actions: <Widget>[UIToolkit.getHomeButton(context)],
+        leading: Padding(
+            child: IconButton(
+              icon: BackButtonIcon(),
+              onPressed: Navigator.of(context).pop,
+            ),
+            padding: EdgeInsets.only(left: 15.0)),
+        actions: <Widget>[
+          Padding(
+              child: UIToolkit.getHomeButton(context),
+              padding: EdgeInsets.only(right: 16.0))
+        ],
       ),
-      body: ListView.separated(
-          padding: EdgeInsets.only(top: 10.0),
-          itemBuilder: _tileBuilder,
-          itemCount: helpEntry.steps.length + 1,
-          separatorBuilder: (context, index) {
-            return index != helpEntry.steps.length - 1
-                ? Divider()
-                : Container();
-          }),
+      body: ListView.builder(
+        padding:
+            EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0, bottom: 50.0),
+        itemBuilder: _tileBuilder,
+        itemCount: helpEntry.steps.length + 1,
+      ),
     );
   }
 }

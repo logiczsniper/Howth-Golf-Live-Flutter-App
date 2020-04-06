@@ -189,7 +189,7 @@ class UIToolkit {
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
   static Container getVersus(BuildContext context, String opposition,
-          String howthText, GlobalKey _homeTeamKey, GlobalKey _awayTeamKey) =>
+          String howthText, GlobalKey _awayTeamKey) =>
       Container(
           margin: EdgeInsets.fromLTRB(20.0, 12.5, 20.0, 2.0),
           // margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
@@ -199,18 +199,14 @@ class UIToolkit {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: UIToolkit.showcase(
-                    context: context,
-                    key: _homeTeamKey,
-                    description: Strings.homeTeam,
-                    child: Text(
-                      howthText,
-                      textAlign: TextAlign.right,
-                      style: TextStyles.form.copyWith(
-                          color: Palette.dark,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.5),
-                    )),
+                child: Text(
+                  howthText,
+                  textAlign: TextAlign.right,
+                  style: TextStyles.form.copyWith(
+                      color: Palette.dark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.5),
+                ),
               ),
               Container(
                   width: 45.0,
@@ -256,87 +252,123 @@ class UIToolkit {
         context: context,
         key: _holeKey,
         description: Strings.hole,
-        child: Padding(
-            padding: EdgeInsets.all(5.3),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  /// Home team section.
-                  Expanded(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                        /// Home player.
-                        Expanded(
-                            child: Align(
-                                alignment: Alignment.centerLeft,
+        child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 25),
+            decoration: BoxDecoration(
+                color: Palette.card.withAlpha(240),
+                borderRadius: BorderRadius.circular(13.0)),
+            child: Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      /// Home team section.
+                      Expanded(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                            /// Home player.
+                            Expanded(
                                 child: UIToolkit.showcase(
                                     context: context,
                                     key: _playersKey,
                                     description: Strings.players,
                                     child: Container(
-                                        padding: EdgeInsets.all(8.0),
-                                        decoration: BoxDecoration(
-                                            color: Palette.card.withAlpha(240),
-                                            borderRadius:
-                                                BorderRadius.circular(13.0)),
+                                        padding: EdgeInsets.all(17.5),
+                                        alignment: Alignment.centerLeft,
                                         child: Text("Howth player(s)",
                                             textAlign: TextAlign.left,
-                                            style: TextStyles.cardSubTitle))))),
+                                            style: TextStyles.cardSubTitle
+                                                .copyWith(
+                                                    color: Palette.darker))))),
 
-                        /// Home score.
-                        UIToolkit.showcase(
-                            context: context,
-                            key: _holeHomeScoreKey,
-                            description: Strings.holeHomeScore,
-                            child: Container(
-                                child: Text(hole.holeScore.howth,
-                                    style: TextStyles.leadingChild),
-                                padding:
-                                    EdgeInsets.fromLTRB(16.0, 3.0, 12.0, 3.0))),
-                      ])),
+                            /// Home score.
+                            UIToolkit.showcase(
+                                context: context,
+                                key: _holeHomeScoreKey,
+                                description: Strings.holeHomeScore,
+                                child: Container(
+                                    child: Text(hole.holeScore.howth,
+                                        style: TextStyles.leadingChild.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20)),
+                                    padding: EdgeInsets.fromLTRB(
+                                        16.0, 3.0, 12.0, 3.0))),
 
-                  /// Hole Number
-                  UIToolkit.showcase(
-                      context: context,
-                      key: _holeNumberKey,
-                      description: Strings.currentHoleNumber,
-                      child: UIToolkit.getHoleNumberDecorated(hole.holeNumber)),
+                            /// Hole Number
+                            UIToolkit.showcase(
+                                context: context,
+                                key: _holeNumberKey,
+                                description: Strings.currentHoleNumber,
+                                child: UIToolkit.getHoleNumberDecorated(
+                                    hole.holeNumber)),
 
-                  /// Away team section.
-                  Expanded(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                        /// Away team score.
-                        UIToolkit.showcase(
-                            context: context,
-                            key: _holeAwayScoreKey,
-                            description: Strings.holeAwayScore,
-                            child: Container(
-                                child: Text(hole.holeScore.opposition,
-                                    style: TextStyles.leadingChild),
-                                padding:
-                                    EdgeInsets.fromLTRB(12.0, 3.0, 16.0, 3.0))),
+                            /// Opposition score.
+                            UIToolkit.showcase(
+                                context: context,
+                                key: _holeAwayScoreKey,
+                                description: Strings.holeAwayScore,
+                                child: Container(
+                                    child: Text(hole.holeScore.opposition,
+                                        style: TextStyles.leadingChild.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20)),
+                                    padding: EdgeInsets.fromLTRB(
+                                        12.0, 3.0, 16.0, 3.0))),
 
-                        /// Away team player.
-                        Expanded(
-                            child: Align(
-                                alignment: Alignment.centerRight,
+                            /// Opposition player.
+                            Expanded(
                                 child: UIToolkit.showcase(
                                     context: context,
                                     key: _oppositionKey,
                                     description: Strings.opposition,
                                     child: Container(
-                                        padding: EdgeInsets.all(8.0),
-                                        decoration: BoxDecoration(
-                                            color: Palette.card.withAlpha(240),
-                                            borderRadius:
-                                                BorderRadius.circular(13.0)),
-                                        child: Text("Opposition player(s)/club",
+                                        padding: EdgeInsets.all(17.5),
+                                        alignment: Alignment.centerRight,
+                                        child: Text("Opposing player(s)/club",
                                             textAlign: TextAlign.right,
-                                            style: TextStyles.cardSubTitle))))),
-                      ]))
-                ])));
+                                            style: TextStyles.cardSubTitle
+                                                .copyWith(
+                                                    color: Palette.darker))))),
+                          ]))
+                    ]))));
+
+    // /// Away team section.
+    // Expanded(
+    //     child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         children: <Widget>[
+    //       /// Away team score.
+    //       UIToolkit.showcase(
+    //           context: context,
+    //           key: _holeAwayScoreKey,
+    //           description: Strings.holeAwayScore,
+    //           child: Container(
+    //               child: Text(hole.holeScore.opposition,
+    //                   style: TextStyles.leadingChild),
+    //               padding: EdgeInsets.fromLTRB(
+    //                   12.0, 3.0, 16.0, 3.0))),
+
+    //       /// Away team player.
+    //       Expanded(
+    //           child: Align(
+    //               alignment: Alignment.centerRight,
+    //               child: UIToolkit.showcase(
+    //                   context: context,
+    //                   key: _oppositionKey,
+    //                   description: Strings.opposition,
+    //                   child: Container(
+    //                       padding: EdgeInsets.all(8.0),
+    //                       decoration: BoxDecoration(
+    //                           color:
+    //                               Palette.card.withAlpha(240),
+    //                           borderRadius:
+    //                               BorderRadius.circular(
+    //                                   13.0)),
+    //                       child: Text(
+    //                           "Opposition player(s)/club",
+    //                           textAlign: TextAlign.right,
+    //                           style: TextStyles
+    //                               .cardSubTitle))))),
   }
 }

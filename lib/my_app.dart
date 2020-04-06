@@ -6,6 +6,7 @@ import 'package:howth_golf_live/app/help/help_data_view_model.dart';
 import 'package:howth_golf_live/app/home/authentication_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
+import 'package:howth_golf_live/app/hole_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/routing/routes.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<AuthenticationViewModel>(
           create: (_) => AuthenticationViewModel(),
+        ),
+        ChangeNotifierProvider<HoleViewModel>(
+          create: (_) => HoleViewModel(),
         ),
         FutureProvider<HelpDataViewModel>(
           create: (_) => HelpDataViewModel.getModel,

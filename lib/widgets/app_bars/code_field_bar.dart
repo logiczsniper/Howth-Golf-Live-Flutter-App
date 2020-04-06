@@ -87,6 +87,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
             icon: Icon(iconData),
             tooltip: iconMessage,
             onPressed: _codePressed,
+            padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
             key: ValueKey(DateTime.now())));
   }
 
@@ -96,7 +97,9 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         key: widget.backKey,
         description: Strings.tapBack,
         child: IconButton(
-            icon: BackButtonIcon(), onPressed: Navigator.of(context).pop));
+            icon: BackButtonIcon(),
+            onPressed: Navigator.of(context).pop,
+            padding: EdgeInsets.fromLTRB(25.0, 8.0, 5.0, 8.0)));
   }
 
   @override

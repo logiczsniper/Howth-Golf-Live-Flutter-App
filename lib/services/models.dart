@@ -48,7 +48,7 @@ class DatabaseEntry {
 
   static DatabaseEntry get example => DatabaseEntry(
       date:
-          "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+          "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
       id: -1,
       location: Location.example,
       time: "${DateTime.now().hour}:${DateTime.now().minute}",

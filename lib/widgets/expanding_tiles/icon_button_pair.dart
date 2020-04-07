@@ -24,13 +24,13 @@ class IconButtonPair extends StatelessWidget {
                   child: Icon(
                     Icons.add_circle,
                     color: iconColor,
-                    size: 35.0,
+                    size: 34.0,
                   )),
               GestureDetector(
                   onTap: onSubtract,
                   child: Icon(
                     Icons.remove_circle,
-                    size: 32.5,
+                    size: 31.5,
                     color: iconColor.withAlpha(245),
                   )),
             ]));

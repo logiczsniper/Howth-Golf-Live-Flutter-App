@@ -125,7 +125,12 @@ class _CompetitionPageState extends State<CompetitionPage> {
 
     DatabaseEntry currentData =
         _firebaseModel.entryFromId(widget.initialData.id) ?? widget.initialData;
-    bool _hasAccess = _userStatus.isManager(currentData.id);
+
+    /// The user has access to modify this competition if they are an admin or they are a manager and
+    /// this competition is NOT archived.
+    bool _hasAccess = _firebaseModel.isArchived(currentData)
+        ? _userStatus.isAdmin
+        : _userStatus.isManager(currentData.id);
 
     Widget floatingActionButton = _hasAccess
         ? UIToolkit.createButton(
@@ -191,10 +196,24 @@ class _CompetitionPageState extends State<CompetitionPage> {
                     itemCount: currentData.holes.length +
                         _firebaseModel.bonusEntries(currentData, hasVisited),
                     itemBuilder: (context, index) {
-                      if (index == 0)
+                      if (index == 0 && _firebaseModel.isArchived(currentData))
+                        return Container(
+                            padding: EdgeInsets.all(6.0),
+                            margin: EdgeInsets.fromLTRB(26.0, 10.0, 26.0, 0.0),
+                            decoration: BoxDecoration(
+                                color: Palette.maroon,
+                                borderRadius: BorderRadius.circular(13.0)),
+                            child: Text(
+                              Strings.finished,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Palette.inMaroon,
+                                  fontWeight: FontWeight.w600),
+                            ));
+                      else if (index == 0 ||
+                          index == 1 && _firebaseModel.isArchived(currentData))
                         return Padding(
                             padding: EdgeInsets.zero,
-                            // padding: EdgeInsets.only(bottom: 12.5),
                             child: CompetitionDetails(
                                 currentData,
                                 _homeScoreKey,
@@ -202,13 +221,17 @@ class _CompetitionPageState extends State<CompetitionPage> {
                                 _locationKey,
                                 _dateKey,
                                 _timeKey));
-                      else if (index == 1)
+                      else if (index == 1 ||
+                          index == 2 && _firebaseModel.isArchived(currentData))
                         return UIToolkit.getVersus(
                             context,
                             currentData.opposition,
                             Strings.homeAddress,
                             _awayTeamKey);
-                      else if (!hasVisited && index == 2) {
+                      else if (!hasVisited && index == 2 ||
+                          !hasVisited &&
+                              index == 3 &&
+                              _firebaseModel.isArchived(currentData)) {
                         return UIToolkit.exampleHole(
                             context,
                             _holeKey,
@@ -238,6 +261,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                       } else {
                         int holeIndex = index;
                         if (!hasVisited) holeIndex--;
+                        if (_firebaseModel.isArchived(currentData)) holeIndex--;
 
                         int _index = holeIndex - 2;
                         Hole currentHole = currentData.holes[_index];
@@ -246,7 +270,11 @@ class _CompetitionPageState extends State<CompetitionPage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                    color: index % 2 != 0
+                                    color: index % 2 !=
+                                            (_firebaseModel
+                                                    .isArchived(currentData)
+                                                ? 1
+                                                : 0)
                                         ? Palette.light
                                         : Palette.card.withAlpha(240),
                                     borderRadius: BorderRadius.circular(13.0)),
@@ -311,7 +339,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                                                               ),
                                                           child: Icon(
                                                             Icons.edit,
-                                                            size: 35.0,
+                                                            size: 32.0,
                                                           )),
                                                       GestureDetector(
                                                           onTap: () => showModal(
@@ -327,7 +355,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                                                                       .id)),
                                                           child: Icon(
                                                             Icons.delete,
-                                                            size: 32.5,
+                                                            size: 32.0,
                                                           )),
                                                     ]),
                                               ),

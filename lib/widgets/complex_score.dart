@@ -7,7 +7,6 @@ import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 
 class ComplexScore extends StatelessWidget {
-  final bool isHome;
   final Score score;
 
   /// A small display for showing [Score]s.
@@ -15,7 +14,7 @@ class ComplexScore extends StatelessWidget {
   /// Must have two main capabilities: round whole numbers
   /// to int rather than having ".0" at the end, and use
   /// fractions instead of decimals.
-  ComplexScore(this.isHome, this.score);
+  ComplexScore(this.score);
 
   /// Determines whether [score] is a string containing a fraction or whole
   /// number.
@@ -34,14 +33,18 @@ class ComplexScore extends StatelessWidget {
         : double.tryParse(score).toInt().toString();
   }
 
-  static TextSpan getFraction(bool isHowth, Score scores) => TextSpan(
+  static TextSpan getFraction(bool isHowth, Score scores,
+          {FontWeight fontWeight}) =>
+      TextSpan(
 
-      /// The ternary operator (and others like it) below ensure that
-      /// no fraction is displayed if the [currentEntry.score] is whole.
-      text: _isFraction(isHowth ? scores.howth : scores.opposition)
-          ? "1/2"
-          : Strings.empty,
-      style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
+          /// The ternary operator (and others like it) below ensure that
+          /// no fraction is displayed if the [currentEntry.score] is whole.
+          text: _isFraction(isHowth ? scores.howth : scores.opposition)
+              ? "1/2"
+              : Strings.empty,
+          style: TextStyle(
+              fontFeatures: [FontFeature.enable('frac')],
+              fontWeight: fontWeight));
 
   static RichText getMixedFraction(bool isHowth, Score score) => RichText(
       key: ValueKey(score),
@@ -71,15 +74,15 @@ class ComplexScore extends StatelessWidget {
       /// on the left, and whoever is away on the right.
       text: TextSpan(style: TextStyles.scoreCard, children: <TextSpan>[
         /// Home team score.
-        TextSpan(text: _getMainNumber(isHome, score)),
-        getFraction(isHome, score),
+        TextSpan(text: _getMainNumber(true, score)),
+        getFraction(true, score, fontWeight: FontWeight.w600),
 
         /// Middle divider.
         TextSpan(text: " - "),
 
         /// Away team score.
-        TextSpan(text: _getMainNumber(!isHome, score)),
-        getFraction(!isHome, score),
+        TextSpan(text: _getMainNumber(false, score)),
+        getFraction(false, score, fontWeight: FontWeight.w600),
       ]),
     );
   }

@@ -191,8 +191,7 @@ class UIToolkit {
   static Container getVersus(BuildContext context, String opposition,
           String howthText, GlobalKey _awayTeamKey) =>
       Container(
-          margin: EdgeInsets.fromLTRB(20.0, 12.5, 20.0, 2.0),
-          // margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+          margin: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 2.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(13.0),
               color: Colors.transparent),
@@ -209,11 +208,10 @@ class UIToolkit {
                 ),
               ),
               Container(
-                  width: 45.0,
+                  width: 42.5,
                   margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
                       color: Palette.maroon,
-                      border: Border.all(color: Palette.maroon, width: 1.5),
                       borderRadius: BorderRadius.circular(13.0)),
                   child: Text(
                     Strings.versus,

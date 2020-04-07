@@ -82,7 +82,7 @@ class CompetitionDetails extends StatelessWidget {
                 /// Home team score.
 
                 SideFlexible(
-                    currentEntry.score, true, homeScoreKey, Strings.homeScore),
+                    currentEntry.score, true, homeScoreKey, Strings.howthScore),
 
                 /// Details of competition.
                 _centralFlexible(context, hasAccess),
@@ -92,7 +92,7 @@ class CompetitionDetails extends StatelessWidget {
                   currentEntry.score,
                   false,
                   awayScoreKey,
-                  Strings.awayScore,
+                  Strings.oppositionScore,
                 )
               ],
             ),

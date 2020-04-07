@@ -224,7 +224,7 @@ class UIToolkit {
                   child: UIToolkit.showcase(
                       context: context,
                       key: _awayTeamKey,
-                      description: Strings.awayTeam,
+                      description: Strings.oppositionTeam,
                       child: Text(
                         opposition,
                         textAlign: TextAlign.left,
@@ -284,7 +284,7 @@ class UIToolkit {
                             UIToolkit.showcase(
                                 context: context,
                                 key: _holeHomeScoreKey,
-                                description: Strings.holeHomeScore,
+                                description: Strings.holeHowthScore,
                                 child: Container(
                                     child: Text(hole.holeScore.howth,
                                         style: TextStyles.leadingChild.copyWith(
@@ -305,7 +305,7 @@ class UIToolkit {
                             UIToolkit.showcase(
                                 context: context,
                                 key: _holeAwayScoreKey,
-                                description: Strings.holeAwayScore,
+                                description: Strings.holeOppositionScore,
                                 child: Container(
                                     child: Text(hole.holeScore.opposition,
                                         style: TextStyles.leadingChild.copyWith(

@@ -137,34 +137,34 @@ class _CompetitionPageState extends State<CompetitionPage> {
             context: context, text: Strings.newHole, id: currentData.id)
         : null;
 
-    final GlobalKey _homeScoreKey = GlobalKey();
-    final GlobalKey _awayScoreKey = GlobalKey();
+    final GlobalKey _howthScoreKey = GlobalKey();
+    final GlobalKey _oppositionScoreKey = GlobalKey();
     final GlobalKey _locationKey = GlobalKey();
     final GlobalKey _dateKey = GlobalKey();
     final GlobalKey _timeKey = GlobalKey();
-    final GlobalKey _awayTeamKey = GlobalKey();
+    final GlobalKey _oppositionTeamKey = GlobalKey();
     final GlobalKey _holeKey = GlobalKey();
     final GlobalKey _playersKey = GlobalKey();
     final GlobalKey _oppositionKey = GlobalKey();
     final GlobalKey _holeNumberKey = GlobalKey();
-    final GlobalKey _holeHomeScoreKey = GlobalKey();
-    final GlobalKey _holeAwayScoreKey = GlobalKey();
+    final GlobalKey _holeHowthScoreKey = GlobalKey();
+    final GlobalKey _holeOppositionScoreKey = GlobalKey();
     final GlobalKey _backKey = GlobalKey();
     final GlobalKey _codeKey = GlobalKey();
 
     List<GlobalKey> keys = [
-      _homeScoreKey,
-      _awayScoreKey,
+      _howthScoreKey,
+      _oppositionScoreKey,
       _locationKey,
       _dateKey,
       _timeKey,
-      _awayTeamKey,
+      _oppositionTeamKey,
       _holeKey,
       _playersKey,
       _oppositionKey,
-      _holeHomeScoreKey,
+      _holeHowthScoreKey,
       _holeNumberKey,
-      _holeAwayScoreKey,
+      _holeOppositionScoreKey,
       _backKey,
       _codeKey
     ];
@@ -216,8 +216,8 @@ class _CompetitionPageState extends State<CompetitionPage> {
                             padding: EdgeInsets.zero,
                             child: CompetitionDetails(
                                 currentData,
-                                _homeScoreKey,
-                                _awayScoreKey,
+                                _howthScoreKey,
+                                _oppositionScoreKey,
                                 _locationKey,
                                 _dateKey,
                                 _timeKey));
@@ -227,7 +227,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                             context,
                             currentData.opposition,
                             Strings.homeAddress,
-                            _awayTeamKey);
+                            _oppositionTeamKey);
                       else if (!hasVisited && index == 2 ||
                           !hasVisited &&
                               index == 3 &&
@@ -236,8 +236,8 @@ class _CompetitionPageState extends State<CompetitionPage> {
                             context,
                             _holeKey,
                             _playersKey,
-                            _holeHomeScoreKey,
-                            _holeAwayScoreKey,
+                            _holeHowthScoreKey,
+                            _holeOppositionScoreKey,
                             _holeNumberKey,
                             _oppositionKey);
                       } else if (currentData.holes.isEmpty) {

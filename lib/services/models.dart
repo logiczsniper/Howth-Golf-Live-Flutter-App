@@ -47,11 +47,10 @@ class DatabaseEntry {
         score = Score.fromMap(map[Fields.score]);
 
   static DatabaseEntry get example => DatabaseEntry(
-      date:
-          "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+      date: "01-02-2020",
       id: -1,
       location: Location.example,
-      time: "${DateTime.now().hour}:${DateTime.now().minute}",
+      time: "12:00",
       opposition: "Opposing Club Name",
       title: "Example Competition Title",
       holes: [Hole.example],

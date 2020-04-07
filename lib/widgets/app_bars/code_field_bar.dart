@@ -37,21 +37,27 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     if (!isVerified) {
       String codeAttempt = inputText.toString();
       Future<bool> isCodeCorrect = Future.value(false);
+      String position;
 
       switch (widget.title) {
         case Strings.helpsText:
           isCodeCorrect = widget.userStatus
               .adminAttempt(codeAttempt, _firebaseModel.adminCode.toString());
+          position = Strings.admin;
           break;
         default:
           isCodeCorrect = widget.userStatus
               .managerAttempt(codeAttempt, widget.id.toString());
+          position = Strings.manager + widget.title + ".";
       }
 
       isCodeCorrect.then((bool isCodeCorrect) {
         if (!isCodeCorrect && inputText.isNotEmpty)
           Scaffold.of(context).showSnackBar(
               UIToolkit.snackbar(Strings.incorrectCode, Icons.lock));
+        else if (isCodeCorrect)
+          Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
+              Strings.correctCode + position, Icons.lock_open));
 
         setState(() {
           appBarTitle = actionPressed(appBarTitle, context, _filter);

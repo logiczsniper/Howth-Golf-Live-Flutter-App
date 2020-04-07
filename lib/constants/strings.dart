@@ -17,6 +17,8 @@ class Strings {
   static const String tapModify = "Tap to modify!";
   static const String tapAdmin = "Tap to enter admin code!";
   static const String tapManager = "Tap to enter manager code!";
+  static const String tapEditHole = "Tap a player to edit score!";
+  static const String tapEditCompetition = "Tap a competition to edit details!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -84,6 +86,9 @@ class Strings {
   static const String enterCode = "Enter code here...";
   static const String enterSearch = "Enter search text here...";
   static const String incorrectCode = "Incorrect code entered!";
+  static const String correctCode = "Correct code entered! You are now a";
+  static const String admin = "n admin.";
+  static const String manager = " manager of ";
 
   static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";

@@ -136,7 +136,10 @@ class _CompetitionPageState extends State<CompetitionPage> {
 
     Widget floatingActionButton = _hasAccess
         ? UIToolkit.createButton(
-            context: context, text: Strings.newHole, id: currentData.id)
+            context: context,
+            primaryText: Strings.newHole,
+            secondaryText: Strings.tapEditHole,
+            id: currentData.id)
         : null;
 
     final GlobalKey _howthScoreKey = GlobalKey();
@@ -317,7 +320,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                                               /// Modify/delete the hole!
                                               Container(
                                                 margin:
-                                                    EdgeInsets.only(left: 24.0),
+                                                    EdgeInsets.only(left: 26.0),
                                                 padding: EdgeInsets.only(
                                                     bottom: 4.0,
                                                     left: 0.5,
@@ -468,20 +471,18 @@ class _CompetitionPageState extends State<CompetitionPage> {
 
                                     /// Display the [lastUpdated] formatted.
                                     Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 3.0),
-                                        padding: currentHole.comment.isEmpty
-                                            ? EdgeInsets.only(bottom: 8.0)
-                                            : null,
-                                        child: AnimatedSwitcher(
-                                          child: Text(
-                                              _firebaseModel.prettyLastUpdated(
-                                                  currentHole.lastUpdated),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyles.cardTitle,
-                                              key: ValueKey(DateTime.now())),
-                                          duration: Duration(milliseconds: 350),
-                                        )),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 3.0),
+                                      padding: currentHole.comment.isEmpty
+                                          ? EdgeInsets.only(bottom: 8.0)
+                                          : null,
+                                      child: Text(
+                                        _firebaseModel.prettyLastUpdated(
+                                            currentHole.lastUpdated),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyles.cardTitle,
+                                      ),
+                                    ),
 
                                     /// If there is a [comment], display it.
                                     currentHole.comment.isEmpty

@@ -185,7 +185,10 @@ class CompetitionsPage extends StatelessWidget {
     bool _hasAccess = _userStatus.isAdmin;
 
     Widget floatingActionButton = _hasAccess
-        ? UIToolkit.createButton(context: context, text: Strings.newCompetition)
+        ? UIToolkit.createButton(
+            context: context,
+            primaryText: Strings.newCompetition,
+            secondaryText: Strings.tapEditCompetition)
         : null;
 
     final GlobalKey _titleKey = GlobalKey();

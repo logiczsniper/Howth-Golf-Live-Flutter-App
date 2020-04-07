@@ -71,6 +71,7 @@ class CompetitionDetails extends StatelessWidget {
         _userStatus.isVerified(currentEntry.title, id: currentEntry.id);
 
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.5),
       padding: EdgeInsets.fromLTRB(0.0, 3.5, 0.0, 0.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

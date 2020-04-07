@@ -146,34 +146,61 @@ class UIToolkit {
               iconData,
               color: Palette.maroon,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                ),
               ),
             )
           ],
         ),
-        duration: duration ?? Duration(seconds: 5),
+        duration: duration ?? Duration(seconds: 7),
       );
 
   static FloatingActionButton createButton(
-      {@required BuildContext context, String text, int id}) {
-    if (text == Strings.newHole) assert(id != null);
-    assert(text == Strings.newCompetition || text == Strings.newHole);
+      {@required BuildContext context,
+      String primaryText,
+      String secondaryText,
+      int id}) {
+    if (primaryText == Strings.newHole) assert(id != null);
+    assert(primaryText == Strings.newCompetition ||
+        primaryText == Strings.newHole);
+    assert(secondaryText == Strings.tapEditHole ||
+        secondaryText == Strings.tapEditCompetition);
 
     return FloatingActionButton.extended(
-      icon: Icon(
-        Icons.add_circle,
-        color: Palette.inMaroon,
-      ),
-      label: Text(
-        text,
-        style: TextStyle(fontSize: 15, color: Palette.inMaroon),
+      label: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: Icon(
+                  Icons.add_circle,
+                  color: Palette.inMaroon,
+                ),
+              ),
+              Text(
+                primaryText,
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Palette.inMaroon,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          Text(
+            secondaryText,
+            style: TextStyle(fontSize: 12, color: Palette.inMaroon),
+          ),
+        ],
       ),
       onPressed: () {
-        switch (text) {
+        switch (primaryText) {
           case Strings.newCompetition:
             Routes.of(context).toCompetitionCreation();
             break;

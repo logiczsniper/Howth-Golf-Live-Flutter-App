@@ -69,21 +69,13 @@ class StatefulAppBar {
       Container(
           height: 45,
           decoration: BoxDecoration(
-              color: Palette.light,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Palette.dark,
-                    spreadRadius: 0.3,
-                    blurRadius: 1.5,
-                    offset: Offset(0, 0.75))
-              ],
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(13.0)),
+            color: Palette.card,
+            borderRadius: BorderRadius.circular(13.0),
+          ),
           child: TextField(
             keyboardType: textType,
             obscureText: obscureText,
             cursorColor: Palette.maroon,
-            textAlign: TextAlign.center,
             textCapitalization: TextCapitalization.sentences,
             autocorrect: false,
             controller: _filter,

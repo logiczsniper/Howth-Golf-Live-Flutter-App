@@ -1,41 +1,49 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/hole_view_model.dart';
 import 'package:howth_golf_live/routing/routes.dart';
+import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/competition_details/competition_details.dart';
+import 'package:howth_golf_live/widgets/expanding_tiles/custom_expansion_tile.dart';
+import 'package:howth_golf_live/widgets/expanding_tiles/icon_button_pair.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
-class CompetitionPage extends StatelessWidget {
+class CompetitionPage extends StatefulWidget {
   final DatabaseEntry initialData;
 
   CompetitionPage(this.initialData);
+
+  @override
+  _CompetitionPageState createState() => _CompetitionPageState();
+}
+
+class _CompetitionPageState extends State<CompetitionPage> {
+  ScrollController _scrollController;
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
   Expanded _getPlayer(Hole hole, String text, int index,
           {bool isOpposition = false}) =>
       Expanded(
-          child: Align(
+          child: Container(
+              padding: EdgeInsets.all(17.5),
               alignment:
                   isOpposition ? Alignment.centerRight : Alignment.centerLeft,
               child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: index % 2 != 0
-                          ? Palette.light
-                          : Palette.card.withAlpha(240),
-                      borderRadius: BorderRadius.circular(13.0)),
                   child: Text(text,
                       textAlign:
                           isOpposition ? TextAlign.right : TextAlign.left,
@@ -43,7 +51,9 @@ class CompetitionPage extends StatelessWidget {
 
   /// Gets the properly padded and styled score widget.
   Container _getScore(String text, {bool isOpposition = false}) => Container(
-      child: Text(text, style: TextStyles.leadingChild),
+      child: Text(text,
+          style: TextStyles.leadingChild
+              .copyWith(fontWeight: FontWeight.bold, fontSize: 20)),
       padding: EdgeInsets.fromLTRB(
           isOpposition ? 12.0 : 16.0, 3.0, !isOpposition ? 12.0 : 16.0, 3.0));
 
@@ -56,10 +66,10 @@ class CompetitionPage extends StatelessWidget {
   /// The [index] is the index of the [hole] within [currentData], which must be known
   /// when navigating to the individual hole page so that the user can update a single hole-
   /// the hole specified by the index.
-  Widget _rowBuilder(BuildContext context, Hole hole, bool isHome,
-          String opposition, int index, int id) =>
+  Widget _rowBuilder(BuildContext context, Hole hole, String opposition,
+          int index, int id) =>
       Padding(
-          padding: EdgeInsets.all(5.3),
+          padding: EdgeInsets.symmetric(vertical: 4.0),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -69,11 +79,7 @@ class CompetitionPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                       /// Home player.
-                      _getPlayer(
-                        hole,
-                        hole.formattedPlayers,
-                        index,
-                      ),
+                      _getPlayer(hole, hole.formattedPlayers, index),
 
                       /// Home score.
                       _getScore(hole.holeScore.howth)
@@ -92,13 +98,27 @@ class CompetitionPage extends StatelessWidget {
 
                       /// Away team player.
                       _getPlayer(
-                        hole,
-                        hole.formattedOpposition(opposition),
-                        index,
-                        isOpposition: true,
-                      )
+                          hole, hole.formattedOpposition(opposition), index,
+                          isOpposition: true)
                     ]))
               ]));
+
+  @override
+  void initState() {
+    super.initState();
+
+    HoleViewModel model = Provider.of<HoleViewModel>(context, listen: false);
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      model.scroll(_scrollController.offset);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +126,13 @@ class CompetitionPage extends StatelessWidget {
     var _firebaseModel = Provider.of<FirebaseViewModel>(context);
 
     DatabaseEntry currentData =
-        _firebaseModel.entryFromId(initialData.id) ?? initialData;
-    bool _hasAccess = _userStatus.isManager(currentData.id);
+        _firebaseModel.entryFromId(widget.initialData.id) ?? widget.initialData;
+
+    /// The user has access to modify this competition if they are an admin or they are a manager and
+    /// this competition is NOT archived.
+    bool _hasAccess = _firebaseModel.isArchived(currentData)
+        ? _userStatus.isAdmin
+        : _userStatus.isManager(currentData.id);
 
     Widget floatingActionButton = _hasAccess
         ? UIToolkit.createButton(
@@ -119,7 +144,6 @@ class CompetitionPage extends StatelessWidget {
     final GlobalKey _locationKey = GlobalKey();
     final GlobalKey _dateKey = GlobalKey();
     final GlobalKey _timeKey = GlobalKey();
-    final GlobalKey _howthTeamKey = GlobalKey();
     final GlobalKey _oppositionTeamKey = GlobalKey();
     final GlobalKey _holeKey = GlobalKey();
     final GlobalKey _playersKey = GlobalKey();
@@ -136,7 +160,6 @@ class CompetitionPage extends StatelessWidget {
       _locationKey,
       _dateKey,
       _timeKey,
-      _howthTeamKey,
       _oppositionTeamKey,
       _holeKey,
       _playersKey,
@@ -155,6 +178,9 @@ class CompetitionPage extends StatelessWidget {
           (_) => ShowCaseWidget.of(context).startShowCase(keys));
     }
 
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollController
+        .jumpTo(Provider.of<HoleViewModel>(context, listen: false).offset));
+
     return Scaffold(
         floatingActionButton: Container(
             padding: EdgeInsets.only(bottom: 10.0),
@@ -166,193 +192,312 @@ class CompetitionPage extends StatelessWidget {
             duration: Duration(milliseconds: 350),
             child: OpacityChangeWidget(
                 key: ValueKey(DateTime.now()),
-                target: ListView.separated(
-                    padding: EdgeInsets.only(bottom: 100.0),
+                target: ListView.builder(
+                    controller: _scrollController,
+                    padding: EdgeInsets.only(bottom: 200.0),
                     itemCount: currentData.holes.length +
                         _firebaseModel.bonusEntries(currentData, hasVisited),
-                    separatorBuilder: (context, index) {
-                      if (index != 0 && index != 1)
-                        return Divider();
-                      else
-                        return Container();
-                    },
                     itemBuilder: (context, index) {
-                      if (index == 0)
-                        return CompetitionDetails(
-                            currentData,
-                            _howthScoreKey,
-                            _oppositionScoreKey,
-                            _locationKey,
-                            _dateKey,
-                            _timeKey);
-                      else if (index == 1)
+                      if (index == 0 && _firebaseModel.isArchived(currentData))
+                        return Container(
+                            padding: EdgeInsets.all(6.0),
+                            margin: EdgeInsets.fromLTRB(26.0, 10.0, 26.0, 0.0),
+                            decoration: BoxDecoration(
+                                color: Palette.maroon,
+                                borderRadius: BorderRadius.circular(13.0)),
+                            child: Text(
+                              Strings.finished,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Palette.inMaroon,
+                                  fontWeight: FontWeight.w600),
+                            ));
+                      else if (index == 0 ||
+                          index == 1 && _firebaseModel.isArchived(currentData))
+                        return Padding(
+                            padding: EdgeInsets.zero,
+                            child: CompetitionDetails(
+                                currentData,
+                                _howthScoreKey,
+                                _oppositionScoreKey,
+                                _locationKey,
+                                _dateKey,
+                                _timeKey));
+                      else if (index == 1 ||
+                          index == 2 && _firebaseModel.isArchived(currentData))
                         return UIToolkit.getVersus(
                             context,
                             currentData.opposition,
                             Strings.homeAddress,
-                            _howthTeamKey,
                             _oppositionTeamKey);
-                      else if (!hasVisited && index == 2) {
-                        Hole hole = Hole.example;
-                        return UIToolkit.showcase(
-                            context: context,
-                            key: _holeKey,
-                            description: Strings.hole,
-                            child: Padding(
-                                padding: EdgeInsets.all(5.3),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      /// Home team section.
-                                      Expanded(
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: <Widget>[
-                                            /// Home player.
-                                            Expanded(
-                                                child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: UIToolkit.showcase(
-                                                        context: context,
-                                                        key: _playersKey,
-                                                        description:
-                                                            Strings.players,
-                                                        child: Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8.0),
-                                                            decoration: BoxDecoration(
-                                                                color: Palette
-                                                                    .card
-                                                                    .withAlpha(
-                                                                        240),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13.0)),
-                                                            child: Text(
-                                                              "Howth player(s)",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              style: TextStyles
-                                                                  .cardSubTitle,
-                                                            ))))),
-
-                                            /// Home score.
-                                            UIToolkit.showcase(
-                                                context: context,
-                                                key: _holeHowthScoreKey,
-                                                description:
-                                                    Strings.holeHomeScore,
-                                                child: Container(
-                                                    child: Text(
-                                                        hole.holeScore.howth,
-                                                        style: TextStyles
-                                                            .leadingChild),
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            16.0,
-                                                            3.0,
-                                                            12.0,
-                                                            3.0))),
-                                          ])),
-
-                                      /// Hole Number
-                                      UIToolkit.showcase(
-                                          context: context,
-                                          key: _holeNumberKey,
-                                          description:
-                                              Strings.currentHoleNumber,
-                                          child:
-                                              UIToolkit.getHoleNumberDecorated(
-                                                  hole.holeNumber)),
-
-                                      /// Away team section.
-                                      Expanded(
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                            /// Away team score.
-                                            UIToolkit.showcase(
-                                                context: context,
-                                                key: _holeOppositionScoreKey,
-                                                description:
-                                                    Strings.holeAwayScore,
-                                                child: Container(
-                                                    child: Text(
-                                                        hole.holeScore
-                                                            .opposition,
-                                                        style: TextStyles
-                                                            .leadingChild),
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            12.0,
-                                                            3.0,
-                                                            16.0,
-                                                            3.0))),
-
-                                            /// Away team player.
-                                            Expanded(
-                                                child: Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: UIToolkit.showcase(
-                                                        context: context,
-                                                        key: _oppositionKey,
-                                                        description:
-                                                            Strings.opposition,
-                                                        child: Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8.0),
-                                                            decoration: BoxDecoration(
-                                                                color: Palette
-                                                                    .card
-                                                                    .withAlpha(
-                                                                        240),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            13.0)),
-                                                            child: Text(
-                                                              "Opposition player(s)/club",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .right,
-                                                              style: TextStyles
-                                                                  .cardSubTitle,
-                                                            ))))),
-                                          ]))
-                                    ])));
-                      } else if (currentData.holes.isEmpty)
-                        return Center(
-                            child: Padding(
-                                child: Text(
-                                    Strings.noHoles + currentData.title + "!",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyles.noData),
-                                padding: EdgeInsets.only(top: 25.0)));
-                      else {
+                      else if (!hasVisited && index == 2 ||
+                          !hasVisited &&
+                              index == 3 &&
+                              _firebaseModel.isArchived(currentData)) {
+                        return UIToolkit.exampleHole(
+                            context,
+                            _holeKey,
+                            _playersKey,
+                            _holeHowthScoreKey,
+                            _holeOppositionScoreKey,
+                            _holeNumberKey,
+                            _oppositionKey);
+                      } else if (currentData.holes.isEmpty) {
+                        return Container(
+                            padding: EdgeInsets.only(top: 25),
+                            alignment: Alignment.center,
+                            child: Column(children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.only(bottom: 7.0),
+                                  child: Icon(Icons.live_help,
+                                      color: Palette.dark.withAlpha(200),
+                                      size: 30.0)),
+                              Padding(
+                                  child: Text(
+                                      Strings.noHoles + currentData.title + "!",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyles.noData),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.0)),
+                            ]));
+                      } else {
                         int holeIndex = index;
-
                         if (!hasVisited) holeIndex--;
+                        if (_firebaseModel.isArchived(currentData)) holeIndex--;
 
-                        return GestureDetector(
-                            onTap: () => Routes.of(context)
-                                .toHole(currentData.id, holeIndex - 2),
+                        int _index = holeIndex - 2;
+                        Hole currentHole = currentData.holes[_index];
+
+                        return Consumer<HoleViewModel>(
                             child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                    color: index % 2 !=
+                                            (_firebaseModel
+                                                    .isArchived(currentData)
+                                                ? 1
+                                                : 0)
+                                        ? Palette.light
+                                        : Palette.card.withAlpha(240),
+                                    borderRadius: BorderRadius.circular(13.0)),
                                 child: _rowBuilder(
                                     context,
-                                    currentData.holes[holeIndex - 2],
-                                    currentData.location.isHome,
+                                    currentData.holes[_index],
                                     currentData.opposition,
                                     index,
-                                    currentData.id)));
+                                    currentData.id)),
+                            builder: (context, model, child) =>
+                                CustomExpansionTile(
+                                  key: ValueKey(currentHole),
+                                  initiallyExpanded: _index == model.openIndex,
+                                  onExpansionChanged: (bool isOpen) {
+                                    if (isOpen) {
+                                      model.open(_index);
+                                      double _offset =
+                                          (_index * 60 + 60).toDouble();
+
+                                      /// If the difference between the current position and where the
+                                      /// scroll would end up is too great, scroll!
+                                      if ((_scrollController.offset - _offset)
+                                              .abs() >
+                                          60)
+                                        _scrollController.animateTo(_offset,
+                                            duration:
+                                                Duration(milliseconds: 700),
+                                            curve: Curves.easeInOutQuart);
+                                    } else {
+                                      model.close();
+                                    }
+                                  },
+                                  title: child,
+                                  children: <Widget>[
+                                    _hasAccess
+                                        ? Stack(
+                                            children: <Widget>[
+                                              /// Modify/delete the hole!
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 24.0),
+                                                padding: EdgeInsets.only(
+                                                    bottom: 4.0,
+                                                    left: 0.5,
+                                                    right: 0.5),
+                                                child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      GestureDetector(
+                                                          onTap: () =>
+                                                              Routes.of(context)
+                                                                  .toHoleModification(
+                                                                currentData.id,
+                                                                _index,
+                                                                currentHole,
+                                                                currentData
+                                                                    .opposition,
+                                                              ),
+                                                          child: Icon(
+                                                            Icons.edit,
+                                                            size: 32.0,
+                                                          )),
+                                                      GestureDetector(
+                                                          onTap: () => showModal(
+                                                              context: context,
+                                                              configuration:
+                                                                  FadeScaleTransitionConfiguration(),
+                                                              builder: (context) => CustomAlertDialog(
+                                                                  FirebaseInteraction.of(
+                                                                          context)
+                                                                      .deleteHole,
+                                                                  index: _index,
+                                                                  id: currentData
+                                                                      .id)),
+                                                          child: Icon(
+                                                            Icons.delete,
+                                                            size: 32.0,
+                                                          )),
+                                                    ]),
+                                              ),
+
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  /// Modify howth's score!
+                                                  IconButtonPair(onAdd: () {
+                                                    Score updatedScore =
+                                                        currentHole.holeScore
+                                                            .updateScore(
+                                                                true, 1);
+                                                    Hole updatedHole =
+                                                        currentHole.updateHole(
+                                                            newScore:
+                                                                updatedScore);
+                                                    FirebaseInteraction.of(
+                                                            context)
+                                                        .updateHole(
+                                                            _index,
+                                                            currentData.id,
+                                                            updatedHole);
+                                                  }, onSubtract: () {
+                                                    Score updatedScore =
+                                                        currentHole.holeScore
+                                                            .updateScore(
+                                                                true, -1);
+                                                    Hole updatedHole =
+                                                        currentHole.updateHole(
+                                                            newScore:
+                                                                updatedScore);
+                                                    FirebaseInteraction.of(
+                                                            context)
+                                                        .updateHole(
+                                                            _index,
+                                                            currentData.id,
+                                                            updatedHole);
+                                                  }),
+
+                                                  /// Modify the hole number!
+                                                  IconButtonPair(
+                                                      iconColor: Palette.maroon,
+                                                      onAdd: () {
+                                                        Hole updatedHole =
+                                                            currentHole
+                                                                .updateNumber(
+                                                                    1);
+                                                        FirebaseInteraction.of(
+                                                                context)
+                                                            .updateHole(
+                                                                _index,
+                                                                currentData.id,
+                                                                updatedHole);
+                                                      },
+                                                      onSubtract: () {
+                                                        Hole updatedHole =
+                                                            currentHole
+                                                                .updateNumber(
+                                                                    -1);
+                                                        FirebaseInteraction.of(
+                                                                context)
+                                                            .updateHole(
+                                                                _index,
+                                                                currentData.id,
+                                                                updatedHole);
+                                                      }),
+
+                                                  /// Modify the opposition score!
+                                                  IconButtonPair(onAdd: () {
+                                                    Score updatedScore =
+                                                        currentHole.holeScore
+                                                            .updateScore(
+                                                                false, 1);
+                                                    Hole updatedHole =
+                                                        currentHole.updateHole(
+                                                            newScore:
+                                                                updatedScore);
+                                                    FirebaseInteraction.of(
+                                                            context)
+                                                        .updateHole(
+                                                            _index,
+                                                            currentData.id,
+                                                            updatedHole);
+                                                  }, onSubtract: () {
+                                                    Score updatedScore =
+                                                        currentHole
+                                                            .holeScore
+                                                            .updateScore(
+                                                                false, -1);
+                                                    Hole updatedHole =
+                                                        currentHole.updateHole(
+                                                            newScore:
+                                                                updatedScore);
+                                                    FirebaseInteraction.of(
+                                                            context)
+                                                        .updateHole(
+                                                            _index,
+                                                            currentData.id,
+                                                            updatedHole);
+                                                  }),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                        : Container(),
+
+                                    /// Display the [lastUpdated] formatted.
+                                    Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 3.0),
+                                        padding: currentHole.comment.isEmpty
+                                            ? EdgeInsets.only(bottom: 8.0)
+                                            : null,
+                                        child: AnimatedSwitcher(
+                                          child: Text(
+                                              _firebaseModel.prettyLastUpdated(
+                                                  currentHole.lastUpdated),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyles.cardTitle,
+                                              key: ValueKey(DateTime.now())),
+                                          duration: Duration(milliseconds: 350),
+                                        )),
+
+                                    /// If there is a [comment], display it.
+                                    currentHole.comment.isEmpty
+                                        ? Container()
+                                        : Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 3.0),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 6.0),
+                                            child: Text(
+                                              "Comment: ${currentHole.comment}",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyles.cardTitle,
+                                            ))
+                                  ],
+                                ));
                       }
                     }))));
   }

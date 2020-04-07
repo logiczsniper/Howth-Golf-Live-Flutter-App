@@ -47,11 +47,10 @@ class DatabaseEntry {
         score = Score.fromMap(map[Fields.score]);
 
   static DatabaseEntry get example => DatabaseEntry(
-      date:
-          "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}",
+      date: "01-02-2020",
       id: -1,
       location: Location.example,
-      time: "${DateTime.now().hour}:${DateTime.now().minute}",
+      time: "12:00",
       opposition: "Opposing Club Name",
       title: "Example Competition Title",
       holes: [Hole.example],
@@ -152,16 +151,16 @@ class Score {
   /// Updates the home team in this score by the [value].
   ///
   /// Returns the equivalent hole with the updated value.
-  /// [value] will be either 1 or -1 to increment or decrement the home team.
-  Score updateScore(bool isHome, int value) {
+  /// [value] will be either 1 or -1 to increment or decrement howth's score.
+  Score updateScore(bool isHowth, int value) {
     assert(value == 1 || value == -1);
     int parsedHowth = int.tryParse(howth);
     int parsedOpposition = int.tryParse(opposition);
 
     Score newScore = Score(
-        howth: isHome ? (parsedHowth + value).toString() : howth,
+        howth: isHowth ? (parsedHowth + value).toString() : howth,
         opposition:
-            !isHome ? (parsedOpposition + value).toString() : opposition);
+            !isHowth ? (parsedOpposition + value).toString() : opposition);
 
     return newScore;
   }
@@ -280,6 +279,13 @@ class Hole {
       names.first,
       (String first, String second) =>
           second == names.first ? first : first + ", " + second);
+
+  @override
+  int get hashCode => lastUpdated.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      other is Hole && other.lastUpdated.isAtSameMomentAs(lastUpdated);
 
   Hole(
       {@required this.holeNumber,

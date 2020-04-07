@@ -18,7 +18,7 @@ class TextStyles {
       TextStyle(fontSize: 17, color: Palette.dark, fontWeight: FontWeight.w300);
 
   static const TextStyle cardSubTitle =
-      TextStyle(fontSize: 14, color: Palette.dark);
+      TextStyle(fontSize: 14, color: Palette.darker);
 
   static const TextStyle hint = TextStyle(fontSize: 16, color: Palette.dark);
 

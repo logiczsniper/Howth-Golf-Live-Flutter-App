@@ -6,7 +6,6 @@ import 'package:howth_golf_live/app/creation/create_competition.dart';
 import 'package:howth_golf_live/app/creation/create_hole.dart';
 import 'package:howth_golf_live/app/help/help_page.dart';
 import 'package:howth_golf_live/app/help/helps_page.dart';
-import 'package:howth_golf_live/app/hole/hole_page.dart';
 import 'package:howth_golf_live/app/home/home_page.dart';
 import 'package:howth_golf_live/app/modification/modify_competition.dart';
 import 'package:howth_golf_live/app/modification/modify_hole.dart';
@@ -62,8 +61,9 @@ class Routes {
       pushTo(ModifyCompetition(currentEntry));
 
   /// Push to [ModifyHole] page.
-  void toHoleModification(int id, int index, Hole currentHole) =>
-      pushTo(ModifyHole(id, index, currentHole));
+  void toHoleModification(
+          int id, int index, Hole currentHole, String opposition) =>
+      pushTo(ModifyHole(id, index, currentHole, opposition));
 
   /// Push to [CreateCompetition] page.
   void toCompetitionCreation() => pushTo(CreateCompetition());
@@ -76,9 +76,6 @@ class Routes {
 
   /// Push to the [Help] page.
   void toHelp(AppHelpEntry helpEntry) => pushTo(HelpPage(helpEntry));
-
-  /// Push to the [Hole] page.
-  void toHole(int id, int index) => pushTo(HolePage(id, index));
 
   /// Push to [Competitions] page.
   void toCompetitions() => pushTo(CompetitionsPage());

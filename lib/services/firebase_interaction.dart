@@ -13,13 +13,13 @@ import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
-class FirebaseInteration {
+class FirebaseInteraction {
   final BuildContext context;
 
   var _firebaseModel;
   List _databaseEntries;
 
-  FirebaseInteration(this.context) {
+  FirebaseInteraction.of(this.context) {
     _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
     _databaseEntries = List.from(_firebaseModel.rawEntries);
   }
@@ -48,9 +48,8 @@ class FirebaseInteration {
     return int.parse(code);
   }
 
-  void _updateDatabase({bool pop = true, bool popAgain = false}) {
+  void _updateDatabase({bool pop = true}) {
     if (pop) Navigator.of(context).pop();
-    if (popAgain) Navigator.of(context).pop();
 
     Map<String, dynamic> newData = {Fields.data: _databaseEntries};
     DocumentSnapshot _documentSnapshot = _firebaseModel.document;
@@ -159,7 +158,7 @@ class FirebaseInteration {
       }
     }
 
-    _updateDatabase(popAgain: true);
+    _updateDatabase();
   }
 
   /// Using the form fields, create a [Hole] and add it to the

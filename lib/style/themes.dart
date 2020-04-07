@@ -31,11 +31,15 @@ class Themes {
       dividerTheme: dividerTheme);
 
   static DividerThemeData dividerTheme = DividerThemeData(
-      color: Palette.divider,
-      indent: 60.0,
-      endIndent: 60.0,
-      thickness: 1.5,
-      space: 27.5);
+    // color: Palette.divider,
+    color: Colors.transparent,
+    indent: 60.0,
+    endIndent: 60.0,
+    // thickness: 1.5,
+    thickness: 0.0,
+    // space: 27.5,
+    space: 0.0,
+  );
 
   static SnackBarThemeData snackBarThemeData = SnackBarThemeData(
       shape: RoundedRectangleBorder(

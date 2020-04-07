@@ -34,13 +34,13 @@ class Strings {
   static const String archivedWelcome = "Tap for archived competitions!";
 
   static const String competitionTitle = "The title of the competition!";
-  static const String competitionDate = "Competition date (YYYY-MM-DD)!";
-  static const String competitionScore = "Competition score (home on left)!";
+  static const String competitionDate = "Competition date (DD-MM-YYYY)!";
+  static const String competitionScore = "Competition score (howth on left)!";
 
   static const String competitionName = "Competition name";
 
-  static const String homeScore = "Howth's overall score!";
-  static const String awayScore = "Opposition's overall score!";
+  static const String howthScore = "Howth's overall score!";
+  static const String oppositionScore = "Opposition's overall score!";
   static const String location = "Competition location!";
   static const String date = "Competition date!";
   static const String time = "Competition time!";
@@ -48,10 +48,9 @@ class Strings {
   static const String opposition = "Opposition's player(s)!";
   static const String hole = "Tap for this match-up's details!";
   static const String currentHoleNumber = "Current hole number!";
-  static const String holeHomeScore = "Howth's score!";
-  static const String holeAwayScore = "Opposition's score!";
-  static const String homeTeam = "Howth name!";
-  static const String awayTeam = "Opposition name!";
+  static const String holeHowthScore = "Howth's score!";
+  static const String holeOppositionScore = "Opposition's score!";
+  static const String oppositionTeam = "Opposition name!";
   static const String holeNumber = "Hole Number:";
 
   /// Paths to assets used in the app.
@@ -88,7 +87,8 @@ class Strings {
 
   static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";
-  static const String versus = "VS";
+  static const String versus = "V";
+  static const String finished = "Finished!";
 
   static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";

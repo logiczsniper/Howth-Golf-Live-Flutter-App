@@ -13,11 +13,12 @@ class MiddleRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           icon,
-          Container(
+          Flexible(
               child: Text(
             text,
             maxLines: 2,
-            overflow: TextOverflow.fade,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
             style: TextStyles.cardSubTitle.apply(fontSizeDelta: -2),
           )),
         ],

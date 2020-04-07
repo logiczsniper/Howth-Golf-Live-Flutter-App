@@ -33,25 +33,34 @@ class ComplexScore extends StatelessWidget {
         : double.tryParse(score).toInt().toString();
   }
 
-  static TextSpan getFraction(bool isHowth, Score scores) => TextSpan(
+  static TextSpan getFraction(bool isHowth, Score scores,
+          {FontWeight fontWeight}) =>
+      TextSpan(
 
-      /// The ternary operator (and others like it) below ensure that
-      /// no fraction is displayed if the [currentEntry.score] is whole.
-      text: _isFraction(isHowth ? scores.howth : scores.opposition)
-          ? "1/2"
-          : Strings.empty,
-      style: TextStyle(fontFeatures: [FontFeature.enable('frac')]));
+          /// The ternary operator (and others like it) below ensure that
+          /// no fraction is displayed if the [currentEntry.score] is whole.
+          text: _isFraction(isHowth ? scores.howth : scores.opposition)
+              ? "1/2"
+              : Strings.empty,
+          style: TextStyle(
+              fontFeatures: [FontFeature.enable('frac')],
+              fontWeight: fontWeight));
 
   static RichText getMixedFraction(bool isHowth, Score score) => RichText(
-      key: ValueKey(DateTime.now()),
+      key: ValueKey(score),
       text: TextSpan(
           style: TextStyle(
-              fontSize: 22,
-              color: Palette.inMaroon,
-              fontWeight: FontWeight.w400),
+              fontSize: score.howth[0] == "0" && isHowth ||
+                      score.opposition[0] == "0" && !isHowth
+                  ? 50
+                  : 32,
+              color: Palette.dark,
+              fontWeight: FontWeight.w800),
           children: <TextSpan>[
             /// Main number.
-            TextSpan(text: _getMainNumber(isHowth, score)),
+            TextSpan(
+                text: _getMainNumber(isHowth, score),
+                style: TextStyle(fontSize: 70.0)),
 
             /// Fraction.
             getFraction(isHowth, score)
@@ -66,14 +75,14 @@ class ComplexScore extends StatelessWidget {
       text: TextSpan(style: TextStyles.scoreCard, children: <TextSpan>[
         /// Home team score.
         TextSpan(text: _getMainNumber(true, score)),
-        getFraction(true, score),
+        getFraction(true, score, fontWeight: FontWeight.w600),
 
         /// Middle divider.
         TextSpan(text: " - "),
 
         /// Away team score.
         TextSpan(text: _getMainNumber(false, score)),
-        getFraction(false, score),
+        getFraction(false, score, fontWeight: FontWeight.w600),
       ]),
     );
   }

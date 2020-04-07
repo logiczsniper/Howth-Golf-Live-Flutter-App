@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/app/creation/creation_page.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/firebase_interation.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
@@ -48,7 +48,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    FirebaseInteration(context).addHole(_formKey, numberField, commentField,
+    FirebaseInteraction.of(context).addHole(_formKey, numberField, commentField,
         playersField, oppositionField, widget.currentId);
   }
 

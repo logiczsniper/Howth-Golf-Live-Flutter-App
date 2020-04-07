@@ -33,10 +33,9 @@ class CompetitionDetails extends StatelessWidget {
   ///
   /// If [hasAccess], a fourth row must be displayed which shows the key ([id])
   /// of the competition.
-  Widget _centralFlexible(BuildContext context, bool hasAccess) => Flexible(
-        flex: 2,
-        child: Center(
-            child: Column(
+  Widget _centralFlexible(BuildContext context, bool hasAccess) => Container(
+        alignment: Alignment.center,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             UIToolkit.showcase(
@@ -62,7 +61,7 @@ class CompetitionDetails extends StatelessWidget {
                 ? _getMiddleRow(currentEntry.id.toString(), Icons.vpn_key, 17.0)
                 : Container()
           ],
-        )),
+        ),
       );
 
   @override
@@ -71,36 +70,28 @@ class CompetitionDetails extends StatelessWidget {
     bool hasAccess =
         _userStatus.isVerified(currentEntry.title, id: currentEntry.id);
 
-    return Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 1.5),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                /// Home team score.
+    return Container(
+      padding: EdgeInsets.fromLTRB(0.0, 3.5, 0.0, 0.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          /// Home team score.
+          SideFlexible(
+              currentEntry.score, true, howthScoreKey, Strings.howthScore),
 
-                SideFlexible(
-                  currentEntry.score,
-                  howthScoreKey,
-                  Strings.homeScore,
-                  true,
-                ),
+          /// Details of competition.
+          Flexible(child: _centralFlexible(context, hasAccess)),
 
-                /// Details of competition.
-                _centralFlexible(context, hasAccess),
-
-                /// Away team score.
-                SideFlexible(
-                  currentEntry.score,
-                  oppositionScoreKey,
-                  Strings.awayScore,
-                  false,
-                )
-              ],
-            ),
-          ],
-        ));
+          /// Away team score.
+          SideFlexible(
+            currentEntry.score,
+            false,
+            oppositionScoreKey,
+            Strings.oppositionScore,
+          )
+        ],
+      ),
+    );
   }
 }

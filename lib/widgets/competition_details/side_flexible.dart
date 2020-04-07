@@ -7,22 +7,21 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class SideFlexible extends StatelessWidget {
   final Score score;
+  final bool isHowth;
   final GlobalKey childKey;
   final String description;
-  final bool isHowth;
 
   /// Shows the overall competition score, [text] for a specific competition.
-  SideFlexible(this.score, this.childKey, this.description, this.isHowth);
+  SideFlexible(this.score, this.isHowth, this.childKey, this.description);
 
   /// The maroon decoration around the [text].
   Decoration get _decoration => ShapeDecoration(
-      color: Palette.maroon,
+      color: Palette.light,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
   @override
-  Widget build(BuildContext context) => Flexible(
-      flex: 1,
-      child: Column(children: <Widget>[
+  Widget build(BuildContext context) => Expanded(
+          child: Column(children: <Widget>[
         UIToolkit.showcase(
             context: context,
             key: childKey,

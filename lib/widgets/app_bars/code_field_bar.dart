@@ -113,7 +113,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     super.initState();
 
     /// Build the two bars.
-    titleBar = buildTitleBar(widget.title);
+    titleBar = buildTitleBar(widget.title, id: widget.id);
     inputBar = buildInputBar(
         TextInputType.number, true, Strings.enterCode, _filter, _codePressed);
 

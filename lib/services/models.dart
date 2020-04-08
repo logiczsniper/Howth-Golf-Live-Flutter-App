@@ -59,7 +59,16 @@ class DatabaseEntry {
   int get hashCode => id;
 
   @override
-  bool operator ==(Object other) => other is DatabaseEntry && other.id == id;
+  bool operator ==(Object other) =>
+      other is DatabaseEntry &&
+      other.id == id &&
+      other.date == date &&
+      other.location == location &&
+      other.time == time &&
+      other.opposition == opposition &&
+      other.title == title &&
+      other.holes == holes &&
+      other.score == score;
 
   DatabaseEntry(
       {@required this.date,

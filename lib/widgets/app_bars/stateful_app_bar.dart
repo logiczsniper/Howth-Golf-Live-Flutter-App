@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/themes.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/connectivity_view_model.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
@@ -50,13 +51,29 @@ class StatefulAppBar {
   }
 
   /// The simpler app bar that just displays text- the title.
-  Widget buildTitleBar(String title) => Center(
-          child: Text(
-        title == Strings.competitionsText ? Strings.empty : title,
-        softWrap: true,
-        textAlign: TextAlign.center,
-        maxLines: 2,
-      ));
+  Widget buildTitleBar(String title, {int id = 0}) {
+    assert(title != Strings.competitionsText || id == 0);
+
+    Widget _child = Center(
+        child: Text(
+      title == Strings.competitionsText ? Strings.empty : title,
+      softWrap: true,
+      textAlign: TextAlign.center,
+      maxLines: 2,
+    ));
+
+    return title == Strings.helpsText || title == Strings.competitionsText
+        ? _child
+        : Consumer<FirebaseViewModel>(
+            builder: (context, model, child) => Center(
+                child: Text(
+              model.entryFromId(id).title,
+              softWrap: true,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            )),
+          );
+  }
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.

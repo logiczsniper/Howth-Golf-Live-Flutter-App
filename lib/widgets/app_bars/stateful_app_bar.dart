@@ -64,10 +64,11 @@ class StatefulAppBar {
 
     return title == Strings.helpsText || title == Strings.competitionsText
         ? _child
-        : Consumer<FirebaseViewModel>(
-            builder: (context, model, child) => Center(
+        : Selector<FirebaseViewModel, String>(
+            selector: (context, model) => model.entryFromId(id).title,
+            builder: (context, title, child) => Center(
                 child: Text(
-              model.entryFromId(id).title,
+              title,
               softWrap: true,
               textAlign: TextAlign.center,
               maxLines: 2,

@@ -112,17 +112,17 @@ class CompetitionPage extends StatelessWidget {
 
     /// The user has access to modify this competition if they are an admin or they are a manager and
     /// this competition is NOT archived.
-    bool _hasAccess = _firebaseModel.isArchived(currentData)
-        ? _userStatus.isAdmin
-        : _userStatus.isManager(currentData.id);
+    // bool _hasAccess = _firebaseModel.isArchived(currentData)
+    //     ? _userStatus.isAdmin
+    //     : _userStatus.isManager(currentData.id);
 
-    Widget floatingActionButton = _hasAccess
-        ? UIToolkit.createButton(
-            context: context,
-            primaryText: Strings.newHole,
-            secondaryText: Strings.tapEditHole,
-            id: currentData.id)
-        : null;
+    // Widget floatingActionButton = _hasAccess
+    //     ? UIToolkit.createButton(
+    //         context: context,
+    //         primaryText: Strings.newHole,
+    //         secondaryText: Strings.tapEditHole,
+    //         id: currentData.id)
+    //     : null;
 
     final GlobalKey _howthScoreKey = GlobalKey();
     final GlobalKey _oppositionScoreKey = GlobalKey();
@@ -165,6 +165,20 @@ class CompetitionPage extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback(
         (_) => _scrollController.jumpTo(_holeModel.offset));
+
+    Widget floatingActionButton =
+        Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
+            selector: (context, userStatusModel, firebaseModel) => firebaseModel
+                    .isArchived(firebaseModel.entryFromId(initialData.id))
+                ? userStatusModel.isAdmin
+                : userStatusModel.isManager(initialData.id),
+            builder: (context, hasAccess, child) => hasAccess
+                ? UIToolkit.createButton(
+                    context: context,
+                    primaryText: Strings.newHole,
+                    secondaryText: Strings.tapEditHole,
+                    id: initialData.id)
+                : Container());
 
     return Scaffold(
         floatingActionButton: Container(
@@ -296,160 +310,194 @@ class CompetitionPage extends StatelessWidget {
                                   },
                                   title: child,
                                   children: <Widget>[
-                                    _hasAccess
-                                        ? Stack(
-                                            children: <Widget>[
-                                              /// Modify/delete the hole!
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(left: 26.0),
-                                                padding: EdgeInsets.only(
-                                                    bottom: 4.0,
-                                                    left: 0.5,
-                                                    right: 0.5),
-                                                child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      GestureDetector(
-                                                          onTap: () =>
-                                                              Routes.of(context)
-                                                                  .toHoleModification(
-                                                                currentData.id,
-                                                                _index,
-                                                                currentHole,
-                                                                currentData
-                                                                    .opposition,
-                                                              ),
-                                                          child: Icon(
-                                                            Icons.edit,
-                                                            size: 32.0,
-                                                          )),
-                                                      GestureDetector(
-                                                          onTap: () => showModal(
-                                                              context: context,
-                                                              configuration:
-                                                                  FadeScaleTransitionConfiguration(),
-                                                              builder: (context) => CustomAlertDialog(
-                                                                  FirebaseInteraction.of(
+                                    Selector2<UserStatusViewModel,
+                                        FirebaseViewModel, bool>(
+                                      selector: (context, userStatusModel,
+                                              firebaseModel) =>
+                                          firebaseModel.isArchived(firebaseModel
+                                                  .entryFromId(initialData.id))
+                                              ? userStatusModel.isAdmin
+                                              : userStatusModel
+                                                  .isManager(initialData.id),
+                                      builder: (context, hasAccess, child) =>
+                                          hasAccess
+                                              ? Stack(
+                                                  children: <Widget>[
+                                                    /// Modify/delete the hole!
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 26.0),
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 4.0,
+                                                          left: 0.5,
+                                                          right: 0.5),
+                                                      child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: <Widget>[
+                                                            GestureDetector(
+                                                                onTap: () =>
+                                                                    Routes.of(
+                                                                            context)
+                                                                        .toHoleModification(
+                                                                      currentData
+                                                                          .id,
+                                                                      _index,
+                                                                      currentHole,
+                                                                      currentData
+                                                                          .opposition,
+                                                                    ),
+                                                                child: Icon(
+                                                                  Icons.edit,
+                                                                  size: 32.0,
+                                                                )),
+                                                            GestureDetector(
+                                                                onTap: () => showModal(
+                                                                    context:
+                                                                        context,
+                                                                    configuration:
+                                                                        FadeScaleTransitionConfiguration(),
+                                                                    builder: (context) => CustomAlertDialog(
+                                                                        FirebaseInteraction.of(context)
+                                                                            .deleteHole,
+                                                                        index:
+                                                                            _index,
+                                                                        id: currentData
+                                                                            .id)),
+                                                                child: Icon(
+                                                                  Icons.delete,
+                                                                  size: 32.0,
+                                                                )),
+                                                          ]),
+                                                    ),
+
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        /// Modify howth's score!
+                                                        IconButtonPair(
+                                                            onAdd: () {
+                                                          Score updatedScore =
+                                                              currentHole
+                                                                  .holeScore
+                                                                  .updateScore(
+                                                                      true, 1);
+                                                          Hole updatedHole =
+                                                              currentHole
+                                                                  .updateHole(
+                                                                      newScore:
+                                                                          updatedScore);
+                                                          FirebaseInteraction
+                                                                  .of(context)
+                                                              .updateHole(
+                                                                  _index,
+                                                                  currentData
+                                                                      .id,
+                                                                  updatedHole);
+                                                        }, onSubtract: () {
+                                                          Score updatedScore =
+                                                              currentHole
+                                                                  .holeScore
+                                                                  .updateScore(
+                                                                      true, -1);
+                                                          Hole updatedHole =
+                                                              currentHole
+                                                                  .updateHole(
+                                                                      newScore:
+                                                                          updatedScore);
+                                                          FirebaseInteraction
+                                                                  .of(context)
+                                                              .updateHole(
+                                                                  _index,
+                                                                  currentData
+                                                                      .id,
+                                                                  updatedHole);
+                                                        }),
+
+                                                        /// Modify the hole number!
+                                                        IconButtonPair(
+                                                            iconColor:
+                                                                Palette.maroon,
+                                                            onAdd: () {
+                                                              Hole updatedHole =
+                                                                  currentHole
+                                                                      .updateNumber(
+                                                                          1);
+                                                              FirebaseInteraction
+                                                                      .of(
                                                                           context)
-                                                                      .deleteHole,
-                                                                  index: _index,
-                                                                  id: currentData
-                                                                      .id)),
-                                                          child: Icon(
-                                                            Icons.delete,
-                                                            size: 32.0,
-                                                          )),
-                                                    ]),
-                                              ),
+                                                                  .updateHole(
+                                                                      _index,
+                                                                      currentData
+                                                                          .id,
+                                                                      updatedHole);
+                                                            },
+                                                            onSubtract: () {
+                                                              Hole updatedHole =
+                                                                  currentHole
+                                                                      .updateNumber(
+                                                                          -1);
+                                                              FirebaseInteraction
+                                                                      .of(
+                                                                          context)
+                                                                  .updateHole(
+                                                                      _index,
+                                                                      currentData
+                                                                          .id,
+                                                                      updatedHole);
+                                                            }),
 
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  /// Modify howth's score!
-                                                  IconButtonPair(onAdd: () {
-                                                    Score updatedScore =
-                                                        currentHole.holeScore
-                                                            .updateScore(
-                                                                true, 1);
-                                                    Hole updatedHole =
-                                                        currentHole.updateHole(
-                                                            newScore:
-                                                                updatedScore);
-                                                    FirebaseInteraction.of(
-                                                            context)
-                                                        .updateHole(
-                                                            _index,
-                                                            currentData.id,
-                                                            updatedHole);
-                                                  }, onSubtract: () {
-                                                    Score updatedScore =
-                                                        currentHole.holeScore
-                                                            .updateScore(
-                                                                true, -1);
-                                                    Hole updatedHole =
-                                                        currentHole.updateHole(
-                                                            newScore:
-                                                                updatedScore);
-                                                    FirebaseInteraction.of(
-                                                            context)
-                                                        .updateHole(
-                                                            _index,
-                                                            currentData.id,
-                                                            updatedHole);
-                                                  }),
-
-                                                  /// Modify the hole number!
-                                                  IconButtonPair(
-                                                      iconColor: Palette.maroon,
-                                                      onAdd: () {
-                                                        Hole updatedHole =
-                                                            currentHole
-                                                                .updateNumber(
-                                                                    1);
-                                                        FirebaseInteraction.of(
-                                                                context)
-                                                            .updateHole(
-                                                                _index,
-                                                                currentData.id,
-                                                                updatedHole);
-                                                      },
-                                                      onSubtract: () {
-                                                        Hole updatedHole =
-                                                            currentHole
-                                                                .updateNumber(
-                                                                    -1);
-                                                        FirebaseInteraction.of(
-                                                                context)
-                                                            .updateHole(
-                                                                _index,
-                                                                currentData.id,
-                                                                updatedHole);
-                                                      }),
-
-                                                  /// Modify the opposition score!
-                                                  IconButtonPair(onAdd: () {
-                                                    Score updatedScore =
-                                                        currentHole.holeScore
-                                                            .updateScore(
-                                                                false, 1);
-                                                    Hole updatedHole =
-                                                        currentHole.updateHole(
-                                                            newScore:
-                                                                updatedScore);
-                                                    FirebaseInteraction.of(
-                                                            context)
-                                                        .updateHole(
-                                                            _index,
-                                                            currentData.id,
-                                                            updatedHole);
-                                                  }, onSubtract: () {
-                                                    Score updatedScore =
-                                                        currentHole
-                                                            .holeScore
-                                                            .updateScore(
-                                                                false, -1);
-                                                    Hole updatedHole =
-                                                        currentHole.updateHole(
-                                                            newScore:
-                                                                updatedScore);
-                                                    FirebaseInteraction.of(
-                                                            context)
-                                                        .updateHole(
-                                                            _index,
-                                                            currentData.id,
-                                                            updatedHole);
-                                                  }),
-                                                ],
-                                              ),
-                                            ],
-                                          )
-                                        : Container(),
+                                                        /// Modify the opposition score!
+                                                        IconButtonPair(
+                                                            onAdd: () {
+                                                          Score updatedScore =
+                                                              currentHole
+                                                                  .holeScore
+                                                                  .updateScore(
+                                                                      false, 1);
+                                                          Hole updatedHole =
+                                                              currentHole
+                                                                  .updateHole(
+                                                                      newScore:
+                                                                          updatedScore);
+                                                          FirebaseInteraction
+                                                                  .of(context)
+                                                              .updateHole(
+                                                                  _index,
+                                                                  currentData
+                                                                      .id,
+                                                                  updatedHole);
+                                                        }, onSubtract: () {
+                                                          Score updatedScore =
+                                                              currentHole
+                                                                  .holeScore
+                                                                  .updateScore(
+                                                                      false,
+                                                                      -1);
+                                                          Hole updatedHole =
+                                                              currentHole
+                                                                  .updateHole(
+                                                                      newScore:
+                                                                          updatedScore);
+                                                          FirebaseInteraction
+                                                                  .of(context)
+                                                              .updateHole(
+                                                                  _index,
+                                                                  currentData
+                                                                      .id,
+                                                                  updatedHole);
+                                                        }),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container(),
+                                    ),
 
                                     /// Display the [lastUpdated] formatted.
                                     Container(

@@ -21,7 +21,6 @@ class CustomExpansionTile extends StatefulWidget {
     this.leading,
     @required this.title,
     this.subtitle,
-    this.backgroundColor,
     this.onExpansionChanged,
     this.children = const <Widget>[],
     this.initiallyExpanded = false,
@@ -55,9 +54,6 @@ class CustomExpansionTile extends StatefulWidget {
   /// Typically [ListTile] widgets.
   final List<Widget> children;
 
-  /// The color to display behind the sublist when expanded.
-  final Color backgroundColor;
-
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
   final bool initiallyExpanded;
 
@@ -73,14 +69,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
       CurveTween(curve: Curves.easeIn);
 
   final ColorTween _borderColorTween = ColorTween();
-  final ColorTween _headerColorTween = ColorTween();
-  final ColorTween _backgroundColorTween = ColorTween();
 
   AnimationController _controller;
   Animation<double> _heightFactor;
   Animation<Color> _borderColor;
-  Animation<Color> _headerColor;
-  Animation<Color> _backgroundColor;
 
   bool _isExpanded = false;
 
@@ -90,9 +82,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
-    _headerColor = _controller.drive(_headerColorTween.chain(_easeInTween));
-    _backgroundColor =
-        _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded =
         PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
@@ -129,7 +118,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
 
     return Container(
       decoration: BoxDecoration(
-        color: _backgroundColor.value ?? Colors.transparent,
+        color: Colors.transparent,
         border: Border(
           top: BorderSide(color: borderSideColor),
           bottom: BorderSide(color: borderSideColor),
@@ -139,7 +128,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTileTheme.merge(
-            textColor: _headerColor.value,
+            textColor: Palette.dark,
             child: ListTile(
               onTap: _handleTap,
               leading: widget.leading,
@@ -160,12 +149,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
 
   @override
   void didChangeDependencies() {
-    final ThemeData theme = Theme.of(context);
     _borderColorTween..end = Palette.card;
-    _headerColorTween
-      ..begin = theme.textTheme.subhead.color
-      ..end = theme.accentColor;
-    _backgroundColorTween..end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

@@ -22,17 +22,10 @@ import 'package:howth_golf_live/widgets/expanding_tiles/icon_button_pair.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
-class CompetitionPage extends StatefulWidget {
+class CompetitionPage extends StatelessWidget {
   final DatabaseEntry initialData;
 
   CompetitionPage(this.initialData);
-
-  @override
-  _CompetitionPageState createState() => _CompetitionPageState();
-}
-
-class _CompetitionPageState extends State<CompetitionPage> {
-  ScrollController _scrollController;
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
@@ -104,29 +97,18 @@ class _CompetitionPageState extends State<CompetitionPage> {
               ]));
 
   @override
-  void initState() {
-    super.initState();
-
-    HoleViewModel model = Provider.of<HoleViewModel>(context, listen: false);
-    _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      model.scroll(_scrollController.offset);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
     var _firebaseModel = Provider.of<FirebaseViewModel>(context);
+    var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
+
+    final ScrollController _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      _holeModel.scroll(_scrollController.offset);
+    });
 
     DatabaseEntry currentData =
-        _firebaseModel.entryFromId(widget.initialData.id) ?? widget.initialData;
+        _firebaseModel.entryFromId(initialData.id) ?? initialData;
 
     /// The user has access to modify this competition if they are an admin or they are a manager and
     /// this competition is NOT archived.
@@ -181,8 +163,8 @@ class _CompetitionPageState extends State<CompetitionPage> {
           (_) => ShowCaseWidget.of(context).startShowCase(keys));
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollController
-        .jumpTo(Provider.of<HoleViewModel>(context, listen: false).offset));
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _scrollController.jumpTo(_holeModel.offset));
 
     return Scaffold(
         floatingActionButton: Container(

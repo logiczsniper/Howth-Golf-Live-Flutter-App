@@ -2,14 +2,6 @@ import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:meta/meta.dart';
 
-abstract class Model {
-  Map<String, dynamic> get toJson;
-  fromJson(Map<String, dynamic> json);
-
-  List<T> generateList<T extends Model>(List<Map<String, dynamic>> source) =>
-      List<T>.generate(source.length, (int i) => fromJson(source[i]));
-}
-
 class DatabaseEntry {
   final int id;
   final Location location;
@@ -20,16 +12,15 @@ class DatabaseEntry {
   final List<Hole> holes;
   final Score score;
 
-  /// Get a single string which contains all the data specific to this event, making
-  /// it easily searchable.
-  @override
-  String toString() => "$date $location $time $opposition $title $holes $score";
-
-  @override
-  int get hashCode => id;
-
-  @override
-  bool operator ==(Object other) => other is DatabaseEntry && other.id == id;
+  static DatabaseEntry get example => DatabaseEntry(
+      date: "01-02-2020",
+      id: -1,
+      location: Location.example,
+      time: "12:00",
+      opposition: "Opposing Club Name",
+      title: "Example Competition Title",
+      holes: [Hole.example],
+      score: Score.example);
 
   /// Construct a [DatabaseEntry] from a JSON object.
   ///
@@ -46,16 +37,6 @@ class DatabaseEntry {
             (int index) => Hole.fromMap(map[Fields.holes][index])),
         score = Score.fromMap(map[Fields.score]);
 
-  static DatabaseEntry get example => DatabaseEntry(
-      date: "01-02-2020",
-      id: -1,
-      location: Location.example,
-      time: "12:00",
-      opposition: "Opposing Club Name",
-      title: "Example Competition Title",
-      holes: [Hole.example],
-      score: Score.example);
-
   /// Converts a database entry into a map so it can be put into the database.
   Map<String, dynamic> get toJson => {
         Fields.date: date,
@@ -68,6 +49,17 @@ class DatabaseEntry {
             holes.length, (int index) => holes[index].toJson),
         Fields.score: score.toJson
       };
+
+  /// Get a single string which contains all the data specific to this event, making
+  /// it easily searchable.
+  @override
+  String toString() => "$date $location $time $opposition $title $holes $score";
+
+  @override
+  int get hashCode => id;
+
+  @override
+  bool operator ==(Object other) => other is DatabaseEntry && other.id == id;
 
   DatabaseEntry(
       {@required this.date,

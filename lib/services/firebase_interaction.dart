@@ -59,9 +59,8 @@ class FirebaseInteraction {
   }
 
   /// Remove [currentEntry] from the entries in the database.
-  void deleteCompetition(DatabaseEntry currentEntry) {
-    _databaseEntries.removeWhere(
-        (rawEntry) => currentEntry == DatabaseEntry.fromMap(rawEntry));
+  void deleteCompetition(int id) {
+    _databaseEntries.removeWhere((rawEntry) => id == rawEntry[Fields.id]);
 
     _updateDatabase();
   }
@@ -79,7 +78,10 @@ class FirebaseInteraction {
       DatabaseEntry newEntry = DatabaseEntry(
           id: _id,
           title: titleField.controller.value.text,
-          location: Location(address: locationField.controller.value.text),
+          location: Location(
+              address: locationField.controller.text.isEmpty
+                  ? Strings.homeAddress
+                  : locationField.controller.text),
           opposition: oppositionField.controller.value.text,
           holes: [],
           score: Score.fresh,

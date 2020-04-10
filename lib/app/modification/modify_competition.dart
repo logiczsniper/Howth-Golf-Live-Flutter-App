@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/app/creation/creation_page.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/widgets/input_fields/datetime.dart';
 import 'package:howth_golf_live/widgets/input_fields/text.dart';
+import 'package:provider/provider.dart';
 
 class ModifyCompetition extends StatefulWidget {
   /// A page for the form to reside when an admin is creating a competition.
-  final DatabaseEntry currentEntry;
+  final int id;
 
-  ModifyCompetition(this.currentEntry);
+  ModifyCompetition(this.id);
 
   @override
   ModifyCompetitionState createState() => ModifyCompetitionState();
@@ -21,6 +23,7 @@ class ModifyCompetition extends StatefulWidget {
 class ModifyCompetitionState extends State<ModifyCompetition>
     with CreationPage {
   final _formKey = GlobalKey<FormState>();
+  DatabaseEntry currentEntry;
   String isHome;
 
   /// The various fields the user must fill out.
@@ -32,9 +35,13 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   DropdownButton<String> get _home => dropdownButton(
       isHome,
       (String newValue) => setState(() {
+            if (isHome == Strings.home && newValue == Strings.away) {
+              locationField.controller.clear();
+            } else if (newValue == Strings.home) {
+              locationField.controller.text = Strings.homeAddress;
+            }
+
             isHome = newValue;
-            locationField.controller.text =
-                newValue == Strings.home ? Strings.homeAddress : Strings.empty;
           }),
       <String>[Strings.home, Strings.away]
           .map<DropdownMenuItem<String>>((String value) =>
@@ -65,7 +72,7 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   void _onPressed() {
     FirebaseInteraction.of(context).updateCompetition(
         _formKey,
-        widget.currentEntry.id,
+        widget.id,
         isHome == Strings.home,
         titleField,
         locationField,
@@ -77,17 +84,22 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   void initState() {
     super.initState();
 
-    isHome = widget.currentEntry.location.isHome ? Strings.home : Strings.away;
-    titleField = DecoratedTextField(Strings.empty,
-        initialValue: widget.currentEntry.title);
+    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
+    currentEntry = _firebaseModel.entryFromId(widget.id);
+
+    isHome = currentEntry.location.isHome ? Strings.home : Strings.away;
+    titleField =
+        DecoratedTextField(Strings.empty, initialValue: currentEntry.title);
     locationField = DecoratedTextField(
-        Strings.location.substring(0, Strings.location.length - 1),
-        initialValue: widget.currentEntry.location.address);
+      Strings.location.substring(0, Strings.location.length - 1),
+      initialValue: currentEntry.location.address == Strings.homeAddress
+          ? null
+          : currentEntry.location.address,
+    );
     oppositionField = DecoratedTextField(Strings.empty,
-        initialValue: widget.currentEntry.opposition);
+        initialValue: currentEntry.opposition);
     dateTimeField = DecoratedDateTimeField(Strings.empty,
-        initialValue:
-            "${widget.currentEntry.date} ${widget.currentEntry.time}");
+        initialValue: "${currentEntry.date} ${currentEntry.time}");
   }
 
   @override

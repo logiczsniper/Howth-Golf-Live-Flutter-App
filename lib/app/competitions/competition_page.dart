@@ -282,10 +282,19 @@ class CompetitionPage extends StatelessWidget {
             /// If the [itemCount] changes, the hole list view must update
             /// in this [Selector].
             Selector<FirebaseViewModel, Tuple2<int, bool>>(
-          child: _columnBuilder(context, _howthScoreKey, _oppositionScoreKey,
-              _oppositionTeamKey, _locationKey, _dateKey, _timeKey),
-          selector: (_, model) => Tuple2(model.itemCount(id, hasVisited),
-              model.entryFromId(id).holes.isEmpty),
+          child: _columnBuilder(
+            context,
+            _howthScoreKey,
+            _oppositionScoreKey,
+            _oppositionTeamKey,
+            _locationKey,
+            _dateKey,
+            _timeKey,
+          ),
+          selector: (_, model) => Tuple2(
+            model.holesItemCount(id, hasVisited),
+            model.entryFromId(id).holes.isEmpty,
+          ),
           builder: (_, data, child) => AnimatedSwitcher(
             duration: Duration(milliseconds: 350),
             child: ListView.builder(

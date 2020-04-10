@@ -31,9 +31,13 @@ class CreateCompetitionState extends State<CreateCompetition>
   DropdownButton<String> get _home => dropdownButton(
       isHome,
       (String newValue) => setState(() {
+            if (isHome == Strings.home && newValue == Strings.away) {
+              locationField.controller.clear();
+            } else if (newValue == Strings.home) {
+              locationField.controller.text = Strings.homeAddress;
+            }
+
             isHome = newValue;
-            locationField.controller.text =
-                isHome == Strings.home ? Strings.homeAddress : Strings.empty;
           }),
       <String>[Strings.home, Strings.away]
           .map<DropdownMenuItem<String>>((String value) =>
@@ -63,7 +67,12 @@ class CreateCompetitionState extends State<CreateCompetition>
 
   void _onPressed() {
     FirebaseInteraction.of(context).addCompetition(
-        _formKey, titleField, locationField, oppositionField, dateTimeField);
+      _formKey,
+      titleField,
+      locationField,
+      oppositionField,
+      dateTimeField,
+    );
   }
 
   @override

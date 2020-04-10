@@ -23,10 +23,38 @@ class FirebaseViewModel {
   int get adminCode => document?.data[Fields.adminCode];
 
   DatabaseEntry entryFromId(int id) =>
-      databaseEntries?.firstWhere((entry) => entry?.id == id);
-  DatabaseEntry entryFromIndex(int index) => databaseEntries?.elementAt(index);
+      databaseEntries?.firstWhere((entry) => entry?.id == id,
+          orElse: () => DatabaseEntry.example);
 
-  int itemCount(int id, bool hasVisited) {
+  List<DatabaseEntry> activeElements(
+      bool hasVisited, bool isCurrentTab, String searchText) {
+    List<DatabaseEntry> filteredElements = filterElements(searchText);
+
+    /// At the 0th index of [sortedElements] will be the currentElements,
+    /// and at the 1st index will be the archivedElements.
+    List<List<DatabaseEntry>> sortedElements = sortElements(filteredElements);
+
+    List<DatabaseEntry> activeElements =
+        isCurrentTab ? sortedElements[0] : sortedElements[1];
+
+    return activeElements;
+  }
+
+  int competitionsItemCount(
+      bool hasVisited, bool isCurrentTab, String searchText) {
+    List<DatabaseEntry> _activeElements =
+        activeElements(hasVisited, isCurrentTab, searchText);
+
+    int itemCount = _activeElements.isEmpty
+        ? 1
+        : (hasVisited || !isCurrentTab
+            ? _activeElements.length
+            : _activeElements.length + 1);
+
+    return itemCount;
+  }
+
+  int holesItemCount(int id, bool hasVisited) {
     DatabaseEntry currentData = entryFromId(id);
     List<Hole> holes = currentData.holes;
 
@@ -47,8 +75,7 @@ class FirebaseViewModel {
   /// Will return a list where the element at index 0 is a list of
   /// current [DatabaseEntry]s and the element at index 1 is a list of
   /// archived [DatabaseEntry]s.
-  List<List<DatabaseEntry>> sortedElements(
-      List<DatabaseEntry> filteredElements) {
+  List<List<DatabaseEntry>> sortElements(List<DatabaseEntry> filteredElements) {
     /// All entries are classified as current or archived.
     /// If the [competitionDate] is greater than 9 days in the past,
     /// it is archived. Otherwise, it is current.
@@ -68,7 +95,7 @@ class FirebaseViewModel {
   ///
   /// Utilizes the [DatabaseEntry.toString] function to get all of the
   /// data for the entry in one string.
-  List<DatabaseEntry> filteredElements(String _searchText) {
+  List<DatabaseEntry> filterElements(String _searchText) {
     List<DatabaseEntry> filteredElements = List();
     if (_searchText.isNotEmpty) {
       databaseEntries.forEach((DatabaseEntry currentEntry) {

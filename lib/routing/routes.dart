@@ -64,8 +64,7 @@ class Routes {
       ).then(onComplete);
 
   /// Push to [ModifyCompetition] page.
-  void toCompetitionModification(DatabaseEntry currentEntry) =>
-      pushTo(ModifyCompetition(currentEntry));
+  void toCompetitionModification(int id) => pushTo(ModifyCompetition(id));
 
   /// Push to [ModifyHole] page.
   void toHoleModification(int id, int index) => pushTo(ModifyHole(id, index));

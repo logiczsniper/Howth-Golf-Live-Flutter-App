@@ -68,10 +68,15 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             : CrossFadeState.showSecond,
       );
 
-  AnimatedSwitcher _buildTab(bool isCurrentTab) => AnimatedSwitcher(
-      child: widget._listBuilder(context, inputText, isCurrentTab,
-          widget.hasVisited, widget.keys[4], widget.keys[5], widget.keys[6]),
-      duration: Duration(milliseconds: 350));
+  Widget _buildTab(bool isCurrentTab) => widget._listBuilder(
+        context,
+        inputText,
+        isCurrentTab,
+        widget.hasVisited,
+        widget.keys[4],
+        widget.keys[5],
+        widget.keys[6],
+      );
 
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
       indicatorColor: Palette.maroon,

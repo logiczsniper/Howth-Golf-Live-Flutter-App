@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:provider/provider.dart';
@@ -19,24 +20,56 @@ import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:showcaseview/showcase_widget.dart';
+import 'package:tuple/tuple.dart';
 
 class CompetitionsPage extends StatelessWidget {
-  static Widget _tileBuilder(
-          BuildContext context, DatabaseEntry currentEntry, bool isAdmin) =>
+  static Widget _tileBuilder(BuildContext context, int id, bool isAdmin) =>
       ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-          title: Text(currentEntry.title,
-              overflow: TextOverflow.ellipsis, maxLines: 2),
+          title: Selector<FirebaseViewModel, String>(
+            selector: (_, model) => model.entryFromId(id).title,
+            builder: (_, title, __) => AnimatedSwitcher(
+              duration: Duration(milliseconds: 350),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                key: ValueKey<String>(title),
+                child: Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ),
+            ),
+          ),
           subtitle: Row(children: <Widget>[
             Container(
-                padding: EdgeInsets.only(right: 15.0),
-                decoration: UIToolkit.rightSideBoxDecoration,
-                child: Text(currentEntry.date,
+              padding: EdgeInsets.only(right: 15.0),
+              decoration: UIToolkit.rightSideBoxDecoration,
+              child: Selector<FirebaseViewModel, String>(
+                selector: (_, model) => model.entryFromId(id).date,
+                builder: (_, date, __) => AnimatedSwitcher(
+                  duration: Duration(milliseconds: 350),
+                  child: Text(
+                    date,
+                    key: ValueKey<String>(date),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyles.cardSubTitle)),
+                    style: TextStyles.cardSubTitle,
+                  ),
+                ),
+              ),
+            ),
             Padding(
-                child: ComplexScore(currentEntry.score),
+                child: Selector<FirebaseViewModel, Score>(
+                  selector: (_, model) => model.entryFromId(id).score,
+                  builder: (_, score, __) => AnimatedSwitcher(
+                    duration: Duration(milliseconds: 350),
+                    child: Container(
+                      child: ComplexScore(score),
+                      key: ValueKey<Score>(score),
+                    ),
+                  ),
+                ),
                 padding: EdgeInsets.only(left: 15.0))
           ]),
           trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right,
@@ -51,119 +84,97 @@ class CompetitionsPage extends StatelessWidget {
       GlobalKey _dateKey,
       GlobalKey _scoreKey) {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
-    var _firebaseModel = Provider.of<FirebaseViewModel>(context);
-
-    if (_firebaseModel.currentSnapshot == null) return UIToolkit.loadingSpinner;
-
-    List<DatabaseEntry> filteredElements =
-        _firebaseModel.filteredElements(_searchText);
-
-    /// At the 0th index of [sortedElements] will be the currentElements,
-    /// and at the 1st index will be the archivedElements.
-    List<List<DatabaseEntry>> sortedElements =
-        _firebaseModel.sortedElements(filteredElements);
-
-    List<DatabaseEntry> activeElements =
-        isCurrentTab ? sortedElements[0] : sortedElements[1];
-
-    int itemCount = activeElements.isEmpty
-        ? 1
-        : (hasVisited || !isCurrentTab
-            ? activeElements.length
-            : activeElements.length + 1);
 
     // _userStatus.clearPreferences();
 
     return OpacityChangeWidget(
-        key: ValueKey<int>(filteredElements.length),
-        target: AnimatedSwitcher(
-            duration: Duration(milliseconds: 350),
-            child: ListView.builder(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
-                itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  if (!hasVisited && index == 0 && isCurrentTab) {
+      target: Selector<FirebaseViewModel, Tuple3<int, QuerySnapshot, bool>>(
+        selector: (_, model) {
+          return Tuple3(
+            model.competitionsItemCount(hasVisited, isCurrentTab, _searchText),
+            model.currentSnapshot,
+            model.activeElements(hasVisited, isCurrentTab, _searchText).isEmpty,
+          );
+        },
+        builder: (context, data, child) => AnimatedSwitcher(
+          duration: Duration(milliseconds: 350),
+          child: data.item2 == null
+              ? UIToolkit.loadingSpinner
+              : ListView.builder(
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
+
+                  /// Value accounts for the fact that if there are no entries (data.item3)
+                  /// then the item count will still be 1 for [UIToolkit.getNoDataText].
+                  key: ValueKey<int>(data.item3 ? data.item1 - 1 : data.item1),
+                  itemCount: data.item1,
+                  itemBuilder: (context, index) {
+                    if (!hasVisited && index == 0 && isCurrentTab) {
+                      return UIToolkit.exampleCompetition(
+                        context,
+                        _titleKey,
+                        _dateKey,
+                        _scoreKey,
+                      );
+                    } else if (data.item3) {
+                      /// In the case where the user searched for something with no results,
+                      /// return a [Text] widget to notify the user of that.
+                      return UIToolkit.getNoDataText(Strings.noCompetitions);
+                    }
+
+                    /// Corrects the fault in index caused by the [UIToolkit.exampleCompetition].
+                    int competitionIndex = index;
+                    if (!hasVisited && isCurrentTab) competitionIndex--;
+
+                    /// Fetch the [id] of the current competition.
+                    var _firebaseModel =
+                        Provider.of<FirebaseViewModel>(context, listen: false);
+                    int id = _firebaseModel
+                        .activeElements(hasVisited, isCurrentTab, _searchText)
+                        .elementAt(competitionIndex)
+                        .id;
+
                     return ComplexCard(
-                        child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 13.0, vertical: 5.0),
-                            title: UIToolkit.showcase(
-                              context: context,
-                              key: _titleKey,
-                              description: Strings.competitionTitle,
-                              child: Text(DatabaseEntry.example.title,
-                                  overflow: TextOverflow.ellipsis, maxLines: 2),
-                            ),
-                            subtitle: Row(children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.only(right: 15.0),
-                                decoration: UIToolkit.rightSideBoxDecoration,
-                                child: UIToolkit.showcase(
-                                    context: context,
-                                    key: _dateKey,
-                                    description: Strings.competitionDate,
-                                    child: Text(DatabaseEntry.example.date,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: TextStyles.cardSubTitle)),
-                              ),
-                              Padding(
-                                  child: UIToolkit.showcase(
-                                    context: context,
-                                    key: _scoreKey,
-                                    description: Strings.competitionScore,
-                                    child: ComplexScore(
-                                        DatabaseEntry.example.score),
-                                  ),
-                                  padding: EdgeInsets.only(left: 15.0))
-                            ]),
-                            trailing: Icon(Icons.keyboard_arrow_right,
-                                color: Palette.maroon)));
-                  }
-
-                  /// In the case where the user searched for something with no results,
-                  /// return a [Text] widget to notify the user of that.
-                  if (activeElements.isEmpty) {
-                    return UIToolkit.getNoDataText(Strings.noCompetitions);
-                  }
-
-                  int elementIndex = index;
-
-                  if (!hasVisited && isCurrentTab) elementIndex--;
-
-                  DatabaseEntry currentEntry = activeElements[elementIndex];
-
-                  return ComplexCard(
                       child: _tileBuilder(
-                          context, currentEntry, _userStatus.isAdmin),
-                      onTap: () =>
-                          Routes.of(context).toCompetition(currentEntry.id),
-                      iconButton: _userStatus.isAdmin
-                          ? Column(mainAxisSize: MainAxisSize.min, children: <
-                              Widget>[
-                              IconButton(
-                                padding: EdgeInsets.only(top: 10.0),
-                                icon: Icon(Icons.edit),
-                                onPressed: () => Routes.of(context)
-                                    .toCompetitionModification(currentEntry),
-                              ),
-                              IconButton(
+                        context,
+                        id,
+                        _userStatus.isAdmin,
+                      ),
+                      onTap: () => Routes.of(context).toCompetition(id),
+                      iconButton: !_userStatus.isAdmin
+                          ? null
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  padding: EdgeInsets.only(top: 10.0),
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () => Routes.of(context)
+                                      .toCompetitionModification(id),
+                                ),
+                                IconButton(
                                   icon: Icon(Icons.delete),
                                   padding: EdgeInsets.only(bottom: 10.0),
 
                                   /// When deleting a [DatabaseEntry], prompts the user to double check their intent
                                   /// is to do so as this can have major consquences if an accident.
                                   onPressed: () => showModal(
-                                      context: context,
-                                      configuration:
-                                          FadeScaleTransitionConfiguration(),
-                                      builder: (context) => CustomAlertDialog(
-                                          FirebaseInteraction.of(context)
-                                              .deleteCompetition,
-                                          currentEntry: currentEntry))),
-                            ])
-                          : null);
-                })));
+                                    context: context,
+                                    configuration:
+                                        FadeScaleTransitionConfiguration(),
+                                    builder: (context) => CustomAlertDialog(
+                                        FirebaseInteraction.of(context)
+                                            .deleteCompetition,
+                                        id: id),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    );
+                  },
+                ),
+        ),
+      ),
+    );
   }
 
   @override

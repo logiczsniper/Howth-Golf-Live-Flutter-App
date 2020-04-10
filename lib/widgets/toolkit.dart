@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:howth_golf_live/widgets/complex_card.dart';
+import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
 
@@ -306,6 +308,48 @@ class UIToolkit {
         ],
       ),
     );
+  }
+
+  static Widget exampleCompetition(
+    BuildContext context,
+    GlobalKey _titleKey,
+    GlobalKey _dateKey,
+    GlobalKey _scoreKey,
+  ) {
+    return ComplexCard(
+        child: ListTile(
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+            title: UIToolkit.showcase(
+              context: context,
+              key: _titleKey,
+              description: Strings.competitionTitle,
+              child: Text(DatabaseEntry.example.title,
+                  overflow: TextOverflow.ellipsis, maxLines: 2),
+            ),
+            subtitle: Row(children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(right: 15.0),
+                decoration: UIToolkit.rightSideBoxDecoration,
+                child: UIToolkit.showcase(
+                    context: context,
+                    key: _dateKey,
+                    description: Strings.competitionDate,
+                    child: Text(DatabaseEntry.example.date,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyles.cardSubTitle)),
+              ),
+              Padding(
+                  child: UIToolkit.showcase(
+                    context: context,
+                    key: _scoreKey,
+                    description: Strings.competitionScore,
+                    child: ComplexScore(DatabaseEntry.example.score),
+                  ),
+                  padding: EdgeInsets.only(left: 15.0))
+            ]),
+            trailing: Icon(Icons.keyboard_arrow_right, color: Palette.maroon)));
   }
 
   static Widget exampleHole(

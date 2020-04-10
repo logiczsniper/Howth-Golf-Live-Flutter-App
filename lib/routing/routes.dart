@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/app/competitions/competitions_page.dart';
@@ -29,41 +31,44 @@ class Routes {
   Routes.of(BuildContext context) : context = context;
 
   /// Push to [destination].
-  void pushTo(Widget destination) => Navigator.push(
-      context,
-      MaterialPageRoute(
+  void pushTo(Widget destination,
+          {FutureOr<dynamic> Function(dynamic) onComplete}) =>
+      Navigator.push(
+        context,
+        MaterialPageRoute(
           builder: (context) => ShowCaseWidget(
-              onFinish: () {
-                var _userStatus =
-                    Provider.of<UserStatusViewModel>(context, listen: false);
+            onFinish: () {
+              var _userStatus =
+                  Provider.of<UserStatusViewModel>(context, listen: false);
 
-                String route;
+              String route;
 
-                switch (destination.runtimeType) {
-                  case CompetitionsPage:
-                    route = Strings.competitionsText;
-                    break;
-                  case HelpsPage:
-                    route = Strings.helpsText;
-                    break;
-                  case CompetitionPage:
-                    route = Strings.specificCompetition;
-                    break;
-                  default:
-                    route = Strings.empty;
-                }
-                if (route.isNotEmpty) _userStatus.visitRoute(route);
-              },
-              builder: Builder(builder: (context) => destination))));
+              switch (destination.runtimeType) {
+                case CompetitionsPage:
+                  route = Strings.competitionsText;
+                  break;
+                case HelpsPage:
+                  route = Strings.helpsText;
+                  break;
+                case CompetitionPage:
+                  route = Strings.specificCompetition;
+                  break;
+                default:
+                  route = Strings.empty;
+              }
+              if (route.isNotEmpty) _userStatus.visitRoute(route);
+            },
+            builder: Builder(builder: (_) => destination),
+          ),
+        ),
+      ).then(onComplete);
 
   /// Push to [ModifyCompetition] page.
   void toCompetitionModification(DatabaseEntry currentEntry) =>
       pushTo(ModifyCompetition(currentEntry));
 
   /// Push to [ModifyHole] page.
-  void toHoleModification(
-          int id, int index, Hole currentHole, String opposition) =>
-      pushTo(ModifyHole(id, index, currentHole, opposition));
+  void toHoleModification(int id, int index) => pushTo(ModifyHole(id, index));
 
   /// Push to [CreateCompetition] page.
   void toCompetitionCreation() => pushTo(CreateCompetition());
@@ -78,11 +83,11 @@ class Routes {
   void toHelp(AppHelpEntry helpEntry) => pushTo(HelpPage(helpEntry));
 
   /// Push to [Competitions] page.
-  void toCompetitions() => pushTo(CompetitionsPage());
+  void toCompetitions({FutureOr<dynamic> Function(dynamic) onComplete}) =>
+      pushTo(CompetitionsPage(), onComplete: onComplete);
 
   /// Push to the [Competition] page.
-  void toCompetition(DatabaseEntry currentEntry) =>
-      pushTo(CompetitionPage(currentEntry));
+  void toCompetition(int id) => pushTo(CompetitionPage(id));
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {

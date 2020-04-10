@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/app/creation/creation_page.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
@@ -11,17 +13,18 @@ import 'package:howth_golf_live/widgets/input_fields/text.dart';
 class ModifyHole extends StatefulWidget {
   /// A page for the form to reside when an admin is creating a hole.
   final int index;
-  final int currentId;
-  final Hole currentHole;
-  final String opposition;
+  final int id;
 
-  ModifyHole(this.currentId, this.index, this.currentHole, this.opposition);
+  ModifyHole(this.id, this.index);
 
   @override
   ModifyHoleState createState() => ModifyHoleState();
 }
 
 class ModifyHoleState extends State<ModifyHole> with CreationPage {
+  Hole currentHole;
+  String opposition;
+
   final _formKey = GlobalKey<FormState>();
 
   /// Fields the user must fill out to create a hole.
@@ -48,28 +51,31 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
           padding: EdgeInsets.all(5.0))));
 
   void _onPressed() {
-    Hole updatedHole = widget.currentHole.updateHole(
+    Hole updatedHole = currentHole.updateHole(
         newPlayers: playersField.controller.value.text.split(", "),
         newOpposition: oppositionField.controller.value.text.split(", "),
         newComment: commentField.controller.value.text);
     FirebaseInteraction.of(context)
-        .updateHole(widget.index, widget.currentId, updatedHole, pop: true);
+        .updateHole(widget.index, widget.id, updatedHole, pop: true);
   }
 
   @override
   void initState() {
     super.initState();
 
+    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
+    opposition = _firebaseModel.entryFromId(widget.id).opposition;
+    currentHole =
+        _firebaseModel.entryFromId(widget.id).holes.elementAt(widget.index);
+
     commentField = DecoratedTextField(
-        widget.currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
-        initialValue: widget.currentHole.comment.isEmpty
-            ? null
-            : widget.currentHole.comment,
+        currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
+        initialValue: currentHole.comment.isEmpty ? null : currentHole.comment,
         isRequired: false);
     playersField = DecoratedTextField(Strings.empty,
-        initialValue: widget.currentHole.formattedPlayers);
+        initialValue: currentHole.formattedPlayers);
     oppositionField = DecoratedTextField(Strings.empty,
-        initialValue: widget.currentHole.formattedOpposition(widget.opposition),
+        initialValue: currentHole.formattedOpposition(opposition),
         isRequired: false);
   }
 

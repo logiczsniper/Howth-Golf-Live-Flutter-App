@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
+import 'package:provider/provider.dart';
 
 class IconButtonPair extends StatelessWidget {
+  final BuildContext context;
+  final int id;
+  final int index;
   final Color iconColor;
-  final Function onAdd;
-  final Function onSubtract;
+  final Hole Function(Hole) onAdd;
+  final Hole Function(Hole) onSubtract;
 
-  const IconButtonPair(
+  const IconButtonPair(this.context, this.index, this.id,
       {this.iconColor = Palette.dark,
       @required this.onAdd,
       @required this.onSubtract});
+
+  void tapped(Hole Function(Hole) callback) {
+    /// Fetch the [currentHole] from the [Provider].
+    var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
+    Hole currentHole = _firebaseModel.entryFromId(id).holes.elementAt(index);
+
+    /// Update the hole with the [callback].
+    Hole updatedHole = callback(currentHole);
+
+    /// Push change to database using [FirebaseInteraction.updateHole].
+    FirebaseInteraction.of(context).updateHole(index, id, updatedHole);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +39,18 @@ class IconButtonPair extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               GestureDetector(
-                  onTap: onAdd,
+                  onTap: () {
+                    tapped(onAdd);
+                  },
                   child: Icon(
                     Icons.add_circle,
                     color: iconColor,
                     size: 34.0,
                   )),
               GestureDetector(
-                  onTap: onSubtract,
+                  onTap: () {
+                    tapped(onSubtract);
+                  },
                   child: Icon(
                     Icons.remove_circle,
                     size: 31.5,

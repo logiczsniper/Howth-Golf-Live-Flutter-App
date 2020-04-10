@@ -48,7 +48,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         default:
           isCodeCorrect = widget.userStatus
               .managerAttempt(codeAttempt, widget.id.toString());
-          position = Strings.manager + widget.title + ".";
+          position = Strings.manager;
       }
 
       isCodeCorrect.then((bool isCodeCorrect) {

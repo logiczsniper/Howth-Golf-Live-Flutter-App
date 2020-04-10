@@ -31,7 +31,12 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
         style: TextStyles.form,
         decoration: getDecoration(context, hintText),
         format: format,
-        validator: (input) => validator(input, true),
+        validator: (input) {
+          return validator(
+            input ?? initialValue,
+            true,
+          );
+        },
         onShowPicker: (context, currentValue) async {
           final date = await showRoundedDatePicker(
               context: context,

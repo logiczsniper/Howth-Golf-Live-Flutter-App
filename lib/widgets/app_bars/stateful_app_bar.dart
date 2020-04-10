@@ -52,28 +52,32 @@ class StatefulAppBar {
 
   /// The simpler app bar that just displays text- the title.
   Widget buildTitleBar(String title, {int id = 0}) {
-    assert(title != Strings.competitionsText || id == 0);
+    if (title == Strings.helpsText || title == Strings.competitionsText)
+      return Center(
+          child: Text(
+        title == Strings.competitionsText ? Strings.empty : title,
+        softWrap: true,
+        textAlign: TextAlign.center,
+        maxLines: 2,
+      ));
 
-    Widget _child = Center(
-        child: Text(
-      title == Strings.competitionsText ? Strings.empty : title,
-      softWrap: true,
-      textAlign: TextAlign.center,
-      maxLines: 2,
-    ));
-
-    return title == Strings.helpsText || title == Strings.competitionsText
-        ? _child
-        : Selector<FirebaseViewModel, String>(
-            selector: (context, model) => model.entryFromId(id).title,
-            builder: (context, title, child) => Center(
-                child: Text(
-              title,
-              softWrap: true,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-            )),
-          );
+    /// At this point, title must be for a specific competition!
+    assert(id != 0);
+    return Selector<FirebaseViewModel, String>(
+      selector: (context, model) => model.entryFromId(id).title,
+      builder: (context, title, child) => Center(
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 350),
+          child: Text(
+            title,
+            key: ValueKey<String>(title),
+            softWrap: true,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+          ),
+        ),
+      ),
+    );
   }
 
   /// The search app bar which enables the user to type into a search box.

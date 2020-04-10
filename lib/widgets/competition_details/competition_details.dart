@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/user_status_view_model.dart';
-import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
 class CompetitionDetails extends StatelessWidget {
-  final DatabaseEntry currentEntry;
+  final int id;
+
   final GlobalKey howthScoreKey;
   final GlobalKey oppositionScoreKey;
   final GlobalKey locationKey;
   final GlobalKey dateKey;
   final GlobalKey timeKey;
 
-  CompetitionDetails(this.currentEntry, this.howthScoreKey,
-      this.oppositionScoreKey, this.locationKey, this.dateKey, this.timeKey);
+  CompetitionDetails(this.id, this.howthScoreKey, this.oppositionScoreKey,
+      this.locationKey, this.dateKey, this.timeKey);
 
   /// Get a padded [MiddleRow].
   ///
   /// Displays an icon followed by text ([data]).
-  Widget _getMiddleRow(String data, IconData iconData, double size) {
+  Widget _getMiddleRow(String field, IconData iconData, double size) {
     return Padding(
-      child: MiddleRow(data.trim(), Icon(iconData, size: size)),
+      child: MiddleRow(field, Icon(iconData, size: size), id),
       padding: EdgeInsets.symmetric(vertical: 1.0),
     );
   }
@@ -42,23 +43,22 @@ class CompetitionDetails extends StatelessWidget {
               context: context,
               key: locationKey,
               description: Strings.location,
-              child: _getMiddleRow(
-                  currentEntry.location.address, Icons.location_on, 18.5),
+              child: _getMiddleRow(Fields.address, Icons.location_on, 18.5),
             ),
             UIToolkit.showcase(
               context: context,
               key: dateKey,
               description: Strings.date,
-              child: _getMiddleRow(currentEntry.date, Icons.date_range, 18.0),
+              child: _getMiddleRow(Fields.date, Icons.date_range, 18.0),
             ),
             UIToolkit.showcase(
               context: context,
               key: timeKey,
               description: Strings.time,
-              child: _getMiddleRow(currentEntry.time, Icons.access_time, 18),
+              child: _getMiddleRow(Fields.time, Icons.access_time, 18),
             ),
             hasAccess
-                ? _getMiddleRow(currentEntry.id.toString(), Icons.vpn_key, 17.0)
+                ? _getMiddleRow(Fields.id, Icons.vpn_key, 17.0)
                 : Container()
           ],
         ),
@@ -67,8 +67,7 @@ class CompetitionDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
-    bool hasAccess =
-        _userStatus.isVerified(currentEntry.title, id: currentEntry.id);
+    bool hasAccess = _userStatus.isVerified(Strings.competitionTitle, id: id);
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.5),
@@ -78,15 +77,14 @@ class CompetitionDetails extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           /// Home team score.
-          SideFlexible(
-              currentEntry.score, true, howthScoreKey, Strings.howthScore),
+          SideFlexible(id, true, howthScoreKey, Strings.howthScore),
 
           /// Details of competition.
           Flexible(child: _centralFlexible(context, hasAccess)),
 
           /// Away team score.
           SideFlexible(
-            currentEntry.score,
+            id,
             false,
             oppositionScoreKey,
             Strings.oppositionScore,

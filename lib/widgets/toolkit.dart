@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase.dart';
+
 import 'dart:ui';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
-import 'package:showcaseview/showcase.dart';
 
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -47,7 +50,7 @@ class UIToolkit {
           decoration: roundedRectBoxDecoration,
           child: child));
 
-  /// The maroon decoration around the [text].
+  /// The maroon decoration around the [field].
   static Decoration get scoreDecoration => ShapeDecoration(
       color: Palette.maroon,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
@@ -214,18 +217,20 @@ class UIToolkit {
   /// Returns the centered and padded [Row] containing the [howthText] and the
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
-  static Container getVersus(BuildContext context, String opposition,
-          String howthText, GlobalKey _awayTeamKey) =>
+  static Container getVersus(
+          BuildContext context, int id, GlobalKey _awayTeamKey) =>
       Container(
           margin: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 2.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(13.0),
               color: Colors.transparent),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Expanded(
                 child: Text(
-                  howthText,
+                  Strings.homeAddress,
                   textAlign: TextAlign.right,
                   style: TextStyles.form.copyWith(
                       color: Palette.dark,
@@ -234,34 +239,74 @@ class UIToolkit {
                 ),
               ),
               Container(
-                  width: 42.5,
-                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  decoration: BoxDecoration(
-                      color: Palette.maroon,
-                      borderRadius: BorderRadius.circular(13.0)),
-                  child: Text(
-                    Strings.versus,
-                    textAlign: TextAlign.center,
-                    style: TextStyles.helpTitle.copyWith(
-                        fontWeight: FontWeight.w900, color: Palette.inMaroon),
-                  ),
-                  padding: EdgeInsets.all(10.0)),
+                width: 42.5,
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                decoration: BoxDecoration(
+                    color: Palette.maroon,
+                    borderRadius: BorderRadius.circular(13.0)),
+                child: Text(
+                  Strings.versus,
+                  textAlign: TextAlign.center,
+                  style: TextStyles.helpTitle.copyWith(
+                      fontWeight: FontWeight.w900, color: Palette.inMaroon),
+                ),
+              ),
               Expanded(
-                  child: UIToolkit.showcase(
-                      context: context,
-                      key: _awayTeamKey,
-                      description: Strings.oppositionTeam,
-                      child: Text(
-                        opposition,
-                        textAlign: TextAlign.left,
-                        style: TextStyles.form.copyWith(
-                            color: Palette.dark,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.5),
-                      )))
+                child: UIToolkit.showcase(
+                  context: context,
+                  key: _awayTeamKey,
+                  description: Strings.oppositionTeam,
+                  child: Selector<FirebaseViewModel, String>(
+                    selector: (_, model) => model.entryFromId(id).opposition,
+                    builder: (_, oppositionName, __) => AnimatedSwitcher(
+                      duration: Duration(milliseconds: 350),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        key: ValueKey<String>(oppositionName),
+                        child: Text(
+                          oppositionName,
+                          textAlign: TextAlign.left,
+                          style: TextStyles.form.copyWith(
+                              color: Palette.dark,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.5),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0));
+
+  static Widget getNoDataText(String text) {
+    return Container(
+      padding: EdgeInsets.only(top: 25),
+      alignment: Alignment.center,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 7.0),
+            child: Icon(
+              Icons.live_help,
+              color: Palette.dark.withAlpha(200),
+              size: 30.0,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyles.noData,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   static Widget exampleHole(
       BuildContext context,

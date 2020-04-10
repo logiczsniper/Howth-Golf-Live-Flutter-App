@@ -80,7 +80,7 @@ class Strings {
   static const String connected = "Connected!";
   static const String entering = "Entering...";
   static const String noCompetitions = "No competitions found!";
-  static const String noHoles = "No hole data found for ";
+  static const String noHoles = "No hole data found!";
 
   static const String alreadyAdmin = "You are already an admin!";
   static const String enterCode = "Enter code here...";
@@ -88,7 +88,7 @@ class Strings {
   static const String incorrectCode = "Incorrect code entered!";
   static const String correctCode = "Correct code entered! You are now a";
   static const String admin = "n admin.";
-  static const String manager = " manager of ";
+  static const String manager = " manager of this competition.";
 
   static const String upUnder = "Up\\Under";
   static const String aS = "A\\S";

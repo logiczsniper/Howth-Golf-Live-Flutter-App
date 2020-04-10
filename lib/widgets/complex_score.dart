@@ -46,25 +46,34 @@ class ComplexScore extends StatelessWidget {
               fontFeatures: [FontFeature.enable('frac')],
               fontWeight: fontWeight));
 
-  static RichText getMixedFraction(bool isHowth, Score score) => RichText(
-      key: ValueKey(score),
-      text: TextSpan(
-          style: TextStyle(
-              fontSize: score.howth[0] == "0" && isHowth ||
-                      score.opposition[0] == "0" && !isHowth
-                  ? 50
-                  : 32,
-              color: Palette.dark,
-              fontWeight: FontWeight.w800),
-          children: <TextSpan>[
-            /// Main number.
-            TextSpan(
-                text: _getMainNumber(isHowth, score),
-                style: TextStyle(fontSize: 70.0)),
+  static TextSpan getMixedFraction(String scoreString) => TextSpan(
+        style: TextStyle(
+            fontSize: scoreString[0] == "0" ? 55 : 32,
+            color: Palette.dark,
+            fontWeight: FontWeight.w800),
+        children: <TextSpan>[
+          /// Main number.
+          TextSpan(
+            text: double.tryParse(scoreString).toInt() == 0 &&
+                    _isFraction(scoreString)
+                ? Strings.empty
+                : double.tryParse(scoreString).toInt().toString(),
+            style: TextStyle(fontSize: 70.0),
+          ),
 
-            /// Fraction.
-            getFraction(isHowth, score)
-          ]));
+          /// Fraction.
+          TextSpan(
+            /// The ternary operator (and others like it) below ensure that
+            /// no fraction is displayed if the [currentEntry.score] is whole.
+            text: _isFraction(scoreString) ? "1/2" : Strings.empty,
+            style: TextStyle(
+              fontFeatures: [
+                FontFeature.enable('frac'),
+              ],
+            ),
+          ),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

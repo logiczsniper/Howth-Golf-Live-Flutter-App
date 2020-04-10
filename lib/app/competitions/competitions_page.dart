@@ -75,7 +75,7 @@ class CompetitionsPage extends StatelessWidget {
     // _userStatus.clearPreferences();
 
     return OpacityChangeWidget(
-        key: ValueKey(DateTime.now()),
+        key: ValueKey<int>(filteredElements.length),
         target: AnimatedSwitcher(
             duration: Duration(milliseconds: 350),
             child: ListView.builder(
@@ -124,19 +124,7 @@ class CompetitionsPage extends StatelessWidget {
                   /// In the case where the user searched for something with no results,
                   /// return a [Text] widget to notify the user of that.
                   if (activeElements.isEmpty) {
-                    return ListTile(
-                        title: Container(
-                            padding: EdgeInsets.only(top: 25),
-                            alignment: Alignment.center,
-                            child: Column(children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.only(bottom: 7.0),
-                                  child: Icon(Icons.live_help,
-                                      color: Palette.dark.withAlpha(200),
-                                      size: 30.0)),
-                              Text(Strings.noCompetitions,
-                                  style: TextStyles.noData)
-                            ])));
+                    return UIToolkit.getNoDataText(Strings.noCompetitions);
                   }
 
                   int elementIndex = index;
@@ -149,7 +137,7 @@ class CompetitionsPage extends StatelessWidget {
                       child: _tileBuilder(
                           context, currentEntry, _userStatus.isAdmin),
                       onTap: () =>
-                          Routes.of(context).toCompetition(currentEntry),
+                          Routes.of(context).toCompetition(currentEntry.id),
                       iconButton: _userStatus.isAdmin
                           ? Column(mainAxisSize: MainAxisSize.min, children: <
                               Widget>[

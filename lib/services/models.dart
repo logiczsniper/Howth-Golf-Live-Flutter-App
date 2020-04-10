@@ -22,6 +22,44 @@ class DatabaseEntry {
       holes: [Hole.example],
       score: Score.example);
 
+  /// Fetch an attribute based on [field] String.
+  String attribute(String field) {
+    switch (field) {
+      case Fields.address:
+        return location.address;
+      case Fields.date:
+        return date;
+      case Fields.time:
+        return time;
+      case Fields.id:
+        return id.toString();
+      default:
+        throw AssertionError();
+    }
+  }
+
+  /// Determines if the given [DatabaseEntry] is classified as
+  /// archived or not.
+  bool get isArchived {
+    DateTime competitionDate = DateTime.tryParse(_irishFormatDate);
+
+    /// If we failed to parse the date, set [hoursFromNow] to 0
+    /// and [inPast] to true. This moves the competition to current. (we cant
+    /// figure out if it is in the past or not).
+    int hoursFromNow =
+        competitionDate?.difference(DateTime.now())?.inHours?.abs() ?? 0;
+    bool inPast = competitionDate?.isBefore(DateTime.now()) ?? true;
+
+    return hoursFromNow >= 25 && inPast;
+  }
+
+  /// Converts the date format from irish date format (dd-MM-yyyy HH:mm)
+  /// to the standard DateTime format (yyyy-MM-dd HH:mm).
+  String get _irishFormatDate {
+    List<String> _splitDMY = date.split("-");
+    return "${_splitDMY[2]}-${_splitDMY[1]}-${_splitDMY[0]} $time";
+  }
+
   /// Construct a [DatabaseEntry] from a JSON object.
   ///
   /// The [Firestore] instance will output [_InternalLinkedHashMap]
@@ -272,6 +310,32 @@ class Hole {
       _formattedNames(opposition).isEmpty
           ? oppositionClub
           : _formattedNames(opposition);
+
+  /// Convert [lastUpdated] to a pretty string.
+  String get prettyLastUpdated {
+    Duration difference = DateTime.now().difference(lastUpdated);
+
+    String value;
+
+    if (difference.inHours < 1)
+
+      /// Less than an hour; return in minutes.
+      value = "${difference.inMinutes} minute(s) ago";
+    else if (difference.inDays < 1)
+
+      /// Less than a day; return in hours.
+      value = "${difference.inHours} hour(s) ago";
+    else if (difference.inDays < 365)
+
+      /// Less than a year; return in days.
+      value = "${difference.inDays} day(s) ago";
+    else
+
+      /// Greater than a year; return in years.
+      value = "${(difference.inDays ~/ 365)} year(s) ago";
+
+    return "Last updated: $value";
+  }
 
   /// Turn a list of players, [playerList], into one string with
   /// those individual player names separated by commas, apart from the last

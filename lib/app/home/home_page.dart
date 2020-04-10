@@ -34,19 +34,25 @@ class HomePage extends StatelessWidget {
   Widget _page(
           BuildContext context, AuthenticationViewModel authenticationModel) =>
       GestureDetector(
-          onTap: () {
-            authenticationModel.anonymousSignIn(context);
-          },
-          child: Scaffold(
-              body: Stack(alignment: Alignment.topCenter, children: <Widget>[
-            OpacityChangeWidget(target: _howthLogo),
-            Column(
+        onTap: () {
+          authenticationModel.anonymousSignIn(context);
+        },
+        child: Scaffold(
+          body: Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              OpacityChangeWidget(target: _howthLogo),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _howthText,
                   _tapText(authenticationModel.status)
-                ])
-          ])));
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +61,9 @@ class HomePage extends StatelessWidget {
       if (authenticationViewModel.status == Strings.connected) {
         authenticationViewModel.status = Strings.entering;
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Routes.of(context).toCompetitions();
+          Routes.of(context).toCompetitions(onComplete: (_) {
+            authenticationViewModel.status = Strings.tapMe;
+          });
         });
       }
       return _page(context, authenticationViewModel);

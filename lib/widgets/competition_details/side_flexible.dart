@@ -36,7 +36,7 @@ class SideFlexible extends StatelessWidget {
                       ? model.entryFromId(id).score.howth
                       : model.entryFromId(id).score.opposition,
                   builder: (context, scoreString, _) => AnimatedSwitcher(
-                    duration: Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 350),
                     child: RichText(
                       key: ValueKey<String>(scoreString),
                       text: ComplexScore.getMixedFraction(scoreString),

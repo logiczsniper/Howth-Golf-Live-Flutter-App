@@ -249,7 +249,7 @@ class Hole {
       players: ["Home player(s)"],
       opposition: ["Opposing club/player(s)"],
       comment: Strings.empty,
-      lastUpdated: DateTime.now().subtract(Duration(seconds: 60)));
+      lastUpdated: DateTime.now().subtract(const Duration(seconds: 60)));
 
   static Hole get fresh => Hole(
       holeNumber: 0,

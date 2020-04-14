@@ -78,23 +78,26 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     if (appBarTitle == inputBar) {
       iconData = Icons.check;
     } else {
-      iconData = isVerified ? Icons.check_circle : Icons.account_circle;
+      iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
     }
 
     String description = widget.title == Strings.helpsText
         ? Strings.tapAdmin
         : Strings.tapManager;
 
-    return UIToolkit.showcase(
-        context: context,
-        key: widget.codeKey,
-        description: description,
-        child: IconButton(
+    return Container(
+      key: ValueKey<IconData>(iconData),
+      child: UIToolkit.showcase(
+          context: context,
+          key: widget.codeKey,
+          description: description,
+          child: IconButton(
             icon: Icon(iconData),
             tooltip: iconMessage,
             onPressed: _codePressed,
             padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
-            key: ValueKey(DateTime.now())));
+          )),
+    );
   }
 
   Widget get _backIconButton {
@@ -133,7 +136,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         leading: _backIconButton,
         actions: <Widget>[
           AnimatedSwitcher(
-              child: _actionIconButton, duration: Duration(milliseconds: 350))
+              child: _actionIconButton,
+              duration: const Duration(milliseconds: 350))
         ]);
   }
 }

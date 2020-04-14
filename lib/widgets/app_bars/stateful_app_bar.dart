@@ -35,7 +35,7 @@ class StatefulAppBar {
 
   /// The title must be an [AnimatedSwitcher].
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
-      duration: Duration(milliseconds: 350), child: appBarTitle);
+      duration: const Duration(milliseconds: 350), child: appBarTitle);
 
   void checkConnectivity(BuildContext context) {
     var _connectivityStatus = Provider.of<ConnectivityViewModel>(context);
@@ -45,7 +45,7 @@ class StatefulAppBar {
         Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
             Strings.noConnection,
             Icons.signal_cellular_connected_no_internet_4_bar,
-            duration: Duration(seconds: 8)));
+            duration: const Duration(seconds: 8)));
       });
     }
   }
@@ -67,7 +67,7 @@ class StatefulAppBar {
       selector: (context, model) => model.entryFromId(id).title,
       builder: (context, title, child) => Center(
         child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 350),
+          duration: const Duration(milliseconds: 350),
           child: Text(
             title,
             key: ValueKey<String>(title),

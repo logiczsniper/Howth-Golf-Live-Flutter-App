@@ -26,7 +26,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
       DecoratedTextField(Fields.comment, isRequired: false);
   DecoratedTextField playersField = DecoratedTextField(Fields.players);
   DecoratedTextField oppositionField =
-      DecoratedTextField(Fields.opposition, isRequired: false);
+      DecoratedTextField(Strings.oppositionHole, isRequired: false);
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(

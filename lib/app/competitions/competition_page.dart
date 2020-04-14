@@ -112,7 +112,7 @@ class CompetitionPage extends StatelessWidget {
                           .elementAt(index)
                           .formattedPlayers,
                       builder: (_, homePlayers, child) => AnimatedSwitcher(
-                        duration: Duration(milliseconds: 350),
+                        duration: const Duration(milliseconds: 350),
                         child: Container(
                           key: ValueKey<String>(homePlayers),
                           child: _getPlayer(homePlayers),
@@ -130,7 +130,7 @@ class CompetitionPage extends StatelessWidget {
                         .holeScore
                         .howth,
                     builder: (_, howthScoreString, __) => AnimatedSwitcher(
-                      duration: Duration(milliseconds: 350),
+                      duration: const Duration(milliseconds: 350),
                       child: Container(
                         key: ValueKey<String>(howthScoreString),
                         child: _getScore(howthScoreString),
@@ -146,7 +146,7 @@ class CompetitionPage extends StatelessWidget {
               selector: (_, model) =>
                   model.entryFromId(id).holes.elementAt(index).holeNumber,
               builder: (_, holeNumber, __) => AnimatedSwitcher(
-                duration: Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 350),
                 child: Container(
                   key: ValueKey<int>(holeNumber),
                   child: UIToolkit.getHoleNumberDecorated(holeNumber),
@@ -168,7 +168,7 @@ class CompetitionPage extends StatelessWidget {
                         .holeScore
                         .opposition,
                     builder: (_, oppositionScoreString, __) => AnimatedSwitcher(
-                      duration: Duration(milliseconds: 350),
+                      duration: const Duration(milliseconds: 350),
                       child: Container(
                         key: ValueKey<String>(oppositionScoreString),
                         child: _getScore(oppositionScoreString,
@@ -188,7 +188,7 @@ class CompetitionPage extends StatelessWidget {
                           .formattedOpposition(
                               model.entryFromId(id).opposition),
                       builder: (_, oppositionString, __) => AnimatedSwitcher(
-                        duration: Duration(milliseconds: 350),
+                        duration: const Duration(milliseconds: 350),
                         child: Container(
                           key: ValueKey<String>(oppositionString),
                           child:
@@ -296,7 +296,7 @@ class CompetitionPage extends StatelessWidget {
             model.entryFromId(id).holes.isEmpty,
           ),
           builder: (_, data, child) => AnimatedSwitcher(
-            duration: Duration(milliseconds: 350),
+            duration: const Duration(milliseconds: 350),
             child: ListView.builder(
               controller: _scrollController,
               padding: EdgeInsets.only(bottom: 400.0),
@@ -351,7 +351,7 @@ class CompetitionPage extends StatelessWidget {
                         /// scroll would end up is too great, scroll!
                         if ((_scrollController.offset - _offset).abs() > 60)
                           _scrollController.animateTo(_offset,
-                              duration: Duration(milliseconds: 700),
+                              duration: const Duration(milliseconds: 700),
                               curve: Curves.easeInOutQuart);
                       } else {
                         model.close();
@@ -474,7 +474,7 @@ class CompetitionPage extends StatelessWidget {
                               .prettyLastUpdated,
                           builder: (_, lastUpdatedPretty, __) =>
                               AnimatedSwitcher(
-                            duration: Duration(milliseconds: 350),
+                            duration: const Duration(milliseconds: 350),
                             child: Text(
                               lastUpdatedPretty,
                               key: ValueKey<String>(lastUpdatedPretty),
@@ -496,7 +496,7 @@ class CompetitionPage extends StatelessWidget {
                               .elementAt(index)
                               .comment,
                           builder: (_, comment, __) => AnimatedSwitcher(
-                            duration: Duration(milliseconds: 350),
+                            duration: const Duration(milliseconds: 350),
                             child: comment.isEmpty
                                 ? Container()
                                 : Text(

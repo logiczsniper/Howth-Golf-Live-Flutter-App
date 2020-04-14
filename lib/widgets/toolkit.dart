@@ -61,7 +61,7 @@ class UIToolkit {
           child: SpinKitPulse(
         color: Palette.dark,
         size: 45,
-        duration: Duration(milliseconds: 350),
+        duration: const Duration(milliseconds: 350),
       ));
 
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
@@ -161,7 +161,7 @@ class UIToolkit {
             )
           ],
         ),
-        duration: duration ?? Duration(seconds: 7),
+        duration: duration ?? const Duration(seconds: 7),
       );
 
   static FloatingActionButton createButton(
@@ -262,7 +262,7 @@ class UIToolkit {
                   child: Selector<FirebaseViewModel, String>(
                     selector: (_, model) => model.entryFromId(id).opposition,
                     builder: (_, oppositionName, __) => AnimatedSwitcher(
-                      duration: Duration(milliseconds: 350),
+                      duration: const Duration(milliseconds: 350),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         key: ValueKey<String>(oppositionName),

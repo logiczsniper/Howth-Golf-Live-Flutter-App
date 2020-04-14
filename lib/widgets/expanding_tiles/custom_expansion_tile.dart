@@ -10,7 +10,7 @@ import 'package:howth_golf_live/style/palette.dart';
 ///
 /// @see C:\flutter_install\flutter\packages\flutter\lib\src\material\expansion_tile.dart
 
-const Duration _kExpand = Duration(milliseconds: 200);
+const Duration _kExpand = const Duration(milliseconds: 200);
 
 class CustomExpansionTile extends StatefulWidget {
   /// Creates a single-line [ListTile] with a trailing button that expands or collapses

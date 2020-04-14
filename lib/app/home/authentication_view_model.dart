@@ -21,7 +21,7 @@ class AuthenticationViewModel extends ChangeNotifier {
       notifyListeners();
       await FirebaseAuth.instance
           .signInAnonymously()
-          .timeout(Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 15), onTimeout: () {
         _status = Strings.timedOut;
         notifyListeners();
         return null;

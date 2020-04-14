@@ -17,7 +17,6 @@ import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
-import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'package:tuple/tuple.dart';
@@ -29,7 +28,7 @@ class CompetitionsPage extends StatelessWidget {
           title: Selector<FirebaseViewModel, String>(
             selector: (_, model) => model.entryFromId(id).title,
             builder: (_, title, __) => AnimatedSwitcher(
-              duration: Duration(milliseconds: 350),
+              duration: const Duration(milliseconds: 350),
               child: Align(
                 alignment: Alignment.centerLeft,
                 key: ValueKey<String>(title),
@@ -48,7 +47,7 @@ class CompetitionsPage extends StatelessWidget {
               child: Selector<FirebaseViewModel, String>(
                 selector: (_, model) => model.entryFromId(id).date,
                 builder: (_, date, __) => AnimatedSwitcher(
-                  duration: Duration(milliseconds: 350),
+                  duration: const Duration(milliseconds: 350),
                   child: Text(
                     date,
                     key: ValueKey<String>(date),
@@ -63,7 +62,7 @@ class CompetitionsPage extends StatelessWidget {
                 child: Selector<FirebaseViewModel, Score>(
                   selector: (_, model) => model.entryFromId(id).score,
                   builder: (_, score, __) => AnimatedSwitcher(
-                    duration: Duration(milliseconds: 350),
+                    duration: const Duration(milliseconds: 350),
                     child: Container(
                       child: ComplexScore(score),
                       key: ValueKey<Score>(score),
@@ -87,92 +86,90 @@ class CompetitionsPage extends StatelessWidget {
 
     // _userStatus.clearPreferences();
 
-    return OpacityChangeWidget(
-      target: Selector<FirebaseViewModel, Tuple3<int, QuerySnapshot, bool>>(
-        selector: (_, model) {
-          return Tuple3(
-            model.competitionsItemCount(hasVisited, isCurrentTab, _searchText),
-            model.currentSnapshot,
-            model.activeElements(hasVisited, isCurrentTab, _searchText).isEmpty,
-          );
-        },
-        builder: (context, data, child) => AnimatedSwitcher(
-          duration: Duration(milliseconds: 350),
-          child: data.item2 == null
-              ? UIToolkit.loadingSpinner
-              : ListView.builder(
-                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
+    return Selector<FirebaseViewModel, Tuple3<int, QuerySnapshot, bool>>(
+      selector: (_, model) {
+        return Tuple3(
+          model.competitionsItemCount(hasVisited, isCurrentTab, _searchText),
+          model.currentSnapshot,
+          model.activeElements(hasVisited, isCurrentTab, _searchText).isEmpty,
+        );
+      },
+      builder: (context, data, child) => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        child: data.item2 == null
+            ? UIToolkit.loadingSpinner
+            : ListView.builder(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
 
-                  /// Value accounts for the fact that if there are no entries (data.item3)
-                  /// then the item count will still be 1 for [UIToolkit.getNoDataText].
-                  key: ValueKey<int>(data.item3 ? data.item1 - 1 : data.item1),
-                  itemCount: data.item1,
-                  itemBuilder: (context, index) {
-                    if (!hasVisited && index == 0 && isCurrentTab) {
-                      return UIToolkit.exampleCompetition(
-                        context,
-                        _titleKey,
-                        _dateKey,
-                        _scoreKey,
-                      );
-                    } else if (data.item3) {
-                      /// In the case where the user searched for something with no results,
-                      /// return a [Text] widget to notify the user of that.
-                      return UIToolkit.getNoDataText(Strings.noCompetitions);
-                    }
-
-                    /// Corrects the fault in index caused by the [UIToolkit.exampleCompetition].
-                    int competitionIndex = index;
-                    if (!hasVisited && isCurrentTab) competitionIndex--;
-
-                    /// Fetch the [id] of the current competition.
-                    var _firebaseModel =
-                        Provider.of<FirebaseViewModel>(context, listen: false);
-                    int id = _firebaseModel
-                        .activeElements(hasVisited, isCurrentTab, _searchText)
-                        .elementAt(competitionIndex)
-                        .id;
-
-                    return ComplexCard(
-                      child: _tileBuilder(
-                        context,
-                        id,
-                        _userStatus.isAdmin,
-                      ),
-                      onTap: () => Routes.of(context).toCompetition(id),
-                      iconButton: !_userStatus.isAdmin
-                          ? null
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  padding: EdgeInsets.only(top: 10.0),
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () => Routes.of(context)
-                                      .toCompetitionModification(id),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  padding: EdgeInsets.only(bottom: 10.0),
-
-                                  /// When deleting a [DatabaseEntry], prompts the user to double check their intent
-                                  /// is to do so as this can have major consquences if an accident.
-                                  onPressed: () => showModal(
-                                    context: context,
-                                    configuration:
-                                        FadeScaleTransitionConfiguration(),
-                                    builder: (context) => CustomAlertDialog(
-                                        FirebaseInteraction.of(context)
-                                            .deleteCompetition,
-                                        id: id),
-                                  ),
-                                ),
-                              ],
-                            ),
+                /// Value accounts for the fact that if there are no entries (data.item3)
+                /// then the item count will still be 1 for [UIToolkit.getNoDataText].
+                key: ValueKey<int>(data.item3 ? data.item1 - 1 : data.item1),
+                itemCount: data.item1,
+                itemBuilder: (context, index) {
+                  if (!hasVisited && index == 0 && isCurrentTab) {
+                    return UIToolkit.exampleCompetition(
+                      context,
+                      _titleKey,
+                      _dateKey,
+                      _scoreKey,
                     );
-                  },
-                ),
-        ),
+                  } else if (data.item3) {
+                    /// In the case where the user searched for something with no results,
+                    /// return a [Text] widget to notify the user of that.
+                    return UIToolkit.getNoDataText(Strings.noCompetitions);
+                  }
+
+                  /// Corrects the fault in index caused by the [UIToolkit.exampleCompetition].
+                  int competitionIndex = index;
+                  if (!hasVisited && isCurrentTab) competitionIndex--;
+
+                  /// Fetch the [id] of the current competition.
+                  var _firebaseModel =
+                      Provider.of<FirebaseViewModel>(context, listen: false);
+                  int id = _firebaseModel
+                      .activeElements(hasVisited, isCurrentTab, _searchText)
+                      .elementAt(competitionIndex)
+                      .id;
+
+                  return ComplexCard(
+                    child: _tileBuilder(
+                      context,
+                      id,
+                      _userStatus.isAdmin,
+                    ),
+                    onTap: () => Routes.of(context).toCompetition(id),
+                    iconButton: !_userStatus.isAdmin
+                        ? null
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                padding: EdgeInsets.only(top: 10.0),
+                                icon: Icon(Icons.edit),
+                                onPressed: () => Routes.of(context)
+                                    .toCompetitionModification(id),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                padding: EdgeInsets.only(bottom: 10.0),
+
+                                /// When deleting a [DatabaseEntry], prompts the user to double check their intent
+                                /// is to do so as this can have major consquences if an accident.
+                                onPressed: () => showModal(
+                                  context: context,
+                                  configuration:
+                                      FadeScaleTransitionConfiguration(),
+                                  builder: (context) => CustomAlertDialog(
+                                      FirebaseInteraction.of(context)
+                                          .deleteCompetition,
+                                      id: id),
+                                ),
+                              ),
+                            ],
+                          ),
+                  );
+                },
+              ),
       ),
     );
   }

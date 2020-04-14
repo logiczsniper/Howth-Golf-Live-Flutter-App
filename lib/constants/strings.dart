@@ -54,6 +54,7 @@ class Strings {
   static const String holeOppositionScore = "Opposition's score!";
   static const String oppositionTeam = "Opposition name!";
   static const String holeNumber = "Hole Number:";
+  static const String oppositionHole = "Opposition players";
 
   /// Paths to assets used in the app.
   static const String iconPath = "lib/assets/logo.svg";

@@ -68,7 +68,7 @@ class Themes {
   });
 
   static TooltipThemeData tooltipTheme = TooltipThemeData(
-      showDuration: Duration(seconds: 5),
+      showDuration: const Duration(seconds: 5),
       textStyle: TextStyle(color: Palette.dark),
       decoration: BoxDecoration(
           color: Palette.card.withAlpha(254),

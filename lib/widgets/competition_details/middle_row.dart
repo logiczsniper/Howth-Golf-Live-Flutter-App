@@ -21,7 +21,7 @@ class MiddleRow extends StatelessWidget {
             child: Selector<FirebaseViewModel, String>(
               selector: (_, model) => model.entryFromId(id).attribute(field),
               builder: (context, value, _) => AnimatedSwitcher(
-                duration: Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 350),
                 child: Text(
                   value,
                   key: ValueKey<String>(value),

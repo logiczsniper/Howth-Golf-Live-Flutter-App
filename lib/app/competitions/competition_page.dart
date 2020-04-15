@@ -276,243 +276,270 @@ class CompetitionPage extends StatelessWidget {
       appBar: CodeFieldBar(
           Strings.specificCompetition, _userStatus, _backKey, _codeKey,
           id: id),
-      body: OpacityChangeWidget(
-        target:
+      body:
 
-            /// If the [itemCount] changes, the hole list view must update
-            /// in this [Selector].
-            Selector<FirebaseViewModel, Tuple2<int, bool>>(
-          child: _columnBuilder(
-            context,
-            _howthScoreKey,
-            _oppositionScoreKey,
-            _oppositionTeamKey,
-            _locationKey,
-            _dateKey,
-            _timeKey,
-          ),
-          selector: (_, model) => Tuple2(
-            model.holesItemCount(id, hasVisited),
-            model.entryFromId(id).holes.isEmpty,
-          ),
-          builder: (_, data, child) => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 350),
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.only(bottom: 400.0),
-              shrinkWrap: true,
-              itemCount: data.item1,
-              itemBuilder: (context, index) {
-                if (index == 0)
+          /// If the [itemCount] changes, the hole list view must update
+          /// in this [Selector].
+          Selector<FirebaseViewModel, Tuple2<int, bool>>(
+        child: _columnBuilder(
+          context,
+          _howthScoreKey,
+          _oppositionScoreKey,
+          _oppositionTeamKey,
+          _locationKey,
+          _dateKey,
+          _timeKey,
+        ),
+        selector: (_, model) => Tuple2(
+          model.holesItemCount(id, hasVisited),
+          model.entryFromId(id).holes.isEmpty,
+        ),
+        builder: (_, data, child) => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          child: ListView.builder(
+            controller: _scrollController,
+            padding: EdgeInsets.only(bottom: 400.0),
+            shrinkWrap: true,
+            itemCount: data.item1,
+            itemBuilder: (context, index) {
+              if (index == 0)
 
-                  /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
-                  /// widgets in one column.
-                  return child;
-                else if (index == 1) {
-                  if (!hasVisited)
-                    return UIToolkit.exampleHole(
-                        context,
-                        _holeKey,
-                        _playersKey,
-                        _holeHowthScoreKey,
-                        _holeOppositionScoreKey,
-                        _holeNumberKey,
-                        _oppositionKey);
-                  else if (data.item2)
-                    return UIToolkit.getNoDataText(Strings.noHoles);
-                }
+                /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
+                /// widgets in one column.
+                return child;
+              else if (index == 1) {
+                if (!hasVisited)
+                  return UIToolkit.exampleHole(
+                      context,
+                      _holeKey,
+                      _playersKey,
+                      _holeHowthScoreKey,
+                      _holeOppositionScoreKey,
+                      _holeNumberKey,
+                      _oppositionKey);
+                else if (data.item2)
+                  return UIToolkit.getNoDataText(Strings.noHoles);
+              }
 
-                /// If there are no more special conditions to handle, proceed with hole list creation.
-                /// Subtract one from the [index] to account for the [columnBuilder].
-                int _index = --index;
+              /// If there are no more special conditions to handle, proceed with hole list creation.
+              /// Subtract one from the [index] to account for the [columnBuilder].
+              int _index = --index;
 
-                /// If the page has not been visted before, subtract one from the [_index] to
-                /// account for the [UIToolkit.exampleHole].
-                if (!hasVisited) _index--;
+              /// If the page has not been visted before, subtract one from the [_index] to
+              /// account for the [UIToolkit.exampleHole].
+              if (!hasVisited) _index--;
 
-                return Consumer<HoleViewModel>(
-                  child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 12),
-                      child: _rowBuilder(context, _index, id),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(13.0),
-                          color: index % 2 != 0
-                              ? Palette.light
-                              : Palette.card.withAlpha(240))),
-                  builder: (context, model, child) => CustomExpansionTile(
-                    title: child,
-                    initiallyExpanded: _index == model.openIndex,
-                    onExpansionChanged: (bool isOpen) {
-                      if (isOpen) {
-                        model.open(_index);
-                        double _offset = (_index * 60 + 60).toDouble();
+              /// Create a controller which will be passed into the state of [CustomExpansionTile]
+              /// which enables us to call the [ExpansionTile._handleTap] method from here.
+              CustomExpansionTileController customExpansionTileController =
+                  CustomExpansionTileController();
 
-                        /// If the difference between the current position and where the
-                        /// scroll would end up is too great, scroll!
-                        if ((_scrollController.offset - _offset).abs() > 60)
-                          _scrollController.animateTo(_offset,
-                              duration: const Duration(milliseconds: 700),
-                              curve: Curves.easeInOutQuart);
-                      } else {
-                        model.close();
-                      }
-                    },
-                    children: <Widget>[
-                      Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
-                        selector: (context, userStatusModel, firebaseModel) =>
-                            firebaseModel.entryFromId(id).isArchived
-                                ? userStatusModel.isAdmin
-                                : userStatusModel.isManager(id),
-                        builder: (context, hasAccess, child) => hasAccess
-                            ? Stack(
-                                children: <Widget>[
-                                  /// Modify/delete the hole!
-                                  Container(
-                                    margin: EdgeInsets.only(left: 26.0),
-                                    padding: EdgeInsets.only(
-                                        bottom: 4.0, left: 0.5, right: 0.5),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () => Routes.of(context)
-                                                .toHoleModification(id, _index),
-                                            child: Icon(
-                                              Icons.edit,
-                                              size: 32.0,
-                                            ),
+              return Consumer<HoleViewModel>(
+                child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 12),
+                    child: _rowBuilder(context, _index, id),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13.0),
+                        color: index % 2 != 0
+                            ? Palette.light
+                            : Palette.card.withAlpha(240))),
+                builder: (context, model, child) => CustomExpansionTile(
+                  customExpansionTileController: customExpansionTileController,
+                  title: child,
+                  initiallyExpanded: _index == model.openIndex,
+                  onExpansionChanged: (bool isOpen) {
+                    if (isOpen) {
+                      model.open(_index);
+                      double _offset = (_index * 60 + 50).toDouble();
+
+                      /// If the difference between the current position and where the
+                      /// scroll would end up is too great, scroll!
+                      if ((_scrollController.offset - _offset).abs() > 60)
+                        _scrollController.animateTo(_offset,
+                            duration: const Duration(milliseconds: 700),
+                            curve: Curves.easeInOutQuart);
+                    } else {
+                      model.close();
+                    }
+                  },
+                  children: <Widget>[
+                    Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
+                      selector: (context, userStatusModel, firebaseModel) =>
+                          firebaseModel.entryFromId(id).isArchived
+                              ? userStatusModel.isAdmin
+                              : userStatusModel.isManager(id),
+                      builder: (context, hasAccess, child) => hasAccess
+                          ? Stack(
+                              children: <Widget>[
+                                /// Done button!
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 28.0),
+                                    // decoration: UIToolkit
+                                    //     .roundedRectBoxDecoration
+                                    //     .copyWith(color: Palette.dark),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        model.close();
+                                        customExpansionTileController.tap();
+                                      },
+                                      child: Icon(Icons.publish, size: 35.0),
+
+                                      // child: Text(
+                                      //   "Done",
+                                      //   textAlign: TextAlign.end,
+                                      //   style: TextStyles.cardSubTitle.copyWith(
+                                      //     color: Palette.inMaroon,
+                                      //     fontWeight: FontWeight.bold,
+                                      //   ),
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+
+                                /// Modify/delete the hole!
+                                Container(
+                                  margin: EdgeInsets.only(left: 28.0),
+                                  padding: EdgeInsets.only(
+                                      bottom: 4.0, left: 0.5, right: 0.5),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        GestureDetector(
+                                          onTap: () => Routes.of(context)
+                                              .toHoleModification(id, _index),
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: 32.0,
                                           ),
-                                          GestureDetector(
-                                              onTap: () => showModal(
-                                                    context: context,
-                                                    configuration:
-                                                        FadeScaleTransitionConfiguration(),
-                                                    builder: (context) =>
-                                                        CustomAlertDialog(
-                                                            FirebaseInteraction
-                                                                    .of(context)
-                                                                .deleteHole,
-                                                            index: _index,
-                                                            id: id),
-                                                  ),
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 32.0,
-                                              )),
-                                        ]),
-                                  ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => showModal(
+                                            context: context,
+                                            configuration:
+                                                FadeScaleTransitionConfiguration(),
+                                            builder: (context) =>
+                                                CustomAlertDialog(
+                                                    FirebaseInteraction.of(
+                                                            context)
+                                                        .deleteHole,
+                                                    index: _index,
+                                                    id: id),
+                                          ),
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 32.0,
+                                          ),
+                                        ),
+                                      ]),
+                                ),
 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      /// Modify howth's score!
-                                      IconButtonPair(context, _index, id,
-                                          onAdd: (currentHole) {
-                                        Score updatedScore = currentHole
-                                            .holeScore
-                                            .updateScore(true, 1);
-                                        Hole updatedHole = currentHole
-                                            .updateHole(newScore: updatedScore);
-                                        return updatedHole;
-                                      }, onSubtract: (currentHole) {
-                                        Score updatedScore = currentHole
-                                            .holeScore
-                                            .updateScore(true, -1);
-                                        Hole updatedHole = currentHole
-                                            .updateHole(newScore: updatedScore);
-                                        return updatedHole;
-                                      }),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    /// Modify howth's score!
+                                    IconButtonPair(context, _index, id,
+                                        onAdd: (currentHole) {
+                                      Score updatedScore = currentHole.holeScore
+                                          .updateScore(true, 1);
+                                      Hole updatedHole = currentHole.updateHole(
+                                          newScore: updatedScore);
+                                      return updatedHole;
+                                    }, onSubtract: (currentHole) {
+                                      Score updatedScore = currentHole.holeScore
+                                          .updateScore(true, -1);
+                                      Hole updatedHole = currentHole.updateHole(
+                                          newScore: updatedScore);
+                                      return updatedHole;
+                                    }),
 
-                                      /// Modify the hole number!
-                                      IconButtonPair(context, _index, id,
-                                          iconColor: Palette.maroon,
-                                          onAdd: (currentHole) {
-                                        Hole updatedHole =
-                                            currentHole.updateNumber(1);
-                                        return updatedHole;
-                                      }, onSubtract: (currentHole) {
-                                        Hole updatedHole =
-                                            currentHole.updateNumber(-1);
-                                        return updatedHole;
-                                      }),
+                                    /// Modify the hole number!
+                                    IconButtonPair(context, _index, id,
+                                        iconColor: Palette.maroon,
+                                        onAdd: (currentHole) {
+                                      Hole updatedHole =
+                                          currentHole.updateNumber(1);
+                                      return updatedHole;
+                                    }, onSubtract: (currentHole) {
+                                      Hole updatedHole =
+                                          currentHole.updateNumber(-1);
+                                      return updatedHole;
+                                    }),
 
-                                      /// Modify the opposition score!
-                                      IconButtonPair(context, _index, id,
-                                          onAdd: (currentHole) {
-                                        Score updatedScore = currentHole
-                                            .holeScore
-                                            .updateScore(false, 1);
-                                        Hole updatedHole = currentHole
-                                            .updateHole(newScore: updatedScore);
-                                        return updatedHole;
-                                      }, onSubtract: (currentHole) {
-                                        Score updatedScore = currentHole
-                                            .holeScore
-                                            .updateScore(false, -1);
-                                        Hole updatedHole = currentHole
-                                            .updateHole(newScore: updatedScore);
-                                        return updatedHole;
-                                      }),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            : Container(),
-                      ),
+                                    /// Modify the opposition score!
+                                    IconButtonPair(context, _index, id,
+                                        onAdd: (currentHole) {
+                                      Score updatedScore = currentHole.holeScore
+                                          .updateScore(false, 1);
+                                      Hole updatedHole = currentHole.updateHole(
+                                          newScore: updatedScore);
+                                      return updatedHole;
+                                    }, onSubtract: (currentHole) {
+                                      Score updatedScore = currentHole.holeScore
+                                          .updateScore(false, -1);
+                                      Hole updatedHole = currentHole.updateHole(
+                                          newScore: updatedScore);
+                                      return updatedHole;
+                                    }),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Container(),
+                    ),
 
-                      /// Display the [lastUpdated] formatted.
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 3.0),
-                        padding: EdgeInsets.symmetric(vertical: 6.0),
-                        child: Selector<FirebaseViewModel, String>(
-                          selector: (_, model) => model
-                              .entryFromId(id)
-                              .holes
-                              .elementAt(index)
-                              .prettyLastUpdated,
-                          builder: (_, lastUpdatedPretty, __) =>
-                              AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 350),
-                            child: Text(
-                              lastUpdatedPretty,
-                              key: ValueKey<String>(lastUpdatedPretty),
-                              textAlign: TextAlign.center,
-                              style: TextStyles.cardTitle,
-                            ),
+                    /// Display the [lastUpdated] formatted.
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 3.0),
+                      padding: EdgeInsets.symmetric(vertical: 6.0),
+                      child: Selector<FirebaseViewModel, String>(
+                        selector: (_, model) => model
+                            .entryFromId(id)
+                            .holes
+                            .elementAt(index)
+                            .prettyLastUpdated,
+                        builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 350),
+                          child: Text(
+                            lastUpdatedPretty,
+                            key: ValueKey<String>(lastUpdatedPretty),
+                            textAlign: TextAlign.center,
+                            style: TextStyles.cardTitle,
                           ),
                         ),
                       ),
+                    ),
 
-                      /// If there is a [comment], display it.
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 3.0),
-                        padding: EdgeInsets.symmetric(vertical: 6.0),
-                        child: Selector<FirebaseViewModel, String>(
-                          selector: (_, model) => model
-                              .entryFromId(id)
-                              .holes
-                              .elementAt(index)
-                              .comment,
-                          builder: (_, comment, __) => AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 350),
-                            child: comment.isEmpty
-                                ? Container()
-                                : Text(
-                                    "Comment: $comment",
-                                    key: ValueKey<String>(comment),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyles.cardTitle,
-                                  ),
-                          ),
+                    /// If there is a [comment], display it.
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 3.0),
+                      padding: EdgeInsets.symmetric(vertical: 6.0),
+                      child: Selector<FirebaseViewModel, String>(
+                        selector: (_, model) => model
+                            .entryFromId(id)
+                            .holes
+                            .elementAt(index)
+                            .comment,
+                        builder: (_, comment, __) => AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 350),
+                          child: comment.isEmpty
+                              ? Container()
+                              : Text(
+                                  "Comment: $comment",
+                                  key: ValueKey<String>(comment),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyles.cardTitle,
+                                ),
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

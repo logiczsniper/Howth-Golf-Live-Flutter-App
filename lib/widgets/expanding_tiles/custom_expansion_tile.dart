@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
+class CustomExpansionTileController extends ChangeNotifier {
+  void tap() {
+    notifyListeners();
+  }
+}
+
 /// Logan Czernel - modification to [ExpansionTile].
 ///
 /// This is literally the same widget as a standard [ExpansionTile],
@@ -18,6 +24,7 @@ class CustomExpansionTile extends StatefulWidget {
   /// be non-null.
   const CustomExpansionTile({
     Key key,
+    this.customExpansionTileController,
     this.leading,
     @required this.title,
     this.subtitle,
@@ -26,6 +33,8 @@ class CustomExpansionTile extends StatefulWidget {
     this.initiallyExpanded = false,
   })  : assert(initiallyExpanded != null),
         super(key: key);
+
+  final CustomExpansionTileController customExpansionTileController;
 
   /// A widget to display before the title.
   ///
@@ -82,6 +91,10 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
+
+    widget.customExpansionTileController.addListener(() {
+      _handleTap();
+    });
 
     _isExpanded =
         PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
@@ -8,12 +8,11 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
+import 'package:howth_golf_live/style/palette.dart';
 
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
-import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
 class HelpsPage extends StatelessWidget {
   static Widget _tileBuilder(
@@ -51,18 +50,17 @@ class HelpsPage extends StatelessWidget {
     }
 
     return Scaffold(
-        appBar:
-            CodeFieldBar(Strings.helpsText, _userStatus, _backKey, _codeKey),
-        body: OpacityChangeWidget(
-            target: _helpData.data.isEmpty
-                ? UIToolkit.loadingSpinner
-                : ListView.builder(
-                    padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
-                    itemCount: _helpData.data.length + _userStatus.bonusEntries,
-                    itemBuilder: (context, index) {
-                      AppHelpEntry currentHelpEntry = _helpData.data[index];
-                      return _tileBuilder(context, currentHelpEntry, index + 1);
-                    },
-                  )));
+      appBar: CodeFieldBar(Strings.helpsText, _userStatus, _backKey, _codeKey),
+      body: _helpData.data.isEmpty
+          ? UIToolkit.loadingSpinner
+          : ListView.builder(
+              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
+              itemCount: _helpData.data.length + _userStatus.bonusEntries,
+              itemBuilder: (context, index) {
+                AppHelpEntry currentHelpEntry = _helpData.data[index];
+                return _tileBuilder(context, currentHelpEntry, index + 1);
+              },
+            ),
+    );
   }
 }

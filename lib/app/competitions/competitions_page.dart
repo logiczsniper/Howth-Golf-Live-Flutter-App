@@ -1,14 +1,15 @@
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/palette.dart';
 import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase_widget.dart';
+import 'package:tuple/tuple.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
-
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
+import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
@@ -18,8 +19,6 @@ import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:showcaseview/showcase_widget.dart';
-import 'package:tuple/tuple.dart';
 
 class CompetitionsPage extends StatelessWidget {
   static Widget _tileBuilder(BuildContext context, int id, bool isAdmin) =>

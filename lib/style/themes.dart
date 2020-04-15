@@ -63,7 +63,7 @@ class Themes {
 
   static PageTransitionsTheme pageTransitionsTheme =
       PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-    TargetPlatform.android: ZoomPageTransitionsBuilder(),
+    TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
     TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
   });
 

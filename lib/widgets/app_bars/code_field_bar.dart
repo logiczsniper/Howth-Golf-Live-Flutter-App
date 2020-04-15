@@ -66,39 +66,54 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     }
   }
 
+  /// The [IconData] switches between a admin icon (if [titleBar]) and
+  /// a check icon (if [inputBar]).
+  AnimatedCrossFade get _iconData {
+    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+    return AnimatedCrossFade(
+      duration: const Duration(milliseconds: 350),
+      firstChild:
+          Icon(isVerified ? Icons.check_circle_outline : Icons.account_circle),
+      secondChild: Icon(Icons.check),
+      crossFadeState: appBarTitle != inputBar
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
+    );
+  }
+
   /// This depends greatly on whether or not the user is verified.
   ///
   /// Both the message and the icon image itself change based on [isVerified].
-  Widget get _actionIconButton {
-    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+  // Widget get _actionIconButton {
+  //   bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
 
-    String iconMessage = isVerified ? Strings.alreadyAdmin : Strings.tapCode;
-    IconData iconData;
+  //   String iconMessage = isVerified ? Strings.alreadyAdmin : Strings.tapCode;
+  //   IconData iconData;
 
-    if (appBarTitle == inputBar) {
-      iconData = Icons.check;
-    } else {
-      iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
-    }
+  //   if (appBarTitle == inputBar) {
+  //     iconData = Icons.check;
+  //   } else {
+  //     iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
+  //   }
 
-    String description = widget.title == Strings.helpsText
-        ? Strings.tapAdmin
-        : Strings.tapManager;
+  //   String description = widget.title == Strings.helpsText
+  //       ? Strings.tapAdmin
+  //       : Strings.tapManager;
 
-    return Container(
-      key: ValueKey<IconData>(iconData),
-      child: UIToolkit.showcase(
-          context: context,
-          key: widget.codeKey,
-          description: description,
-          child: IconButton(
-            icon: Icon(iconData),
-            tooltip: iconMessage,
-            onPressed: _codePressed,
-            padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
-          )),
-    );
-  }
+  //   return Container(
+  //     key: ValueKey<IconData>(iconData),
+  //     child: UIToolkit.showcase(
+  //         context: context,
+  //         key: widget.codeKey,
+  //         description: description,
+  //         child: IconButton(
+  //           icon: Icon(iconData),
+  //           tooltip: iconMessage,
+  //           onPressed: _codePressed,
+  //           padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
+  //         )),
+  //   );
+  // }
 
   Widget get _backIconButton {
     return UIToolkit.showcase(
@@ -130,14 +145,24 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   @override
   Widget build(BuildContext context) {
     checkConnectivity(context);
+    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
     return AppBar(
         title: getTitle(appBarTitle),
         centerTitle: true,
         leading: _backIconButton,
         actions: <Widget>[
-          AnimatedSwitcher(
-              child: _actionIconButton,
-              duration: const Duration(milliseconds: 350))
+          UIToolkit.showcase(
+              context: context,
+              key: widget.codeKey,
+              description: widget.title == Strings.helpsText
+                  ? Strings.tapAdmin
+                  : Strings.tapManager,
+              child: IconButton(
+                icon: _iconData,
+                tooltip: isVerified ? Strings.alreadyAdmin : Strings.tapCode,
+                onPressed: _codePressed,
+                padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
+              )),
         ]);
   }
 }

@@ -17,9 +17,14 @@ class HoleViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isOpen(int index) {
+    return _openIndex == index;
+  }
+
   /// Effectively close all tiles.
   void close() {
     _openIndex = -1;
+    print("HI");
     notifyListeners();
   }
 

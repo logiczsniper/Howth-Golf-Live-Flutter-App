@@ -65,7 +65,9 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
         _firebaseModel.entryFromId(widget.id).holes.elementAt(widget.index);
 
     commentField = DecoratedTextField(
-      currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
+      currentHole.comment.isEmpty
+          ? Fields.comment + Strings.notes
+          : Strings.empty,
       initialValue: currentHole.comment.isEmpty ? null : currentHole.comment,
       isRequired: false,
       noteText: Strings.optional,

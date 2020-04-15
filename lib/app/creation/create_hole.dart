@@ -23,7 +23,7 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
   DecoratedTextField numberField =
       DecoratedTextField(Fields.holeNumber, number: true);
   DecoratedTextField commentField = DecoratedTextField(
-    Fields.comment,
+    Fields.comment + Strings.notes,
     isRequired: false,
     noteText: Strings.optional,
   );

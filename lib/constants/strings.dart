@@ -98,6 +98,7 @@ class Strings {
 
   static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";
+  static const String notes = " / Notes";
   static const String home = "Home";
   static const String away = "Away";
   static const String howthIs = "Howth is: ";

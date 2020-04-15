@@ -41,12 +41,8 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
               shrinkWrap: true,
               children: <Widget>[
                 playersField,
-                UIToolkit.getFormText(Strings.nameCommas),
                 oppositionField,
-                UIToolkit.getFormText(
-                    Strings.optional + " " + Strings.nameCommas),
                 commentField,
-                UIToolkit.getFormText(Strings.optional)
               ]),
           padding: EdgeInsets.all(5.0))));
 
@@ -69,14 +65,22 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
         _firebaseModel.entryFromId(widget.id).holes.elementAt(widget.index);
 
     commentField = DecoratedTextField(
-        currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
-        initialValue: currentHole.comment.isEmpty ? null : currentHole.comment,
-        isRequired: false);
-    playersField = DecoratedTextField(Strings.empty,
-        initialValue: currentHole.formattedPlayers);
-    oppositionField = DecoratedTextField(Strings.empty,
-        initialValue: currentHole.formattedOpposition(opposition),
-        isRequired: false);
+      currentHole.comment.isEmpty ? Fields.comment : Strings.empty,
+      initialValue: currentHole.comment.isEmpty ? null : currentHole.comment,
+      isRequired: false,
+      noteText: Strings.optional,
+    );
+    playersField = DecoratedTextField(
+      Strings.empty,
+      initialValue: currentHole.formattedPlayers,
+      noteText: Strings.nameCommas,
+    );
+    oppositionField = DecoratedTextField(
+      Strings.empty,
+      initialValue: currentHole.formattedOpposition(opposition),
+      isRequired: false,
+      noteText: Strings.optional + " " + Strings.nameCommas,
+    );
   }
 
   @override

@@ -22,11 +22,20 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
   /// Fields the user must fill out to create a hole.
   DecoratedTextField numberField =
       DecoratedTextField(Fields.holeNumber, number: true);
-  DecoratedTextField commentField =
-      DecoratedTextField(Fields.comment, isRequired: false);
-  DecoratedTextField playersField = DecoratedTextField(Fields.players);
-  DecoratedTextField oppositionField =
-      DecoratedTextField(Strings.oppositionHole, isRequired: false);
+  DecoratedTextField commentField = DecoratedTextField(
+    Fields.comment,
+    isRequired: false,
+    noteText: Strings.optional,
+  );
+  DecoratedTextField playersField = DecoratedTextField(
+    Fields.players,
+    noteText: Strings.nameCommas,
+  );
+  DecoratedTextField oppositionField = DecoratedTextField(
+    Strings.oppositionHole,
+    isRequired: false,
+    noteText: Strings.optional + " " + Strings.nameCommas,
+  );
 
   /// See [CreateCompetitionState._form].
   Form get _form => Form(
@@ -38,12 +47,8 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
               children: <Widget>[
                 numberField,
                 playersField,
-                UIToolkit.getFormText(Strings.nameCommas),
                 oppositionField,
-                UIToolkit.getFormText(
-                    Strings.optional + " " + Strings.nameCommas),
                 commentField,
-                UIToolkit.getFormText(Strings.optional)
               ]),
           padding: EdgeInsets.all(5.0))));
 

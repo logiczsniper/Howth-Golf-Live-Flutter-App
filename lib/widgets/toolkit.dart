@@ -88,16 +88,6 @@ class UIToolkit {
       maxLines: 1,
       style: TextStyles.leadingChild);
 
-  /// The text that appears in a form.
-  static Widget getFormText(String text) => Padding(
-      padding: EdgeInsets.only(top: 2.0, bottom: 8.0),
-      child: Center(
-          child: Text(
-        Strings.note + text,
-        textAlign: TextAlign.center,
-        style: TextStyles.form,
-      )));
-
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
       icon: Icon(Icons.home),

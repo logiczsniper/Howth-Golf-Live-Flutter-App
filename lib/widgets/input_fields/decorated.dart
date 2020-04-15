@@ -32,8 +32,11 @@ class DecoratedField {
 
   /// [InputDecoration] with a red underline in every state and custom
   /// [hintText].
-  InputDecoration getDecoration(BuildContext context, String hintText) =>
+  InputDecoration getDecoration(BuildContext context, String hintText,
+          [String noteText = ""]) =>
       InputDecoration(
+              helperText: noteText,
+              helperMaxLines: 2,
               prefixIcon: Icon(
                 Icons.keyboard_arrow_right,
                 color: Palette.dark,
@@ -41,6 +44,8 @@ class DecoratedField {
               hintText: _formatHintText(hintText))
           .applyDefaults(Theme.of(context).inputDecorationTheme);
 
-  EdgeInsets getPadding(bool withPadding) =>
-      EdgeInsets.only(bottom: withPadding ? 25 : 0);
+  EdgeInsets getPadding(bool withPadding, bool hasNote) => EdgeInsets.only(
+        bottom:
+            hasNote ? (withPadding ? 25 : 0) + 8.0 : (withPadding ? 25 : 0.0),
+      );
 }

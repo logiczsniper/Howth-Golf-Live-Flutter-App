@@ -22,7 +22,8 @@ class CreateCompetitionState extends State<CreateCompetition>
   String isHome = Strings.home;
 
   /// The various fields the user must fill out.
-  DecoratedTextField titleField = DecoratedTextField(Strings.competitionName);
+  DecoratedTextField titleField = DecoratedTextField(Strings.competitionName,
+      noteText: Strings.titleLengthNote);
   DecoratedTextField locationField = DecoratedTextField(Fields.location);
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
   DecoratedDateTimeField dateTimeField =
@@ -56,7 +57,6 @@ class CreateCompetitionState extends State<CreateCompetition>
             shrinkWrap: true,
             children: <Widget>[
               titleField,
-              UIToolkit.getFormText(Strings.titleLengthNote),
               getSpecialInput(Strings.empty, _home),
               isHome == Strings.home ? Container() : locationField,
               oppositionField,

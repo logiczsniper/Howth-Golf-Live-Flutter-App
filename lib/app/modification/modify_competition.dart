@@ -60,7 +60,6 @@ class ModifyCompetitionState extends State<ModifyCompetition>
             shrinkWrap: true,
             children: <Widget>[
               titleField,
-              UIToolkit.getFormText(Strings.titleLengthNote),
               getSpecialInput(Strings.empty, _home),
               isHome == Strings.home ? Container() : locationField,
               oppositionField,
@@ -88,8 +87,8 @@ class ModifyCompetitionState extends State<ModifyCompetition>
     currentEntry = _firebaseModel.entryFromId(widget.id);
 
     isHome = currentEntry.location.isHome ? Strings.home : Strings.away;
-    titleField =
-        DecoratedTextField(Strings.empty, initialValue: currentEntry.title);
+    titleField = DecoratedTextField(Strings.empty,
+        initialValue: currentEntry.title, noteText: Strings.titleLengthNote);
     locationField = DecoratedTextField(
       Strings.location.substring(0, Strings.location.length - 1),
       initialValue: currentEntry.location.address == Strings.homeAddress

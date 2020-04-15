@@ -22,7 +22,7 @@ class DecoratedDateTimeField extends StatelessWidget with DecoratedField {
   Widget build(BuildContext context) {
     controller.text = initialValue;
     return Padding(
-      padding: getPadding(withPadding),
+      padding: getPadding(withPadding, false),
       child: DateTimeField(
         initialValue: DateTime.tryParse(initialValue),
         resetIcon: null,

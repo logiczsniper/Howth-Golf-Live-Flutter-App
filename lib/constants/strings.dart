@@ -101,8 +101,8 @@ class Strings {
   static const String home = "Home";
   static const String away = "Away";
   static const String howthIs = "Howth is: ";
-  static const String nameCommas = "Names separated by commas.";
-  static const String optional = "This is optional.";
+  static const String nameCommas = "Comma separated names.";
+  static const String optional = "Optional.";
   static const String titleLengthNote =
       "Try to keep title length < ~30 characters.";
 

@@ -12,19 +12,21 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
   final bool withPadding;
   final bool number;
   final bool isRequired;
+  final String noteText;
 
   /// [hintText] is the text that will be displayed before the user types anything.
   DecoratedTextField(this.hintText,
       {this.withPadding = false,
       this.number = false,
       this.isRequired = true,
-      this.initialValue = Strings.empty});
+      this.initialValue = Strings.empty,
+      this.noteText = Strings.empty});
 
   @override
   Widget build(BuildContext context) {
     controller.text = initialValue;
     return Padding(
-        padding: getPadding(withPadding),
+        padding: getPadding(withPadding, noteText != Strings.empty),
         child: TextFormField(
             cursorColor: Palette.maroon,
             textCapitalization: TextCapitalization.sentences,
@@ -33,7 +35,7 @@ class DecoratedTextField extends StatelessWidget with DecoratedField {
             maxLength: number ? 3 : 80,
             controller: controller,
             style: TextStyles.form,
-            decoration: getDecoration(context, hintText),
+            decoration: getDecoration(context, hintText, noteText),
             validator: (input) => validator(input, isRequired)));
   }
 }

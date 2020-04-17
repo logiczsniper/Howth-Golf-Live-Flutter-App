@@ -179,7 +179,8 @@ class FirebaseInteraction {
     /// If the form inputs have been validated, add to holes.
     if (_formKey.currentState.validate()) {
       Hole newHole = Hole(
-          holeNumber: int.tryParse(numberField.controller.value.text),
+          holeNumber:
+              int.tryParse(numberField.controller.value.text).abs() ?? 0,
           holeScore: Score.fresh,
           comment: commentField.controller.text,
           lastUpdated: DateTime.now(),

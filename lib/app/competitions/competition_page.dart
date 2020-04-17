@@ -276,6 +276,8 @@ class CompetitionPage extends StatelessWidget {
                     id: id)
                 : Container());
 
+    /// TODO: FIXME: publish button NOT CLOSING ?
+
     return Scaffold(
       floatingActionButton: Container(
           padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
@@ -383,6 +385,8 @@ class CompetitionPage extends StatelessWidget {
                                   alignment: Alignment.topRight,
                                   child: Container(
                                     margin: EdgeInsets.only(right: 29.0),
+
+                                    /// TODO: Check with the button
                                     // decoration: UIToolkit
                                     //     .roundedRectBoxDecoration
                                     //     .copyWith(color: Palette.dark),
@@ -435,6 +439,8 @@ class CompetitionPage extends StatelessWidget {
                                                 UIToolkit.modalConfiguration(
                                                     isDeletion: true),
                                             builder: (context) =>
+
+                                                /// TODO: close all open holes in the page if OK is pressed!
                                                 CustomAlertDialog(
                                                     FirebaseInteraction.of(
                                                             context)

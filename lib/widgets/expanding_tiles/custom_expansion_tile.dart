@@ -80,8 +80,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
   AnimationController _controller;
   Animation<double> _heightFactor;
   Animation<Color> _borderColor;
-
-  bool _isExpanded = false;
+  bool _isExpanded;
 
   @override
   void initState() {
@@ -92,8 +91,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
 
     widget.customExpansionTileController.addListener(_handleTap);
 
-    _isExpanded =
-        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+    _isExpanded = widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
   }
 
@@ -116,7 +114,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
           });
         });
       }
-      PageStorage.of(context)?.writeState(context, _isExpanded);
     });
     if (widget.onExpansionChanged != null)
       widget.onExpansionChanged(_isExpanded);

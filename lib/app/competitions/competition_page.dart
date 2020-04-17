@@ -1,27 +1,25 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/app/hole_view_model.dart';
-import 'package:howth_golf_live/routing/routes.dart';
-import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
-
+import 'package:howth_golf_live/app/modification/modify_hole.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
-
+import 'package:howth_golf_live/app/hole_view_model.dart';
+import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/competition_details/competition_details.dart';
 import 'package:howth_golf_live/widgets/expanding_tiles/custom_expansion_tile.dart';
 import 'package:howth_golf_live/widgets/expanding_tiles/icon_button_pair.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
-import 'package:tuple/tuple.dart';
 
 class CompetitionPage extends StatelessWidget {
   final int id;
@@ -249,7 +247,11 @@ class CompetitionPage extends StatelessWidget {
     bool hasVisited = _userStatus.hasVisited(Strings.specificCompetition);
     if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
-          (_) => ShowCaseWidget.of(context).startShowCase(keys));
+        (_) => Future.delayed(
+          const Duration(milliseconds: 600),
+          () => ShowCaseWidget.of(context).startShowCase(keys),
+        ),
+      );
     }
 
     WidgetsBinding.instance.addPostFrameCallback(
@@ -375,7 +377,7 @@ class CompetitionPage extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Container(
-                                    margin: EdgeInsets.only(right: 28.0),
+                                    margin: EdgeInsets.only(right: 29.0),
                                     // decoration: UIToolkit
                                     //     .roundedRectBoxDecoration
                                     //     .copyWith(color: Palette.dark),
@@ -384,7 +386,7 @@ class CompetitionPage extends StatelessWidget {
                                         model.close();
                                         customExpansionTileController.tap();
                                       },
-                                      child: Icon(Icons.publish, size: 35.0),
+                                      child: Icon(Icons.publish, size: 34.0),
 
                                       // child: Text(
                                       //   "Done",
@@ -400,7 +402,7 @@ class CompetitionPage extends StatelessWidget {
 
                                 /// Modify/delete the hole!
                                 Container(
-                                  margin: EdgeInsets.only(left: 28.0),
+                                  margin: EdgeInsets.only(left: 29.0),
                                   padding: EdgeInsets.only(
                                       bottom: 4.0, left: 0.5, right: 0.5),
                                   child: Column(
@@ -409,8 +411,13 @@ class CompetitionPage extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         GestureDetector(
-                                          onTap: () => Routes.of(context)
-                                              .toHoleModification(id, _index),
+                                          onTap: () => showModal(
+                                            context: context,
+                                            configuration:
+                                                UIToolkit.modalConfiguration(),
+                                            builder: (context) =>
+                                                ModifyHole(id, _index),
+                                          ),
                                           child: Icon(
                                             Icons.edit,
                                             size: 32.0,
@@ -420,7 +427,8 @@ class CompetitionPage extends StatelessWidget {
                                           onTap: () => showModal(
                                             context: context,
                                             configuration:
-                                                FadeScaleTransitionConfiguration(),
+                                                UIToolkit.modalConfiguration(
+                                                    isDeletion: true),
                                             builder: (context) =>
                                                 CustomAlertDialog(
                                                     FirebaseInteraction.of(

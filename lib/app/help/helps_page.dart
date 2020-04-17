@@ -46,7 +46,11 @@ class HelpsPage extends StatelessWidget {
 
     if (!_userStatus.hasVisited(Strings.helpsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
-          (_) => ShowCaseWidget.of(context).startShowCase(keys));
+        (_) => Future.delayed(
+          const Duration(milliseconds: 600),
+          () => ShowCaseWidget.of(context).startShowCase(keys),
+        ),
+      );
     }
 
     return Scaffold(

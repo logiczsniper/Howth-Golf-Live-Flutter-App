@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
@@ -6,29 +7,30 @@ import 'package:howth_golf_live/style/text_styles.dart';
 
 class Themes {
   static ThemeData get appTheme => ThemeData(
-      colorScheme: colorScheme,
-      primaryColor: Palette.light,
-      primaryColorDark: Palette.dark,
-      accentColor: Palette.maroon,
-      splashColor: Palette.maroon.withAlpha(50),
-      disabledColor: Palette.maroon,
-      textSelectionHandleColor: Palette.maroon,
-      textSelectionColor: Palette.maroon,
-      scaffoldBackgroundColor: Palette.light,
-      fontFamily: Strings.firaSans,
-      textTheme: textTheme,
-      iconTheme: iconTheme,
-      inputDecorationTheme: inputDecorationTheme,
-      appBarTheme: appBarTheme,
-      floatingActionButtonTheme: floatingActionButtonTheme,
-      tabBarTheme: tabBarTheme,
-      tooltipTheme: tooltipTheme,
-      cardTheme: cardTheme,
-      pageTransitionsTheme: pageTransitionsTheme,
-      dialogTheme: dialogTheme,
-      buttonTheme: buttonTheme,
-      snackBarTheme: snackBarThemeData,
-      dividerTheme: dividerTheme);
+        colorScheme: colorScheme,
+        primaryColor: Palette.light,
+        primaryColorDark: Palette.dark,
+        accentColor: Palette.maroon,
+        splashColor: Palette.maroon.withAlpha(50),
+        disabledColor: Palette.maroon,
+        textSelectionHandleColor: Palette.maroon,
+        textSelectionColor: Palette.maroon,
+        scaffoldBackgroundColor: Palette.light,
+        fontFamily: Strings.firaSans,
+        textTheme: textTheme,
+        iconTheme: iconTheme,
+        inputDecorationTheme: inputDecorationTheme,
+        appBarTheme: appBarTheme,
+        floatingActionButtonTheme: floatingActionButtonTheme,
+        tabBarTheme: tabBarTheme,
+        tooltipTheme: tooltipTheme,
+        cardTheme: cardTheme,
+        pageTransitionsTheme: pageTransitionsTheme,
+        dialogTheme: dialogTheme,
+        buttonTheme: buttonTheme,
+        snackBarTheme: snackBarThemeData,
+        dividerTheme: dividerTheme,
+      );
 
   static DividerThemeData dividerTheme = DividerThemeData(
     // color: Palette.divider,
@@ -63,7 +65,9 @@ class Themes {
 
   static PageTransitionsTheme pageTransitionsTheme =
       PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-    TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+    TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+      transitionType: SharedAxisTransitionType.horizontal,
+    ),
     TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
   });
 

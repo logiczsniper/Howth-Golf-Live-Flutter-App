@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
 class CustomExpansionTileController extends ChangeNotifier {
-  void tap() {
-    notifyListeners();
-  }
+  void tap() => notifyListeners();
 }
 
 /// Logan Czernel - modification to [ExpansionTile].
@@ -16,7 +14,7 @@ class CustomExpansionTileController extends ChangeNotifier {
 ///
 /// @see C:\flutter_install\flutter\packages\flutter\lib\src\material\expansion_tile.dart
 
-const Duration _kExpand = const Duration(milliseconds: 200);
+const Duration _kExpand = const Duration(milliseconds: 350);
 
 class CustomExpansionTile extends StatefulWidget {
   /// Creates a single-line [ListTile] with a trailing button that expands or collapses
@@ -92,9 +90,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
     _heightFactor = _controller.drive(_easeInTween);
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
 
-    widget.customExpansionTileController.addListener(() {
-      _handleTap();
-    });
+    widget.customExpansionTileController.addListener(_handleTap);
 
     _isExpanded =
         PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;

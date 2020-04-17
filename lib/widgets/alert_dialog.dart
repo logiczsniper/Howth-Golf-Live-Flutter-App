@@ -19,7 +19,12 @@ class CustomAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(Strings.doubleCheck, style: TextStyles.cardTitle),
+      title: Text(
+        Strings.doubleCheck,
+        style: TextStyles.cardTitle.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       content: Text(
         Strings.irreversibleAction,
       ),

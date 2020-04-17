@@ -7,13 +7,13 @@ import 'package:tuple/tuple.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
+import 'package:howth_golf_live/app/modification/modify_competition.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
-
 import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/widgets/app_bars/competitions_bar.dart';
@@ -145,8 +145,11 @@ class CompetitionsPage extends StatelessWidget {
                               IconButton(
                                 padding: EdgeInsets.only(top: 10.0),
                                 icon: Icon(Icons.edit),
-                                onPressed: () => Routes.of(context)
-                                    .toCompetitionModification(id),
+                                onPressed: () => showModal(
+                                  context: context,
+                                  configuration: UIToolkit.modalConfiguration(),
+                                  builder: (context) => ModifyCompetition(id),
+                                ),
                               ),
                               IconButton(
                                 icon: Icon(Icons.delete),
@@ -156,8 +159,11 @@ class CompetitionsPage extends StatelessWidget {
                                 /// is to do so as this can have major consquences if an accident.
                                 onPressed: () => showModal(
                                   context: context,
-                                  configuration:
-                                      FadeScaleTransitionConfiguration(),
+                                  // configuration:
+                                  // FadeScaleTransitionConfiguration(),
+                                  configuration: UIToolkit.modalConfiguration(
+                                    isDeletion: true,
+                                  ),
                                   builder: (context) => CustomAlertDialog(
                                       FirebaseInteraction.of(context)
                                           .deleteCompetition,
@@ -206,7 +212,11 @@ class CompetitionsPage extends StatelessWidget {
 
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
-          (_) => ShowCaseWidget.of(context).startShowCase(keys));
+        (_) => Future.delayed(
+          const Duration(milliseconds: 600),
+          () => ShowCaseWidget.of(context).startShowCase(keys),
+        ),
+      );
     }
 
     return Scaffold(

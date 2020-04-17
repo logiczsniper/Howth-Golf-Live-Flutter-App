@@ -15,6 +15,7 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/widgets/long_material_page_route.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
@@ -35,7 +36,7 @@ class Routes {
           {FutureOr<dynamic> Function(dynamic) onComplete}) =>
       Navigator.push(
         context,
-        MaterialPageRoute(
+        LongMaterialPageRoute(
           builder: (context) => ShowCaseWidget(
             onFinish: () {
               var _userStatus =

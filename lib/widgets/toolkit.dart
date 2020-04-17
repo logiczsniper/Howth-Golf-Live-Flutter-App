@@ -1,19 +1,23 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:howth_golf_live/widgets/complex_card.dart';
-import 'package:howth_golf_live/widgets/complex_score.dart';
+import 'package:howth_golf_live/widgets/custom_modal_configuration.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
 
 import 'dart:ui';
 
+import 'package:howth_golf_live/app/creation/create_competition.dart';
+import 'package:howth_golf_live/app/creation/create_hole.dart';
+import 'package:howth_golf_live/widgets/complex_card.dart';
+import 'package:howth_golf_live/widgets/scroll_behavior.dart';
+import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
-import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
@@ -44,6 +48,21 @@ class UIToolkit {
       color: Palette.card,
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(13.0));
+
+  // static FadeScaleTransitionConfiguration modalConfiguration(
+  //         {bool isDeletion = false}) =>
+  //     FadeScaleTransitionConfiguration(
+  //       transitionDuration: const Duration(milliseconds: 250),
+  //       reverseTransitionDuration: const Duration(milliseconds: 200),
+  //       barrierColor:
+  //           isDeletion ? Palette.darker.withAlpha(138) : Palette.light,
+  //     );
+
+  static ModalConfiguration modalConfiguration({bool isDeletion = false}) =>
+      CustomTransitionConfiguration(
+        barrierColor:
+            isDeletion ? Palette.darker.withAlpha(138) : Palette.light,
+      );
 
   /// Some common methods used in various pages and widgets.
   static Card getCard(Widget child) => Card(
@@ -193,16 +212,22 @@ class UIToolkit {
           ),
         ],
       ),
-      onPressed: () {
-        switch (primaryText) {
-          case Strings.newCompetition:
-            Routes.of(context).toCompetitionCreation();
-            break;
-          case Strings.newHole:
-            Routes.of(context).toHoleCreation(id);
-            break;
-        }
-      },
+      onPressed: () => showModal(
+        context: context,
+        configuration: modalConfiguration(),
+        builder: (context) {
+          switch (primaryText) {
+            case Strings.newCompetition:
+              return CreateCompetition();
+              break;
+            case Strings.newHole:
+              return CreateHole(id);
+              break;
+            default:
+              throw Exception;
+          }
+        },
+      ),
     );
   }
 

@@ -28,18 +28,32 @@ class HelpPage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-              child: Text(
-                currentStep.title,
-                style: TextStyles.cardTitle,
-                textAlign: TextAlign.left,
-              ),
-              padding: EdgeInsets.only(bottom: 5.0)),
+            padding: EdgeInsets.only(bottom: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                UIToolkit.getHoleNumberDecorated(
+                    helpEntry.title == "App Usage - Q&A" ? "?" : index + 1),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      currentStep.title,
+                      style: TextStyles.cardTitle
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Padding(
-              child: Text(
-                currentStep.data,
-                style: TextStyles.cardSubTitle,
-              ),
-              padding: EdgeInsets.only(left: 4.5))
+            padding: EdgeInsets.only(left: 4.5),
+            child: Text(
+              currentStep.data,
+              style: TextStyles.cardSubTitle,
+            ),
+          ),
         ],
       ),
     );

@@ -1,27 +1,27 @@
 [
   {
-    "title": "General App Usage",
+    "title": "App Usage - Q&A",
     "subtitle": "Understanding Howth Golf Live",
     "steps": [
       {
-        "title": "Competition scores",
-        "data": "Found to the right of the date on competition cards- howth data is always on the left!"
+        "title": "Where are the competition scores",
+        "data": "The competition scores are found to the right of the date on competition cards- howth data is always on the left!"
       },
       {
-        "title": "Refreshing",
-        "data": "There is no need- all data is always up to date."
+        "title": "How do I refresh",
+        "data": "Refreshing is done automatically- all data is always up to date as long as you have an internet connection."
       },
       {
-        "title": "Competition details",
-        "data": "At the top middle of a specific competition page: location, date & lastly the time."
+        "title": "Where are the competition details",
+        "data": "Tap a competition card to enter that competition page. The competition details are found at the top center (of this page) in the following order: location, date & lastly the time."
       },
       {
-        "title": "Searching for a competition",
-        "data": "In the Competitions page, hit the magnifying glass icon in the top right & enter search text."
+        "title": " How do I search for a competition",
+        "data": "In the Competitions page, tap the magnifying glass icon in the top right & enter search text."
       },
       {
-        "title": "More hole data",
-        "data": "In a competition page, you can click on an individual hole to see extra information or (if you have access) update scores/hole data."
+        "title": "Where can I find additional details for a match-up",
+        "data": "In a competition page, you can tap on an individual match-up to see extra information. If you have access to the competition, you can update scores/hole data here."
       }
     ]
   },
@@ -31,27 +31,27 @@
     "steps": [
       {
         "title": "Go to the competitions page",
-        "data": "Click the home icon in the top right corner of this page to return to the Competitions page."
+        "data": "Tap the home icon in the top right corner of this page to return to the Competitions page."
       },
       {
         "title": "Locate your competition",
         "data": "Scroll through the current & archived competitions to find your competition."
       },
       {
-        "title": "Click on the competition",
+        "title": "Tap on the competition",
         "data": "Tap anywhere on it's card to enter page with the details of your competition."
       },
       {
         "title": "Show the text field",
-        "data": "Click the admin icon in the top right corner of the page. A text field should appear."
+        "data": "Tap the admin icon in the top right corner of the page. A text field should appear."
       },
       {
         "title": "Enter your code",
-        "data": "Click on the text field that has appeared & type in your competition code."
+        "data": "Tap on the text field that has appeared & type in your competition code."
       },
       {
         "title": "Submit entered code",
-        "data": "Click the check icon in the top right corner of the page. The text field vanishes."
+        "data": "Tap the check icon in the top right corner of the page. The text field vanishes."
       }
     ]
   },
@@ -61,19 +61,19 @@
     "steps": [
       {
         "title": "Go to the app help page",
-        "data": "Click the arrow icon in the top left corner of this page to go back to the App Help page."
+        "data": "Tap the arrow icon in the top left corner of this page to go back to the App Help page."
       },
       {
         "title": "Show the text field",
-        "data": "Click the admin icon in the top right corner of the page. A text field should appear."
+        "data": "Tap the admin icon in the top right corner of the page. A text field should appear."
       },
       {
         "title": "Enter your admin code",
-        "data": "Click on the text field that has appeared & type in your admin code."
+        "data": "Tap on the text field that has appeared & type in your admin code."
       },
       {
         "title": "Submit entered code",
-        "data": "Click the check icon in the top right corner of the page. The text field vanishes."
+        "data": "Tap the check icon in the top right corner of the page. The text field vanishes."
       }
     ]
   },
@@ -83,19 +83,19 @@
     "steps": [
       {
         "title": "Add a hole",
-        "data": "In a competition page, click the button at the bottom. Fill out the required information and hit the check icon in the top right."
+        "data": "In a competition page, tap the button at the bottom. Fill out the required information and tap the check icon in the top right."
       },
       {
         "title": "Remove a hole",
-        "data": "Click on the hole you want to remove. In the drop-down that appears, click the delete icon (below the edit icon) in the bottom left."
+        "data": "Tap on the hole you want to remove. In the drop-down that appears, tap the delete icon (below the edit icon) in the bottom left."
       },
       {
         "title": "Modify a hole",
-        "data": "Click on the hole you want to modify. In the drop-down that appears, click the edit icon (above the delete icon) in the top left."
+        "data": "Tap on the hole you want to modify. In the drop-down that appears, tap the edit icon (above the delete icon) in the top left."
       },
       {
         "title": "Updating hole numbers / scores",
-        "data": "Click on the hole you want to modify. In the drop-down that appears, there will be 3 sets of plus/minus icons. They are vertically aligned with the number that they modify."
+        "data": "Tap on the hole you want to modify. In the drop-down that appears, there will be 3 sets of plus/minus icons. They are vertically aligned with the number that they modify."
       }
     ]
   },
@@ -105,15 +105,15 @@
     "steps": [
       {
         "title": "Add a competition",
-        "data": "In the competitions page, click the button at the bottom. Fill out the required information and hit the check icon in the top right."
+        "data": "In the competitions page, tap the button at the bottom. Fill out the required information and tap the check icon in the top right."
       },
       {
         "title": "Remove a competition",
-        "data": "In the competitions page, each card will have a remove icon on the bottom right of it. Click this icon to remove the associated competition."
+        "data": "In the competitions page, each card will have a remove icon on the bottom right of it. Tap this icon to remove the associated competition."
       },
       {
         "title": "Modify a competition",
-        "data": "In the competitions page, each card will have a edit icon on the top right of it. Click this icon to modify the associated competition."
+        "data": "In the competitions page, each card will have a edit icon on the top right of it. Tap this icon to modify the associated competition."
       },
       {
         "title": "Add a manager",

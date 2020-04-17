@@ -85,8 +85,7 @@ class UIToolkit {
 
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
-  static Container getHoleNumberDecorated(int holeNumber) => Container(
-      key: ValueKey(DateTime.now()),
+  static Container getHoleNumberDecorated(dynamic holeNumber) => Container(
       margin: EdgeInsets.symmetric(vertical: 2.0),
       padding: EdgeInsets.all(2.5),
       width: 32.0,

@@ -22,6 +22,17 @@ class DatabaseEntry {
       holes: [Hole.example],
       score: Score.example);
 
+  static DatabaseEntry get empty => DatabaseEntry(
+        date: Strings.empty,
+        id: -2,
+        location: Location.empty,
+        time: Strings.empty,
+        opposition: Strings.empty,
+        title: Strings.empty,
+        holes: [],
+        score: Score.empty,
+      );
+
   /// Fetch an attribute based on [field] String.
   String attribute(String field) {
     switch (field) {
@@ -140,6 +151,10 @@ class Score {
 
   static Score get example => Score(howth: "1", opposition: "0");
   static Score get holeExample => Score(howth: "4", opposition: "0");
+  static Score get empty => Score(
+        howth: "0",
+        opposition: "0",
+      );
 
   static Score get fresh => Score(howth: "0", opposition: "0");
 
@@ -375,6 +390,7 @@ class Location {
   bool get isHome => address == Strings.homeAddress;
 
   static Location get example => Location(address: Strings.homeAddress);
+  static Location get empty => Location(address: Strings.empty);
 
   @override
   int get hashCode => address.hashCode;

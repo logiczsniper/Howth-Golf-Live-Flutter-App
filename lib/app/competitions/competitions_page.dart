@@ -126,9 +126,14 @@ class CompetitionsPage extends StatelessWidget {
                   var _firebaseModel =
                       Provider.of<FirebaseViewModel>(context, listen: false);
                   int id = _firebaseModel
-                      .activeElements(hasVisited, isCurrentTab, _searchText)
-                      .elementAt(competitionIndex)
+                      .activeElements(hasVisited, isCurrentTab,
+                          _searchText)[competitionIndex]
                       .id;
+
+                  if (id == null) {
+                    print("GONE");
+                    return Container();
+                  }
 
                   return ComplexCard(
                     child: _tileBuilder(

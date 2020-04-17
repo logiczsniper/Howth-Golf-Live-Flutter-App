@@ -259,10 +259,15 @@ class CompetitionPage extends StatelessWidget {
 
     Widget floatingActionButton =
         Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
-            selector: (context, userStatusModel, firebaseModel) =>
-                firebaseModel.entryFromId(id).isArchived
-                    ? userStatusModel.isAdmin
-                    : userStatusModel.isManager(id),
+            selector: (context, userStatusModel, firebaseModel) {
+              DatabaseEntry entry = firebaseModel.entryFromId(id);
+
+              if (entry.id == -2) Navigator.of(context).pop();
+
+              return firebaseModel.entryFromId(id).isArchived
+                  ? userStatusModel.isAdmin
+                  : userStatusModel.isManager(id);
+            },
             builder: (context, hasAccess, child) => hasAccess
                 ? UIToolkit.createButton(
                     context: context,

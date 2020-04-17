@@ -24,7 +24,7 @@ class FirebaseViewModel {
 
   DatabaseEntry entryFromId(int id) =>
       databaseEntries?.firstWhere((entry) => entry?.id == id,
-          orElse: () => DatabaseEntry.example);
+          orElse: () => DatabaseEntry.empty);
 
   List<DatabaseEntry> activeElements(
       bool hasVisited, bool isCurrentTab, String searchText) {

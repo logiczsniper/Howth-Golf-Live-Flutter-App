@@ -1,9 +1,16 @@
+import 'package:animations/animations.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/style/palette.dart';
 
-class CustomExpansionTileController extends ChangeNotifier {
-  void tap() => notifyListeners();
-}
+import 'package:howth_golf_live/app/firebase_view_model.dart';
+import 'package:howth_golf_live/app/modification/modify_hole.dart';
+import 'package:howth_golf_live/app/user_status_view_model.dart';
+import 'package:howth_golf_live/services/firebase_interaction.dart';
+import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/style/palette.dart';
+import 'package:howth_golf_live/widgets/alert_dialog.dart';
+import 'package:howth_golf_live/widgets/expanding_tiles/icon_button_pair.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 
 /// Logan Czernel - modification to [ExpansionTile].
 ///
@@ -22,17 +29,16 @@ class CustomExpansionTile extends StatefulWidget {
   /// be non-null.
   const CustomExpansionTile({
     Key key,
-    this.customExpansionTileController,
     this.leading,
     @required this.title,
     this.subtitle,
     this.onExpansionChanged,
     this.children = const <Widget>[],
     this.initiallyExpanded = false,
+    this.index,
+    this.id,
   })  : assert(initiallyExpanded != null),
         super(key: key);
-
-  final CustomExpansionTileController customExpansionTileController;
 
   /// A widget to display before the title.
   ///
@@ -64,6 +70,9 @@ class CustomExpansionTile extends StatefulWidget {
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
   final bool initiallyExpanded;
 
+  final int index;
+  final int id;
+
   @override
   _CustomExpansionTileState createState() => _CustomExpansionTileState();
 }
@@ -88,8 +97,6 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
     _controller = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _controller.drive(_easeInTween);
     _borderColor = _controller.drive(_borderColorTween.chain(_easeOutTween));
-
-    widget.customExpansionTileController.addListener(_handleTap);
 
     _isExpanded = widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
@@ -159,9 +166,125 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
     super.didChangeDependencies();
   }
 
+  Widget get _adminWidgets =>
+      Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
+        selector: (context, userStatusModel, firebaseModel) =>
+            firebaseModel.entryFromId(widget.id).isArchived
+                ? userStatusModel.isAdmin
+                : userStatusModel.isManager(widget.id),
+        builder: (context, hasAccess, child) => hasAccess
+            ? Stack(
+                children: <Widget>[
+                  /// Close this hole!
+                  Container(
+                    margin: EdgeInsets.only(right: 27.0),
+                    padding:
+                        EdgeInsets.only(bottom: 4.0, left: 0.5, right: 0.5),
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: _handleTap,
+                      child: Icon(Icons.highlight_off, size: 33.25),
+                    ),
+                  ),
+
+                  /// Modify/delete the hole!
+                  Container(
+                    margin: EdgeInsets.only(left: 27.0),
+                    padding:
+                        EdgeInsets.only(bottom: 4.0, left: 0.5, right: 0.5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => showModal(
+                            context: context,
+                            configuration: UIToolkit.modalConfiguration(),
+                            builder: (context) =>
+                                ModifyHole(widget.id, widget.index),
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            size: 32.0,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => showModal(
+                            context: context,
+                            configuration:
+                                UIToolkit.modalConfiguration(isDeletion: true),
+                            builder: (context) => CustomAlertDialog(
+                              FirebaseInteraction.of(context).deleteHole,
+                              index: widget.index,
+                              id: widget.id,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.delete,
+                            size: 32.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      /// Modify howth's score!
+                      IconButtonPair(context, widget.index, widget.id,
+                          onAdd: (currentHole) {
+                        Score updatedScore =
+                            currentHole.holeScore.updateScore(true, 1);
+                        Hole updatedHole =
+                            currentHole.updateHole(newScore: updatedScore);
+                        return updatedHole;
+                      }, onSubtract: (currentHole) {
+                        Score updatedScore =
+                            currentHole.holeScore.updateScore(true, -1);
+                        Hole updatedHole =
+                            currentHole.updateHole(newScore: updatedScore);
+                        return updatedHole;
+                      }),
+
+                      /// Modify the hole number!
+                      IconButtonPair(context, widget.index, widget.id,
+                          iconColor: Palette.maroon, onAdd: (currentHole) {
+                        Hole updatedHole = currentHole.updateNumber(1);
+                        return updatedHole;
+                      }, onSubtract: (currentHole) {
+                        Hole updatedHole = currentHole.updateNumber(-1);
+                        return updatedHole;
+                      }),
+
+                      /// Modify the opposition score!
+                      IconButtonPair(context, widget.index, widget.id,
+                          onAdd: (currentHole) {
+                        Score updatedScore =
+                            currentHole.holeScore.updateScore(false, 1);
+                        Hole updatedHole =
+                            currentHole.updateHole(newScore: updatedScore);
+                        return updatedHole;
+                      }, onSubtract: (currentHole) {
+                        Score updatedScore =
+                            currentHole.holeScore.updateScore(false, -1);
+                        Hole updatedHole =
+                            currentHole.updateHole(newScore: updatedScore);
+                        return updatedHole;
+                      }),
+                    ],
+                  ),
+                ],
+              )
+            : Container(),
+      );
+
   @override
   Widget build(BuildContext context) {
     final bool closed = !_isExpanded && _controller.isDismissed;
+
+    List<Widget> children = widget.children;
+    children.insert(0, _adminWidgets);
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildChildren,

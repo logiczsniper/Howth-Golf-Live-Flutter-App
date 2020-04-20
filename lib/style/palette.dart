@@ -7,6 +7,5 @@ class Palette {
   static const Color darker = Color.fromARGB(255, 25, 25, 25);
   static const Color maroon = Color.fromARGB(255, 128, 0, 0);
   static const Color card = Color.fromARGB(255, 243, 243, 243);
-  static const Color divider = Color.fromARGB(225, 220, 220, 220);
   static const Color inMaroon = Color.fromARGB(252, 238, 238, 238);
 }

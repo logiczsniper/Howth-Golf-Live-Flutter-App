@@ -83,8 +83,6 @@ class CompetitionsPage extends StatelessWidget {
       GlobalKey _scoreKey) {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
 
-    // _userStatus.clearPreferences();
-
     return Selector<FirebaseViewModel, Tuple3<int, QuerySnapshot, bool>>(
       selector: (_, model) {
         return Tuple3(
@@ -218,7 +216,7 @@ class CompetitionsPage extends StatelessWidget {
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 600),
+          const Duration(milliseconds: 610),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );

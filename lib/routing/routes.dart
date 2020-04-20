@@ -87,7 +87,12 @@ class Routes {
       pushTo(CompetitionsPage(), onComplete: onComplete);
 
   /// Push to the [Competition] page.
-  void toCompetition(int id) => pushTo(CompetitionPage(id));
+  void toCompetition(int id) => pushTo(
+        CompetitionPage(
+          id,
+          ScrollController(),
+        ),
+      );
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {

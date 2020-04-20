@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -6,25 +5,22 @@ import 'package:showcaseview/showcase_widget.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
-import 'package:howth_golf_live/app/modification/modify_hole.dart';
 import 'package:howth_golf_live/constants/strings.dart';
-import 'package:howth_golf_live/services/firebase_interaction.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/app/hole_view_model.dart';
-import 'package:howth_golf_live/widgets/alert_dialog.dart';
 import 'package:howth_golf_live/widgets/app_bars/code_field_bar.dart';
 import 'package:howth_golf_live/widgets/competition_details/competition_details.dart';
 import 'package:howth_golf_live/widgets/expanding_tiles/custom_expansion_tile.dart';
-import 'package:howth_golf_live/widgets/expanding_tiles/icon_button_pair.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionPage extends StatelessWidget {
   final int id;
+  final ScrollController _scrollController;
 
-  CompetitionPage(this.id);
+  CompetitionPage(this.id, this._scrollController);
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
@@ -207,9 +203,8 @@ class CompetitionPage extends StatelessWidget {
     var _userStatus = Provider.of<UserStatusViewModel>(context);
     var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
 
-    final ScrollController _scrollController = ScrollController();
     _scrollController.addListener(() {
-      _holeModel.scroll(_scrollController.offset);
+      _holeModel.scroll(id, _scrollController.offset);
     });
 
     final GlobalKey _howthScoreKey = GlobalKey();
@@ -248,14 +243,15 @@ class CompetitionPage extends StatelessWidget {
     if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 600),
+          const Duration(milliseconds: 610),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );
     }
 
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => _scrollController.jumpTo(_holeModel.offset));
+      (_) => _scrollController.jumpTo(_holeModel.offset(id: id)),
+    );
 
     Widget floatingActionButton =
         Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
@@ -275,8 +271,6 @@ class CompetitionPage extends StatelessWidget {
                     secondaryText: Strings.tapEditHole,
                     id: id)
                 : Container());
-
-    /// TODO: FIXME: publish button NOT CLOSING ?
 
     return Scaffold(
       floatingActionButton: Container(
@@ -338,11 +332,6 @@ class CompetitionPage extends StatelessWidget {
               /// account for the [UIToolkit.exampleHole].
               if (!hasVisited) _index--;
 
-              /// Create a controller which will be passed into the state of [CustomExpansionTile]
-              /// which enables us to call the [ExpansionTile._handleTap] method from here.
-              CustomExpansionTileController customExpansionTileController =
-                  CustomExpansionTileController();
-
               return Consumer<HoleViewModel>(
                 child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 12),
@@ -353,163 +342,28 @@ class CompetitionPage extends StatelessWidget {
                             ? Palette.light
                             : Palette.card.withAlpha(240))),
                 builder: (context, model, child) => CustomExpansionTile(
-                  customExpansionTileController: customExpansionTileController,
                   title: child,
-                  initiallyExpanded: _index == model.openIndex,
+                  id: id,
+                  index: _index,
+                  initiallyExpanded: model.openIndices(id: id).contains(_index),
                   onExpansionChanged: (bool isOpen) {
                     if (isOpen) {
-                      model.open(_index);
+                      model.open(id, _index);
                       double _offset = (_index * 60 + 50).toDouble();
 
                       /// If the difference between the current position and where the
                       /// scroll would end up is too great, scroll!
                       if ((_scrollController.offset - _offset).abs() > 60)
-                        _scrollController.animateTo(_offset,
-                            duration: const Duration(milliseconds: 700),
-                            curve: Curves.easeInOutQuart);
+                        _scrollController.animateTo(
+                          _offset,
+                          duration: const Duration(milliseconds: 700),
+                          curve: Curves.easeInOutQuart,
+                        );
                     } else {
-                      model.close();
+                      model.close(id, _index);
                     }
                   },
                   children: <Widget>[
-                    Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
-                      selector: (context, userStatusModel, firebaseModel) =>
-                          firebaseModel.entryFromId(id).isArchived
-                              ? userStatusModel.isAdmin
-                              : userStatusModel.isManager(id),
-                      builder: (context, hasAccess, child) => hasAccess
-                          ? Stack(
-                              children: <Widget>[
-                                /// Done button!
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 29.0),
-
-                                    /// TODO: Check with the button
-                                    // decoration: UIToolkit
-                                    //     .roundedRectBoxDecoration
-                                    //     .copyWith(color: Palette.dark),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        model.close();
-                                        customExpansionTileController.tap();
-                                      },
-                                      child: Icon(Icons.publish, size: 34.0),
-
-                                      // child: Text(
-                                      //   "Done",
-                                      //   textAlign: TextAlign.end,
-                                      //   style: TextStyles.cardSubTitle.copyWith(
-                                      //     color: Palette.inMaroon,
-                                      //     fontWeight: FontWeight.bold,
-                                      //   ),
-                                      // ),
-                                    ),
-                                  ),
-                                ),
-
-                                /// Modify/delete the hole!
-                                Container(
-                                  margin: EdgeInsets.only(left: 29.0),
-                                  padding: EdgeInsets.only(
-                                      bottom: 4.0, left: 0.5, right: 0.5),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        GestureDetector(
-                                          onTap: () => showModal(
-                                            context: context,
-                                            configuration:
-                                                UIToolkit.modalConfiguration(),
-                                            builder: (context) =>
-                                                ModifyHole(id, _index),
-                                          ),
-                                          child: Icon(
-                                            Icons.edit,
-                                            size: 32.0,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => showModal(
-                                            context: context,
-                                            configuration:
-                                                UIToolkit.modalConfiguration(
-                                                    isDeletion: true),
-                                            builder: (context) =>
-
-                                                /// TODO: close all open holes in the page if OK is pressed!
-                                                CustomAlertDialog(
-                                                    FirebaseInteraction.of(
-                                                            context)
-                                                        .deleteHole,
-                                                    index: _index,
-                                                    id: id),
-                                          ),
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 32.0,
-                                          ),
-                                        ),
-                                      ]),
-                                ),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    /// Modify howth's score!
-                                    IconButtonPair(context, _index, id,
-                                        onAdd: (currentHole) {
-                                      Score updatedScore = currentHole.holeScore
-                                          .updateScore(true, 1);
-                                      Hole updatedHole = currentHole.updateHole(
-                                          newScore: updatedScore);
-                                      return updatedHole;
-                                    }, onSubtract: (currentHole) {
-                                      Score updatedScore = currentHole.holeScore
-                                          .updateScore(true, -1);
-                                      Hole updatedHole = currentHole.updateHole(
-                                          newScore: updatedScore);
-                                      return updatedHole;
-                                    }),
-
-                                    /// Modify the hole number!
-                                    IconButtonPair(context, _index, id,
-                                        iconColor: Palette.maroon,
-                                        onAdd: (currentHole) {
-                                      Hole updatedHole =
-                                          currentHole.updateNumber(1);
-                                      return updatedHole;
-                                    }, onSubtract: (currentHole) {
-                                      Hole updatedHole =
-                                          currentHole.updateNumber(-1);
-                                      return updatedHole;
-                                    }),
-
-                                    /// Modify the opposition score!
-                                    IconButtonPair(context, _index, id,
-                                        onAdd: (currentHole) {
-                                      Score updatedScore = currentHole.holeScore
-                                          .updateScore(false, 1);
-                                      Hole updatedHole = currentHole.updateHole(
-                                          newScore: updatedScore);
-                                      return updatedHole;
-                                    }, onSubtract: (currentHole) {
-                                      Score updatedScore = currentHole.holeScore
-                                          .updateScore(false, -1);
-                                      Hole updatedHole = currentHole.updateHole(
-                                          newScore: updatedScore);
-                                      return updatedHole;
-                                    }),
-                                  ],
-                                ),
-                              ],
-                            )
-                          : Container(),
-                    ),
-
                     /// Display the [lastUpdated] formatted.
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 3.0),
@@ -534,7 +388,7 @@ class CompetitionPage extends StatelessWidget {
 
                     /// If there is a [comment], display it.
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 3.0),
+                      margin: EdgeInsets.symmetric(horizontal: 27.0),
                       padding: EdgeInsets.symmetric(vertical: 6.0),
                       child: Selector<FirebaseViewModel, String>(
                         selector: (_, model) => model

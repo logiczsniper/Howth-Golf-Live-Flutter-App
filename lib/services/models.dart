@@ -331,25 +331,34 @@ class Hole {
     Duration difference = DateTime.now().difference(lastUpdated);
 
     String value;
+    int displayValue;
 
-    if (difference.inHours < 1)
+    if (difference.inHours < 1) {
+      displayValue = difference.inMinutes;
 
       /// Less than an hour; return in minutes.
-      value = "${difference.inMinutes} minute(s) ago";
-    else if (difference.inDays < 1)
+      value = "$displayValue minute" + (displayValue == 1 ? "" : "s");
+    } else if (difference.inDays < 1) {
+      displayValue = difference.inHours;
 
       /// Less than a day; return in hours.
-      value = "${difference.inHours} hour(s) ago";
-    else if (difference.inDays < 365)
+      value = "$displayValue hour" + (displayValue == 1 ? "" : "s");
+    } else if (difference.inDays < 365) {
+      displayValue = difference.inDays;
 
       /// Less than a year; return in days.
-      value = "${difference.inDays} day(s) ago";
-    else
+      value = "$displayValue day" + (displayValue == 1 ? "" : "s");
+    } else {
+      displayValue = difference.inDays ~/ 365;
 
       /// Greater than a year; return in years.
-      value = "${(difference.inDays ~/ 365)} year(s) ago";
+      value = "$displayValue year" + (displayValue == 1 ? "" : "s");
+    }
 
-    return "Last updated: $value";
+    return "Last updated: " +
+        (displayValue == 0 && value.contains("minutes")
+            ? "just now"
+            : "$value ago");
   }
 
   /// Turn a list of players, [playerList], into one string with

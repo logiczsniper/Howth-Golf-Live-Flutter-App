@@ -91,10 +91,16 @@ class UIToolkit {
       width: 32.0,
       child: Padding(
           child: Align(
-              alignment: Alignment.center,
-              child: Text(holeNumber.toString(),
-                  style: TextStyles.cardSubTitle.copyWith(
-                      color: Palette.inMaroon, fontWeight: FontWeight.bold))),
+            alignment: Alignment.center,
+            child: Text(
+              holeNumber.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyles.cardSubTitle.copyWith(
+                color: Palette.inMaroon,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           padding: EdgeInsets.all(4.0)),
       decoration: BoxDecoration(
           color: Palette.maroon,
@@ -141,7 +147,7 @@ class UIToolkit {
           Widget child}) =>
       Showcase(
           key: key,
-          description: description ?? "",
+          description: "  $description  " ?? "",
           descTextStyle: TextStyles.description,
           showArrow: false,
           textColor: Palette.dark,

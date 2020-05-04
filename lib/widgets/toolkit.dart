@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:howth_golf_live/widgets/custom_modal_configuration.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
@@ -177,6 +178,15 @@ class UIToolkit {
         ),
         duration: duration ?? const Duration(seconds: 7),
       );
+
+  static SvgPicture svgHowthLogo({double width, double height}) {
+    return SvgPicture.asset(
+      Strings.iconPath,
+      color: Palette.inMaroon.withAlpha(125),
+      width: width,
+      height: height,
+    );
+  }
 
   static FloatingActionButton createButton(
       {@required BuildContext context,

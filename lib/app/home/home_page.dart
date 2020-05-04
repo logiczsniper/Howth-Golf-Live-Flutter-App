@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/home/authentication_view_model.dart';
@@ -27,9 +27,8 @@ class HomePage extends StatelessWidget {
           fontSize: 40.0,
           fontFamily: Strings.cormorantGaramond));
 
-  Widget get _howthLogo => Center(
-      child: SvgPicture.asset(Strings.iconPath,
-          color: Palette.inMaroon.withAlpha(125), width: 200.0, height: 380.0));
+  Widget get _howthLogo =>
+      Center(child: UIToolkit.svgHowthLogo(width: 200.0, height: 380.0));
 
   Widget _page(
           BuildContext context, AuthenticationViewModel authenticationModel) =>

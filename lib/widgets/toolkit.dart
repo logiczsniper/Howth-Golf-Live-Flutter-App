@@ -179,10 +179,15 @@ class UIToolkit {
         duration: duration ?? const Duration(seconds: 7),
       );
 
-  static SvgPicture svgHowthLogo({double width, double height}) {
+  static SvgPicture svgHowthLogo({
+    double width = 70.0,
+    double height = 115.0,
+    int opacity = 220,
+    Color color,
+  }) {
     return SvgPicture.asset(
       Strings.iconPath,
-      color: Palette.inMaroon.withAlpha(125),
+      color: color ?? Palette.dark.withAlpha(opacity),
       width: width,
       height: height,
     );

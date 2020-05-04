@@ -11,7 +11,7 @@ import 'package:howth_golf_live/widgets/opacity_change.dart';
 
 class HomePage extends StatelessWidget {
   Widget _tapText(String text) => Padding(
-      padding: EdgeInsets.only(top: 10.0),
+      padding: EdgeInsets.all(8.0),
       child: OpacityChangeWidget(
           flashing: true,
           target: Text(
@@ -19,16 +19,20 @@ class HomePage extends StatelessWidget {
             style: TextStyles.form,
           )));
 
-  Widget get _howthText => Text(Strings.appTitle,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: Palette.maroon,
-          height: 1.0,
-          fontSize: 40.0,
-          fontFamily: Strings.cormorantGaramond));
+  Widget get _howthText => Padding(
+        padding: EdgeInsets.only(bottom: 8.0),
+        child: Text(Strings.appTitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Palette.maroon,
+                height: 1.0,
+                fontSize: 40.0,
+                fontFamily: Strings.cormorantGaramond)),
+      );
 
   Widget get _howthLogo =>
-      Center(child: UIToolkit.svgHowthLogo(width: 200.0, height: 380.0));
+      Center(child: UIToolkit.svgHowthLogo(width: 100.0, height: 190.0));
+  // Center(child: UIToolkit.svgHowthLogo(width: 200.0, height: 380.0));
 
   Widget _page(
           BuildContext context, AuthenticationViewModel authenticationModel) =>
@@ -37,18 +41,18 @@ class HomePage extends StatelessWidget {
           authenticationModel.anonymousSignIn(context);
         },
         child: Scaffold(
-          body: Stack(
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              OpacityChangeWidget(target: _howthLogo),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _howthText,
-                  _tapText(authenticationModel.status)
-                ],
-              ),
-            ],
+          // floatingActionButton: OpacityChangeWidget(target: _howthLogo),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerDocked,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                OpacityChangeWidget(target: _howthLogo),
+                _howthText,
+                _tapText(authenticationModel.status),
+              ],
+            ),
           ),
         ),
       );

@@ -20,8 +20,8 @@
         "data": "In the Competitions page, tap the magnifying glass icon in the top right & enter search text."
       },
       {
-        "title": "Where can I find additional details for a match-up",
-        "data": "In a competition page, you can tap on an individual match-up to see extra information. If you have access to the competition, you can update scores/hole data here."
+        "title": "Where can I find additional details for a match/player",
+        "data": "In a competition page, you can tap on a player's name to see extra information. If you have access to the competition, you can update scores/hole data here."
       }
     ]
   },
@@ -42,16 +42,16 @@
         "data": "Tap anywhere on it's card to enter page with the details of your competition."
       },
       {
-        "title": "Show the text field",
-        "data": "Tap the admin icon in the top right corner of the page. A text field should appear."
+        "title": "Show the text box",
+        "data": "Tap the admin icon in the top right corner of the page. A text box should appear."
       },
       {
         "title": "Enter your code",
-        "data": "Tap on the text field that has appeared & type in your competition code."
+        "data": "Tap on the text box that has appeared & type in your competition code."
       },
       {
         "title": "Submit entered code",
-        "data": "Tap the check icon in the top right corner of the page. The text field vanishes."
+        "data": "Tap the check icon in the top right corner of the page. The text box vanishes."
       }
     ]
   },
@@ -64,16 +64,16 @@
         "data": "Tap the arrow icon in the top left corner of this page to go back to the App Help page."
       },
       {
-        "title": "Show the text field",
-        "data": "Tap the admin icon in the top right corner of the page. A text field should appear."
+        "title": "Show the text box",
+        "data": "Tap the admin icon in the top right corner of the page. A text box should appear."
       },
       {
         "title": "Enter your admin code",
-        "data": "Tap on the text field that has appeared & type in your admin code."
+        "data": "Tap on the text box that has appeared & type in your admin code."
       },
       {
         "title": "Submit entered code",
-        "data": "Tap the check icon in the top right corner of the page. The text field vanishes."
+        "data": "Tap the check icon in the top right corner of the page. The text box vanishes."
       }
     ]
   },

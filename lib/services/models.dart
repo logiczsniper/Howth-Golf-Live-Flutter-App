@@ -2,6 +2,14 @@ import 'package:howth_golf_live/constants/fields.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:meta/meta.dart';
 
+/// Represents a competition in the database.
+///
+/// [id] is an immutable, 6 digit integer which is used as the code to gain access to
+/// the competition entry.
+///
+/// [opposition] the opposing team name.
+///
+/// [score] the overall competition score.
 class DatabaseEntry {
   final int id;
   final Location location;
@@ -130,6 +138,11 @@ class DatabaseEntry {
       @required this.score});
 }
 
+/// Represents the score of either a hole or a competition.
+///
+/// [howth] howths current score.
+///
+/// [opposition] the opposing teams score.
 class Score {
   final String howth;
   final String opposition;
@@ -150,7 +163,7 @@ class Score {
         opposition = _calculateScore(parsedHoles)[1];
 
   static Score get example => Score(howth: "1", opposition: "0");
-  static Score get holeExample => Score(howth: "4", opposition: "0");
+  static Score get holeExample => Score(howth: "2", opposition: "1");
   static Score get empty => Score(
         howth: "0",
         opposition: "0",
@@ -190,6 +203,7 @@ class Score {
 
   bool get isAllSquare => howth == opposition && howth == "0";
 
+  /// Get which team is ahead!
   String get _leader {
     double howth = double.tryParse(this.howth);
     double opposition = double.tryParse(this.opposition);
@@ -234,12 +248,25 @@ class Score {
   Score({@required this.howth, @required this.opposition});
 }
 
+/// Represents a match-up / hole in a competition.
+///
+/// Note:
+///
+/// In the database, [holeNumber] is actually 'hole_number',
+///                  [holeScore] is actually 'hole_score' and
+///                  [lastUpdated] is actually 'last_updated'. (stored as string)
+///
+/// [holeNumber] the current hole number for this matchup.
+///
+/// [holeScore] the current score for this matchup.
+///
+/// [players] howth player names.
+///
+/// [opposition] optional opposing player names.
+/// If empty, the [DatabaseEntry.opposition] is used.
+///
+/// [comment] optional.
 class Hole {
-  /// Note:
-  ///
-  /// In the database, [holeNumber] is actually 'hole_number',
-  ///                  [holeScore] is actually 'hole_score' and
-  ///                  [lastUpdated] is actually 'last_updated'. (stored as string)
   final int holeNumber;
   final Score holeScore;
   final List<String> players;
@@ -259,9 +286,9 @@ class Hole {
         lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
   static Hole get example => Hole(
-      holeNumber: 2,
+      holeNumber: 3,
       holeScore: Score.holeExample,
-      players: ["Home player(s)"],
+      players: ["Howth player(s)"],
       opposition: ["Opposing club/player(s)"],
       comment: Strings.empty,
       lastUpdated: DateTime.now().subtract(const Duration(seconds: 60)));
@@ -298,29 +325,45 @@ class Hole {
         lastUpdated: DateTime.now());
   }
 
-  Hole updateHole(
-      {Score newScore,
-      int newHoleNumber,
-      List<String> newPlayers,
-      List<String> newOpposition,
-      String newComment}) {
+  /// Update a hole, atleast one property must not be null.
+  Hole updateHole({
+    Score newScore,
+    int newHoleNumber,
+    List<String> newPlayers,
+    List<String> newOpposition,
+    String newComment,
+  }) {
     assert(newScore != null ||
         newHoleNumber != null ||
         newPlayers != null ||
         newComment != null ||
         newOpposition != null);
     return Hole(
-        holeNumber: newHoleNumber ?? holeNumber,
-        holeScore: newScore ?? holeScore,
-        players: newPlayers ?? players,
-        opposition: newOpposition ?? opposition,
-        comment: newComment ?? comment,
-        lastUpdated: DateTime.now());
+      holeNumber: newHoleNumber ?? holeNumber,
+      holeScore: newScore ?? holeScore,
+      players: newPlayers ?? players,
+      opposition: newOpposition ?? opposition,
+      comment: newComment ?? comment,
+      lastUpdated: DateTime.now(),
+    );
   }
 
+  /// Turn a list of players, [playerList], into one string with
+  /// those individual player names separated by commas, apart from the last
+  /// player in the list.
+  String _formattedNames(List<String> names) => names.fold(
+      names.first,
+      (String first, String second) =>
+          second == names.first ? first : first + ", " + second);
+
+  /// Returns the hole players formatted, if no players are given,
+  /// returns 'Howth Golf Club'.
   String get formattedPlayers => _formattedNames(players).isEmpty
       ? Strings.homeAddress
       : _formattedNames(players);
+
+  /// Returns the opposing teams players for this hole formatted.
+  /// If no names are given, returns the opposing club name.
   String formattedOpposition(String oppositionClub) =>
       _formattedNames(opposition).isEmpty
           ? oppositionClub
@@ -361,14 +404,6 @@ class Hole {
             : "$value ago");
   }
 
-  /// Turn a list of players, [playerList], into one string with
-  /// those individual player names separated by commas, apart from the last
-  /// player in the list.
-  String _formattedNames(List<String> names) => names.fold(
-      names.first,
-      (String first, String second) =>
-          second == names.first ? first : first + ", " + second);
-
   @override
   int get hashCode => lastUpdated.hashCode;
 
@@ -376,13 +411,14 @@ class Hole {
   bool operator ==(Object other) =>
       other is Hole && other.lastUpdated.isAtSameMomentAs(lastUpdated);
 
-  Hole(
-      {@required this.holeNumber,
-      @required this.holeScore,
-      @required this.players,
-      this.comment,
-      this.opposition,
-      @required this.lastUpdated});
+  Hole({
+    @required this.holeNumber,
+    @required this.holeScore,
+    @required this.players,
+    this.comment,
+    this.opposition,
+    @required this.lastUpdated,
+  });
 }
 
 class Location {

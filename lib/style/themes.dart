@@ -32,17 +32,20 @@ class Themes {
       );
 
   static SnackBarThemeData snackBarThemeData = SnackBarThemeData(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
+    backgroundColor: Palette.card.withAlpha(253),
+    contentTextStyle: TextStyle(color: Palette.dark),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
         top: Radius.circular(13),
-      )),
-      backgroundColor: Palette.card.withAlpha(253),
-      contentTextStyle: TextStyle(color: Palette.dark));
+      ),
+    ),
+  );
 
   static ButtonThemeData buttonTheme = ButtonThemeData(
-      splashColor: Palette.maroon.withAlpha(60),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-      textTheme: ButtonTextTheme.accent);
+    splashColor: Palette.maroon.withAlpha(60),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+    textTheme: ButtonTextTheme.accent,
+  );
 
   static DialogTheme dialogTheme = DialogTheme(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
@@ -51,13 +54,16 @@ class Themes {
     contentTextStyle: TextStyle(color: Palette.dark, fontSize: 13.0),
   );
 
-  static PageTransitionsTheme pageTransitionsTheme =
-      PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-    TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-      transitionType: SharedAxisTransitionType.horizontal,
-    ),
-    TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-  });
+  /// [SharedAxisPageTransition] set to horizontal is, in my opinion, the android
+  /// equivalent to iOS [CupertinoPageTransition].
+  static PageTransitionsTheme pageTransitionsTheme = PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+        transitionType: SharedAxisTransitionType.horizontal,
+      ),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+    },
+  );
 
   static TooltipThemeData tooltipTheme = TooltipThemeData(
       showDuration: const Duration(seconds: 5),
@@ -73,10 +79,10 @@ class Themes {
 
   static FloatingActionButtonThemeData floatingActionButtonTheme =
       FloatingActionButtonThemeData(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-          backgroundColor: Palette.maroon,
-          elevation: 0.25);
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
+    backgroundColor: Palette.maroon,
+    elevation: 0.25,
+  );
 
   static InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
       contentPadding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 14.0),
@@ -116,20 +122,21 @@ class Themes {
   static TextTheme get titleTheme => TextTheme(title: TextStyles.title);
 
   static CardTheme get cardTheme => CardTheme(
-        color: Palette.card,
-        elevation: 0.01,
-        margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
-      );
+      color: Palette.card,
+      elevation: 0.01,
+      margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
   static AppBarTheme get appBarTheme => AppBarTheme(
-      iconTheme: iconTheme,
-      actionsIconTheme: iconTheme,
-      textTheme: titleTheme,
-      color: Palette.light,
-      elevation: 0.0);
+        iconTheme: iconTheme,
+        actionsIconTheme: iconTheme,
+        textTheme: titleTheme,
+        color: Palette.light,
+        elevation: 0.0,
+      );
 
-  static IconThemeData get iconTheme =>
-      IconThemeData(color: Palette.dark, size: 22.0);
+  static IconThemeData get iconTheme => IconThemeData(
+        color: Palette.dark,
+        size: 22.0,
+      );
 }

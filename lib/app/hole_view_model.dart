@@ -4,6 +4,9 @@ class HoleViewModel extends ChangeNotifier {
   /// Only the tile at the [_openIndex] will be built
   /// already opened!
   Map<int, List<int>> _openIndices = {};
+
+  /// The [id] of a competition mapped with the [offset] which that hole
+  /// list has been scrolled to.
   Map<int, double> _offsets = {};
 
   /// If [openIndex] is null, none have been opened!

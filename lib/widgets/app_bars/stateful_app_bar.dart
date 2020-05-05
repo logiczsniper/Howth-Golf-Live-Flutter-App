@@ -8,6 +8,12 @@ import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/connectivity_view_model.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
+/// App bar which needs to be able to transform.
+///
+/// The title converts to a secondary widget on the tap of an
+/// icon which also fade transitions to a secondary icon.
+///
+/// @see [CodeFieldBar], [CompetitionsPageAppBar].
 class StatefulAppBar {
   String inputText = Strings.empty;
   String title;
@@ -17,7 +23,10 @@ class StatefulAppBar {
 
   /// Returns the next [appBarTitle].
   Widget actionPressed(
-      Widget appBarTitle, BuildContext context, TextEditingController _filter) {
+    Widget appBarTitle,
+    BuildContext context,
+    TextEditingController _filter,
+  ) {
     if (appBarTitle == inputBar) {
       _filter.clear();
       FocusScope.of(context).requestFocus(FocusNode());
@@ -37,15 +46,21 @@ class StatefulAppBar {
   AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
       duration: const Duration(milliseconds: 350), child: appBarTitle);
 
+  /// Use the [ConnectivityViewModel] to monitor the status
+  /// of the devices connection to internet.
+  ///
+  /// As all major pages (every page apart from a [HelpPage]), use [StatefulAppBar],
+  /// this checks connectivity across nearly the entire app.
   void checkConnectivity(BuildContext context) {
     var _connectivityStatus = Provider.of<ConnectivityViewModel>(context);
 
     if (_connectivityStatus.isNotConnected) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
-            Strings.noConnection,
-            Icons.signal_cellular_connected_no_internet_4_bar,
-            duration: const Duration(seconds: 8)));
+          Strings.noConnection,
+          Icons.signal_cellular_connected_no_internet_4_bar,
+          duration: const Duration(seconds: 8),
+        ));
       });
     }
   }

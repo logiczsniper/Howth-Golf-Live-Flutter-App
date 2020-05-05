@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// A simple animator widget for either:
+///
+/// 1) Flashing a [target] if [flashing] is true.
+/// 2) Fading a [target] in when building.
 class OpacityChangeWidget extends StatefulWidget {
   final Widget target;
   final bool flashing;
@@ -41,7 +45,9 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
     /// else, the duration should be quick and snappy.
     int duration = widget.flashing ? 900 : 350;
     _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: duration));
+      vsync: this,
+      duration: Duration(milliseconds: duration),
+    );
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
       ..addStatusListener(_statusListener);
   }

@@ -14,11 +14,12 @@ class HelpPage extends StatelessWidget {
     List<HelpStep> steps = helpEntry.steps;
     if (index == steps.length)
       return Padding(
-          child: Icon(
-            Icons.check,
-            color: Palette.maroon,
-          ),
-          padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 25.0));
+        padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 25.0),
+        child: Icon(
+          Icons.check,
+          color: Palette.maroon,
+        ),
+      );
 
     HelpStep currentStep = steps[index];
 
@@ -59,8 +60,12 @@ class HelpPage extends StatelessWidget {
     );
   }
 
-  Text get _title => Text(helpEntry.title,
-      textAlign: TextAlign.center, maxLines: 2, style: TextStyles.title);
+  Text get _title => Text(
+        helpEntry.title,
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        style: TextStyles.title,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -69,22 +74,28 @@ class HelpPage extends StatelessWidget {
         centerTitle: true,
         title: _title,
         leading: Padding(
-            child: IconButton(
-              icon: BackButtonIcon(),
-              onPressed: Navigator.of(context).pop,
-            ),
-            padding: EdgeInsets.only(left: 15.0)),
+          padding: EdgeInsets.only(left: 15.0),
+          child: IconButton(
+            icon: BackButtonIcon(),
+            onPressed: Navigator.of(context).pop,
+          ),
+        ),
         actions: <Widget>[
           Padding(
-              child: UIToolkit.getHomeButton(context),
-              padding: EdgeInsets.only(right: 16.0))
+            child: UIToolkit.getHomeButton(context),
+            padding: EdgeInsets.only(right: 16.0),
+          )
         ],
       ),
       body: ListView.builder(
-        padding:
-            EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0, bottom: 50.0),
         itemBuilder: _tileBuilder,
         itemCount: helpEntry.steps.length + 1,
+        padding: EdgeInsets.only(
+          top: 10.0,
+          right: 16.0,
+          left: 16.0,
+          bottom: 50.0,
+        ),
       ),
     );
   }

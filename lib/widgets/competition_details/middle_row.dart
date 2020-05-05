@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 
+/// Shows an icon, [icon] followed by a value of the competition, [field].
+/// The competition is specified by the [id].
 class MiddleRow extends StatelessWidget {
   final String field;
   final int id;
   final Icon icon;
 
-  /// Shows an icon, [icon] followed by a value of the competition, [field].
   const MiddleRow(this.field, this.icon, this.id);
 
   @override

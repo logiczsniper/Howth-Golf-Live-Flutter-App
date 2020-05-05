@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/app/connectivity_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/help/help_data_view_model.dart';
 import 'package:howth_golf_live/app/home/authentication_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
+import 'package:howth_golf_live/app/connectivity_view_model.dart';
 import 'package:howth_golf_live/app/hole_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
@@ -43,9 +43,10 @@ class MyApp extends StatelessWidget {
   /// The root of the app.
   @override
   Widget build(BuildContext context) => MaterialApp(
-      builder: UIToolkit.appBuilder,
-      title: Strings.appName,
-      initialRoute: Routes.home,
-      routes: Routes.map,
-      theme: Themes.appTheme);
+        builder: UIToolkit.appBuilder,
+        title: Strings.appName,
+        initialRoute: Routes.home,
+        routes: Routes.map,
+        theme: Themes.appTheme,
+      );
 }

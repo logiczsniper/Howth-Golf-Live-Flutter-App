@@ -2,24 +2,26 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:howth_golf_live/widgets/custom_modal_configuration.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
 
 import 'dart:ui';
 
 import 'package:howth_golf_live/app/creation/create_competition.dart';
+import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/creation/create_hole.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
+import 'package:howth_golf_live/widgets/custom_modal_configuration.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
-import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 
+/// A collection of widget and decoration builders used throughout
+/// the app.
 class UIToolkit {
   /// Serves as the builder method for the [MaterialApp].
   ///
@@ -50,15 +52,7 @@ class UIToolkit {
       shape: BoxShape.rectangle,
       borderRadius: BorderRadius.circular(13.0));
 
-  // static FadeScaleTransitionConfiguration modalConfiguration(
-  //         {bool isDeletion = false}) =>
-  //     FadeScaleTransitionConfiguration(
-  //       transitionDuration: const Duration(milliseconds: 250),
-  //       reverseTransitionDuration: const Duration(milliseconds: 200),
-  //       barrierColor:
-  //           isDeletion ? Palette.darker.withAlpha(138) : Palette.light,
-  //     );
-
+  /// Uses [CustomTransitionConfiguration] instead of the standard.
   static ModalConfiguration modalConfiguration({bool isDeletion = false}) =>
       CustomTransitionConfiguration(
         barrierColor:
@@ -78,11 +72,12 @@ class UIToolkit {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
   static Center get loadingSpinner => Center(
-          child: SpinKitPulse(
-        color: Palette.dark,
-        size: 45,
-        duration: const Duration(milliseconds: 350),
-      ));
+        child: SpinKitPulse(
+          color: Palette.dark,
+          size: 45,
+          duration: const Duration(milliseconds: 350),
+        ),
+      );
 
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
@@ -91,18 +86,19 @@ class UIToolkit {
       padding: EdgeInsets.all(2.5),
       width: 32.0,
       child: Padding(
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              holeNumber.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyles.cardSubTitle.copyWith(
-                color: Palette.inMaroon,
-                fontWeight: FontWeight.bold,
-              ),
+        padding: EdgeInsets.all(4.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            holeNumber.toString(),
+            textAlign: TextAlign.center,
+            style: TextStyles.cardSubTitle.copyWith(
+              color: Palette.inMaroon,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          padding: EdgeInsets.all(4.0)),
+        ),
+      ),
       decoration: BoxDecoration(
           color: Palette.maroon,
           border: Border.all(color: Palette.maroon, width: 1.5),
@@ -141,23 +137,33 @@ class UIToolkit {
                 fontWeight: FontWeight.w400))
       ]);
 
-  static Showcase showcase(
-          {@required BuildContext context,
-          @required GlobalKey key,
-          String description,
-          Widget child}) =>
+  /// Builds a [Showcase] widget with preset parameters
+  /// for saving time such as [descTextStyle], [showArrow], [textColor],
+  /// [overlayColor] and adds padding to [description].
+  static Showcase showcase({
+    @required BuildContext context,
+    @required GlobalKey key,
+    String description,
+    Widget child,
+  }) =>
       Showcase(
-          key: key,
-          description: "  $description  " ?? "",
-          descTextStyle: TextStyles.description,
-          showArrow: false,
-          textColor: Palette.dark,
-          overlayColor: Palette.dark,
-          child: child ?? Container());
+        key: key,
+        description: "  $description  " ?? "",
+        descTextStyle: TextStyles.description,
+        showArrow: false,
+        textColor: Palette.dark,
+        overlayColor: Palette.dark,
+        child: child ?? Container(),
+      );
 
-  static SnackBar snackbar(String text, IconData iconData,
-          {Duration duration}) =>
+  /// Builds the standard app [SnackBar] that is consistent.
+  static SnackBar snackbar(
+    String text,
+    IconData iconData, {
+    Duration duration,
+  }) =>
       SnackBar(
+        duration: duration ?? const Duration(seconds: 7),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -176,7 +182,6 @@ class UIToolkit {
             )
           ],
         ),
-        duration: duration ?? const Duration(seconds: 7),
       );
 
   static SvgPicture svgHowthLogo({
@@ -193,11 +198,20 @@ class UIToolkit {
     );
   }
 
-  static FloatingActionButton createButton(
-      {@required BuildContext context,
-      String primaryText,
-      String secondaryText,
-      int id}) {
+  /// Builds a [FloatingActionButton].
+  ///
+  /// [primaryText] is the main text of the button, bolded and centerd.
+  /// [secondaryText] is the text below the main text, thinner.
+  ///
+  /// With the [CustomModalConfiguration], it shows either the
+  /// [CreateCompetition] or [CreateHole] modals. It knows which to show
+  /// via [primaryText].
+  static FloatingActionButton createButton({
+    @required BuildContext context,
+    String primaryText,
+    String secondaryText,
+    int id,
+  }) {
     if (primaryText == Strings.newHole) assert(id != null);
     assert(primaryText == Strings.newCompetition ||
         primaryText == Strings.newHole);
@@ -255,96 +269,103 @@ class UIToolkit {
   /// [currentData.opposition] text in the correct order depending on
   /// [currentData.location.isHome].
   static Container getVersus(
-          BuildContext context, int id, GlobalKey _awayTeamKey) =>
+    BuildContext context,
+    int id,
+    GlobalKey _awayTeamKey,
+  ) =>
       Container(
-          margin: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 2.0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(13.0),
-              color: Colors.transparent),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  Strings.homeAddress,
-                  textAlign: TextAlign.right,
-                  style: TextStyles.form.copyWith(
-                      color: Palette.dark,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.5),
+        padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
+        margin: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 2.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13.0),
+          color: Colors.transparent,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                Strings.homeAddress,
+                textAlign: TextAlign.right,
+                style: TextStyles.form.copyWith(
+                    color: Palette.dark,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.5),
+              ),
+            ),
+            Container(
+              width: 42.5,
+              padding: EdgeInsets.all(10.0),
+              margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              decoration: BoxDecoration(
+                  color: Palette.maroon,
+                  borderRadius: BorderRadius.circular(13.0)),
+              child: Text(
+                Strings.versus,
+                textAlign: TextAlign.center,
+                style: TextStyles.helpTitle.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: Palette.inMaroon,
                 ),
               ),
-              Container(
-                width: 42.5,
-                padding: EdgeInsets.all(10.0),
-                margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                decoration: BoxDecoration(
-                    color: Palette.maroon,
-                    borderRadius: BorderRadius.circular(13.0)),
-                child: Text(
-                  Strings.versus,
-                  textAlign: TextAlign.center,
-                  style: TextStyles.helpTitle.copyWith(
-                      fontWeight: FontWeight.w900, color: Palette.inMaroon),
-                ),
-              ),
-              Expanded(
-                child: UIToolkit.showcase(
-                  context: context,
-                  key: _awayTeamKey,
-                  description: Strings.oppositionTeam,
-                  child: Selector<FirebaseViewModel, String>(
-                    selector: (_, model) => model.entryFromId(id).opposition,
-                    builder: (_, oppositionName, __) => AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 350),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        key: ValueKey<String>(oppositionName),
-                        child: Text(
-                          oppositionName,
-                          textAlign: TextAlign.left,
-                          style: TextStyles.form.copyWith(
-                              color: Palette.dark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.5),
-                        ),
+            ),
+            Expanded(
+              child: UIToolkit.showcase(
+                context: context,
+                key: _awayTeamKey,
+                description: Strings.oppositionTeam,
+                child: Selector<FirebaseViewModel, String>(
+                  selector: (_, model) => model.entryFromId(id).opposition,
+                  builder: (_, oppositionName, __) => AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 350),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      key: ValueKey<String>(oppositionName),
+                      child: Text(
+                        oppositionName,
+                        textAlign: TextAlign.left,
+                        style: TextStyles.form.copyWith(
+                            color: Palette.dark,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.5),
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0));
-
-  static Widget getNoDataText(String text) {
-    return Container(
-      padding: EdgeInsets.only(top: 25),
-      alignment: Alignment.center,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(bottom: 7.0),
-            child: Icon(
-              Icons.live_help,
-              color: Palette.dark.withAlpha(200),
-              size: 30.0,
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyles.noData,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
+  static Widget getNoDataText(String text) => Container(
+        padding: EdgeInsets.only(top: 25),
+        alignment: Alignment.center,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 7.0),
+              child: Icon(
+                Icons.live_help,
+                color: Palette.dark.withAlpha(200),
+                size: 30.0,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyles.noData,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  /// Returns a gigantic ugly example competition card for when the user
+  /// enters the [CompetitionsPage] for the first time.
   static Widget exampleCompetition(
     BuildContext context,
     GlobalKey _titleKey,
@@ -353,48 +374,52 @@ class UIToolkit {
   ) {
     return ComplexCard(
         child: ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-            title: UIToolkit.showcase(
+      trailing: Icon(Icons.keyboard_arrow_right, color: Palette.maroon),
+      contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+      title: UIToolkit.showcase(
+        context: context,
+        key: _titleKey,
+        description: Strings.competitionTitle,
+        child: Text(DatabaseEntry.example.title,
+            overflow: TextOverflow.ellipsis, maxLines: 2),
+      ),
+      subtitle: Row(children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(right: 15.0),
+          decoration: UIToolkit.rightSideBoxDecoration,
+          child: UIToolkit.showcase(
               context: context,
-              key: _titleKey,
-              description: Strings.competitionTitle,
-              child: Text(DatabaseEntry.example.title,
-                  overflow: TextOverflow.ellipsis, maxLines: 2),
-            ),
-            subtitle: Row(children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(right: 15.0),
-                decoration: UIToolkit.rightSideBoxDecoration,
-                child: UIToolkit.showcase(
-                    context: context,
-                    key: _dateKey,
-                    description: Strings.competitionDate,
-                    child: Text(DatabaseEntry.example.date,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyles.cardSubTitle)),
-              ),
-              Padding(
-                  child: UIToolkit.showcase(
-                    context: context,
-                    key: _scoreKey,
-                    description: Strings.competitionScore,
-                    child: ComplexScore(DatabaseEntry.example.score),
-                  ),
-                  padding: EdgeInsets.only(left: 15.0))
-            ]),
-            trailing: Icon(Icons.keyboard_arrow_right, color: Palette.maroon)));
+              key: _dateKey,
+              description: Strings.competitionDate,
+              child: Text(DatabaseEntry.example.date,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyles.cardSubTitle)),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 15.0),
+          child: UIToolkit.showcase(
+            context: context,
+            key: _scoreKey,
+            description: Strings.competitionScore,
+            child: ComplexScore(DatabaseEntry.example.score),
+          ),
+        )
+      ]),
+    ));
   }
 
+  /// Returns a big ugly example hole for when the user enters a
+  /// [CompetitionPage] for the first time.
   static Widget exampleHole(
-      BuildContext context,
-      GlobalKey _holeKey,
-      GlobalKey _playersKey,
-      GlobalKey _holeHomeScoreKey,
-      GlobalKey _holeAwayScoreKey,
-      GlobalKey _holeNumberKey,
-      GlobalKey _oppositionKey) {
+    BuildContext context,
+    GlobalKey _holeKey,
+    GlobalKey _playersKey,
+    GlobalKey _holeHomeScoreKey,
+    GlobalKey _holeAwayScoreKey,
+    GlobalKey _holeNumberKey,
+    GlobalKey _oppositionKey,
+  ) {
     Hole hole = Hole.example;
     return UIToolkit.showcase(
         context: context,

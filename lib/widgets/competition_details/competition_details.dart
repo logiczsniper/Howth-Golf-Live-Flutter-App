@@ -8,6 +8,10 @@ import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/widgets/competition_details/middle_row.dart';
 import 'package:howth_golf_live/widgets/competition_details/side_flexible.dart';
 
+/// Shows the user icon signified information about a
+/// competition as specified by the [id].
+///
+/// Takes many [GlobalKey]s for the showcase.
 class CompetitionDetails extends StatelessWidget {
   final int id;
 
@@ -17,8 +21,14 @@ class CompetitionDetails extends StatelessWidget {
   final GlobalKey dateKey;
   final GlobalKey timeKey;
 
-  CompetitionDetails(this.id, this.howthScoreKey, this.oppositionScoreKey,
-      this.locationKey, this.dateKey, this.timeKey);
+  CompetitionDetails(
+    this.id,
+    this.howthScoreKey,
+    this.oppositionScoreKey,
+    this.locationKey,
+    this.dateKey,
+    this.timeKey,
+  );
 
   /// Get a padded [MiddleRow].
   ///
@@ -66,6 +76,8 @@ class CompetitionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// If the user [hasAccess], they must be able to see the final row in
+    /// the details: the [id] of this competition.
     var _userStatus = Provider.of<UserStatusViewModel>(context);
     bool hasAccess = _userStatus.isVerified(Strings.competitionTitle, id: id);
 
@@ -77,7 +89,12 @@ class CompetitionDetails extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           /// Home team score.
-          SideFlexible(id, true, howthScoreKey, Strings.howthScore),
+          SideFlexible(
+            id,
+            true,
+            howthScoreKey,
+            Strings.howthScore,
+          ),
 
           /// Details of competition.
           Flexible(child: _centralFlexible(context, hasAccess)),

@@ -8,22 +8,29 @@ import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
+typedef CompetitionListBuilder = Widget Function(
+    BuildContext, String, bool, bool, GlobalKey, GlobalKey, GlobalKey);
+
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
   final String title;
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
   /// lists- one from current and the other from archived.
-  final Widget Function(
-          BuildContext, String, bool, bool, GlobalKey, GlobalKey, GlobalKey)
-      _listBuilder;
+  final CompetitionListBuilder _listBuilder;
 
+  /// Showcase keys.
   final List<GlobalKey> keys;
+
+  /// Whether or not the user has visited before.
   final bool hasVisited;
 
-  CompetitionsPageAppBar(this._listBuilder,
-      {this.title, this.hasVisited, this.keys})
-      : preferredSize = Size.fromHeight(56.0);
+  CompetitionsPageAppBar(
+    this._listBuilder, {
+    this.title,
+    this.hasVisited,
+    this.keys,
+  }) : preferredSize = Size.fromHeight(56.0);
 
   @override
   _CompetitionsPageAppBarState createState() => _CompetitionsPageAppBarState();
@@ -46,15 +53,22 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
     /// Build the two bars.
     titleBar = buildTitleBar(widget.title);
-    inputBar = buildInputBar(TextInputType.text, false, Strings.enterSearch,
-        _filter, _searchPressed);
+    inputBar = buildInputBar(
+      TextInputType.text,
+      false,
+      Strings.enterSearch,
+      _filter,
+      _searchPressed,
+    );
 
     title = widget.title;
 
     /// [appBarTitle] defaults to the title bar.
     appBarTitle = titleBar;
-    _filter.addListener(() => setState(
-        () => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text));
+    _filter.addListener(
+      () => setState(() =>
+          inputText = _filter.text.isEmpty ? Strings.empty : _filter.text),
+    );
   }
 
   /// The [IconData] switches between a search icon (if [titleBar]) and
@@ -68,6 +82,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             : CrossFadeState.showSecond,
       );
 
+  /// Build the tab - the list of competitions!
   Widget _buildTab(bool isCurrentTab) => widget._listBuilder(
         context,
         inputText,
@@ -86,7 +101,14 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
       insets: EdgeInsets.zero);
 
   @override
+  void dispose() {
+    _filter.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    /// Checks the connectivity for the [CompetitionsPage].
     checkConnectivity(context);
 
     return SafeArea(
@@ -94,72 +116,74 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         controller: ScrollController(),
         headerSliverBuilder: (context, _) => <Widget>[
           SliverAppBar(
-              shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(13))),
-              centerTitle: true,
-              title: getTitle(appBarTitle),
-              floating: true,
-              pinned: false,
-              snap: true,
-              leading: UIToolkit.showcase(
-                context: context,
-                key: widget.keys[1],
-                description: Strings.tapHelp,
-                child: IconButton(
-                    icon: Icon(Icons.help_outline),
-                    padding: EdgeInsets.fromLTRB(27.0, 8.0, 8.0, 8.0),
-                    tooltip: Strings.tapHelp,
-                    onPressed: () => Routes.of(context).toHelps()),
-              ),
-              actions: <Widget>[
-                UIToolkit.showcase(
-                    context: context,
-                    key: widget.keys[0],
-                    description: Strings.tapSearch,
-                    child: IconButton(
-                        icon: _iconData,
-                        padding: EdgeInsets.fromLTRB(8.0, 8.0, 27.0, 8.0),
-                        tooltip: Strings.tapSearch,
-                        onPressed: _searchPressed))
-              ],
-              bottom: PreferredSize(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(28.0, 5.0, 0.0, 0.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            child: Text(
-                              Strings.competitionsText,
-                              style: TextStyles.title.copyWith(
-                                  fontSize: 33.0, fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.start,
-                            ),
-                            padding: EdgeInsets.only(bottom: 6.0),
-                          ),
-                          TabBar(
-                              isScrollable: true,
-                              indicator: _tabIndicator,
-                              tabs: <Widget>[
-                                UIToolkit.showcase(
-                                    context: context,
-                                    key: widget.keys[2],
-                                    description: Strings.currentWelcome,
-                                    child: Tab(text: Strings.currentText)),
-                                UIToolkit.showcase(
-                                    context: context,
-                                    key: widget.keys[3],
-                                    description: Strings.archivedWelcome,
-                                    child: Tab(text: Strings.archivedText)),
-                              ])
-                        ],
+            centerTitle: true,
+            title: getTitle(appBarTitle),
+            floating: true,
+            pinned: false,
+            snap: true,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(13))),
+            leading: UIToolkit.showcase(
+              context: context,
+              key: widget.keys[1],
+              description: Strings.tapHelp,
+              child: IconButton(
+                  icon: Icon(Icons.help_outline),
+                  padding: EdgeInsets.fromLTRB(27.0, 8.0, 8.0, 8.0),
+                  tooltip: Strings.tapHelp,
+                  onPressed: () => Routes.of(context).toHelps()),
+            ),
+            actions: <Widget>[
+              UIToolkit.showcase(
+                  context: context,
+                  key: widget.keys[0],
+                  description: Strings.tapSearch,
+                  child: IconButton(
+                      icon: _iconData,
+                      padding: EdgeInsets.fromLTRB(8.0, 8.0, 27.0, 8.0),
+                      tooltip: Strings.tapSearch,
+                      onPressed: _searchPressed))
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(87.0),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.fromLTRB(28.0, 5.0, 0.0, 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 6.0),
+                      child: Text(
+                        Strings.competitionsText,
+                        textAlign: TextAlign.start,
+                        style: TextStyles.title.copyWith(
+                          fontSize: 33.0,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  preferredSize: Size.fromHeight(87.0)))
+                    TabBar(
+                        isScrollable: true,
+                        indicator: _tabIndicator,
+                        tabs: <Widget>[
+                          UIToolkit.showcase(
+                              context: context,
+                              key: widget.keys[2],
+                              description: Strings.currentWelcome,
+                              child: Tab(text: Strings.currentText)),
+                          UIToolkit.showcase(
+                              context: context,
+                              key: widget.keys[3],
+                              description: Strings.archivedWelcome,
+                              child: Tab(text: Strings.archivedText)),
+                        ])
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
         body: TabBarView(children: <Widget>[
           /// The second parameter indicates whether or not this

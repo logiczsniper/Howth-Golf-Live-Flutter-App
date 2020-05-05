@@ -17,7 +17,10 @@ import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionPage extends StatelessWidget {
+  /// The [id] of the [DatabaseEntry] which this page is displaying.
   final int id;
+
+  /// The single controller being used in all the competition pages.
   final ScrollController _scrollController;
 
   CompetitionPage(this.id, this._scrollController);
@@ -40,6 +43,12 @@ class CompetitionPage extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(
           isOpposition ? 12.0 : 16.0, 3.0, !isOpposition ? 12.0 : 16.0, 3.0));
 
+  /// Builds the [Column] of data at the top of the competition.
+  ///
+  /// This includes:
+  ///   - the 'finished' banner if the competition is archived
+  ///   - the [CompetitionDetails]
+  ///   - the 'versus' widget.
   Widget _columnBuilder(
       BuildContext context,
       GlobalKey _howthScoreKey,
@@ -92,12 +101,12 @@ class CompetitionPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            /// Home team section.
+            /// Howth team section.
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  /// Home player.
+                  /// Howth player.
                   Expanded(
                     child: Selector<FirebaseViewModel, String>(
                       selector: (_, model) => model
@@ -115,7 +124,7 @@ class CompetitionPage extends StatelessWidget {
                     ),
                   ),
 
-                  /// Home score.
+                  /// Howth score.
                   Selector<FirebaseViewModel, String>(
                     selector: (_, model) => model
                         .entryFromId(id)
@@ -148,12 +157,12 @@ class CompetitionPage extends StatelessWidget {
               ),
             ),
 
-            /// Away team section.
+            /// Opposition team section.
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  /// Away team score.
+                  /// Opposition team score.
                   Selector<FirebaseViewModel, String>(
                     selector: (_, model) => model
                         .entryFromId(id)
@@ -171,7 +180,7 @@ class CompetitionPage extends StatelessWidget {
                     ),
                   ),
 
-                  /// Away team player / club.
+                  /// Opposition team player / club.
                   /// Rebuild if the opposition club name changes
                   Expanded(
                     child: Selector<FirebaseViewModel, String>(
@@ -200,13 +209,19 @@ class CompetitionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// We must listen actively to the [UserStatusViewModel].
     var _userStatus = Provider.of<UserStatusViewModel>(context);
+
+    /// All hole data is monitored via [Selector] or [Consumer] widgets.
     var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
 
+    /// Keep track of the scroll position in this [CompetitionPage]
+    /// in the [HoleViewModel].
     _scrollController.addListener(() {
       _holeModel.scroll(id, _scrollController.offset);
     });
 
+    /// The keys for the showcase.
     final GlobalKey _howthScoreKey = GlobalKey();
     final GlobalKey _oppositionScoreKey = GlobalKey();
     final GlobalKey _locationKey = GlobalKey();
@@ -239,6 +254,10 @@ class CompetitionPage extends StatelessWidget {
       _codeKey
     ];
 
+    /// If the user has not visited this page before, play the showcase.
+    ///
+    /// In [Routes], the route is visited automatically after the showcase
+    /// ends.
     bool hasVisited = _userStatus.hasVisited(Strings.specificCompetition);
     if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -249,15 +268,25 @@ class CompetitionPage extends StatelessWidget {
       );
     }
 
+    /// Scroll to the current position as stored in [_holeModel].
+    ///
+    /// This adds the feature of saving your scroll position for
+    /// each competition page.
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _scrollController.jumpTo(_holeModel.offset(id: id)),
     );
 
+    /// Creates a FAB which rebuilds using [Selector].
+    ///
+    /// If the user does not [hasAccess] then the button is
+    /// replaced by a [Container] which isnt visible.
     Widget floatingActionButton =
         Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
             selector: (context, userStatusModel, firebaseModel) {
               DatabaseEntry entry = firebaseModel.entryFromId(id);
 
+              /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
+              /// this page must be popped from the navigation stack.
               if (entry.id == -2) Navigator.of(context).pop();
 
               return firebaseModel.entryFromId(id).isArchived
@@ -274,11 +303,17 @@ class CompetitionPage extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: Container(
-          padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
+        padding: EdgeInsets.only(bottom: 10.0),
+        child: floatingActionButton,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: CodeFieldBar(
-          Strings.specificCompetition, _userStatus, _backKey, _codeKey,
-          id: id),
+        Strings.specificCompetition,
+        _userStatus,
+        _backKey,
+        _codeKey,
+        id: id,
+      ),
       body:
 
           /// If the [itemCount] changes, the hole list view must update
@@ -297,6 +332,13 @@ class CompetitionPage extends StatelessWidget {
           model.holesItemCount(id, hasVisited),
           model.entryFromId(id).holes.isEmpty,
         ),
+
+        /// The [data] parameter is the [Tuple2] created above.
+        ///
+        /// [data.item1] is the [itemCount], while
+        /// [data.item2] is whether the current competition has any holes.
+        ///
+        /// [child] is the [_columnBuilder] result.
         builder: (_, data, child) => AnimatedSwitcher(
           duration: const Duration(milliseconds: 350),
           child: ListView.builder(
@@ -349,6 +391,8 @@ class CompetitionPage extends StatelessWidget {
                   onExpansionChanged: (bool isOpen) {
                     if (isOpen) {
                       model.open(id, _index);
+
+                      /// Roughly calculate the offset to scroll to.
                       double _offset = (_index * 60 + 50).toDouble();
 
                       /// If the difference between the current position and where the

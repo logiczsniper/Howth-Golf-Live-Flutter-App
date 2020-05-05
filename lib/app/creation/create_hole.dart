@@ -20,8 +20,10 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
   final _formKey = GlobalKey<FormState>();
 
   /// Fields the user must fill out to create a hole.
-  DecoratedTextField numberField =
-      DecoratedTextField(Fields.holeNumber, number: true);
+  DecoratedTextField numberField = DecoratedTextField(
+    Fields.holeNumber,
+    number: true,
+  );
   DecoratedTextField commentField = DecoratedTextField(
     Fields.comment + Strings.notes,
     isRequired: false,
@@ -41,20 +43,27 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
   Form get _form => Form(
       key: _formKey,
       child: UIToolkit.getCard(Padding(
-          child: ListView(
-              padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
-              shrinkWrap: true,
-              children: <Widget>[
-                numberField,
-                playersField,
-                oppositionField,
-                commentField,
-              ]),
-          padding: EdgeInsets.all(5.0))));
+        padding: EdgeInsets.all(5.0),
+        child: ListView(
+            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+            shrinkWrap: true,
+            children: <Widget>[
+              numberField,
+              playersField,
+              oppositionField,
+              commentField,
+            ]),
+      )));
 
   void _onPressed() {
-    FirebaseInteraction.of(context).addHole(_formKey, numberField, commentField,
-        playersField, oppositionField, widget.currentId);
+    FirebaseInteraction.of(context).addHole(
+      _formKey,
+      numberField,
+      commentField,
+      playersField,
+      oppositionField,
+      widget.currentId,
+    );
   }
 
   @override

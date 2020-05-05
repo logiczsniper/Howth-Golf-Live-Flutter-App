@@ -11,6 +11,7 @@ class FirebaseViewModel {
   FirebaseViewModel(this.currentSnapshot);
   FirebaseViewModel.init() : currentSnapshot = null;
 
+  /// Many getters to interact with children of the [currentSnapshot].
   DocumentSnapshot get document => currentSnapshot?.documents?.first;
   List get _documentEntries => document?.data?.entries?.toList();
 
@@ -21,13 +22,25 @@ class FirebaseViewModel {
       ?.toList();
 
   int get adminCode => document?.data[Fields.adminCode];
+  String title(int id) => entryFromId(id)?.title ?? Strings.empty;
 
+  /// Upon the competition being deleted, this is handled by
+  /// temporarily returning [DatabaseEntry.empty].
   DatabaseEntry entryFromId(int id) =>
       databaseEntries?.firstWhere((entry) => entry?.id == id,
           orElse: () => DatabaseEntry.empty);
 
+  /// Fetches the active elements of the snapshot.
+  ///
+  /// The active elements are elements which are in the tab which is
+  /// currently selected ([isCurrentTab]) and have been filtered via
+  /// [searchText]. Furthermore, if the user ![hasVisited] the page before,
+  /// [activeElements] should also contain [DatabaseEntry.example.]
   List<DatabaseEntry> activeElements(
-      bool hasVisited, bool isCurrentTab, String searchText) {
+    bool hasVisited,
+    bool isCurrentTab,
+    String searchText,
+  ) {
     List<DatabaseEntry> filteredElements = filterElements(searchText);
 
     /// At the 0th index of [sortedElements] will be the currentElements,
@@ -40,8 +53,12 @@ class FirebaseViewModel {
     return activeElements;
   }
 
+  /// Get the actual amount of entries in the [CompetitionsPage].
   int competitionsItemCount(
-      bool hasVisited, bool isCurrentTab, String searchText) {
+    bool hasVisited,
+    bool isCurrentTab,
+    String searchText,
+  ) {
     List<DatabaseEntry> _activeElements =
         activeElements(hasVisited, isCurrentTab, searchText);
 
@@ -54,6 +71,7 @@ class FirebaseViewModel {
     return itemCount;
   }
 
+  /// Get the actual amount of entries in the [CompetitionPage].
   int holesItemCount(int id, bool hasVisited) {
     DatabaseEntry currentData = entryFromId(id);
     List<Hole> holes = currentData.holes;
@@ -67,8 +85,6 @@ class FirebaseViewModel {
         return holes.length + 1;
     }
   }
-
-  String title(int id) => entryFromId(id)?.title ?? Strings.empty;
 
   /// Sorts elements into either current or archived lists.
   ///

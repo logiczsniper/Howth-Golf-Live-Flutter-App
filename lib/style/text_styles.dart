@@ -5,12 +5,6 @@ import 'package:howth_golf_live/style/palette.dart';
 class TextStyles {
   static const TextStyle form = TextStyle(fontSize: 15.0, color: Palette.dark);
 
-  static const TextStyle title = TextStyle(
-      fontFamily: Strings.cormorantGaramond,
-      fontSize: 28.0,
-      height: 0.95,
-      color: Palette.darker);
-
   static const TextStyle helpTitle =
       TextStyle(fontSize: 19, color: Palette.darker);
 
@@ -19,8 +13,6 @@ class TextStyles {
 
   static const TextStyle cardSubTitle =
       TextStyle(fontSize: 14, color: Palette.darker);
-
-  static const TextStyle hint = TextStyle(fontSize: 16, color: Palette.dark);
 
   static const TextStyle dialog =
       TextStyle(fontSize: 17, color: Palette.maroon);
@@ -36,4 +28,11 @@ class TextStyles {
 
   static const TextStyle description =
       TextStyle(fontSize: 14.5, color: Palette.dark);
+
+  static const TextStyle title = TextStyle(
+    fontFamily: Strings.cormorantGaramond,
+    fontSize: 28.0,
+    height: 0.95,
+    color: Palette.darker,
+  );
 }

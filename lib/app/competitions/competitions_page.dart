@@ -21,66 +21,75 @@ import 'package:howth_golf_live/widgets/complex_card.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionsPage extends StatelessWidget {
+  /// Builds an individual tile.
   static Widget _tileBuilder(BuildContext context, int id, bool isAdmin) =>
       ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-          title: Selector<FirebaseViewModel, String>(
-            selector: (_, model) => model.entryFromId(id).title,
-            builder: (_, title, __) => AnimatedSwitcher(
-              duration: const Duration(milliseconds: 350),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                key: ValueKey<String>(title),
+        contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
+        trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right,
+            color: Palette.maroon),
+        title: Selector<FirebaseViewModel, String>(
+          selector: (_, model) => model.entryFromId(id).title,
+          builder: (_, title, __) => AnimatedSwitcher(
+            duration: const Duration(milliseconds: 350),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              key: ValueKey<String>(title),
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+          ),
+        ),
+        subtitle: Row(children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(right: 15.0),
+            decoration: UIToolkit.rightSideBoxDecoration,
+            child: Selector<FirebaseViewModel, String>(
+              selector: (_, model) => model.entryFromId(id).date,
+              builder: (_, date, __) => AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
                 child: Text(
-                  title,
+                  date,
+                  key: ValueKey<String>(date),
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+                  maxLines: 1,
+                  style: TextStyles.cardSubTitle,
                 ),
               ),
             ),
           ),
-          subtitle: Row(children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(right: 15.0),
-              decoration: UIToolkit.rightSideBoxDecoration,
-              child: Selector<FirebaseViewModel, String>(
-                selector: (_, model) => model.entryFromId(id).date,
-                builder: (_, date, __) => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 350),
-                  child: Text(
-                    date,
-                    key: ValueKey<String>(date),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyles.cardSubTitle,
-                  ),
+          Padding(
+            padding: EdgeInsets.only(left: 15.0),
+            child: Selector<FirebaseViewModel, Score>(
+              selector: (_, model) => model.entryFromId(id).score,
+              builder: (_, score, __) => AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
+                child: Container(
+                  child: ComplexScore(score),
+                  key: ValueKey<Score>(score),
                 ),
               ),
             ),
-            Padding(
-                child: Selector<FirebaseViewModel, Score>(
-                  selector: (_, model) => model.entryFromId(id).score,
-                  builder: (_, score, __) => AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 350),
-                    child: Container(
-                      child: ComplexScore(score),
-                      key: ValueKey<Score>(score),
-                    ),
-                  ),
-                ),
-                padding: EdgeInsets.only(left: 15.0))
-          ]),
-          trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right,
-              color: Palette.maroon));
+          )
+        ]),
+      );
 
+  /// Builds the list of tiles.
+  ///
+  /// This method must be passed into [CompetiionsPageAppBar] as
+  /// the [TabBarView] needs to be built there.
   Widget _buildElementsList(
-      BuildContext context,
-      String _searchText,
-      bool isCurrentTab,
-      bool hasVisited,
-      GlobalKey _titleKey,
-      GlobalKey _dateKey,
-      GlobalKey _scoreKey) {
+    BuildContext context,
+    String _searchText,
+    bool isCurrentTab,
+    bool hasVisited,
+    GlobalKey _titleKey,
+    GlobalKey _dateKey,
+    GlobalKey _scoreKey,
+  ) {
+    /// Listen to [UserStatusViewModel].
     var _userStatus = Provider.of<UserStatusViewModel>(context);
 
     return Selector<FirebaseViewModel, Tuple3<int, QuerySnapshot, bool>>(
@@ -91,6 +100,14 @@ class CompetitionsPage extends StatelessWidget {
           model.activeElements(hasVisited, isCurrentTab, _searchText).isEmpty,
         );
       },
+
+      /// Uses [Tuple3] to select 3 pieces of data. If any of these change, this child
+      /// must rebuild.
+      ///
+      /// [data.item1] is the number of competitions.
+      /// [data.item2] is the current [QuerySnapshot]. If it is [null], a loading spinner is shown.
+      /// [data.item3] is whether the active competitions is empty, which take into account the search text,
+      ///              the current tab and if the user has visited or not.
       builder: (context, data, child) => AnimatedSwitcher(
         duration: const Duration(milliseconds: 350),
         child: data.item2 == null
@@ -121,17 +138,22 @@ class CompetitionsPage extends StatelessWidget {
                   if (!hasVisited && isCurrentTab) competitionIndex--;
 
                   /// Fetch the [id] of the current competition.
+                  ///
+                  /// Does not listen to the [FirebaseViewModel] as the [id] is immutable.
                   var _firebaseModel =
                       Provider.of<FirebaseViewModel>(context, listen: false);
                   int id = _firebaseModel
-                      .activeElements(hasVisited, isCurrentTab,
-                          _searchText)[competitionIndex]
+                      .activeElements(
+                        hasVisited,
+                        isCurrentTab,
+                        _searchText,
+                      )[competitionIndex]
                       .id;
 
-                  if (id == null) {
-                    print("GONE");
-                    return Container();
-                  }
+                  /// If the competition was deleted, the [id] would equate to [null] for
+                  /// a split second. Returning a container prevents any error during that
+                  /// time.
+                  if (id == null) return Container();
 
                   return ComplexCard(
                     child: _tileBuilder(
@@ -162,8 +184,6 @@ class CompetitionsPage extends StatelessWidget {
                                 /// is to do so as this can have major consquences if an accident.
                                 onPressed: () => showModal(
                                   context: context,
-                                  // configuration:
-                                  // FadeScaleTransitionConfiguration(),
                                   configuration: UIToolkit.modalConfiguration(
                                     isDeletion: true,
                                   ),
@@ -195,6 +215,7 @@ class CompetitionsPage extends StatelessWidget {
             secondaryText: Strings.tapEditCompetition)
         : null;
 
+    /// Showcase keys.
     final GlobalKey _titleKey = GlobalKey();
     final GlobalKey _dateKey = GlobalKey();
     final GlobalKey _scoreKey = GlobalKey();
@@ -213,6 +234,7 @@ class CompetitionsPage extends StatelessWidget {
       _scoreKey
     ];
 
+    /// Start the showcase if the user has never visited this page before.
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
@@ -225,10 +247,12 @@ class CompetitionsPage extends StatelessWidget {
     return Scaffold(
         body: DefaultTabController(
             length: 2,
-            child: CompetitionsPageAppBar(_buildElementsList,
-                title: Strings.competitionsText,
-                hasVisited: _userStatus.hasVisited(Strings.competitionsText),
-                keys: keys)),
+            child: CompetitionsPageAppBar(
+              _buildElementsList,
+              title: Strings.competitionsText,
+              hasVisited: _userStatus.hasVisited(Strings.competitionsText),
+              keys: keys,
+            )),
         floatingActionButton: Container(
             padding: EdgeInsets.only(bottom: 10.0),
             child: floatingActionButton),

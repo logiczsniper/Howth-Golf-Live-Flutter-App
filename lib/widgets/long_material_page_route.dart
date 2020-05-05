@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Essentially just a [MaterialPageRoute] except with a
+/// longer [transitionDuration].
 class LongMaterialPageRoute<T> extends PageRoute<T> {
   /// Construct a MaterialPageRoute whose contents are defined by [builder].
   ///
@@ -23,6 +25,7 @@ class LongMaterialPageRoute<T> extends PageRoute<T> {
   @override
   final bool maintainState;
 
+  /// Extended duration here.
   @override
   Duration get transitionDuration => const Duration(milliseconds: 750);
 

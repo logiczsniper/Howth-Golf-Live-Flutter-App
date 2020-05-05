@@ -6,13 +6,18 @@ import 'package:howth_golf_live/widgets/complex_score.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 
+/// Shows the overall competition score, [field] for a specific competition.
+///
+/// If the score that is being shown [isHowth], this will only rebuild if
+/// the howth score changes, vice versa with opposition.
+///
+/// [childKey] is just for the showcase.
 class SideFlexible extends StatelessWidget {
   final int id;
   final bool isHowth;
-  final GlobalKey childKey;
   final String description;
+  final GlobalKey childKey;
 
-  /// Shows the overall competition score, [field] for a specific competition.
   SideFlexible(this.id, this.isHowth, this.childKey, this.description);
 
   /// The maroon decoration around the [field].

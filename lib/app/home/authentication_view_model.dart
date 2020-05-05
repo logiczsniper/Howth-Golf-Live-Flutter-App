@@ -7,6 +7,7 @@ class AuthenticationViewModel extends ChangeNotifier {
   String _status;
 
   AuthenticationViewModel() {
+    /// Sign the user out each time this is built.
     FirebaseAuth.instance.signOut();
     _status = Strings.tapMe;
   }
@@ -15,6 +16,10 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   set status(String newStatus) => _status = newStatus;
 
+  /// Sign the user in anonymously.
+  ///
+  /// Upon timeout (after 15 seconds), it gives up and displays an
+  /// appropriate message.
   void anonymousSignIn(context) async {
     try {
       _status = Strings.loading;

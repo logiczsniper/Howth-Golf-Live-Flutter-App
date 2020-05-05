@@ -4,17 +4,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserStatusViewModel extends ChangeNotifier {
   bool _isAdmin;
+
+  /// A list of [DatabaseEntry.id] which this device has access to.
   List<String> _competitionAccess = [];
   List<String> _visitedRoutes = [];
 
   List<String> get competitionAccess => _competitionAccess ?? [];
   List<String> get visitedRoutes => _visitedRoutes ?? [];
+
   bool get isAdmin => _isAdmin ?? false;
   bool isManager(int id) =>
       competitionAccess.contains(id.toString()) || isAdmin;
+
   bool hasVisited(String route) => visitedRoutes.contains(route);
   bool hasAccess(int id) => isAdmin || isManager(id);
 
+  /// Determines whether or not the user is verified.
+  ///
+  /// If the user is at the [HelpsPage] then they are classified as
+  /// 'verified' if they are an admin.
+  ///
+  /// If the user is elsewhere, they are 'verified' if they are an admin
+  /// or they are a manager of the competition which they are currently at.
   bool isVerified(String title, {int id = 0}) {
     switch (title) {
       case Strings.helpsText:
@@ -29,6 +40,7 @@ class UserStatusViewModel extends ChangeNotifier {
     loadUserStatus();
   }
 
+  /// Fetch the user status using [SharedPreferences].
   void loadUserStatus() async {
     final preferences = await SharedPreferences.getInstance();
 
@@ -87,7 +99,14 @@ class UserStatusViewModel extends ChangeNotifier {
     return codeAttempt == actualCode;
   }
 
-  int get bonusEntries {
+  /// Get the additional help entries count based on their user status.
+  ///
+  /// If they are a manager, they get an extra one which explains how to update
+  /// hole data.
+  ///
+  /// If they are an admin, they get the manager level entry and an entry explaining
+  /// how to update competition data.
+  int get bonusHelpEntries {
     if (isAdmin)
       return 0;
     else if (competitionAccess.isNotEmpty)

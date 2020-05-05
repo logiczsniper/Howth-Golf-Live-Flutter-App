@@ -55,50 +55,64 @@ class ModifyCompetitionState extends State<ModifyCompetition>
   Form get _form => Form(
       key: _formKey,
       child: UIToolkit.getCard(Padding(
-          child: ListView(
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
-            shrinkWrap: true,
-            children: <Widget>[
-              titleField,
-              getSpecialInput(Strings.empty, _home),
-              isHome == Strings.home ? Container() : locationField,
-              oppositionField,
-              dateTimeField
-            ],
-          ),
-          padding: EdgeInsets.all(5.0))));
+        padding: EdgeInsets.all(5.0),
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+          shrinkWrap: true,
+          children: <Widget>[
+            titleField,
+            getSpecialInput(Strings.empty, _home),
+            isHome == Strings.home ? Container() : locationField,
+            oppositionField,
+            dateTimeField
+          ],
+        ),
+      )));
 
   void _onPressed() {
     FirebaseInteraction.of(context).updateCompetition(
-        _formKey,
-        widget.id,
-        isHome == Strings.home,
-        titleField,
-        locationField,
-        oppositionField,
-        dateTimeField);
+      _formKey,
+      widget.id,
+      isHome == Strings.home,
+      titleField,
+      locationField,
+      oppositionField,
+      dateTimeField,
+    );
   }
 
   @override
   void initState() {
     super.initState();
 
+    /// A packed method indeed.
+    ///
+    /// All of the input fields must be initialized with the current values
+    /// of this competition.
+
     var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
     currentEntry = _firebaseModel.entryFromId(widget.id);
 
     isHome = currentEntry.location.isHome ? Strings.home : Strings.away;
-    titleField = DecoratedTextField(Strings.empty,
-        initialValue: currentEntry.title, noteText: Strings.titleLengthNote);
+    titleField = DecoratedTextField(
+      Strings.empty,
+      initialValue: currentEntry.title,
+      noteText: Strings.titleLengthNote,
+    );
     locationField = DecoratedTextField(
       Strings.location.substring(0, Strings.location.length - 1),
       initialValue: currentEntry.location.address == Strings.homeAddress
           ? null
           : currentEntry.location.address,
     );
-    oppositionField = DecoratedTextField(Strings.empty,
-        initialValue: currentEntry.opposition);
-    dateTimeField = DecoratedDateTimeField(Strings.empty,
-        initialValue: "${currentEntry.date} ${currentEntry.time}");
+    oppositionField = DecoratedTextField(
+      Strings.empty,
+      initialValue: currentEntry.opposition,
+    );
+    dateTimeField = DecoratedDateTimeField(
+      Strings.empty,
+      initialValue: "${currentEntry.date} ${currentEntry.time}",
+    );
   }
 
   @override

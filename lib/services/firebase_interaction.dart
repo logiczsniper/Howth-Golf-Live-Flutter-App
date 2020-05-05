@@ -48,6 +48,8 @@ class FirebaseInteraction {
     return int.parse(code);
   }
 
+  /// Use [updateData] method to make the changes to [Firestore]
+  /// and pop from the stack.
   void _updateDatabase({bool pop = true}) {
     if (pop) Navigator.of(context).pop();
 
@@ -76,17 +78,18 @@ class FirebaseInteraction {
     /// If the form inputs have been validated, add to competitions.
     if (_formKey.currentState.validate()) {
       DatabaseEntry newEntry = DatabaseEntry(
-          id: _id,
-          title: titleField.controller.value.text,
-          location: Location(
-              address: locationField.controller.text.isEmpty
-                  ? Strings.homeAddress
-                  : locationField.controller.text),
-          opposition: oppositionField.controller.value.text,
-          holes: [],
-          score: Score.fresh,
-          date: dateTimeField.controller.value.text.split(" ")[0],
-          time: dateTimeField.controller.value.text.split(" ")[1]);
+        id: _id,
+        title: titleField.controller.value.text,
+        opposition: oppositionField.controller.value.text,
+        holes: [],
+        score: Score.fresh,
+        date: dateTimeField.controller.value.text.split(" ")[0],
+        time: dateTimeField.controller.value.text.split(" ")[1],
+        location: Location(
+            address: locationField.controller.text.isEmpty
+                ? Strings.homeAddress
+                : locationField.controller.text),
+      );
 
       _databaseEntries.add(newEntry.toJson);
 
@@ -99,13 +102,14 @@ class FirebaseInteraction {
   /// The data used to replace the data found in the competition is found within
   /// the input fields.
   void updateCompetition(
-      GlobalKey<FormState> _formKey,
-      int currentId,
-      bool homeStatus,
-      DecoratedTextField titleField,
-      DecoratedTextField locationField,
-      DecoratedTextField oppositionField,
-      DecoratedDateTimeField dateTimeField) {
+    GlobalKey<FormState> _formKey,
+    int currentId,
+    bool homeStatus,
+    DecoratedTextField titleField,
+    DecoratedTextField locationField,
+    DecoratedTextField oppositionField,
+    DecoratedDateTimeField dateTimeField,
+  ) {
     /// If the form inputs have been validated, update the competition.
     if (_formKey.currentState.validate()) {
       for (Map entry in _databaseEntries) {

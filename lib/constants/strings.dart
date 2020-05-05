@@ -1,11 +1,11 @@
 class Strings {
+  /// Generic information.
   static const String appName = "Howth Golf Live";
   static const String appTitle = "Howth Golf\n Live Scoring";
   static const String homeAddress = "Howth Golf Club";
   static const String empty = "";
-  static const String contactDeveloper =
-      "Contact the developer:\nhowth.lczernel@gmail.com";
 
+  /// Tap messages.
   static const String tapMe = "Tap anywhere to begin!";
   static const String returnHome = "Tap to return to home!";
   static const String deleteHole = "Tap to delete this hole!";
@@ -19,6 +19,8 @@ class Strings {
   static const String tapManager = "Tap to enter manager code!";
   static const String tapEditHole = "Tap a player to edit score!";
   static const String tapEditCompetition = "Tap a competition to edit details!";
+  static const String currentWelcome = "Tap for current competitions!";
+  static const String archivedWelcome = "Tap for archived competitions!";
 
   /// App page texts. Also used for fetching data from firestore and app routing.
   static const String currentText = "Current";
@@ -32,15 +34,13 @@ class Strings {
   static const String modifyHole = "Modify Hole";
   static const String modifyCompetition = "Modify Competition";
 
-  static const String currentWelcome = "Tap for current competitions!";
-  static const String archivedWelcome = "Tap for archived competitions!";
-
+  /// Competition strings for showcase.
   static const String competitionTitle = "The title of the competition!";
   static const String competitionDate = "Competition date (DD-MM-YYYY)!";
   static const String competitionScore = "Competition score (howth on left)!";
-
   static const String competitionName = "Competition name";
 
+  /// Other strings for showcase.
   static const String howthScore = "Howth's overall score!";
   static const String oppositionScore = "Opposition's overall score!";
   static const String location = "Competition location!";
@@ -64,25 +64,31 @@ class Strings {
   static const String firaSans = "FiraSans";
   static const String cormorantGaramond = "CormorantGaramond";
 
+  /// Connectivity related strings.
   static const String consequences = "You may not see the latest data.";
   static const String lostConnection = "Lost connection with database!";
   static const String error =
       "Oof, please email the address in App Help to report this error.";
 
+  /// Modal strings.
   static const String ok = "OK";
   static const String cancel = "CANCEL";
   static const String irreversibleAction = "This action is irreversible.";
   static const String doubleCheck = "Are you sure you want to delete this?";
 
+  /// Home page strings.
   static const String noConnection = "No connection found!";
   static const String loading = "Loading...";
   static const String failure = "Failed!";
   static const String timedOut = "Timed out!";
   static const String connected = "Connected!";
   static const String entering = "Entering...";
+
+  /// No data!
   static const String noCompetitions = "No competitions found!";
   static const String noHoles = "No hole data found!";
 
+  /// User status strings.
   static const String alreadyAdmin = "You are already an admin!";
   static const String enterCode = "Enter code here...";
   static const String enterSearch = "Enter search text here...";
@@ -91,11 +97,12 @@ class Strings {
   static const String admin = "n admin.";
   static const String manager = " manager of this competition.";
 
-  static const String upUnder = "Up\\Under";
+  /// Competition minor strings.
   static const String aS = "A\\S";
   static const String versus = "V";
   static const String finished = "Finished!";
 
+  /// Creation/Modification of holes and competitions.
   static const String requiredField = "This field is required.";
   static const String note = "NOTE: ";
   static const String notes = " / Notes";
@@ -107,6 +114,7 @@ class Strings {
   static const String titleLengthNote =
       "Try to keep title length < ~30 characters.";
 
+  /// [SharedPreferences] strings.
   static const String activeAdminText = "activeAdmin";
   static const String activeCompetitionsText = "activeCompetitions";
   static const String visitedRoutes = "visitedRoutes";

@@ -6,6 +6,14 @@ import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 
+/// A [ComplexScore] is a special widget for displaying my own
+/// custom fractioned score text.
+///
+/// It will display mixed fractions as needed, with the added
+/// ability to vastly increase the size of the score text when it
+/// is only a fraction, e.g. 1/2.
+///
+/// @see [Score]
 class ComplexScore extends StatelessWidget {
   final Score score;
 
@@ -33,19 +41,7 @@ class ComplexScore extends StatelessWidget {
         : double.tryParse(score).toInt().toString();
   }
 
-  static TextSpan getFraction(bool isHowth, Score scores,
-          {FontWeight fontWeight}) =>
-      TextSpan(
-
-          /// The ternary operator (and others like it) below ensure that
-          /// no fraction is displayed if the [currentEntry.score] is whole.
-          text: _isFraction(isHowth ? scores.howth : scores.opposition)
-              ? "1/2"
-              : Strings.empty,
-          style: TextStyle(
-              fontFeatures: [FontFeature.enable('frac')],
-              fontWeight: fontWeight));
-
+  /// Creates a mixed fraction just for [SideFlexible].
   static TextSpan getMixedFraction(String scoreString) => TextSpan(
         style: TextStyle(
             fontSize: scoreString[0] == "0" ? 55 : 32,
@@ -74,6 +70,26 @@ class ComplexScore extends StatelessWidget {
           ),
         ],
       );
+
+  /// Creates a [TextSpan] with the fractional element to the [scores].
+  ///
+  /// Only returns the [Score.howth] if [isHowth] is true. The opposite is true.
+  static TextSpan getFraction(
+    bool isHowth,
+    Score scores, {
+    FontWeight fontWeight,
+  }) =>
+      TextSpan(
+
+          /// The ternary operator (and others like it) below ensure that
+          /// no fraction is displayed if the [currentEntry.score] is whole.
+          text: _isFraction(isHowth ? scores.howth : scores.opposition)
+              ? "1/2"
+              : Strings.empty,
+          style: TextStyle(
+            fontFeatures: [FontFeature.enable('frac')],
+            fontWeight: fontWeight,
+          ));
 
   @override
   Widget build(BuildContext context) {

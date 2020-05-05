@@ -7,6 +7,13 @@ import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/widgets/app_bars/stateful_app_bar.dart';
 import 'package:howth_golf_live/widgets/toolkit.dart';
 
+/// An app bar which accepts a passcode.
+///
+/// [title] the title of the app bar.
+///
+/// [id] if this is a [CompetitionPage] app bar, this is the [DatabaseEntry.id].
+///
+/// [backKey], [codeKey] showcase keys.
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final int id;
@@ -14,9 +21,13 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final GlobalKey backKey;
   final GlobalKey codeKey;
 
-  CodeFieldBar(this.title, this.userStatus, this.backKey, this.codeKey,
-      {this.id})
-      : preferredSize = Size.fromHeight(56.0),
+  CodeFieldBar(
+    this.title,
+    this.userStatus,
+    this.backKey,
+    this.codeKey, {
+    this.id,
+  })  : preferredSize = Size.fromHeight(56.0),
         assert(title == Strings.helpsText ? id == null : id != null);
 
   @override
@@ -41,8 +52,10 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
       switch (widget.title) {
         case Strings.helpsText:
-          isCodeCorrect = widget.userStatus
-              .adminAttempt(codeAttempt, _firebaseModel.adminCode.toString());
+          isCodeCorrect = widget.userStatus.adminAttempt(
+            codeAttempt,
+            _firebaseModel.adminCode.toString(),
+          );
           position = Strings.admin;
           break;
         default:
@@ -72,8 +85,9 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 350),
-      firstChild:
-          Icon(isVerified ? Icons.check_circle_outline : Icons.account_circle),
+      firstChild: Icon(
+        isVerified ? Icons.check_circle_outline : Icons.account_circle,
+      ),
       secondChild: Icon(Icons.check),
       crossFadeState: appBarTitle != inputBar
           ? CrossFadeState.showFirst
@@ -81,50 +95,14 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     );
   }
 
-  /// This depends greatly on whether or not the user is verified.
-  ///
-  /// Both the message and the icon image itself change based on [isVerified].
-  // Widget get _actionIconButton {
-  //   bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
-
-  //   String iconMessage = isVerified ? Strings.alreadyAdmin : Strings.tapCode;
-  //   IconData iconData;
-
-  //   if (appBarTitle == inputBar) {
-  //     iconData = Icons.check;
-  //   } else {
-  //     iconData = isVerified ? Icons.check_circle_outline : Icons.account_circle;
-  //   }
-
-  //   String description = widget.title == Strings.helpsText
-  //       ? Strings.tapAdmin
-  //       : Strings.tapManager;
-
-  //   return Container(
-  //     key: ValueKey<IconData>(iconData),
-  //     child: UIToolkit.showcase(
-  //         context: context,
-  //         key: widget.codeKey,
-  //         description: description,
-  //         child: IconButton(
-  //           icon: Icon(iconData),
-  //           tooltip: iconMessage,
-  //           onPressed: _codePressed,
-  //           padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
-  //         )),
-  //   );
-  // }
-
-  Widget get _backIconButton {
-    return UIToolkit.showcase(
-        context: context,
-        key: widget.backKey,
-        description: Strings.tapBack,
-        child: IconButton(
-            icon: BackButtonIcon(),
-            onPressed: Navigator.of(context).pop,
-            padding: EdgeInsets.fromLTRB(25.0, 8.0, 5.0, 8.0)));
-  }
+  Widget get _backIconButton => UIToolkit.showcase(
+      context: context,
+      key: widget.backKey,
+      description: Strings.tapBack,
+      child: IconButton(
+          icon: BackButtonIcon(),
+          onPressed: Navigator.of(context).pop,
+          padding: EdgeInsets.fromLTRB(25.0, 8.0, 5.0, 8.0)));
 
   @override
   void initState() {
@@ -143,8 +121,16 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   }
 
   @override
+  void dispose() {
+    _filter.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    /// Checks the connection status for the [HelpsPage] and [CompetitionPage].
     checkConnectivity(context);
+
     bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
     return AppBar(
         title: getTitle(appBarTitle),

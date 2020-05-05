@@ -36,15 +36,16 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
   Form get _form => Form(
       key: _formKey,
       child: UIToolkit.getCard(Padding(
-          child: ListView(
-              padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
-              shrinkWrap: true,
-              children: <Widget>[
-                playersField,
-                oppositionField,
-                commentField,
-              ]),
-          padding: EdgeInsets.all(5.0))));
+        padding: EdgeInsets.all(5.0),
+        child: ListView(
+            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+            shrinkWrap: true,
+            children: <Widget>[
+              playersField,
+              oppositionField,
+              commentField,
+            ]),
+      )));
 
   void _onPressed() {
     Hole updatedHole = currentHole.updateHole(
@@ -58,6 +59,9 @@ class ModifyHoleState extends State<ModifyHole> with CreationPage {
   @override
   void initState() {
     super.initState();
+
+    /// Each input field must be initialized with the current values
+    /// of this [Hole].
 
     var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
     opposition = _firebaseModel.entryFromId(widget.id).opposition;

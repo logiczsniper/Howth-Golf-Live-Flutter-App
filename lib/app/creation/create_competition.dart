@@ -9,7 +9,6 @@ import 'package:howth_golf_live/widgets/input_fields/text.dart';
 
 class CreateCompetition extends StatefulWidget {
   /// A page for the form to reside when an admin is creating a competition.
-
   CreateCompetition();
 
   @override
@@ -22,8 +21,10 @@ class CreateCompetitionState extends State<CreateCompetition>
   String isHome = Strings.home;
 
   /// The various fields the user must fill out.
-  DecoratedTextField titleField = DecoratedTextField(Strings.competitionName,
-      noteText: Strings.titleLengthNote);
+  DecoratedTextField titleField = DecoratedTextField(
+    Strings.competitionName,
+    noteText: Strings.titleLengthNote,
+  );
   DecoratedTextField locationField = DecoratedTextField(Fields.location);
   DecoratedTextField oppositionField = DecoratedTextField(Fields.opposition);
   DecoratedDateTimeField dateTimeField =
@@ -52,18 +53,19 @@ class CreateCompetitionState extends State<CreateCompetition>
   Form get _form => Form(
       key: _formKey,
       child: UIToolkit.getCard(Padding(
-          child: ListView(
-            padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
-            shrinkWrap: true,
-            children: <Widget>[
-              titleField,
-              getSpecialInput(Strings.empty, _home),
-              isHome == Strings.home ? Container() : locationField,
-              oppositionField,
-              dateTimeField
-            ],
-          ),
-          padding: EdgeInsets.all(5.0))));
+        padding: EdgeInsets.all(5.0),
+        child: ListView(
+          padding: EdgeInsets.fromLTRB(5.0, 0, 5.0, 15.0),
+          shrinkWrap: true,
+          children: <Widget>[
+            titleField,
+            getSpecialInput(Strings.empty, _home),
+            isHome == Strings.home ? Container() : locationField,
+            oppositionField,
+            dateTimeField
+          ],
+        ),
+      )));
 
   void _onPressed() {
     FirebaseInteraction.of(context).addCompetition(

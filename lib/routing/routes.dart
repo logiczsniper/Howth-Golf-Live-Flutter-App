@@ -1,23 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 import 'package:howth_golf_live/app/competitions/competitions_page.dart';
 import 'package:howth_golf_live/app/competitions/competition_page.dart';
-import 'package:howth_golf_live/app/creation/create_competition.dart';
-import 'package:howth_golf_live/app/creation/create_hole.dart';
 import 'package:howth_golf_live/app/help/help_page.dart';
 import 'package:howth_golf_live/app/help/helps_page.dart';
 import 'package:howth_golf_live/app/home/home_page.dart';
-import 'package:howth_golf_live/app/modification/modify_competition.dart';
-import 'package:howth_golf_live/app/modification/modify_hole.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
 import 'package:howth_golf_live/widgets/long_material_page_route.dart';
-import 'package:provider/provider.dart';
-import 'package:showcaseview/showcase_widget.dart';
 
 Widget get homePage => HomePage();
 Widget get competitionsPage => CompetitionsPage();
@@ -38,6 +34,7 @@ class Routes {
         context,
         LongMaterialPageRoute(
           builder: (context) => ShowCaseWidget(
+            builder: Builder(builder: (_) => destination),
             onFinish: () {
               var _userStatus =
                   Provider.of<UserStatusViewModel>(context, listen: false);
@@ -57,24 +54,13 @@ class Routes {
                 default:
                   route = Strings.empty;
               }
+
+              /// Visit the route in [UserStatusViewModel].
               if (route.isNotEmpty) _userStatus.visitRoute(route);
             },
-            builder: Builder(builder: (_) => destination),
           ),
         ),
       ).then(onComplete);
-
-  /// Push to [ModifyCompetition] page.
-  void toCompetitionModification(int id) => pushTo(ModifyCompetition(id));
-
-  /// Push to [ModifyHole] page.
-  void toHoleModification(int id, int index) => pushTo(ModifyHole(id, index));
-
-  /// Push to [CreateCompetition] page.
-  void toCompetitionCreation() => pushTo(CreateCompetition());
-
-  /// Push to the [CreateHole] page.
-  void toHoleCreation(int id) => pushTo(CreateHole(id));
 
   /// Push to the [Helps] page.
   void toHelps() => pushTo(HelpsPage());

@@ -10,6 +10,7 @@ import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/widgets/opacity_change.dart';
 
 class HomePage extends StatelessWidget {
+  /// Prompts the user to tap the screen, signing them in.
   Widget _tapText(String text) => Padding(
       padding: EdgeInsets.all(8.0),
       child: OpacityChangeWidget(
@@ -19,6 +20,7 @@ class HomePage extends StatelessWidget {
             style: TextStyles.form,
           )));
 
+  /// The title of the app.
   Widget get _howthText => Padding(
         padding: EdgeInsets.only(bottom: 8.0),
         child: Text(Strings.appTitle,
@@ -30,27 +32,29 @@ class HomePage extends StatelessWidget {
                 fontFamily: Strings.cormorantGaramond)),
       );
 
-  Widget get _howthLogo =>
-      Center(child: UIToolkit.svgHowthLogo(width: 100.0, height: 190.0));
-  // Center(child: UIToolkit.svgHowthLogo(width: 200.0, height: 380.0));
+  /// The logo on the front.
+  Widget get _howthLogo => Center(
+        child: UIToolkit.svgHowthLogo(width: 100.0, height: 190.0),
+      );
 
+  /// The entire page.
   Widget _page(
-          BuildContext context, AuthenticationViewModel authenticationModel) =>
+    BuildContext context,
+    AuthenticationViewModel authenticationModel,
+  ) =>
       GestureDetector(
         onTap: () {
+          /// On tap, sign the user in via the [AuthenticationViewModel].
           authenticationModel.anonymousSignIn(context);
         },
         child: Scaffold(
-          // floatingActionButton: OpacityChangeWidget(target: _howthLogo),
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.centerDocked,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 OpacityChangeWidget(target: _howthLogo),
                 _howthText,
-                _tapText(authenticationModel.status),
+                UIToolkit.getCard(_tapText(authenticationModel.status)),
               ],
             ),
           ),
@@ -63,6 +67,9 @@ class HomePage extends StatelessWidget {
         builder: (context, authenticationViewModel, _) {
       if (authenticationViewModel.status == Strings.connected) {
         authenticationViewModel.status = Strings.entering;
+
+        /// We cant navigate while this page is building, so we add
+        /// a [PostFrameCallback] instead.
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Routes.of(context).toCompetitions(onComplete: (_) {
             authenticationViewModel.status = Strings.tapMe;

@@ -186,15 +186,14 @@ class UIToolkit {
 
   static SvgPicture svgHowthLogo({
     double width = 70.0,
-    double height = 115.0,
     int opacity = 220,
     Color color,
   }) {
     return SvgPicture.asset(
       Strings.iconPath,
-      color: color ?? Palette.dark.withAlpha(opacity),
+      fit: BoxFit.fill,
+      allowDrawingOutsideViewBox: true,
       width: width,
-      height: height,
     );
   }
 

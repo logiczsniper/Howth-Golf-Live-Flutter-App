@@ -116,10 +116,10 @@ class Themes {
           button: TextStyles.dialog,
 
           /// Used for list tile titles.
-          subhead: TextStyle(fontSize: 17, fontWeight: FontWeight.w300))
+          subtitle1: TextStyle(fontSize: 17, fontWeight: FontWeight.w300))
       .apply(bodyColor: Palette.dark, displayColor: Palette.dark);
 
-  static TextTheme get titleTheme => TextTheme(title: TextStyles.title);
+  static TextTheme get titleTheme => TextTheme(headline6: TextStyles.title);
 
   static CardTheme get cardTheme => CardTheme(
       color: Palette.card,

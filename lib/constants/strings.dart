@@ -6,7 +6,7 @@ class Strings {
   static const String empty = "";
 
   /// Tap messages.
-  static const String tapMe = "Tap anywhere to begin!";
+  static const String tapMe = "Tap to begin!";
   static const String returnHome = "Tap to return to home!";
   static const String deleteHole = "Tap to delete this hole!";
   static const String tapCode = "Tap to enter a code!";

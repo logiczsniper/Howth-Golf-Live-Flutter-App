@@ -16,6 +16,8 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   set status(String newStatus) => _status = newStatus;
 
+  /// Changes the text back to [Strings.tapMe] once the app has connected
+  /// to the database.
   void resetText(_) {
     _status = Strings.tapMe;
     notifyListeners();

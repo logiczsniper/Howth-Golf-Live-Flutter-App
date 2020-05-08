@@ -43,13 +43,15 @@ class _OpacityChangeWidgetState extends State<OpacityChangeWidget>
 
     /// If [widget.flashing], the duration should be longer and slower versus
     /// else, the duration should be quick and snappy.
-    int duration = widget.flashing ? 900 : 350;
+    int duration = widget.flashing ? 1500 : 350;
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: duration),
     );
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
-      ..addStatusListener(_statusListener);
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOutQuart,
+    )..addStatusListener(_statusListener);
   }
 
   @override

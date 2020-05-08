@@ -16,6 +16,11 @@ class AuthenticationViewModel extends ChangeNotifier {
 
   set status(String newStatus) => _status = newStatus;
 
+  void resetText(_) {
+    _status = Strings.tapMe;
+    notifyListeners();
+  }
+
   /// Sign the user in anonymously.
   ///
   /// Upon timeout (after 15 seconds), it gives up and displays an

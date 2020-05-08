@@ -66,14 +66,11 @@ class HomePage extends StatelessWidget {
     return Consumer<AuthenticationViewModel>(
         builder: (context, authenticationViewModel, _) {
       if (authenticationViewModel.status == Strings.connected) {
-        authenticationViewModel.status = Strings.entering;
-
         /// We cant navigate while this page is building, so we add
         /// a [PostFrameCallback] instead.
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Routes.of(context).toCompetitions(onComplete: (_) {
-            authenticationViewModel.status = Strings.tapMe;
-          });
+          Routes.of(context)
+              .toCompetitions(onComplete: authenticationViewModel.resetText);
         });
       }
       return _page(context, authenticationViewModel);

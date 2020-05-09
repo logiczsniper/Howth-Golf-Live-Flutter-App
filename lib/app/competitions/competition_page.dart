@@ -109,11 +109,8 @@ class CompetitionPage extends StatelessWidget {
                   /// Howth player.
                   Expanded(
                     child: Selector<FirebaseViewModel, String>(
-                      selector: (_, model) => model
-                          .entryFromId(id)
-                          .holes
-                          .elementAt(index)
-                          .formattedPlayers,
+                      selector: (_, model) =>
+                          model.holeFromIndex(id, index).formattedPlayers,
                       builder: (_, homePlayers, child) => AnimatedSwitcher(
                         duration: const Duration(milliseconds: 350),
                         child: Container(
@@ -126,12 +123,8 @@ class CompetitionPage extends StatelessWidget {
 
                   /// Howth score.
                   Selector<FirebaseViewModel, String>(
-                    selector: (_, model) => model
-                        .entryFromId(id)
-                        .holes
-                        .elementAt(index)
-                        .holeScore
-                        .howth,
+                    selector: (_, model) =>
+                        model.holeFromIndex(id, index).holeScore.howth,
                     builder: (_, howthScoreString, __) => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
                       child: Container(
@@ -146,8 +139,7 @@ class CompetitionPage extends StatelessWidget {
 
             /// Hole Number
             Selector<FirebaseViewModel, int>(
-              selector: (_, model) =>
-                  model.entryFromId(id).holes.elementAt(index).holeNumber,
+              selector: (_, model) => model.holeFromIndex(id, index).holeNumber,
               builder: (_, holeNumber, __) => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 350),
                 child: Container(
@@ -164,12 +156,8 @@ class CompetitionPage extends StatelessWidget {
                 children: <Widget>[
                   /// Opposition team score.
                   Selector<FirebaseViewModel, String>(
-                    selector: (_, model) => model
-                        .entryFromId(id)
-                        .holes
-                        .elementAt(index)
-                        .holeScore
-                        .opposition,
+                    selector: (_, model) =>
+                        model.holeFromIndex(id, index).holeScore.opposition,
                     builder: (_, oppositionScoreString, __) => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
                       child: Container(
@@ -185,9 +173,7 @@ class CompetitionPage extends StatelessWidget {
                   Expanded(
                     child: Selector<FirebaseViewModel, String>(
                       selector: (_, model) => model
-                          .entryFromId(id)
-                          .holes
-                          .elementAt(index)
+                          .holeFromIndex(id, index)
                           .formattedOpposition(
                               model.entryFromId(id).opposition),
                       builder: (_, oppositionString, __) => AnimatedSwitcher(
@@ -342,6 +328,7 @@ class CompetitionPage extends StatelessWidget {
         builder: (_, data, child) => AnimatedSwitcher(
           duration: const Duration(milliseconds: 350),
           child: ListView.builder(
+            key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
             controller: _scrollController,
             padding: EdgeInsets.only(bottom: 400.0),
             shrinkWrap: true,
@@ -413,11 +400,8 @@ class CompetitionPage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 3.0),
                       padding: EdgeInsets.symmetric(vertical: 6.0),
                       child: Selector<FirebaseViewModel, String>(
-                        selector: (_, model) => model
-                            .entryFromId(id)
-                            .holes
-                            .elementAt(index)
-                            .prettyLastUpdated,
+                        selector: (_, model) =>
+                            model.holeFromIndex(id, index).prettyLastUpdated,
                         builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
                           duration: const Duration(milliseconds: 350),
                           child: Text(
@@ -435,11 +419,8 @@ class CompetitionPage extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 27.0),
                       padding: EdgeInsets.symmetric(vertical: 6.0),
                       child: Selector<FirebaseViewModel, String>(
-                        selector: (_, model) => model
-                            .entryFromId(id)
-                            .holes
-                            .elementAt(index)
-                            .comment,
+                        selector: (_, model) =>
+                            model.holeFromIndex(id, index).comment,
                         builder: (_, comment, __) => AnimatedSwitcher(
                           duration: const Duration(milliseconds: 350),
                           child: comment.isEmpty

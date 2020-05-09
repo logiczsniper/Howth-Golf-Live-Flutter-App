@@ -30,6 +30,12 @@ class FirebaseViewModel {
       databaseEntries?.firstWhere((entry) => entry?.id == id,
           orElse: () => DatabaseEntry.empty);
 
+  /// Fetches a [Hole] from a competition with the [id] and fetches the [Hole] with
+  /// the given [index] in [DatabaseEntry.holes].
+  Hole holeFromIndex(int id, int index) => entryFromId(id).holes.firstWhere(
+      (hole) => entryFromId(id).holes.indexOf(hole) == index,
+      orElse: () => Hole.fresh);
+
   /// Fetches the active elements of the snapshot.
   ///
   /// The active elements are elements which are in the tab which is
@@ -77,12 +83,12 @@ class FirebaseViewModel {
     List<Hole> holes = currentData.holes;
 
     if (!hasVisited) {
-      return holes.length + 2;
+      return holes.length + 1;
     } else {
       if (holes.isEmpty)
-        return 2;
+        return 1;
       else
-        return holes.length + 1;
+        return holes.length;
     }
   }
 

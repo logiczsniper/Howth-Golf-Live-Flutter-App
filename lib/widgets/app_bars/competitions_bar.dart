@@ -113,7 +113,6 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
 
     return SafeArea(
       child: NestedScrollView(
-        controller: ScrollController(),
         headerSliverBuilder: (context, _) => <Widget>[
           SliverAppBar(
             centerTitle: true,
@@ -121,9 +120,6 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             floating: true,
             pinned: false,
             snap: true,
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(13))),
             leading: UIToolkit.showcase(
               context: context,
               key: widget.keys[1],

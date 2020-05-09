@@ -13,10 +13,14 @@ class HomePage extends StatelessWidget {
   /// Prompts the user to tap the screen, signing them in.
   Widget _tapText(String text) => OpacityChangeWidget(
         flashing: true,
-        target: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyles.form.copyWith(color: Palette.dark, fontSize: 14),
+        target: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: Text(
+            text,
+            key: ValueKey<String>(text),
+            textAlign: TextAlign.center,
+            style: TextStyles.form.copyWith(color: Palette.dark, fontSize: 14),
+          ),
         ),
       );
 
@@ -120,8 +124,9 @@ class HomePage extends StatelessWidget {
         /// We cant navigate while this page is building, so we add
         /// a [PostFrameCallback] instead.
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Routes.of(context)
-              .toCompetitions(onComplete: authenticationViewModel.resetText);
+          Routes.of(context).toCompetitions(
+            onComplete: authenticationViewModel.resetText,
+          );
         });
       }
       return _page(context, authenticationViewModel);

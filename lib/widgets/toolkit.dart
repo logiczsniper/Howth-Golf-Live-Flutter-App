@@ -184,7 +184,7 @@ class UIToolkit {
         ),
       );
 
-  static SvgPicture svgHowthLogo({
+  static Widget svgHowthLogo({
     double width = 70.0,
     int opacity = 220,
     Color color,
@@ -194,6 +194,11 @@ class UIToolkit {
       fit: BoxFit.fill,
       allowDrawingOutsideViewBox: true,
       width: width,
+      placeholderBuilder: (context) => SizedBox(
+        width: width - 5,
+        height: (width - 5) * 1.45,
+        child: Container(color: Palette.light),
+      ),
     );
   }
 

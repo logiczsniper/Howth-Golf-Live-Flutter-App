@@ -15,26 +15,30 @@ class FirebaseViewModel {
   DocumentSnapshot get document => currentSnapshot?.documents?.first;
   List get _documentEntries => document?.data?.entries?.toList();
 
+  /// A list of [_InternallyLinkedHashMap]s is considered 'raw'.
   List get rawEntries => _documentEntries?.last?.value ?? [];
 
   List<DatabaseEntry> get databaseEntries => rawEntries
       ?.map((dynamic element) => DatabaseEntry.fromMap(element))
       ?.toList();
 
+  /// Fetching attributes from the [document].
   int get adminCode => document?.data[Fields.adminCode];
   String title(int id) => entryFromId(id)?.title ?? Strings.empty;
 
   /// Upon the competition being deleted, this is handled by
   /// temporarily returning [DatabaseEntry.empty].
-  DatabaseEntry entryFromId(int id) =>
-      databaseEntries?.firstWhere((entry) => entry?.id == id,
-          orElse: () => DatabaseEntry.empty);
+  DatabaseEntry entryFromId(int id) => databaseEntries?.firstWhere(
+        (entry) => entry?.id == id,
+        orElse: () => DatabaseEntry.empty,
+      );
 
   /// Fetches a [Hole] from a competition with the [id] and fetches the [Hole] with
   /// the given [index] in [DatabaseEntry.holes].
   Hole holeFromIndex(int id, int index) => entryFromId(id).holes.firstWhere(
-      (hole) => entryFromId(id).holes.indexOf(hole) == index,
-      orElse: () => Hole.empty);
+        (hole) => entryFromId(id).holes.indexOf(hole) == index,
+        orElse: () => Hole.empty,
+      );
 
   /// Fetches the active elements of the snapshot.
   ///

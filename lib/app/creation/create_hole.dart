@@ -68,6 +68,9 @@ class CreateHoleState extends State<CreateHole> with CreationPage {
 
   @override
   Widget build(BuildContext context) {
+    /// Attempt to fix bug:
+    // if (widget.currentId == null) Navigator.of(context).pop();
+
     return construct(Strings.newHole, _onPressed, _form);
   }
 }

@@ -279,7 +279,7 @@ class UIToolkit {
   ) =>
       Container(
         padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 8.0),
-        margin: EdgeInsets.fromLTRB(20.0, 3.0, 20.0, 2.0),
+        margin: EdgeInsets.fromLTRB(20.0, 2.0, 20.0, 2.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13.0),
           color: Colors.transparent,

@@ -301,6 +301,14 @@ class Hole {
       comment: Strings.empty,
       lastUpdated: DateTime.now());
 
+  static Hole get empty => Hole(
+      holeNumber: 0,
+      holeScore: Score.fresh,
+      players: [" "],
+      opposition: [" "],
+      comment: Strings.empty,
+      lastUpdated: DateTime.now());
+
   Map get toJson => {
         Fields.holeNumber: holeNumber,
         Fields.holeScore: holeScore.toJson,

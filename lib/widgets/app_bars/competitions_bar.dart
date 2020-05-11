@@ -13,7 +13,7 @@ typedef CompetitionListBuilder = Widget Function(
 
 class CompetitionsPageAppBar extends StatefulWidget
     implements PreferredSizeWidget {
-  final String title;
+  final String title = Strings.competitionsText;
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
   /// lists- one from current and the other from archived.
@@ -27,7 +27,6 @@ class CompetitionsPageAppBar extends StatefulWidget
 
   CompetitionsPageAppBar(
     this._listBuilder, {
-    this.title,
     this.hasVisited,
     this.keys,
   }) : preferredSize = Size.fromHeight(56.0);

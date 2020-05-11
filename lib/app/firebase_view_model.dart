@@ -34,7 +34,7 @@ class FirebaseViewModel {
   /// the given [index] in [DatabaseEntry.holes].
   Hole holeFromIndex(int id, int index) => entryFromId(id).holes.firstWhere(
       (hole) => entryFromId(id).holes.indexOf(hole) == index,
-      orElse: () => Hole.fresh);
+      orElse: () => Hole.empty);
 
   /// Fetches the active elements of the snapshot.
   ///

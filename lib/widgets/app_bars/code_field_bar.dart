@@ -106,6 +106,19 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
           onPressed: Navigator.of(context).pop,
           padding: EdgeInsets.fromLTRB(25.0, 8.0, 5.0, 8.0)));
 
+  Widget _codeIconButton(bool isVerified, bool isHelpsPage) =>
+      UIToolkit.showcase(
+        context: context,
+        key: widget.codeKey,
+        description: isHelpsPage ? Strings.tapAdmin : Strings.tapManager,
+        child: IconButton(
+          icon: _iconData,
+          tooltip: isVerified ? Strings.alreadyAdmin : Strings.tapCode,
+          onPressed: _codePressed,
+          padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
+        ),
+      );
+
   @override
   void initState() {
     super.initState();
@@ -134,24 +147,22 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
     checkConnectivity(context);
 
     bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
-    return AppBar(
-        title: getTitle(appBarTitle),
-        centerTitle: true,
-        leading: _backIconButton,
-        bottom: widget.bottom,
-        actions: <Widget>[
-          UIToolkit.showcase(
-              context: context,
-              key: widget.codeKey,
-              description: widget.title == Strings.helpsText
-                  ? Strings.tapAdmin
-                  : Strings.tapManager,
-              child: IconButton(
-                icon: _iconData,
-                tooltip: isVerified ? Strings.alreadyAdmin : Strings.tapCode,
-                onPressed: _codePressed,
-                padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
-              )),
-        ]);
+    bool isHelpsPage = widget.title == Strings.helpsText;
+
+    return isHelpsPage
+        ? AppBar(
+            title: getTitle(appBarTitle),
+            centerTitle: true,
+            leading: _backIconButton,
+            actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
+          )
+        : SliverAppBar(
+            expandedHeight: 56.0 + 178,
+            bottom: widget.bottom,
+            title: getTitle(appBarTitle),
+            centerTitle: true,
+            leading: _backIconButton,
+            actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
+          );
   }
 }

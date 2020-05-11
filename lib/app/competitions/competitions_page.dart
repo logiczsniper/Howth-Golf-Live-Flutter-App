@@ -249,7 +249,6 @@ class CompetitionsPage extends StatelessWidget {
             length: 2,
             child: CompetitionsPageAppBar(
               _buildElementsList,
-              title: Strings.competitionsText,
               hasVisited: _userStatus.hasVisited(Strings.competitionsText),
               keys: keys,
             )),

@@ -297,25 +297,6 @@ class CompetitionPage extends StatelessWidget {
         child: floatingActionButton,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // appBar: CodeFieldBar(
-      //   Strings.specificCompetition,
-      //   _userStatus,
-      //   _backKey,
-      //   _codeKey,
-      //   id: id,
-      //   bottom: PreferredSize(
-      //     preferredSize: Size.fromHeight(160.0),
-      //     child: _columnBuilder(
-      //       context,
-      //       _howthScoreKey,
-      //       _oppositionScoreKey,
-      //       _oppositionTeamKey,
-      //       _locationKey,
-      //       _dateKey,
-      //       _timeKey,
-      //     ),
-      //   ),
-      // ),
       body:
 
           /// If the [itemCount] changes, the hole list view must update
@@ -331,7 +312,7 @@ class CompetitionPage extends StatelessWidget {
               _codeKey,
               id: id,
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(178.0),
+                preferredSize: Size.fromHeight(130.0),
                 child: _columnBuilder(
                   context,
                   _howthScoreKey,
@@ -361,17 +342,11 @@ class CompetitionPage extends StatelessWidget {
                 duration: const Duration(milliseconds: 5000),
                 child: ListView.builder(
                   key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
-                  // controller: _scrollController,
                   physics: NeverScrollableScrollPhysics(),
-                  // padding: EdgeInsets.only(bottom: 100.0),
-                  // shrinkWrap: true,
                   itemCount: data.item1,
                   itemBuilder: (context, index) {
-                    // if (index == 0)
-
                     /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
                     /// widgets in one column.
-                    // return child;
                     if (index == 0) {
                       if (!hasVisited)
                         return UIToolkit.exampleHole(
@@ -387,8 +362,6 @@ class CompetitionPage extends StatelessWidget {
                     }
 
                     /// If there are no more special conditions to handle, proceed with hole list creation.
-                    /// Subtract one from the [index] to account for the [columnBuilder].
-                    // int _index = --index;
                     int _index = index;
 
                     /// If the page has not been visted before, subtract one from the [_index] to

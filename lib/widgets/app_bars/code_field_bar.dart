@@ -157,8 +157,17 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
             actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
           )
         : SliverAppBar(
-            expandedHeight: 56.0 + 178,
-            bottom: widget.bottom,
+            expandedHeight: 56.0 + 178.0,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              background: Container(
+                margin: EdgeInsets.only(top: 56.0),
+                child: widget.bottom,
+              ),
+            ),
+
+            /// Standard [AppBar] attributes.
             title: getTitle(appBarTitle),
             centerTitle: true,
             leading: _backIconButton,

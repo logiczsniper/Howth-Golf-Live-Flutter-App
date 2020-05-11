@@ -209,6 +209,7 @@ class CompetitionPage extends StatelessWidget {
     /// in the [HoleViewModel].
     _scrollController.addListener(() {
       _holeModel.scroll(id, _scrollController.offset);
+      // print("Offset: ${_scrollController.offset}");
     });
 
     /// The keys for the showcase.
@@ -339,10 +340,11 @@ class CompetitionPage extends StatelessWidget {
             /// [child] is the [_columnBuilder] result.
             builder: (_, data, child) {
               return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 5000),
+                duration: const Duration(milliseconds: 350),
                 child: ListView.builder(
                   key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
-                  physics: NeverScrollableScrollPhysics(),
+                  // physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(bottom: 400),
                   itemCount: data.item1,
                   itemBuilder: (context, index) {
                     /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
@@ -388,7 +390,7 @@ class CompetitionPage extends StatelessWidget {
                             model.open(id, _index);
 
                             /// Roughly calculate the offset to scroll to.
-                            double _offset = (_index * 30 + 40).toDouble();
+                            double _offset = (_index * 70).toDouble();
 
                             /// If the difference between the current position and where the
                             /// scroll would end up is too great, scroll!

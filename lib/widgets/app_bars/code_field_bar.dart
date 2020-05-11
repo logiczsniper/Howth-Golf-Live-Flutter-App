@@ -18,6 +18,7 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final int id;
   final UserStatusViewModel userStatus;
+  final PreferredSize bottom;
   final GlobalKey backKey;
   final GlobalKey codeKey;
 
@@ -27,7 +28,8 @@ class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
     this.backKey,
     this.codeKey, {
     this.id,
-  })  : preferredSize = Size.fromHeight(56.0),
+    this.bottom,
+  })  : preferredSize = Size.fromHeight(bottom == null ? 56.0 : 180.0 + 56.0),
         assert(title == Strings.helpsText ? id == null : id != null);
 
   @override
@@ -136,6 +138,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         title: getTitle(appBarTitle),
         centerTitle: true,
         leading: _backIconButton,
+        bottom: widget.bottom,
         actions: <Widget>[
           UIToolkit.showcase(
               context: context,

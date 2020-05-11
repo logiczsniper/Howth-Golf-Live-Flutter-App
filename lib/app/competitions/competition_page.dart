@@ -21,9 +21,9 @@ class CompetitionPage extends StatelessWidget {
   final int id;
 
   /// The single controller being used in all the competition pages.
-  final ScrollController _scrollController;
+  final ScrollController _scrollController = ScrollController();
 
-  CompetitionPage(this.id, this._scrollController);
+  CompetitionPage(this.id);
 
   /// Get the styled and positioned widget to display the name of the player(s)
   /// for the designated [hole].
@@ -78,10 +78,14 @@ class CompetitionPage extends StatelessWidget {
                 )),
           ),
         ),
-        Padding(
-            padding: EdgeInsets.zero,
-            child: CompetitionDetails(id, _howthScoreKey, _oppositionScoreKey,
-                _locationKey, _dateKey, _timeKey)),
+        CompetitionDetails(
+          id,
+          _howthScoreKey,
+          _oppositionScoreKey,
+          _locationKey,
+          _dateKey,
+          _timeKey,
+        ),
         UIToolkit.getVersus(context, id, _oppositionTeamKey)
       ],
     );
@@ -299,21 +303,24 @@ class CompetitionPage extends StatelessWidget {
         _backKey,
         _codeKey,
         id: id,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(160.0),
+          child: _columnBuilder(
+            context,
+            _howthScoreKey,
+            _oppositionScoreKey,
+            _oppositionTeamKey,
+            _locationKey,
+            _dateKey,
+            _timeKey,
+          ),
+        ),
       ),
       body:
 
           /// If the [itemCount] changes, the hole list view must update
           /// in this [Selector].
           Selector<FirebaseViewModel, Tuple2<int, bool>>(
-        child: _columnBuilder(
-          context,
-          _howthScoreKey,
-          _oppositionScoreKey,
-          _oppositionTeamKey,
-          _locationKey,
-          _dateKey,
-          _timeKey,
-        ),
         selector: (_, model) => Tuple2(
           model.holesItemCount(id, hasVisited),
           model.entryFromId(id).holes.isEmpty,
@@ -325,121 +332,126 @@ class CompetitionPage extends StatelessWidget {
         /// [data.item2] is whether the current competition has any holes.
         ///
         /// [child] is the [_columnBuilder] result.
-        builder: (_, data, child) => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 350),
-          child: ListView.builder(
-            key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
-            controller: _scrollController,
-            padding: EdgeInsets.only(bottom: 400.0),
-            shrinkWrap: true,
-            itemCount: data.item1,
-            itemBuilder: (context, index) {
-              if (index == 0)
+        builder: (_, data, child) {
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 5000),
+            child: ListView.builder(
+              key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
+              controller: _scrollController,
+              padding: EdgeInsets.only(bottom: 400.0),
+              shrinkWrap: true,
+              itemCount: data.item1,
+              itemBuilder: (context, index) {
+                // if (index == 0)
 
                 /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
                 /// widgets in one column.
-                return child;
-              else if (index == 1) {
-                if (!hasVisited)
-                  return UIToolkit.exampleHole(
-                      context,
-                      _holeKey,
-                      _playersKey,
-                      _holeHowthScoreKey,
-                      _holeOppositionScoreKey,
-                      _holeNumberKey,
-                      _oppositionKey);
-                else if (data.item2)
-                  return UIToolkit.getNoDataText(Strings.noHoles);
-              }
+                // return child;
+                if (index == 0) {
+                  if (!hasVisited)
+                    return UIToolkit.exampleHole(
+                        context,
+                        _holeKey,
+                        _playersKey,
+                        _holeHowthScoreKey,
+                        _holeOppositionScoreKey,
+                        _holeNumberKey,
+                        _oppositionKey);
+                  else if (data.item2)
+                    return UIToolkit.getNoDataText(Strings.noHoles);
+                }
 
-              /// If there are no more special conditions to handle, proceed with hole list creation.
-              /// Subtract one from the [index] to account for the [columnBuilder].
-              int _index = --index;
+                /// If there are no more special conditions to handle, proceed with hole list creation.
+                /// Subtract one from the [index] to account for the [columnBuilder].
+                // int _index = --index;
+                int _index = index;
 
-              /// If the page has not been visted before, subtract one from the [_index] to
-              /// account for the [UIToolkit.exampleHole].
-              if (!hasVisited) _index--;
+                /// If the page has not been visted before, subtract one from the [_index] to
+                /// account for the [UIToolkit.exampleHole].
+                if (!hasVisited) _index--;
 
-              return Consumer<HoleViewModel>(
-                child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    child: _rowBuilder(context, _index, id),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13.0),
-                        color: index % 2 != 0
-                            ? Palette.light
-                            : Palette.card.withAlpha(240))),
-                builder: (context, model, child) => CustomExpansionTile(
-                  title: child,
-                  id: id,
-                  index: _index,
-                  initiallyExpanded: model.openIndices(id: id).contains(_index),
-                  onExpansionChanged: (bool isOpen) {
-                    if (isOpen) {
-                      model.open(id, _index);
+                return Consumer<HoleViewModel>(
+                  child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 12),
+                      child: _rowBuilder(context, _index, id),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13.0),
+                          color: index % 2 != 0
+                              ? Palette.light
+                              : Palette.card.withAlpha(240))),
+                  builder: (context, model, child) => CustomExpansionTile(
+                    title: child,
+                    id: id,
+                    index: _index,
+                    initiallyExpanded:
+                        model.openIndices(id: id).contains(_index),
+                    onExpansionChanged: (bool isOpen) {
+                      if (isOpen) {
+                        model.open(id, _index);
 
-                      /// Roughly calculate the offset to scroll to.
-                      double _offset = (_index * 60 + 50).toDouble();
+                        /// Roughly calculate the offset to scroll to.
+                        double _offset = (_index * 30 + 40).toDouble();
 
-                      /// If the difference between the current position and where the
-                      /// scroll would end up is too great, scroll!
-                      if ((_scrollController.offset - _offset).abs() > 60)
-                        _scrollController.animateTo(
-                          _offset,
-                          duration: const Duration(milliseconds: 700),
-                          curve: Curves.easeInOutQuart,
-                        );
-                    } else {
-                      model.close(id, _index);
-                    }
-                  },
-                  children: <Widget>[
-                    /// Display the [lastUpdated] formatted.
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 3.0),
-                      padding: EdgeInsets.symmetric(vertical: 6.0),
-                      child: Selector<FirebaseViewModel, String>(
-                        selector: (_, model) =>
-                            model.holeFromIndex(id, index).prettyLastUpdated,
-                        builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 350),
-                          child: Text(
-                            lastUpdatedPretty,
-                            key: ValueKey<String>(lastUpdatedPretty),
-                            textAlign: TextAlign.center,
-                            style: TextStyles.cardTitle,
+                        /// If the difference between the current position and where the
+                        /// scroll would end up is too great, scroll!
+                        if ((_scrollController.offset - _offset).abs() > 30)
+                          _scrollController.animateTo(
+                            _offset,
+                            duration: const Duration(milliseconds: 700),
+                            curve: Curves.easeInOutQuart,
+                          );
+                      } else {
+                        model.close(id, _index);
+                      }
+                    },
+                    children: <Widget>[
+                      /// Display the [lastUpdated] formatted.
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 3.0),
+                        padding: EdgeInsets.symmetric(vertical: 6.0),
+                        child: Selector<FirebaseViewModel, String>(
+                          selector: (_, model) =>
+                              model.holeFromIndex(id, index).prettyLastUpdated,
+                          builder: (_, lastUpdatedPretty, __) =>
+                              AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 350),
+                            child: Text(
+                              lastUpdatedPretty,
+                              key: ValueKey<String>(lastUpdatedPretty),
+                              textAlign: TextAlign.center,
+                              style: TextStyles.cardTitle,
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    /// If there is a [comment], display it.
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 27.0),
-                      padding: EdgeInsets.symmetric(vertical: 6.0),
-                      child: Selector<FirebaseViewModel, String>(
-                        selector: (_, model) =>
-                            model.holeFromIndex(id, index).comment,
-                        builder: (_, comment, __) => AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 350),
-                          child: comment.isEmpty
-                              ? Container()
-                              : Text(
-                                  "Comment: $comment",
-                                  key: ValueKey<String>(comment),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyles.cardTitle,
-                                ),
+                      /// If there is a [comment], display it.
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 27.0),
+                        padding: EdgeInsets.symmetric(vertical: 6.0),
+                        child: Selector<FirebaseViewModel, String>(
+                          selector: (_, model) =>
+                              model.holeFromIndex(id, index).comment,
+                          builder: (_, comment, __) => AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 350),
+                            child: comment.isEmpty
+                                ? Container()
+                                : Text(
+                                    "Comment: $comment",
+                                    key: ValueKey<String>(comment),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyles.cardTitle,
+                                  ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

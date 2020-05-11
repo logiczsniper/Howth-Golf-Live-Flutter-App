@@ -90,6 +90,15 @@ class FirebaseViewModel {
       else
         return holes.length;
     }
+
+    // if (!hasVisited) {
+    //   return holes.length + 2;
+    // } else {
+    //   if (holes.isEmpty)
+    //     return 2;
+    //   else
+    //     return holes.length + 1;
+    // }
   }
 
   /// Sorts elements into either current or archived lists.

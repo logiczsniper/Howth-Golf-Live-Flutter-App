@@ -169,6 +169,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
             /// Standard [AppBar] attributes.
             title: getTitle(appBarTitle),
+            elevation: 0.0,
             centerTitle: true,
             leading: _backIconButton,
             actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],

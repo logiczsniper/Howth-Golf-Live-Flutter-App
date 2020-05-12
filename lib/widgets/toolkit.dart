@@ -111,9 +111,10 @@ class UIToolkit {
 
   /// A simple button to navigate back to [Competitions] page.
   static IconButton getHomeButton(BuildContext context) => IconButton(
-      icon: Icon(Icons.home),
-      tooltip: Strings.returnHome,
-      onPressed: () => Routes.of(context).toCompetitions());
+        icon: Icon(Icons.home),
+        tooltip: Strings.returnHome,
+        onPressed: Routes.of(context).popToCompetitions,
+      );
 
   /// Handles special situations with [snapshot].
   ///

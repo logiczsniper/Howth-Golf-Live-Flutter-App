@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:showcaseview/showcase_widget.dart';
@@ -7,6 +8,7 @@ import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:howth_golf_live/constants/strings.dart';
 import 'package:howth_golf_live/services/models.dart';
+import 'package:howth_golf_live/routing/routes.dart';
 import 'package:howth_golf_live/style/text_styles.dart';
 import 'package:howth_golf_live/style/palette.dart';
 import 'package:howth_golf_live/app/hole_view_model.dart';
@@ -278,7 +280,9 @@ class CompetitionPage extends StatelessWidget {
 
               /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
               /// this page must be popped from the navigation stack.
-              if (entry.id == -2) Navigator.of(context).pop();
+              ///
+              /// Using [popUntil] in case a modal is over the page (add players modal).
+              if (entry.id == -2) Routes.of(context).popToCompetitions();
 
               return firebaseModel.entryFromId(id).isArchived
                   ? userStatusModel.isAdmin

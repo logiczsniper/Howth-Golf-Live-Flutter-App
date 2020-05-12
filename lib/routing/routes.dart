@@ -75,6 +75,11 @@ class Routes {
   /// Push to the [Competition] page.
   void toCompetition(int id) => pushTo(CompetitionPage(id));
 
+  /// Uses [popUntil] to repeatedly pop until the [CompetitionsPage] is reached.
+  void popToCompetitions() => Navigator.of(context).popUntil((Route route) {
+        return route.settings.name == (Routes.home + Strings.competitionsText);
+      });
+
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
         home: (context) => homePage,

@@ -40,10 +40,9 @@ class CompetitionPage extends StatelessWidget {
   /// Gets the properly padded and styled score widget.
   Container _getScore(String text, {bool isOpposition = false}) => Container(
       child: Text(text,
-          style: TextStyles.leadingChild
-              .copyWith(fontWeight: FontWeight.bold, fontSize: 20)),
-      padding: EdgeInsets.fromLTRB(
-          isOpposition ? 12.0 : 16.0, 3.0, !isOpposition ? 12.0 : 16.0, 3.0));
+          style: TextStyles.leadingChild.copyWith(fontWeight: FontWeight.bold, fontSize: 20)),
+      padding:
+          EdgeInsets.fromLTRB(isOpposition ? 12.0 : 16.0, 3.0, !isOpposition ? 12.0 : 16.0, 3.0));
 
   /// Builds the [Column] of data at the top of the competition.
   ///
@@ -69,14 +68,12 @@ class CompetitionPage extends StatelessWidget {
                 padding: EdgeInsets.all(6.0),
                 margin: EdgeInsets.fromLTRB(26.0, 10.0, 26.0, 0.0),
                 width: 200,
-                decoration: BoxDecoration(
-                    color: Palette.maroon,
-                    borderRadius: BorderRadius.circular(13.0)),
+                decoration:
+                    BoxDecoration(color: Palette.maroon, borderRadius: BorderRadius.circular(13.0)),
                 child: Text(
                   Strings.finished,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Palette.inMaroon, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: Palette.inMaroon, fontWeight: FontWeight.w600),
                 )),
           ),
         ),
@@ -115,8 +112,7 @@ class CompetitionPage extends StatelessWidget {
                   /// Howth player.
                   Expanded(
                     child: Selector<FirebaseViewModel, String>(
-                      selector: (_, model) =>
-                          model.holeFromIndex(id, index).formattedPlayers,
+                      selector: (_, model) => model.holeFromIndex(id, index).formattedPlayers,
                       builder: (_, homePlayers, child) => AnimatedSwitcher(
                         duration: const Duration(milliseconds: 350),
                         child: Container(
@@ -129,8 +125,7 @@ class CompetitionPage extends StatelessWidget {
 
                   /// Howth score.
                   Selector<FirebaseViewModel, String>(
-                    selector: (_, model) =>
-                        model.holeFromIndex(id, index).holeScore.howth,
+                    selector: (_, model) => model.holeFromIndex(id, index).holeScore.howth,
                     builder: (_, howthScoreString, __) => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
                       child: Container(
@@ -162,14 +157,12 @@ class CompetitionPage extends StatelessWidget {
                 children: <Widget>[
                   /// Opposition team score.
                   Selector<FirebaseViewModel, String>(
-                    selector: (_, model) =>
-                        model.holeFromIndex(id, index).holeScore.opposition,
+                    selector: (_, model) => model.holeFromIndex(id, index).holeScore.opposition,
                     builder: (_, oppositionScoreString, __) => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 350),
                       child: Container(
                         key: ValueKey<String>(oppositionScoreString),
-                        child: _getScore(oppositionScoreString,
-                            isOpposition: true),
+                        child: _getScore(oppositionScoreString, isOpposition: true),
                       ),
                     ),
                   ),
@@ -180,14 +173,12 @@ class CompetitionPage extends StatelessWidget {
                     child: Selector<FirebaseViewModel, String>(
                       selector: (_, model) => model
                           .holeFromIndex(id, index)
-                          .formattedOpposition(
-                              model.entryFromId(id).opposition),
+                          .formattedOpposition(model.entryFromId(id).opposition),
                       builder: (_, oppositionString, __) => AnimatedSwitcher(
                         duration: const Duration(milliseconds: 350),
                         child: Container(
                           key: ValueKey<String>(oppositionString),
-                          child:
-                              _getPlayer(oppositionString, isOpposition: true),
+                          child: _getPlayer(oppositionString, isOpposition: true),
                         ),
                       ),
                     ),
@@ -211,7 +202,7 @@ class CompetitionPage extends StatelessWidget {
     /// in the [HoleViewModel].
     _scrollController.addListener(() {
       _holeModel.scroll(id, _scrollController.offset);
-      // print("Offset: ${_scrollController.offset}");
+      print("Outer offset: ${_scrollController.offset}");
     });
 
     /// The keys for the showcase.
@@ -266,35 +257,38 @@ class CompetitionPage extends StatelessWidget {
     /// This adds the feature of saving your scroll position for
     /// each competition page.
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _scrollController.jumpTo(_holeModel.offset(id: id)),
+      (_) {
+        _scrollController.jumpTo(_holeModel.offset(id: id));
+
+        /// TODO: fix me
+      },
     );
 
     /// Creates a FAB which rebuilds using [Selector].
     ///
     /// If the user does not [hasAccess] then the button is
     /// replaced by a [Container] which isnt visible.
-    Widget floatingActionButton =
-        Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
-            selector: (context, userStatusModel, firebaseModel) {
-              DatabaseEntry entry = firebaseModel.entryFromId(id);
+    Widget floatingActionButton = Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
+        selector: (context, userStatusModel, firebaseModel) {
+          DatabaseEntry entry = firebaseModel.entryFromId(id);
 
-              /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
-              /// this page must be popped from the navigation stack.
-              ///
-              /// Using [popUntil] in case a modal is over the page (add players modal).
-              if (entry.id == -2) Routes.of(context).popToCompetitions();
+          /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
+          /// this page must be popped from the navigation stack.
+          ///
+          /// Using [popUntil] in case a modal is over the page (add players modal).
+          if (entry.id == -2) Routes.of(context).popToCompetitions();
 
-              return firebaseModel.entryFromId(id).isArchived
-                  ? userStatusModel.isAdmin
-                  : userStatusModel.isManager(id);
-            },
-            builder: (context, hasAccess, child) => hasAccess
-                ? UIToolkit.createButton(
-                    context: context,
-                    primaryText: Strings.newHole,
-                    secondaryText: Strings.tapEditHole,
-                    id: id)
-                : Container());
+          return firebaseModel.entryFromId(id).isArchived
+              ? userStatusModel.isAdmin
+              : userStatusModel.isManager(id);
+        },
+        builder: (context, hasAccess, child) => hasAccess
+            ? UIToolkit.createButton(
+                context: context,
+                primaryText: Strings.newHole,
+                secondaryText: Strings.tapEditHole,
+                id: id)
+            : Container());
 
     return Scaffold(
       floatingActionButton: Container(
@@ -317,7 +311,7 @@ class CompetitionPage extends StatelessWidget {
               _codeKey,
               id: id,
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(130.0),
+                preferredSize: Size.fromHeight(180.0),
                 child: _columnBuilder(
                   context,
                   _howthScoreKey,
@@ -342,7 +336,11 @@ class CompetitionPage extends StatelessWidget {
             /// [data.item2] is whether the current competition has any holes.
             ///
             /// [child] is the [_columnBuilder] result.
-            builder: (_, data, child) {
+            builder: (context, data, child) {
+              final _innerScrollController = PrimaryScrollController.of(context);
+              _innerScrollController.addListener(() {
+                print("Inner offset: ${_innerScrollController.offset}");
+              });
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 350),
                 child: ListView.builder(
@@ -363,8 +361,7 @@ class CompetitionPage extends StatelessWidget {
                             _holeOppositionScoreKey,
                             _holeNumberKey,
                             _oppositionKey);
-                      else if (data.item2)
-                        return UIToolkit.getNoDataText(Strings.noHoles);
+                      else if (data.item2) return UIToolkit.getNoDataText(Strings.noHoles);
                     }
 
                     /// If there are no more special conditions to handle, proceed with hole list creation.
@@ -380,30 +377,162 @@ class CompetitionPage extends StatelessWidget {
                           child: _rowBuilder(context, _index, id),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(13.0),
-                              color: index % 2 != 0
-                                  ? Palette.light
-                                  : Palette.card.withAlpha(240))),
+                              color: index % 2 != 0 ? Palette.light : Palette.card.withAlpha(240))),
                       builder: (context, model, child) => CustomExpansionTile(
                         title: child,
                         id: id,
                         index: _index,
-                        initiallyExpanded:
-                            model.openIndices(id: id).contains(_index),
+                        initiallyExpanded: model.openIndices(id: id).contains(_index),
                         onExpansionChanged: (bool isOpen) {
                           if (isOpen) {
                             model.open(id, _index);
 
                             /// Roughly calculate the offset to scroll to.
-                            double _offset = (_index * 70).toDouble();
+                            // double _offset = (_index * 70).toDouble();
 
-                            /// If the difference between the current position and where the
-                            /// scroll would end up is too great, scroll!
-                            if ((_scrollController.offset - _offset).abs() > 30)
-                              _scrollController.animateTo(
-                                _offset,
-                                duration: const Duration(milliseconds: 700),
-                                curve: Curves.easeInOutQuart,
-                              );
+                            // /// If the difference between the current position and where the
+                            // /// scroll would end up is too great, scroll!
+                            // if ((_scrollController.offset - _offset).abs() > 30)
+                            //   _scrollController.animateTo(
+                            //     _offset,
+                            //     duration: const Duration(milliseconds: 700),
+                            //     curve: Curves.easeInOutQuart,
+                            //   );
+
+                            /// The new offsets for the outer and the inner scroll views.
+                            double _outerOffset, _innerOffset;
+
+                            /// The current offsets for the outer and inner scroll views.
+                            double _currentOuterOffset = _scrollController.offset;
+                            double _currentInnerOffset = _innerScrollController.offset;
+
+                            /// Average height of each item if they were all on one line.
+                            /// Average height with two lines is 87.
+                            double _itemExtent = 70.0;
+
+                            /// Total offset.
+                            double _currentTotalOffset =
+                                _currentOuterOffset + _currentInnerOffset + _itemExtent;
+
+                            double _threshold = 145.0;
+
+                            bool _shouldScroll = false;
+
+                            double _distance = _currentTotalOffset - (_itemExtent * _index);
+
+                            /// The duration of the entire scroll.
+                            double _totalDuration = 800;
+                            print("Distance: $_distance");
+
+                            if (_distance.abs() > _threshold) {
+                              _shouldScroll = !_shouldScroll;
+                            }
+
+                            bool _isScrollUp = _distance >= 0;
+
+                            if (_shouldScroll) {
+                              if (_innerScrollController.offset > 0) {
+                                /// If the list is currently scrolled into the inner
+                                /// scroll view.
+                                if (_isScrollUp) {
+                                  /// Scrolling up.
+                                  _innerOffset = _innerScrollController.offset - _distance;
+
+                                  if (_innerOffset < 0) {
+                                    _outerOffset = _scrollController.offset + _innerOffset;
+                                    _innerOffset = 0;
+                                  }
+
+                                  double _innerDistance =
+                                      (_innerOffset - _currentInnerOffset).abs();
+                                  double _outerDistance =
+                                      ((_outerOffset ?? _scrollController.offset) -
+                                              _scrollController.offset)
+                                          .abs();
+                                  double _outerDuration =
+                                      (_outerDistance / _distance).abs() * _totalDuration;
+                                  double _innerDuration =
+                                      (_innerDistance / _distance).abs() * _totalDuration;
+
+                                  _innerScrollController
+                                      .animateTo(_innerOffset,
+                                          duration: Duration(milliseconds: _innerDuration.round()),
+                                          curve: Curves.easeInToLinear)
+                                      .whenComplete(() {
+                                    _scrollController
+                                        .animateTo(_outerOffset ?? _scrollController.offset,
+                                            duration:
+                                                Duration(milliseconds: _outerDuration.round()),
+                                            curve: Curves.linearToEaseOut)
+                                        .catchError((_) {
+                                      /// This will throw an error when the duration for the secondary scroll
+                                      /// is zero.
+                                      ///
+                                      /// We ignore this error.
+                                      return Future<void>.value();
+                                    });
+                                  });
+                                } else {
+                                  /// Scrolling down.
+                                  _innerOffset = _innerScrollController.offset - _distance;
+
+                                  _innerScrollController.animateTo(_innerOffset,
+                                      duration: Duration(milliseconds: _totalDuration.round()),
+                                      curve: Curves.linearToEaseOut);
+                                }
+                              } else {
+                                /// Else the list must be shallow enough to only be in the
+                                /// outer list view.
+                                if (_isScrollUp) {
+                                  /// Scrolling up.
+                                  _outerOffset = _scrollController.offset - _distance;
+
+                                  _scrollController.animateTo(_outerOffset,
+                                      duration: Duration(milliseconds: _totalDuration.round()),
+                                      curve: Curves.linearToEaseOut);
+                                } else {
+                                  /// Scrolling down.
+                                  _outerOffset = _scrollController.offset - _distance;
+
+                                  if (_outerOffset > 238) {
+                                    _innerOffset = _outerOffset - 238;
+                                    _outerOffset = 238;
+                                  }
+
+                                  double _outerDistance =
+                                      (_outerOffset - _currentOuterOffset).abs();
+                                  double _innerDistance =
+                                      ((_innerOffset ?? _innerScrollController.offset) -
+                                              _innerScrollController.offset)
+                                          .abs();
+                                  double _outerDuration =
+                                      (_outerDistance / _distance).abs() * _totalDuration;
+                                  double _innerDuration =
+                                      (_innerDistance / _distance).abs() * _totalDuration;
+
+                                  _scrollController
+                                      .animateTo(_outerOffset,
+                                          duration: Duration(milliseconds: _outerDuration.round()),
+                                          curve: Curves.easeInToLinear)
+                                      .whenComplete(() {
+                                    _innerScrollController
+                                        .animateTo(_innerOffset ?? _innerScrollController.offset,
+                                            duration:
+                                                Duration(milliseconds: _innerDuration.round()),
+                                            curve: Curves.linearToEaseOut)
+                                        .catchError((_) {
+                                      /// This will throw an error when the duration for the secondary scroll
+                                      /// is zero.
+                                      ///
+                                      /// We ignore this error.
+                                      return Future<void>.value();
+                                    });
+                                  });
+                                }
+                              }
+                            }
+
+                            print("Total: $_currentTotalOffset");
                           } else {
                             model.close(id, _index);
                           }
@@ -414,11 +543,9 @@ class CompetitionPage extends StatelessWidget {
                             margin: EdgeInsets.symmetric(horizontal: 3.0),
                             padding: EdgeInsets.symmetric(vertical: 6.0),
                             child: Selector<FirebaseViewModel, String>(
-                              selector: (_, model) => model
-                                  .holeFromIndex(id, index)
-                                  .prettyLastUpdated,
-                              builder: (_, lastUpdatedPretty, __) =>
-                                  AnimatedSwitcher(
+                              selector: (_, model) =>
+                                  model.holeFromIndex(id, index).prettyLastUpdated,
+                              builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 350),
                                 child: Text(
                                   lastUpdatedPretty,
@@ -435,8 +562,7 @@ class CompetitionPage extends StatelessWidget {
                             margin: EdgeInsets.symmetric(horizontal: 27.0),
                             padding: EdgeInsets.symmetric(vertical: 6.0),
                             child: Selector<FirebaseViewModel, String>(
-                              selector: (_, model) =>
-                                  model.holeFromIndex(id, index).comment,
+                              selector: (_, model) => model.holeFromIndex(id, index).comment,
                               builder: (_, comment, __) => AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 350),
                                 child: comment.isEmpty

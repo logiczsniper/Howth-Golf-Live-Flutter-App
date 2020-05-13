@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/competitions/nested_auto_scroll.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -21,9 +22,6 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 class CompetitionPage extends StatelessWidget {
   /// The [id] of the [DatabaseEntry] which this page is displaying.
   final int id;
-
-  /// The single controller being used in all the competition pages.
-  final ScrollController _scrollController = ScrollController();
 
   CompetitionPage(this.id);
 
@@ -198,11 +196,12 @@ class CompetitionPage extends StatelessWidget {
     /// All hole data is monitored via [Selector] or [Consumer] widgets.
     var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
 
-    /// Keep track of the scroll position in this [CompetitionPage]
-    /// in the [HoleViewModel].
+    /// The single controller being used in all the competition pages.
+    final ScrollController _scrollController = ScrollController();
+
     _scrollController.addListener(() {
       _holeModel.scroll(id, _scrollController.offset);
-      print("Outer offset: ${_scrollController.offset}");
+      print("scrolled : ${_scrollController.offset}");
     });
 
     /// The keys for the showcase.
@@ -251,18 +250,6 @@ class CompetitionPage extends StatelessWidget {
         ),
       );
     }
-
-    /// Scroll to the current position as stored in [_holeModel].
-    ///
-    /// This adds the feature of saving your scroll position for
-    /// each competition page.
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        _scrollController.jumpTo(_holeModel.offset(id: id));
-
-        /// TODO: fix me
-      },
-    );
 
     /// Creates a FAB which rebuilds using [Selector].
     ///
@@ -337,15 +324,40 @@ class CompetitionPage extends StatelessWidget {
             ///
             /// [child] is the [_columnBuilder] result.
             builder: (context, data, child) {
-              final _innerScrollController = PrimaryScrollController.of(context);
+              final ScrollController _innerScrollController = PrimaryScrollController.of(context);
+
+              /// Listen to the [_innerScrollController], saving the scroll position in
+              /// [HoleDataViewModel].
               _innerScrollController.addListener(() {
-                print("Inner offset: ${_innerScrollController.offset}");
+                _holeModel.scrollInner(id, _innerScrollController.offset);
               });
+
+              /// Scroll to the current position as stored in [_holeModel].
+              ///
+              /// This adds the feature of saving your scroll position for
+              /// each competition page.
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _scrollController.jumpTo(_holeModel.offset(id: id));
+                double _innerOffset = _holeModel.innerOffset(id: id);
+                if (_innerOffset > 0) {
+                  _innerScrollController.jumpTo(_innerOffset);
+                }
+              });
+
+              /// My own [NestedAutoScroller] object which is later used
+              /// to complete the autoscroll functionality when a row is
+              /// tapped.
+              final autoScroller = NestedAutoScroller(
+                scrollController: _scrollController,
+                innerScrollController: _innerScrollController,
+                averageItemExtent: 70.0,
+                threshold: 145.0,
+              );
+
               return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 350),
+                duration: const Duration(milliseconds: 700),
                 child: ListView.builder(
                   key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
-                  // physics: NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.only(bottom: 400),
                   itemCount: data.item1,
                   itemBuilder: (context, index) {
@@ -386,153 +398,7 @@ class CompetitionPage extends StatelessWidget {
                         onExpansionChanged: (bool isOpen) {
                           if (isOpen) {
                             model.open(id, _index);
-
-                            /// Roughly calculate the offset to scroll to.
-                            // double _offset = (_index * 70).toDouble();
-
-                            // /// If the difference between the current position and where the
-                            // /// scroll would end up is too great, scroll!
-                            // if ((_scrollController.offset - _offset).abs() > 30)
-                            //   _scrollController.animateTo(
-                            //     _offset,
-                            //     duration: const Duration(milliseconds: 700),
-                            //     curve: Curves.easeInOutQuart,
-                            //   );
-
-                            /// The new offsets for the outer and the inner scroll views.
-                            double _outerOffset, _innerOffset;
-
-                            /// The current offsets for the outer and inner scroll views.
-                            double _currentOuterOffset = _scrollController.offset;
-                            double _currentInnerOffset = _innerScrollController.offset;
-
-                            /// Average height of each item if they were all on one line.
-                            /// Average height with two lines is 87.
-                            double _itemExtent = 70.0;
-
-                            /// Total offset.
-                            double _currentTotalOffset =
-                                _currentOuterOffset + _currentInnerOffset + _itemExtent;
-
-                            double _threshold = 145.0;
-
-                            bool _shouldScroll = false;
-
-                            double _distance = _currentTotalOffset - (_itemExtent * _index);
-
-                            /// The duration of the entire scroll.
-                            double _totalDuration = 800;
-                            print("Distance: $_distance");
-
-                            if (_distance.abs() > _threshold) {
-                              _shouldScroll = !_shouldScroll;
-                            }
-
-                            bool _isScrollUp = _distance >= 0;
-
-                            if (_shouldScroll) {
-                              if (_innerScrollController.offset > 0) {
-                                /// If the list is currently scrolled into the inner
-                                /// scroll view.
-                                if (_isScrollUp) {
-                                  /// Scrolling up.
-                                  _innerOffset = _innerScrollController.offset - _distance;
-
-                                  if (_innerOffset < 0) {
-                                    _outerOffset = _scrollController.offset + _innerOffset;
-                                    _innerOffset = 0;
-                                  }
-
-                                  double _innerDistance =
-                                      (_innerOffset - _currentInnerOffset).abs();
-                                  double _outerDistance =
-                                      ((_outerOffset ?? _scrollController.offset) -
-                                              _scrollController.offset)
-                                          .abs();
-                                  double _outerDuration =
-                                      (_outerDistance / _distance).abs() * _totalDuration;
-                                  double _innerDuration =
-                                      (_innerDistance / _distance).abs() * _totalDuration;
-
-                                  _innerScrollController
-                                      .animateTo(_innerOffset,
-                                          duration: Duration(milliseconds: _innerDuration.round()),
-                                          curve: Curves.easeInToLinear)
-                                      .whenComplete(() {
-                                    _scrollController
-                                        .animateTo(_outerOffset ?? _scrollController.offset,
-                                            duration:
-                                                Duration(milliseconds: _outerDuration.round()),
-                                            curve: Curves.linearToEaseOut)
-                                        .catchError((_) {
-                                      /// This will throw an error when the duration for the secondary scroll
-                                      /// is zero.
-                                      ///
-                                      /// We ignore this error.
-                                      return Future<void>.value();
-                                    });
-                                  });
-                                } else {
-                                  /// Scrolling down.
-                                  _innerOffset = _innerScrollController.offset - _distance;
-
-                                  _innerScrollController.animateTo(_innerOffset,
-                                      duration: Duration(milliseconds: _totalDuration.round()),
-                                      curve: Curves.linearToEaseOut);
-                                }
-                              } else {
-                                /// Else the list must be shallow enough to only be in the
-                                /// outer list view.
-                                if (_isScrollUp) {
-                                  /// Scrolling up.
-                                  _outerOffset = _scrollController.offset - _distance;
-
-                                  _scrollController.animateTo(_outerOffset,
-                                      duration: Duration(milliseconds: _totalDuration.round()),
-                                      curve: Curves.linearToEaseOut);
-                                } else {
-                                  /// Scrolling down.
-                                  _outerOffset = _scrollController.offset - _distance;
-
-                                  if (_outerOffset > 238) {
-                                    _innerOffset = _outerOffset - 238;
-                                    _outerOffset = 238;
-                                  }
-
-                                  double _outerDistance =
-                                      (_outerOffset - _currentOuterOffset).abs();
-                                  double _innerDistance =
-                                      ((_innerOffset ?? _innerScrollController.offset) -
-                                              _innerScrollController.offset)
-                                          .abs();
-                                  double _outerDuration =
-                                      (_outerDistance / _distance).abs() * _totalDuration;
-                                  double _innerDuration =
-                                      (_innerDistance / _distance).abs() * _totalDuration;
-
-                                  _scrollController
-                                      .animateTo(_outerOffset,
-                                          duration: Duration(milliseconds: _outerDuration.round()),
-                                          curve: Curves.easeInToLinear)
-                                      .whenComplete(() {
-                                    _innerScrollController
-                                        .animateTo(_innerOffset ?? _innerScrollController.offset,
-                                            duration:
-                                                Duration(milliseconds: _innerDuration.round()),
-                                            curve: Curves.linearToEaseOut)
-                                        .catchError((_) {
-                                      /// This will throw an error when the duration for the secondary scroll
-                                      /// is zero.
-                                      ///
-                                      /// We ignore this error.
-                                      return Future<void>.value();
-                                    });
-                                  });
-                                }
-                              }
-                            }
-
-                            print("Total: $_currentTotalOffset");
+                            autoScroller.animateTo(_index);
                           } else {
                             model.close(id, _index);
                           }

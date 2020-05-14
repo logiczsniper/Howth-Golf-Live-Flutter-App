@@ -74,11 +74,9 @@ class Themes {
           borderRadius: BorderRadius.circular(13.0)));
 
   static TabBarTheme tabBarTheme = TabBarTheme(
-      labelColor: Color.fromARGB(250, 247, 247, 247),
-      unselectedLabelColor: Palette.dark);
+      labelColor: Color.fromARGB(250, 247, 247, 247), unselectedLabelColor: Palette.dark);
 
-  static FloatingActionButtonThemeData floatingActionButtonTheme =
-      FloatingActionButtonThemeData(
+  static FloatingActionButtonThemeData floatingActionButtonTheme = FloatingActionButtonThemeData(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
     backgroundColor: Palette.maroon,
     elevation: 0.25,
@@ -94,8 +92,8 @@ class Themes {
       hintStyle: TextStyle(fontSize: 16, color: Palette.dark),
       errorStyle: TextStyle(fontSize: 13, color: Palette.maroon));
 
-  static UnderlineInputBorder get _border => UnderlineInputBorder(
-      borderSide: BorderSide(color: Palette.maroon, width: 1.5));
+  static UnderlineInputBorder get _border =>
+      UnderlineInputBorder(borderSide: BorderSide(color: Palette.maroon, width: 1.5));
 
   static ColorScheme get colorScheme => ColorScheme(
       primary: Palette.dark,
@@ -137,6 +135,6 @@ class Themes {
 
   static IconThemeData get iconTheme => IconThemeData(
         color: Palette.dark,
-        size: 22.0,
+        size: 24.0,
       );
 }

@@ -262,7 +262,10 @@ class CompetitionPage extends StatelessWidget {
           /// this page must be popped from the navigation stack.
           ///
           /// Using [popUntil] in case a modal is over the page (add players modal).
-          if (entry.id == -2) Routes.of(context).popToCompetitions();
+          if (entry.id == -2) {
+            Routes.of(context).popToCompetitions();
+            return false;
+          }
 
           return firebaseModel.entryFromId(id).isArchived
               ? userStatusModel.isAdmin

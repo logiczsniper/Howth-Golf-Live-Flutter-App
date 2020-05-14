@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/services/models.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -61,18 +62,16 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
           position = Strings.admin;
           break;
         default:
-          isCodeCorrect = widget.userStatus
-              .managerAttempt(codeAttempt, widget.id.toString());
+          isCodeCorrect = widget.userStatus.managerAttempt(codeAttempt, widget.id.toString());
           position = Strings.manager;
       }
 
       isCodeCorrect.then((bool isCodeCorrect) {
         if (!isCodeCorrect && inputText.isNotEmpty)
-          Scaffold.of(context).showSnackBar(
-              UIToolkit.snackbar(Strings.incorrectCode, Icons.lock));
+          Scaffold.of(context).showSnackBar(UIToolkit.snackbar(Strings.incorrectCode, Icons.lock));
         else if (isCodeCorrect)
-          Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
-              Strings.correctCode + position, Icons.lock_open));
+          Scaffold.of(context)
+              .showSnackBar(UIToolkit.snackbar(Strings.correctCode + position, Icons.lock_open));
 
         setState(() {
           appBarTitle = actionPressed(appBarTitle, context, _filter);
@@ -91,9 +90,8 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         isVerified ? Icons.check_circle_outline : Icons.account_circle,
       ),
       secondChild: Icon(Icons.check),
-      crossFadeState: appBarTitle != inputBar
-          ? CrossFadeState.showFirst
-          : CrossFadeState.showSecond,
+      crossFadeState:
+          appBarTitle != inputBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
     );
   }
 
@@ -106,8 +104,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
           onPressed: Navigator.of(context).pop,
           padding: EdgeInsets.fromLTRB(25.0, 8.0, 5.0, 8.0)));
 
-  Widget _codeIconButton(bool isVerified, bool isHelpsPage) =>
-      UIToolkit.showcase(
+  Widget _codeIconButton(bool isVerified, bool isHelpsPage) => UIToolkit.showcase(
         context: context,
         key: widget.codeKey,
         description: isHelpsPage ? Strings.tapAdmin : Strings.tapManager,
@@ -125,14 +122,13 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
     /// Build the two bars.
     titleBar = buildTitleBar(widget.title, id: widget.id);
-    inputBar = buildInputBar(
-        TextInputType.number, true, Strings.enterCode, _filter, _codePressed);
+    inputBar = buildInputBar(TextInputType.number, true, Strings.enterCode, _filter, _codePressed);
 
     /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
 
-    _filter.addListener(() => setState(
-        () => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text));
+    _filter.addListener(
+        () => setState(() => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text));
   }
 
   @override
@@ -156,23 +152,27 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
             leading: _backIconButton,
             actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
           )
-        : SliverAppBar(
-            expandedHeight: 60.0 + 178.0,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
+        : Selector<FirebaseViewModel, double>(
+            selector: (_, model) => model.entryFromId(widget.id).codeBarHeightAddon,
+            child: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
               background: Container(
                 margin: EdgeInsets.only(top: 58.0),
                 child: widget.bottom,
               ),
             ),
+            builder: (_, height, child) => SliverAppBar(
+              expandedHeight: 60.0 + height,
+              pinned: true,
+              flexibleSpace: child,
 
-            /// Standard [AppBar] attributes.
-            title: getTitle(appBarTitle),
-            elevation: 0.0,
-            centerTitle: true,
-            leading: _backIconButton,
-            actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
+              /// Standard [AppBar] attributes.
+              title: getTitle(appBarTitle),
+              elevation: 0.0,
+              centerTitle: true,
+              leading: _backIconButton,
+              actions: <Widget>[_codeIconButton(isVerified, isHelpsPage)],
+            ),
           );
   }
 }

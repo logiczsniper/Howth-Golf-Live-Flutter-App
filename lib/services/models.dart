@@ -31,15 +31,28 @@ class DatabaseEntry {
       score: Score.example);
 
   static DatabaseEntry get empty => DatabaseEntry(
-        date: Strings.empty,
+        date: "00-00-0000",
         id: -2,
         location: Location.empty,
-        time: Strings.empty,
+        time: "00:00",
         opposition: Strings.empty,
         title: Strings.empty,
         holes: [],
         score: Score.empty,
       );
+
+  /// Calculate the approximate height addition for the [CodeFieldBar] that is required
+  /// to prevent overflow.
+  double get codeBarHeightAddon {
+    if (isArchived && longOppositionName)
+      return 223.0;
+    else if (isArchived)
+      return 214.0;
+    else if (longOppositionName)
+      return 184.0;
+    else
+      return 178.0;
+  }
 
   /// Fetch an attribute based on [field] String.
   String attribute(String field) {
@@ -65,12 +78,13 @@ class DatabaseEntry {
     /// If we failed to parse the date, set [hoursFromNow] to 0
     /// and [inPast] to true. This moves the competition to current. (we cant
     /// figure out if it is in the past or not).
-    int hoursFromNow =
-        competitionDate?.difference(DateTime.now())?.inHours?.abs() ?? 0;
+    int hoursFromNow = competitionDate?.difference(DateTime.now())?.inHours?.abs() ?? 0;
     bool inPast = competitionDate?.isBefore(DateTime.now()) ?? true;
 
     return hoursFromNow >= 25 && inPast;
   }
+
+  bool get longOppositionName => opposition.trim().length >= 28;
 
   /// Converts the date format from irish date format (dd-MM-yyyy HH:mm)
   /// to the standard DateTime format (yyyy-MM-dd HH:mm).
@@ -90,8 +104,8 @@ class DatabaseEntry {
         time = map[Fields.time],
         opposition = map[Fields.opposition],
         title = map[Fields.title],
-        holes = List<Hole>.generate(map[Fields.holes].length,
-            (int index) => Hole.fromMap(map[Fields.holes][index])),
+        holes = List<Hole>.generate(
+            map[Fields.holes].length, (int index) => Hole.fromMap(map[Fields.holes][index])),
         score = Score.fromMap(map[Fields.score]);
 
   /// Converts a database entry into a map so it can be put into the database.
@@ -102,8 +116,7 @@ class DatabaseEntry {
         Fields.time: time,
         Fields.opposition: opposition,
         Fields.title: title,
-        Fields.holes: List<Map>.generate(
-            holes.length, (int index) => holes[index].toJson),
+        Fields.holes: List<Map>.generate(holes.length, (int index) => holes[index].toJson),
         Fields.score: score.toJson
       };
 
@@ -179,8 +192,7 @@ class Score {
     double parsedHowth = 0;
     double parsedOpposition = 0;
     for (Hole hole in parsedHoles) {
-      if (hole.holeScore.howth == hole.holeScore.opposition &&
-          hole.holeScore.howth == "0") {
+      if (hole.holeScore.howth == hole.holeScore.opposition && hole.holeScore.howth == "0") {
         /// The match is all square: do nothing with score!
       } else if (hole.holeScore._leader == Fields.howth) {
         parsedHowth++;
@@ -227,8 +239,7 @@ class Score {
 
     Score newScore = Score(
         howth: isHowth ? (parsedHowth + value).toString() : howth,
-        opposition:
-            !isHowth ? (parsedOpposition + value).toString() : opposition);
+        opposition: !isHowth ? (parsedOpposition + value).toString() : opposition);
 
     return newScore;
   }
@@ -278,10 +289,10 @@ class Hole {
   Hole.fromMap(Map map)
       : holeNumber = map[Fields.holeNumber],
         holeScore = Score.fromMap(map[Fields.holeScore]),
-        players = List<String>.generate(map[Fields.players].length,
-            (int index) => map[Fields.players][index].toString()),
-        opposition = List<String>.generate(map[Fields.opposition].length,
-            (int index) => map[Fields.opposition][index].toString()),
+        players = List<String>.generate(
+            map[Fields.players].length, (int index) => map[Fields.players][index].toString()),
+        opposition = List<String>.generate(
+            map[Fields.opposition].length, (int index) => map[Fields.opposition][index].toString()),
         comment = map[Fields.comment],
         lastUpdated = DateTime.tryParse(map[Fields.lastUpdated]);
 
@@ -359,23 +370,18 @@ class Hole {
   /// Turn a list of players, [playerList], into one string with
   /// those individual player names separated by commas, apart from the last
   /// player in the list.
-  String _formattedNames(List<String> names) => names.fold(
-      names.first,
-      (String first, String second) =>
-          second == names.first ? first : first + ", " + second);
+  String _formattedNames(List<String> names) => names.fold(names.first,
+      (String first, String second) => second == names.first ? first : first + ", " + second);
 
   /// Returns the hole players formatted, if no players are given,
   /// returns 'Howth Golf Club'.
-  String get formattedPlayers => _formattedNames(players).isEmpty
-      ? Strings.homeAddress
-      : _formattedNames(players);
+  String get formattedPlayers =>
+      _formattedNames(players).isEmpty ? Strings.homeAddress : _formattedNames(players);
 
   /// Returns the opposing teams players for this hole formatted.
   /// If no names are given, returns the opposing club name.
   String formattedOpposition(String oppositionClub) =>
-      _formattedNames(opposition).isEmpty
-          ? oppositionClub
-          : _formattedNames(opposition);
+      _formattedNames(opposition).isEmpty ? oppositionClub : _formattedNames(opposition);
 
   /// Convert [lastUpdated] to a pretty string.
   String get prettyLastUpdated {
@@ -407,9 +413,7 @@ class Hole {
     }
 
     return "Last updated: " +
-        (displayValue == 0 && value.contains("minutes")
-            ? "just now"
-            : "$value ago");
+        (displayValue == 0 && value.contains("minutes") ? "just now" : "$value ago");
   }
 
   @override
@@ -449,8 +453,7 @@ class Location {
   int get hashCode => address.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      other is Location && other.address == address;
+  bool operator ==(Object other) => other is Location && other.address == address;
 
   Location({@required this.address});
 }
@@ -466,11 +469,10 @@ class AppHelpEntry {
   AppHelpEntry.fromMap(Map map)
       : title = map[Fields.title],
         subtitle = map[Fields.subtitle],
-        steps = List<HelpStep>.generate(map[Fields.steps].length,
-            (int index) => HelpStep.fromMap(map[Fields.steps][index]));
+        steps = List<HelpStep>.generate(
+            map[Fields.steps].length, (int index) => HelpStep.fromMap(map[Fields.steps][index]));
 
-  AppHelpEntry(
-      {@required this.title, @required this.subtitle, @required this.steps});
+  AppHelpEntry({@required this.title, @required this.subtitle, @required this.steps});
 }
 
 class HelpStep {

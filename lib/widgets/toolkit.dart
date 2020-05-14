@@ -315,6 +315,8 @@ class UIToolkit {
                       child: Text(
                         oppositionName,
                         textAlign: TextAlign.left,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyles.form.copyWith(
                             color: Palette.dark, fontWeight: FontWeight.bold, fontSize: 16.5),
                       ),

@@ -76,8 +76,10 @@ class Routes {
   void toCompetition(int id) => pushTo(CompetitionPage(id));
 
   /// Uses [popUntil] to repeatedly pop until the [CompetitionsPage] is reached.
-  void popToCompetitions() => Navigator.of(context).popUntil((Route route) {
-        return route.settings.name == (home + Strings.competitionsText);
+  void popToCompetitions() => WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).popUntil((Route route) {
+          return route.settings.name == (home + Strings.competitionsText);
+        });
       });
 
   /// A simple mapping of title to a page within the app for readablity.

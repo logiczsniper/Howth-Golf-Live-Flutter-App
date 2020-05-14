@@ -35,16 +35,13 @@ class StatefulAppBar {
   }
 
   /// Get a custom instantiated [InputDecoration].
-  static InputDecoration _getInputDecoration(String hintText) =>
-      InputDecoration(
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: hintText)
-          .applyDefaults(Themes.inputDecorationTheme);
+  static InputDecoration _getInputDecoration(String hintText) => InputDecoration(
+          enabledBorder: InputBorder.none, focusedBorder: InputBorder.none, hintText: hintText)
+      .applyDefaults(Themes.inputDecorationTheme);
 
   /// The title must be an [AnimatedSwitcher].
-  AnimatedSwitcher getTitle(Widget appBarTitle) => AnimatedSwitcher(
-      duration: const Duration(milliseconds: 350), child: appBarTitle);
+  AnimatedSwitcher getTitle(Widget appBarTitle) =>
+      AnimatedSwitcher(duration: const Duration(milliseconds: 350), child: appBarTitle);
 
   /// Use the [ConnectivityViewModel] to monitor the status
   /// of the devices connection to internet.
@@ -59,7 +56,7 @@ class StatefulAppBar {
         Scaffold.of(context).showSnackBar(UIToolkit.snackbar(
           Strings.noConnection,
           Icons.signal_cellular_connected_no_internet_4_bar,
-          duration: const Duration(seconds: 8),
+          duration: const Duration(seconds: 4),
         ));
       });
     }
@@ -97,12 +94,8 @@ class StatefulAppBar {
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.
-  Widget buildInputBar(
-          TextInputType textType,
-          bool obscureText,
-          String hintText,
-          TextEditingController _filter,
-          Function _codePressed) =>
+  Widget buildInputBar(TextInputType textType, bool obscureText, String hintText,
+          TextEditingController _filter, Function _codePressed) =>
       Container(
           height: 45,
           decoration: BoxDecoration(

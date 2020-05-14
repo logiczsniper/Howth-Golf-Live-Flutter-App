@@ -167,6 +167,7 @@ class CompetitionsPage extends StatelessWidget {
                               IconButton(
                                 padding: EdgeInsets.only(top: 10.0),
                                 icon: Icon(Icons.edit),
+                                iconSize: 32.0,
                                 onPressed: () => showModal(
                                   context: context,
                                   configuration: UIToolkit.modalConfiguration(),
@@ -175,6 +176,7 @@ class CompetitionsPage extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: Icon(Icons.delete),
+                                iconSize: 32.0,
                                 padding: EdgeInsets.only(bottom: 10.0),
 
                                 /// When deleting a [DatabaseEntry], prompts the user to double check their intent
@@ -234,7 +236,7 @@ class CompetitionsPage extends StatelessWidget {
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 630),
+          const Duration(milliseconds: 650),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );

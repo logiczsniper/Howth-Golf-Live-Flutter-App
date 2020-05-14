@@ -156,7 +156,7 @@ class UIToolkit {
     Duration duration,
   }) =>
       SnackBar(
-        duration: duration ?? const Duration(seconds: 7),
+        duration: duration ?? const Duration(seconds: 6),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

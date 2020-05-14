@@ -244,7 +244,7 @@ class CompetitionPage extends StatelessWidget {
     if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 630),
+          const Duration(milliseconds: 650),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );

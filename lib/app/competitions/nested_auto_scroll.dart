@@ -35,6 +35,11 @@ class NestedAutoScroller {
   /// overall scroll to the [index].
   final Curve endCurve;
 
+  /// Suggested pairings for [startCurve] and [endCurve] (other than the default) are:
+  ///
+  /// 1) [Curves.easeInToLinear], [Curves.linearToEaseOut],
+  /// 2) [Curves.easeInCubic], [Curves.easeOutCubic]
+
   /// The offset between the current scroll position (in total) and
   /// the ending position.
   double _distance;
@@ -45,8 +50,8 @@ class NestedAutoScroller {
     @required this.averageItemExtent,
     @required this.threshold,
     this.duration = const Duration(milliseconds: 800),
-    this.startCurve = Curves.easeInToLinear,
-    this.endCurve = Curves.linearToEaseOut,
+    this.startCurve = Curves.easeInCubic,
+    this.endCurve = Curves.decelerate,
   })  : assert(scrollController != null && innerScrollController != null),
         assert(averageItemExtent > 0),
         assert(threshold > 0),

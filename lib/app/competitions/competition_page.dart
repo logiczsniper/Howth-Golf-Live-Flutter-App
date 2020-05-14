@@ -201,7 +201,6 @@ class CompetitionPage extends StatelessWidget {
 
     _scrollController.addListener(() {
       _holeModel.scroll(id, _scrollController.offset);
-      print("scrolled : ${_scrollController.offset}");
     });
 
     /// The keys for the showcase.
@@ -245,7 +244,7 @@ class CompetitionPage extends StatelessWidget {
     if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 610),
+          const Duration(milliseconds: 630),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );

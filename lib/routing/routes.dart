@@ -19,6 +19,8 @@ Widget get homePage => HomePage();
 Widget get competitionsPage => CompetitionsPage();
 Widget get helpsPage => HelpsPage();
 
+typedef OnCompleteCallback = FutureOr<dynamic> Function(dynamic);
+
 class Routes {
   /// The initial route.
   static String get home => "/";
@@ -28,16 +30,14 @@ class Routes {
   Routes.of(BuildContext context) : context = context;
 
   /// Push to [destination].
-  void pushTo(Widget destination,
-          {FutureOr<dynamic> Function(dynamic) onComplete}) =>
-      Navigator.push(
+  void pushTo(Widget destination, {OnCompleteCallback onComplete, String name}) => Navigator.push(
         context,
         LongMaterialPageRoute(
+          settings: RouteSettings(name: name),
           builder: (context) => ShowCaseWidget(
             builder: Builder(builder: (_) => destination),
             onFinish: () {
-              var _userStatus =
-                  Provider.of<UserStatusViewModel>(context, listen: false);
+              var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
               String route;
 
@@ -63,27 +63,25 @@ class Routes {
       ).then(onComplete);
 
   /// Push to the [Helps] page.
-  void toHelps() => pushTo(HelpsPage());
+  void toHelps() => pushTo(helpsPage);
 
   /// Push to the [Help] page.
   void toHelp(AppHelpEntry helpEntry) => pushTo(HelpPage(helpEntry));
 
   /// Push to [Competitions] page.
-  void toCompetitions({FutureOr<dynamic> Function(dynamic) onComplete}) =>
-      pushTo(CompetitionsPage(), onComplete: onComplete);
+  void toCompetitions({OnCompleteCallback onComplete}) =>
+      pushTo(competitionsPage, onComplete: onComplete, name: home + Strings.competitionsText);
 
   /// Push to the [Competition] page.
   void toCompetition(int id) => pushTo(CompetitionPage(id));
 
   /// Uses [popUntil] to repeatedly pop until the [CompetitionsPage] is reached.
   void popToCompetitions() => Navigator.of(context).popUntil((Route route) {
-        return route.settings.name == (Routes.home + Strings.competitionsText);
+        return route.settings.name == (home + Strings.competitionsText);
       });
 
   /// A simple mapping of title to a page within the app for readablity.
   static Map<String, Widget Function(BuildContext)> get map => {
         home: (context) => homePage,
-        home + Strings.competitionsText: (context) => competitionsPage,
-        home + Strings.helpsText: (context) => helpsPage,
       };
 }

@@ -15,8 +15,7 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class MyApp extends StatelessWidget {
   /// The app, wrapped in all of its providers.
-  static MultiProvider get providedApp =>
-      MultiProvider(child: MyApp(), providers: [
+  static MultiProvider get providedApp => MultiProvider(child: MyApp(), providers: [
         ChangeNotifierProvider<UserStatusViewModel>(
           create: (_) => UserStatusViewModel(),
         ),

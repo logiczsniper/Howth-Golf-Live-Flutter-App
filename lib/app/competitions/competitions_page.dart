@@ -22,11 +22,9 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 
 class CompetitionsPage extends StatelessWidget {
   /// Builds an individual tile.
-  static Widget _tileBuilder(BuildContext context, int id, bool isAdmin) =>
-      ListTile(
+  static Widget _tileBuilder(BuildContext context, int id, bool isAdmin) => ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 5.0),
-        trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right,
-            color: Palette.maroon),
+        trailing: Icon(isAdmin ? null : Icons.keyboard_arrow_right, color: Palette.maroon),
         title: Selector<FirebaseViewModel, String>(
           selector: (_, model) => model.entryFromId(id).title,
           builder: (_, title, __) => AnimatedSwitcher(
@@ -140,8 +138,7 @@ class CompetitionsPage extends StatelessWidget {
                   /// Fetch the [id] of the current competition.
                   ///
                   /// Does not listen to the [FirebaseViewModel] as the [id] is immutable.
-                  var _firebaseModel =
-                      Provider.of<FirebaseViewModel>(context, listen: false);
+                  var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
                   int id = _firebaseModel
                       .activeElements(
                         hasVisited,
@@ -188,8 +185,7 @@ class CompetitionsPage extends StatelessWidget {
                                     isDeletion: true,
                                   ),
                                   builder: (context) => CustomAlertDialog(
-                                      FirebaseInteraction.of(context)
-                                          .deleteCompetition,
+                                      FirebaseInteraction.of(context).deleteCompetition,
                                       id: id),
                                 ),
                               ),
@@ -238,11 +234,13 @@ class CompetitionsPage extends StatelessWidget {
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 610),
+          const Duration(milliseconds: 630),
           () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );
     }
+
+    // _userStatus.clearPreferences();
 
     return Scaffold(
         body: DefaultTabController(
@@ -252,10 +250,8 @@ class CompetitionsPage extends StatelessWidget {
               hasVisited: _userStatus.hasVisited(Strings.competitionsText),
               keys: keys,
             )),
-        floatingActionButton: Container(
-            padding: EdgeInsets.only(bottom: 10.0),
-            child: floatingActionButton),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.centerDocked);
+        floatingActionButton:
+            Container(padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked);
   }
 }

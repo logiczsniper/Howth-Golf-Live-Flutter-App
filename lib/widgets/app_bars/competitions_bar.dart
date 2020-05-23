@@ -11,8 +11,7 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 typedef CompetitionListBuilder = Widget Function(
     BuildContext, String, bool, bool, GlobalKey, GlobalKey, GlobalKey);
 
-class CompetitionsPageAppBar extends StatefulWidget
-    implements PreferredSizeWidget {
+class CompetitionsPageAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title = Strings.competitionsText;
 
   /// Each tab has its own [_listBuilder] as they are sourced from different
@@ -38,13 +37,12 @@ class CompetitionsPageAppBar extends StatefulWidget
   final Size preferredSize;
 }
 
-class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
-    with StatefulAppBar {
+class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
 
   /// Update the [appBarTitle] to the opposite title.
-  void _searchPressed() => setState(
-      () => appBarTitle = actionPressed(appBarTitle, context, _filter));
+  void _searchPressed() =>
+      setState(() => appBarTitle = actionPressed(appBarTitle, context, _filter));
 
   @override
   void initState() {
@@ -65,8 +63,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
     /// [appBarTitle] defaults to the title bar.
     appBarTitle = titleBar;
     _filter.addListener(
-      () => setState(() =>
-          inputText = _filter.text.isEmpty ? Strings.empty : _filter.text),
+      () => setState(() => inputText = _filter.text.isEmpty ? Strings.empty : _filter.text),
     );
   }
 
@@ -76,9 +73,8 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         duration: const Duration(milliseconds: 350),
         firstChild: Icon(Icons.search),
         secondChild: Icon(Icons.close),
-        crossFadeState: appBarTitle != inputBar
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
+        crossFadeState:
+            appBarTitle != inputBar ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       );
 
   /// Build the tab - the list of competitions!
@@ -87,9 +83,9 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
         inputText,
         isCurrentTab,
         widget.hasVisited,
-        widget.keys[4],
         widget.keys[5],
         widget.keys[6],
+        widget.keys[7],
       );
 
   static BubbleTabIndicator get _tabIndicator => BubbleTabIndicator(
@@ -121,7 +117,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             snap: true,
             leading: UIToolkit.showcase(
               context: context,
-              key: widget.keys[1],
+              key: widget.keys[2],
               description: Strings.tapHelp,
               child: IconButton(
                   icon: Icon(Icons.help_outline),
@@ -132,7 +128,7 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
             actions: <Widget>[
               UIToolkit.showcase(
                   context: context,
-                  key: widget.keys[0],
+                  key: widget.keys[1],
                   description: Strings.tapSearch,
                   child: IconButton(
                       icon: _iconData,
@@ -159,21 +155,18 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar>
                         ),
                       ),
                     ),
-                    TabBar(
-                        isScrollable: true,
-                        indicator: _tabIndicator,
-                        tabs: <Widget>[
-                          UIToolkit.showcase(
-                              context: context,
-                              key: widget.keys[2],
-                              description: Strings.currentWelcome,
-                              child: Tab(text: Strings.currentText)),
-                          UIToolkit.showcase(
-                              context: context,
-                              key: widget.keys[3],
-                              description: Strings.archivedWelcome,
-                              child: Tab(text: Strings.archivedText)),
-                        ])
+                    TabBar(isScrollable: true, indicator: _tabIndicator, tabs: <Widget>[
+                      UIToolkit.showcase(
+                          context: context,
+                          key: widget.keys[3],
+                          description: Strings.currentWelcome,
+                          child: Tab(text: Strings.currentText)),
+                      UIToolkit.showcase(
+                          context: context,
+                          key: widget.keys[4],
+                          description: Strings.archivedWelcome,
+                          child: Tab(text: Strings.archivedText)),
+                    ])
                   ],
                 ),
               ),

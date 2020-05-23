@@ -143,10 +143,33 @@ class UIToolkit {
         key: key,
         description: "  $description  " ?? "",
         descTextStyle: TextStyles.description,
+        shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)),
         showArrow: false,
         textColor: Palette.dark,
         overlayColor: Palette.dark,
         child: child ?? Container(),
+      );
+
+  /// Builds a [Showcase] widget with preset parameters
+  /// for saving time such as [descTextStyle], [showArrow], [textColor],
+  /// [overlayColor] and adds padding to [description].
+  static Showcase showcaseWithWidget({
+    @required BuildContext context,
+    @required GlobalKey key,
+    @required Widget child,
+    @required double width,
+    @required double height,
+    Widget container,
+  }) =>
+      Showcase.withWidget(
+        key: key,
+        child: child,
+        width: width,
+        height: height,
+        shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(130.0)),
+        container: container ?? Container(),
+        textColor: Palette.dark,
+        overlayColor: Palette.dark,
       );
 
   /// Builds the standard app [SnackBar] that is consistent.

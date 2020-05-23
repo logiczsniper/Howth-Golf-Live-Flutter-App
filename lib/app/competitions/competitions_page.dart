@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'package:tuple/tuple.dart';
@@ -202,8 +203,9 @@ class CompetitionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _userStatus = Provider.of<UserStatusViewModel>(context);
+    var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
+    /// Get whether or not the user has visited the page before and if they are an admin.
     bool _hasAccess = _userStatus.isAdmin;
 
     Widget floatingActionButton = _hasAccess
@@ -221,23 +223,29 @@ class CompetitionsPage extends StatelessWidget {
     final GlobalKey _currentTabKey = GlobalKey();
     final GlobalKey _helpsKey = GlobalKey();
     final GlobalKey _archivedTabKey = GlobalKey();
+    final GlobalKey _welcomeKey = GlobalKey();
 
     List<GlobalKey> keys = [
+      _welcomeKey,
       _searchKey,
       _helpsKey,
       _currentTabKey,
       _archivedTabKey,
       _titleKey,
       _dateKey,
-      _scoreKey
+      _scoreKey,
     ];
 
     /// Start the showcase if the user has never visited this page before.
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 650),
-          () => ShowCaseWidget.of(context).startShowCase(keys),
+          const Duration(milliseconds: 1000),
+          () {
+            print(ShowCaseWidget.of(context).activeWidgetId);
+            if (ShowCaseWidget.of(context).activeWidgetId == null)
+              ShowCaseWidget.of(context).startShowCase(keys);
+          },
         ),
       );
     }
@@ -245,15 +253,63 @@ class CompetitionsPage extends StatelessWidget {
     // _userStatus.clearPreferences();
 
     return Scaffold(
-        body: DefaultTabController(
-            length: 2,
-            child: CompetitionsPageAppBar(
-              _buildElementsList,
-              hasVisited: _userStatus.hasVisited(Strings.competitionsText),
-              keys: keys,
-            )),
-        floatingActionButton:
-            Container(padding: EdgeInsets.only(bottom: 10.0), child: floatingActionButton),
+        body: Selector<UserStatusViewModel, bool>(
+          selector: (_, model) => model.hasVisited(Strings.competitionsText),
+          child: Center(
+            child: UIToolkit.showcaseWithWidget(
+              context: context,
+              key: keys[0],
+              width: 300,
+              height: 600,
+              child: OpacityChangeWidget(
+                duration: 1200,
+                target: Container(
+                  color: Palette.light,
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Welcome to the Competitions page.",
+                          style: TextStyles.cardTitle.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Text(
+                        "Tap to move through the tutorial...",
+                        style: TextStyles.cardSubTitle,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              container: Container(
+                alignment: Alignment.center,
+                width: 0.001,
+                height: 0.001,
+              ),
+            ),
+          ),
+          builder: (context, hasVisited, child) => Stack(
+            children: <Widget>[
+              DefaultTabController(
+                length: 2,
+                child: CompetitionsPageAppBar(
+                  _buildElementsList,
+                  hasVisited: hasVisited,
+                  keys: keys,
+                ),
+              ),
+              !hasVisited ? child : Container(),
+            ],
+          ),
+        ),
+        floatingActionButton: Container(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: floatingActionButton,
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked);
   }
 }

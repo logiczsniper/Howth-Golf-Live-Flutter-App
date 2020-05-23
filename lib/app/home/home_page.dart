@@ -81,8 +81,11 @@ class HomePage extends StatelessWidget {
   Widget get _howthLogo => Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(15.0),
-        child: UIToolkit.svgHowthLogo(
-          width: 60.0,
+        child: OpacityChangeWidget(
+          duration: 3000,
+          target: UIToolkit.svgHowthLogo(
+            width: 60.0,
+          ),
         ),
       );
 
@@ -98,8 +101,7 @@ class HomePage extends StatelessWidget {
         },
         child: Scaffold(
           backgroundColor: Palette.light,
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: Container(
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12.0),
             child: _tapText(authenticationModel.status),
@@ -118,8 +120,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthenticationViewModel>(
-        builder: (context, authenticationViewModel, _) {
+    return Consumer<AuthenticationViewModel>(builder: (context, authenticationViewModel, _) {
       if (authenticationViewModel.status == Strings.connected) {
         /// We cant navigate while this page is building, so we add
         /// a [PostFrameCallback] instead.

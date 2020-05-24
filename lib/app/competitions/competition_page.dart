@@ -219,8 +219,10 @@ class CompetitionPage extends StatelessWidget {
     final GlobalKey _holeOppositionScoreKey = GlobalKey();
     final GlobalKey _backKey = GlobalKey();
     final GlobalKey _codeKey = GlobalKey();
+    final GlobalKey _welcomeKey = GlobalKey();
 
     List<GlobalKey> keys = [
+      _welcomeKey,
       _howthScoreKey,
       _oppositionScoreKey,
       _locationKey,
@@ -322,6 +324,11 @@ class CompetitionPage extends StatelessWidget {
                 _hasVisited,
               );
             },
+            child: UIToolkit.showcaseWithWidget(
+              context: context,
+              key: _welcomeKey,
+              text: "to a Competition page.",
+            ),
 
             /// The [data] parameter is the [Tuple2] created above.
             ///
@@ -361,99 +368,106 @@ class CompetitionPage extends StatelessWidget {
                 threshold: 145.0,
               );
 
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 700),
-                child: ListView.builder(
-                  key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
-                  padding: EdgeInsets.only(bottom: 400),
-                  itemCount: data.item1,
-                  itemBuilder: (context, index) {
-                    /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
-                    /// widgets in one column.
-                    if (index == 0) {
-                      if (!data.item3)
-                        return UIToolkit.exampleHole(
-                            context,
-                            _holeKey,
-                            _playersKey,
-                            _holeHowthScoreKey,
-                            _holeOppositionScoreKey,
-                            _holeNumberKey,
-                            _oppositionKey);
-                      else if (data.item2) return UIToolkit.getNoDataText(Strings.noHoles);
-                    }
+              return Stack(
+                children: <Widget>[
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 700),
+                    child: ListView.builder(
+                      key: ValueKey<int>(data.item2 ? data.item1 - 1 : data.item1),
+                      padding: EdgeInsets.only(bottom: 400),
+                      itemCount: data.item1,
+                      itemBuilder: (context, index) {
+                        /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
+                        /// widgets in one column.
+                        if (index == 0) {
+                          if (!data.item3)
+                            return UIToolkit.exampleHole(
+                                context,
+                                _holeKey,
+                                _playersKey,
+                                _holeHowthScoreKey,
+                                _holeOppositionScoreKey,
+                                _holeNumberKey,
+                                _oppositionKey);
+                          else if (data.item2) return UIToolkit.getNoDataText(Strings.noHoles);
+                        }
 
-                    /// If there are no more special conditions to handle, proceed with hole list creation.
-                    int _index = index;
+                        /// If there are no more special conditions to handle, proceed with hole list creation.
+                        int _index = index;
 
-                    /// If the page has not been visted before, subtract one from the [_index] to
-                    /// account for the [UIToolkit.exampleHole].
-                    if (!data.item3) _index--;
+                        /// If the page has not been visted before, subtract one from the [_index] to
+                        /// account for the [UIToolkit.exampleHole].
+                        if (!data.item3) _index--;
 
-                    return Consumer<HoleViewModel>(
-                      child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 12),
-                          child: _rowBuilder(context, _index, id),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13.0),
-                              color: index % 2 != 0 ? Palette.light : Palette.card.withAlpha(240))),
-                      builder: (context, model, child) => CustomExpansionTile(
-                        title: child,
-                        id: id,
-                        index: _index,
-                        initiallyExpanded: model.openIndices(id: id).contains(_index),
-                        onExpansionChanged: (bool isOpen) {
-                          if (isOpen) {
-                            model.open(id, _index);
-                            autoScroller.animateTo(_index);
-                          } else {
-                            model.close(id, _index);
-                          }
-                        },
-                        children: <Widget>[
-                          /// Display the [lastUpdated] formatted.
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 3.0),
-                            padding: EdgeInsets.symmetric(vertical: 6.0),
-                            child: Selector<FirebaseViewModel, String>(
-                              selector: (_, model) =>
-                                  model.holeFromIndex(id, index).prettyLastUpdated,
-                              builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 350),
-                                child: Text(
-                                  lastUpdatedPretty,
-                                  key: ValueKey<String>(lastUpdatedPretty),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyles.cardTitle,
+                        return Consumer<HoleViewModel>(
+                          child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 12),
+                              child: _rowBuilder(context, _index, id),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13.0),
+                                  color: index % 2 != 0
+                                      ? Palette.light
+                                      : Palette.card.withAlpha(240))),
+                          builder: (context, model, child) => CustomExpansionTile(
+                            title: child,
+                            id: id,
+                            index: _index,
+                            initiallyExpanded: model.openIndices(id: id).contains(_index),
+                            onExpansionChanged: (bool isOpen) {
+                              if (isOpen) {
+                                model.open(id, _index);
+                                autoScroller.animateTo(_index);
+                              } else {
+                                model.close(id, _index);
+                              }
+                            },
+                            children: <Widget>[
+                              /// Display the [lastUpdated] formatted.
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 3.0),
+                                padding: EdgeInsets.symmetric(vertical: 6.0),
+                                child: Selector<FirebaseViewModel, String>(
+                                  selector: (_, model) =>
+                                      model.holeFromIndex(id, index).prettyLastUpdated,
+                                  builder: (_, lastUpdatedPretty, __) => AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 350),
+                                    child: Text(
+                                      lastUpdatedPretty,
+                                      key: ValueKey<String>(lastUpdatedPretty),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyles.cardTitle,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
 
-                          /// If there is a [comment], display it.
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 27.0),
-                            padding: EdgeInsets.symmetric(vertical: 6.0),
-                            child: Selector<FirebaseViewModel, String>(
-                              selector: (_, model) => model.holeFromIndex(id, index).comment,
-                              builder: (_, comment, __) => AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 350),
-                                child: comment.isEmpty
-                                    ? Container()
-                                    : Text(
-                                        "Comment: $comment",
-                                        key: ValueKey<String>(comment),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyles.cardTitle,
-                                      ),
+                              /// If there is a [comment], display it.
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 27.0),
+                                padding: EdgeInsets.symmetric(vertical: 6.0),
+                                child: Selector<FirebaseViewModel, String>(
+                                  selector: (_, model) => model.holeFromIndex(id, index).comment,
+                                  builder: (_, comment, __) => AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 350),
+                                    child: comment.isEmpty
+                                        ? Container()
+                                        : Text(
+                                            "Comment: $comment",
+                                            key: ValueKey<String>(comment),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyles.cardTitle,
+                                          ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        );
+                      },
+                    ),
+                  ),
+                  !data.item3 ? child : Container(),
+                ],
               );
             },
           ),

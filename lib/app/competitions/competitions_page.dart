@@ -254,12 +254,10 @@ class CompetitionsPage extends StatelessWidget {
     return Scaffold(
         body: Selector<UserStatusViewModel, bool>(
           selector: (_, model) => model.hasVisited(Strings.competitionsText),
-          child: Center(
-            child: UIToolkit.showcaseWithWidget(
-              context: context,
-              key: keys[0],
-              text: "to the Competitions page.",
-            ),
+          child: UIToolkit.showcaseWithWidget(
+            context: context,
+            key: keys[0],
+            text: "to the Competitions page.",
           ),
           builder: (context, hasVisited, child) => Stack(
             children: <Widget>[

@@ -154,47 +154,49 @@ class UIToolkit {
   /// Builds a [Showcase] widget with preset parameters
   /// for saving time such as [descTextStyle], [showArrow], [textColor],
   /// [overlayColor] and adds padding to [description].
-  static Showcase showcaseWithWidget({
+  static Widget showcaseWithWidget({
     @required BuildContext context,
     @required GlobalKey key,
     @required String text,
     Widget container,
   }) =>
-      Showcase.withWidget(
-        key: key,
-        shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(130.0)),
-        textColor: Palette.dark,
-        overlayColor: Palette.dark,
-        width: 300,
-        height: 600,
-        child: OpacityChangeWidget(
-          duration: 1700,
-          target: Container(
-            color: Palette.light,
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "Welcome " + text,
-                    style: TextStyles.cardTitle.copyWith(fontWeight: FontWeight.bold),
+      Center(
+        child: Showcase.withWidget(
+          key: key,
+          shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(130.0)),
+          textColor: Palette.dark,
+          overlayColor: Palette.dark,
+          width: 300,
+          height: 600,
+          child: OpacityChangeWidget(
+            duration: 1700,
+            target: Container(
+              color: Palette.light,
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "Welcome " + text,
+                      style: TextStyles.cardTitle.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                Text(
-                  "Tap to move through the tutorial...",
-                  style: TextStyles.cardSubTitle,
-                ),
-              ],
+                  Text(
+                    "Tap to move through the tutorial...",
+                    style: TextStyles.cardSubTitle,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        container: Container(
-          alignment: Alignment.center,
-          width: 0.001,
-          height: 0.001,
+          container: Container(
+            alignment: Alignment.center,
+            width: 0.001,
+            height: 0.001,
+          ),
         ),
       );
 

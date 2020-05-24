@@ -54,17 +54,20 @@ class HelpsPage extends StatelessWidget {
     /// regardless to account for the new entries being added if the user
     /// becomes an admin.
     var _helpData = Provider.of<HelpDataViewModel>(context);
-    var _userStatus = Provider.of<UserStatusViewModel>(context);
+    var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
     /// Showcase keys.
     final GlobalKey _backKey = GlobalKey();
     final GlobalKey _codeKey = GlobalKey();
+    final GlobalKey _welcomeKey = GlobalKey();
 
-    List<GlobalKey> keys = [_codeKey, _backKey];
+    List<GlobalKey> keys = [_welcomeKey, _codeKey, _backKey];
+
+    bool hasVisited = _userStatus.hasVisited(Strings.helpsText);
 
     /// If the user has not visited this page before,
     /// start the showcase.
-    if (!_userStatus.hasVisited(Strings.helpsText)) {
+    if (!hasVisited) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
           const Duration(milliseconds: 650),
@@ -73,18 +76,35 @@ class HelpsPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: CodeFieldBar(Strings.helpsText, _backKey, _codeKey),
-      body: _helpData.data.isEmpty
-          ? UIToolkit.loadingSpinner
-          : ListView.builder(
+    Widget listView = _helpData.data.isEmpty
+        ? UIToolkit.loadingSpinner
+        : Selector<UserStatusViewModel, int>(
+            selector: (_, model) => model.bonusHelpEntries,
+            builder: (context, bonusHelpEntries, _) => ListView.builder(
               padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
-              itemCount: _helpData.data.length + _userStatus.bonusHelpEntries,
+              itemCount: _helpData.data.length + bonusHelpEntries,
               itemBuilder: (context, index) {
                 AppHelpEntry currentHelpEntry = _helpData.data[index];
                 return _tileBuilder(context, currentHelpEntry, index + 1);
               },
             ),
-    );
+          );
+
+    return Scaffold(
+        appBar: CodeFieldBar(Strings.helpsText, _backKey, _codeKey),
+        body: Stack(
+          children: <Widget>[
+            listView,
+            Selector<UserStatusViewModel, bool>(
+              selector: (_, model) => model.hasVisited(Strings.helpsText),
+              builder: (context, hasVisited, child) => !hasVisited ? child : Container(),
+              child: UIToolkit.showcaseWithWidget(
+                context: context,
+                key: _welcomeKey,
+                text: "to the App Help page.",
+              ),
+            )
+          ],
+        ));
   }
 }

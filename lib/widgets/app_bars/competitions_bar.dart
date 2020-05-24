@@ -51,11 +51,13 @@ class _CompetitionsPageAppBarState extends State<CompetitionsPageAppBar> with St
     /// Build the two bars.
     titleBar = buildTitleBar(widget.title);
     inputBar = buildInputBar(
+      context,
       TextInputType.text,
       false,
       Strings.enterSearch,
       _filter,
       _searchPressed,
+      widget.title,
     );
 
     title = widget.title;

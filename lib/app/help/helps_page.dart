@@ -50,7 +50,9 @@ class HelpsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     /// This page is not that expensive to rebuild and will not rebuild
     /// frequently, its okay to listen to both [HelpDataViewModel] and
-    /// [UserStatusViewModel].
+    /// [UserStatusViewModel]. The [UserStatusViewModel] must be listened to
+    /// regardless to account for the new entries being added if the user
+    /// becomes an admin.
     var _helpData = Provider.of<HelpDataViewModel>(context);
     var _userStatus = Provider.of<UserStatusViewModel>(context);
 
@@ -72,7 +74,7 @@ class HelpsPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: CodeFieldBar(Strings.helpsText, _userStatus, _backKey, _codeKey),
+      appBar: CodeFieldBar(Strings.helpsText, _backKey, _codeKey),
       body: _helpData.data.isEmpty
           ? UIToolkit.loadingSpinner
           : ListView.builder(

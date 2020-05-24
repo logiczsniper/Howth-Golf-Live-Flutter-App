@@ -190,8 +190,9 @@ class CompetitionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// We must listen actively to the [UserStatusViewModel].
-    var _userStatus = Provider.of<UserStatusViewModel>(context);
+    /// No need to listen to the [UserStatusViewModel] as each component which required
+    /// it's data uses [Selector] in order to attain the appropiate information.
+    var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
     /// All hole data is monitored via [Selector] or [Consumer] widgets.
     var _holeModel = Provider.of<HoleViewModel>(context, listen: false);
@@ -295,7 +296,6 @@ class CompetitionPage extends StatelessWidget {
           headerSliverBuilder: (context, _) => <Widget>[
             CodeFieldBar(
               Strings.specificCompetition,
-              _userStatus,
               _backKey,
               _codeKey,
               id: id,
@@ -313,16 +313,21 @@ class CompetitionPage extends StatelessWidget {
               ),
             ),
           ],
-          body: Selector<FirebaseViewModel, Tuple2<int, bool>>(
-            selector: (_, model) => Tuple2(
-              model.holesItemCount(id, hasVisited),
-              model.entryFromId(id).holes.isEmpty,
-            ),
+          body: Selector2<FirebaseViewModel, UserStatusViewModel, Tuple3<int, bool, bool>>(
+            selector: (_, firebaseModel, userStatusModel) {
+              bool _hasVisited = userStatusModel.hasVisited(Strings.specificCompetition);
+              return Tuple3(
+                firebaseModel.holesItemCount(id, _hasVisited),
+                firebaseModel.entryFromId(id).holes.isEmpty,
+                _hasVisited,
+              );
+            },
 
             /// The [data] parameter is the [Tuple2] created above.
             ///
             /// [data.item1] is the [itemCount], while
             /// [data.item2] is whether the current competition has any holes.
+            /// [data.item3] is whether or not the user has visited the page before.
             ///
             /// [child] is the [_columnBuilder] result.
             builder: (context, data, child) {
@@ -366,7 +371,7 @@ class CompetitionPage extends StatelessWidget {
                     /// The archived banner (if archived), [CompetitionDetails], and [UIToolkit.getVersus]
                     /// widgets in one column.
                     if (index == 0) {
-                      if (!hasVisited)
+                      if (!data.item3)
                         return UIToolkit.exampleHole(
                             context,
                             _holeKey,
@@ -383,7 +388,7 @@ class CompetitionPage extends StatelessWidget {
 
                     /// If the page has not been visted before, subtract one from the [_index] to
                     /// account for the [UIToolkit.exampleHole].
-                    if (!hasVisited) _index--;
+                    if (!data.item3) _index--;
 
                     return Consumer<HoleViewModel>(
                       child: Container(

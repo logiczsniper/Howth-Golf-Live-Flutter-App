@@ -1,7 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase_widget.dart';
 import 'package:tuple/tuple.dart';
@@ -240,7 +239,7 @@ class CompetitionsPage extends StatelessWidget {
     if (!_userStatus.hasVisited(Strings.competitionsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
-          const Duration(milliseconds: 1000),
+          const Duration(milliseconds: 650),
           () {
             print(ShowCaseWidget.of(context).activeWidgetId);
             if (ShowCaseWidget.of(context).activeWidgetId == null)
@@ -259,37 +258,7 @@ class CompetitionsPage extends StatelessWidget {
             child: UIToolkit.showcaseWithWidget(
               context: context,
               key: keys[0],
-              width: 300,
-              height: 600,
-              child: OpacityChangeWidget(
-                duration: 1200,
-                target: Container(
-                  color: Palette.light,
-                  padding: EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Welcome to the Competitions page.",
-                          style: TextStyles.cardTitle.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "Tap to move through the tutorial...",
-                        style: TextStyles.cardSubTitle,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              container: Container(
-                alignment: Alignment.center,
-                width: 0.001,
-                height: 0.001,
-              ),
+              text: "to the Competitions page.",
             ),
           ),
           builder: (context, hasVisited, child) => Stack(

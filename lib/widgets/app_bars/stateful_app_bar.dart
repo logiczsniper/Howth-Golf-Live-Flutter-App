@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:howth_golf_live/app/user_status_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:howth_golf_live/constants/strings.dart';
@@ -94,8 +95,9 @@ class StatefulAppBar {
 
   /// The search app bar which enables the user to type into a search box.
   /// Also the code field input bar.
-  Widget buildInputBar(TextInputType textType, bool obscureText, String hintText,
-          TextEditingController _filter, Function _codePressed) =>
+  Widget buildInputBar(BuildContext context, TextInputType textType, bool obscureText,
+          String hintText, TextEditingController _filter, Function _codePressed, String title,
+          {int id}) =>
       Container(
           height: 45,
           decoration: BoxDecoration(
@@ -111,6 +113,7 @@ class StatefulAppBar {
             controller: _filter,
             style: TextStyle(color: Palette.dark),
             decoration: _getInputDecoration(hintText),
-            onSubmitted: (_) => _codePressed(),
+            onSubmitted: (_) => _codePressed(
+                Provider.of<UserStatusViewModel>(context, listen: false).isVerified(title, id: id)),
           ));
 }

@@ -18,14 +18,12 @@ import 'package:howth_golf_live/widgets/toolkit.dart';
 class CodeFieldBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final int id;
-  final UserStatusViewModel userStatus;
   final PreferredSize bottom;
   final GlobalKey backKey;
   final GlobalKey codeKey;
 
   CodeFieldBar(
     this.title,
-    this.userStatus,
     this.backKey,
     this.codeKey, {
     this.id,
@@ -44,9 +42,11 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
   final TextEditingController _filter = TextEditingController();
 
   /// Change the app bar, adjust [isVerified] accordingly.
-  void _codePressed() {
+  void _codePressed(bool isVerified) {
+    /// Access models without listening to access methods & attributes when
+    /// the code is pressed.
     var _firebaseModel = Provider.of<FirebaseViewModel>(context, listen: false);
-    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+    var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
     if (!isVerified) {
       String codeAttempt = inputText.toString();
@@ -55,14 +55,14 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
       switch (widget.title) {
         case Strings.helpsText:
-          isCodeCorrect = widget.userStatus.adminAttempt(
+          isCodeCorrect = _userStatus.adminAttempt(
             codeAttempt,
             _firebaseModel.adminCode.toString(),
           );
           position = Strings.admin;
           break;
         default:
-          isCodeCorrect = widget.userStatus.managerAttempt(codeAttempt, widget.id.toString());
+          isCodeCorrect = _userStatus.managerAttempt(codeAttempt, widget.id.toString());
           position = Strings.manager;
       }
 
@@ -82,8 +82,7 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   /// The [IconData] switches between a admin icon (if [titleBar]) and
   /// a check icon (if [inputBar]).
-  AnimatedCrossFade get _iconData {
-    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+  AnimatedCrossFade _iconData(bool isVerified) {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 350),
       firstChild: Icon(
@@ -109,9 +108,9 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
         key: widget.codeKey,
         description: isHelpsPage ? Strings.tapAdmin : Strings.tapManager,
         child: IconButton(
-          icon: _iconData,
+          icon: _iconData(isVerified),
           tooltip: isVerified ? Strings.alreadyAdmin : Strings.tapCode,
-          onPressed: _codePressed,
+          onPressed: () => _codePressed(isVerified),
           padding: EdgeInsets.fromLTRB(5.0, 8.0, 25.0, 8.0),
         ),
       );
@@ -122,7 +121,16 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
     /// Build the two bars.
     titleBar = buildTitleBar(widget.title, id: widget.id);
-    inputBar = buildInputBar(TextInputType.number, true, Strings.enterCode, _filter, _codePressed);
+    inputBar = buildInputBar(
+      context,
+      TextInputType.number,
+      true,
+      Strings.enterCode,
+      _filter,
+      _codePressed,
+      widget.title,
+      id: widget.id,
+    );
 
     /// Default [appBarTitle] to the title.
     appBarTitle = titleBar;
@@ -139,10 +147,13 @@ class CodeFieldBarState extends State<CodeFieldBar> with StatefulAppBar {
 
   @override
   Widget build(BuildContext context) {
+    /// This widget must rebuild if the user's status is updated. Listen is true.
+    var userStatus = Provider.of<UserStatusViewModel>(context);
+
     /// Checks the connection status for the [HelpsPage] and [CompetitionPage].
     checkConnectivity(context);
 
-    bool isVerified = widget.userStatus.isVerified(widget.title, id: widget.id);
+    bool isVerified = userStatus.isVerified(widget.title, id: widget.id);
     bool isHelpsPage = widget.title == Strings.helpsText;
 
     return isHelpsPage

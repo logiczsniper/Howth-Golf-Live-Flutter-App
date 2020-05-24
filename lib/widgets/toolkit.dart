@@ -11,6 +11,7 @@ import 'package:howth_golf_live/app/creation/create_competition.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
 import 'package:howth_golf_live/app/creation/create_hole.dart';
 import 'package:howth_golf_live/widgets/complex_card.dart';
+import 'package:howth_golf_live/widgets/opacity_change.dart';
 import 'package:howth_golf_live/widgets/custom_modal_configuration.dart';
 import 'package:howth_golf_live/widgets/scroll_behavior.dart';
 import 'package:howth_golf_live/widgets/complex_score.dart';
@@ -156,20 +157,45 @@ class UIToolkit {
   static Showcase showcaseWithWidget({
     @required BuildContext context,
     @required GlobalKey key,
-    @required Widget child,
-    @required double width,
-    @required double height,
+    @required String text,
     Widget container,
   }) =>
       Showcase.withWidget(
         key: key,
-        child: child,
-        width: width,
-        height: height,
         shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(130.0)),
-        container: container ?? Container(),
         textColor: Palette.dark,
         overlayColor: Palette.dark,
+        width: 300,
+        height: 600,
+        child: OpacityChangeWidget(
+          duration: 1700,
+          target: Container(
+            color: Palette.light,
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    "Welcome " + text,
+                    style: TextStyles.cardTitle.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  "Tap to move through the tutorial...",
+                  style: TextStyles.cardSubTitle,
+                ),
+              ],
+            ),
+          ),
+        ),
+        container: Container(
+          alignment: Alignment.center,
+          width: 0.001,
+          height: 0.001,
+        ),
       );
 
   /// Builds the standard app [SnackBar] that is consistent.

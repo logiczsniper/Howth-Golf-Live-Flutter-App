@@ -48,12 +48,8 @@ class HelpsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// This page is not that expensive to rebuild and will not rebuild
-    /// frequently, its okay to listen to both [HelpDataViewModel] and
-    /// [UserStatusViewModel]. The [UserStatusViewModel] must be listened to
-    /// regardless to account for the new entries being added if the user
-    /// becomes an admin.
-    var _helpData = Provider.of<HelpDataViewModel>(context);
+    /// Get the user status when the first enter the page (hence [listen: false]) to
+    /// see if the [ShowCaseWidget] should be started.
     var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
     /// Showcase keys.
@@ -63,11 +59,9 @@ class HelpsPage extends StatelessWidget {
 
     List<GlobalKey> keys = [_welcomeKey, _codeKey, _backKey];
 
-    bool hasVisited = _userStatus.hasVisited(Strings.helpsText);
-
     /// If the user has not visited this page before,
     /// start the showcase.
-    if (!hasVisited) {
+    if (!_userStatus.hasVisited(Strings.helpsText)) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
           const Duration(milliseconds: 650),
@@ -76,35 +70,37 @@ class HelpsPage extends StatelessWidget {
       );
     }
 
-    Widget listView = _helpData.data.isEmpty
-        ? UIToolkit.loadingSpinner
-        : Selector<UserStatusViewModel, int>(
-            selector: (_, model) => model.bonusHelpEntries,
-            builder: (context, bonusHelpEntries, _) => ListView.builder(
-              padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
-              itemCount: _helpData.data.length + bonusHelpEntries,
-              itemBuilder: (context, index) {
-                AppHelpEntry currentHelpEntry = _helpData.data[index];
-                return _tileBuilder(context, currentHelpEntry, index + 1);
-              },
-            ),
-          );
-
     return Scaffold(
-        appBar: CodeFieldBar(Strings.helpsText, _backKey, _codeKey),
-        body: Stack(
-          children: <Widget>[
-            listView,
-            Selector<UserStatusViewModel, bool>(
-              selector: (_, model) => model.hasVisited(Strings.helpsText),
-              builder: (context, hasVisited, child) => !hasVisited ? child : Container(),
-              child: UIToolkit.showcaseWithWidget(
-                context: context,
-                key: _welcomeKey,
-                text: "to the App Help page.",
-              ),
-            )
-          ],
-        ));
+      appBar: CodeFieldBar(Strings.helpsText, _backKey, _codeKey),
+      body: Stack(
+        children: <Widget>[
+          Selector<HelpDataViewModel, List<AppHelpEntry>>(
+            selector: (_, model) => model.data,
+            builder: (context, data, child) => data.isEmpty
+                ? UIToolkit.loadingSpinner
+                : Selector<UserStatusViewModel, int>(
+                    selector: (_, model) => model.bonusHelpEntries,
+                    builder: (context, bonusHelpEntries, _) => ListView.builder(
+                      padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 100.0),
+                      itemCount: data.length + bonusHelpEntries,
+                      itemBuilder: (context, index) {
+                        AppHelpEntry currentHelpEntry = data[index];
+                        return _tileBuilder(context, currentHelpEntry, index + 1);
+                      },
+                    ),
+                  ),
+          ),
+          Selector<UserStatusViewModel, bool>(
+            selector: (_, model) => model.hasVisited(Strings.helpsText),
+            builder: (context, hasVisited, child) => !hasVisited ? child : Container(),
+            child: UIToolkit.showcaseWithWidget(
+              context: context,
+              key: _welcomeKey,
+              text: "to the App Help page.",
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

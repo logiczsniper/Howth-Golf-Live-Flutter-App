@@ -240,11 +240,7 @@ class CompetitionsPage extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) => Future.delayed(
           const Duration(milliseconds: 650),
-          () {
-            print(ShowCaseWidget.of(context).activeWidgetId);
-            if (ShowCaseWidget.of(context).activeWidgetId == null)
-              ShowCaseWidget.of(context).startShowCase(keys);
-          },
+          () => ShowCaseWidget.of(context).startShowCase(keys),
         ),
       );
     }

@@ -258,29 +258,30 @@ class CompetitionPage extends StatelessWidget {
     /// If the user does not [hasAccess] then the button is
     /// replaced by a [Container] which isnt visible.
     Widget floatingActionButton = Selector2<UserStatusViewModel, FirebaseViewModel, bool>(
-        selector: (context, userStatusModel, firebaseModel) {
-          DatabaseEntry entry = firebaseModel.entryFromId(id);
+      selector: (context, userStatusModel, firebaseModel) {
+        DatabaseEntry entry = firebaseModel.entryFromId(id);
 
-          /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
-          /// this page must be popped from the navigation stack.
-          ///
-          /// Using [popUntil] in case a modal is over the page (add players modal).
-          if (entry.id == -2) {
-            Routes.of(context).popToCompetitions();
-            return false;
-          }
+        /// If [entry] is the [DatabaseEntry.empty], that means it was deleted and
+        /// this page must be popped from the navigation stack.
+        ///
+        /// Using [popUntil] in case a modal is over the page (add players modal).
+        if (entry.id == -2) {
+          Routes.of(context).popToCompetitions();
+          return false;
+        }
 
-          return firebaseModel.entryFromId(id).isArchived
-              ? userStatusModel.isAdmin
-              : userStatusModel.isManager(id);
-        },
-        builder: (context, hasAccess, child) => hasAccess
-            ? UIToolkit.createButton(
-                context: context,
-                primaryText: Strings.newHole,
-                secondaryText: Strings.tapEditHole,
-                id: id)
-            : Container());
+        return firebaseModel.entryFromId(id).isArchived
+            ? userStatusModel.isAdmin
+            : userStatusModel.isManager(id);
+      },
+      child: UIToolkit.createButton(
+        context: context,
+        primaryText: Strings.newHole,
+        secondaryText: Strings.tapEditHole,
+        id: id,
+      ),
+      builder: (_, hasAccess, child) => hasAccess ? child : Container(),
+    );
 
     return Scaffold(
       floatingActionButton: Container(

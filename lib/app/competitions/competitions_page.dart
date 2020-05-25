@@ -202,17 +202,18 @@ class CompetitionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Fetch the current user status ([listen: false]).
     var _userStatus = Provider.of<UserStatusViewModel>(context, listen: false);
 
-    /// Get whether or not the user has visited the page before and if they are an admin.
-    bool _hasAccess = _userStatus.isAdmin;
-
-    Widget floatingActionButton = _hasAccess
-        ? UIToolkit.createButton(
-            context: context,
-            primaryText: Strings.newCompetition,
-            secondaryText: Strings.tapEditCompetition)
-        : null;
+    Widget floatingActionButton = Selector<UserStatusViewModel, bool>(
+      selector: (_, model) => model.isAdmin,
+      builder: (_, hasAccess, child) => hasAccess ? child : Container(),
+      child: UIToolkit.createButton(
+        context: context,
+        primaryText: Strings.newCompetition,
+        secondaryText: Strings.tapEditCompetition,
+      ),
+    );
 
     /// Showcase keys.
     final GlobalKey _titleKey = GlobalKey();

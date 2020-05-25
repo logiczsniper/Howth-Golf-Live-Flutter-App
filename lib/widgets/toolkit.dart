@@ -1,11 +1,12 @@
-import 'package:animations/animations.dart';
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:animations/animations.dart';
 import 'package:provider/provider.dart';
 import 'package:showcaseview/showcase.dart';
-
-import 'dart:ui';
 
 import 'package:howth_golf_live/app/creation/create_competition.dart';
 import 'package:howth_golf_live/app/firebase_view_model.dart';
@@ -69,14 +70,6 @@ class UIToolkit {
       color: Palette.maroon,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13.0)));
 
-  static Center get loadingSpinner => Center(
-        child: SpinKitPulse(
-          color: Palette.dark,
-          size: 45,
-          duration: const Duration(milliseconds: 350),
-        ),
-      );
-
   /// Returns the [Hole.holeNumber] with apt decoration - a smalled
   /// rounded box with padding.
   static Container getHoleNumberDecorated(dynamic holeNumber) => Container(
@@ -130,6 +123,17 @@ class UIToolkit {
         Text(relevantNumber,
             style: TextStyle(fontSize: 22.5, color: Palette.dark, fontWeight: FontWeight.w400))
       ]);
+
+  static Widget get loadingSpinner {
+    return Center(
+      child: Platform.isIOS || Platform.isMacOS
+          ? CupertinoActivityIndicator()
+          : CircularProgressIndicator(
+              backgroundColor: Palette.inMaroon,
+              valueColor: AlwaysStoppedAnimation<Color>(Palette.maroon),
+            ),
+    );
+  }
 
   /// Builds a [Showcase] widget with preset parameters
   /// for saving time such as [descTextStyle], [showArrow], [textColor],

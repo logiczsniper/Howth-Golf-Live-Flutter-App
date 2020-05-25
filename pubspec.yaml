@@ -17,7 +17,7 @@ dependencies:
   tuple: 1.0.3
   connectivity: 0.4.8+6
   shared_preferences: 0.5.7+3
-  test: ^1.14.5
+  test: 1.14.4
   flutter_svg: 0.17.4
 
   bubble_tab_indicator: 0.1.4
@@ -28,7 +28,7 @@ dependencies:
   showcaseview: 0.1.5
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.7.0
+  flutter_launcher_icons: 0.7.0
   flutter_test:
     sdk: flutter
 
